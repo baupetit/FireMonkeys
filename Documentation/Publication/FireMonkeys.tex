@@ -83,19 +83,14 @@ Nous allons expliquer brièvement de quoi ils parlent, ce que nous en avons rete
 utiliser...
 
 \subsubsection{Real-Time Fluid Dynamics for Games}
-\textbf{Auteurs} : Jos Stam.\\
-
+\textbf{Auteur(s)} : Jos Stam.\\
 \textbf{Publication} : Proceedings of the Game Developer Conference, March 2003 \\
-
 \textbf{Sujet(s) abordé(s)} : \\Modèle de fluide temps réel, pouvant être utilisé pour le feu, la fumée\\
-	Le modèle gère: le deplacement du fluide, la gestion de combustible,les forces appliquées sur le fluide.\\
-	
+	Le modèle gère: le deplacement du fluide, la gestion de combustible,les forces appliquées sur le fluide.\\	
 \textbf{Principe} :\\
 	Le modèle a été décomposé sur plusieurs étapes : génération du fluide par des sources, ajout des forces, diffusion du 		fluide, puis résolution de l'équation de la densité et de l'équation de la vitesse (équations de Navier-Stockes).
 	Pour résoudre les deux équations, il utilise une astuce permettant de résoudre le système très rapidement.
 	Enfin, il utilise le principe de conservation de la masse, qui rajoute des effets réalistes de vortex, avec la 		décomposition de Hodge.\\
-
-
 \textbf{Point(s) positif(s)} :\\
 	C'est facile à implémenter (moins de 100 lignes pour la version 2D)\\
 	Peut être adapté pour la propagation du feu.\\
@@ -103,44 +98,64 @@ utiliser...
 	Résultat réellement joli et réaliste.\\
 	Très bien expliqué.\\
 	Il a fournit un exemple 2D pour de la fumée, plutôt impréssionant.\\
-
 \textbf{Point(s) négatif(s)} :\\
 	La zone d'influence est assez petite, il faut voir si c'est possible de l'étendre sans trop allourdir les calculs. (Octree?) \\
-	Pas trop de détails sur la représentation graphique du feu.\\
-	
+	Pas trop de détails sur la représentation graphique du feu.\\	
+	La dissipation numérique implique que le résultat n'est pas exact.\\
 \textbf{Conclusion} :\\
 	C'est sans doute ce que nous allons adapter, pour qu'il serve à la fois pour le feu, la fumée, et la propagation.
 
 \subsubsection{Stable Fluids}
-\textbf{Auteurs} : Jos Stam.\\
+\textbf{Auteur(s)} : Jos Stam.\\
 \textbf{Publication} : SIGGRAPH 99 Conference Proceedings\\
-\textbf{Sujet(s) abordé(s)} : Résolution de l'équation des fluides ( Navier-Stockes) avec un algorithme stable.\\
-\textbf{Point(s) positif(s)} :\\
+\textbf{Sujet(s) abordé(s)} : Résolution de l'équation des fluides ( Navier-Stockes) avec, pour la première fois, un algorithme inconditionnellement stable.\\
+\textbf{Principe} :\\
+C'est une résolution de Navier-Stockes orientée "Computer Graphic", dans le sens o`u la résolution n'est pas exacte, et ne serait pas utilisable pour des vraies simulations de fluides, mais est "graphiquement adaptée" au problème de fluides.\\
+Résolution en quatre étapes : ajout des forces, advection, diffusion, conservation de la masse.\\
+\textbf{Point(s) positif(s)} : \\
+2D et 3D.\\
+Facile à implémenter.\\
+Résolution stable et temps réel.\\
+Résultat réaliste.\\
 \textbf{Point(s) négatif(s)} :\\
+La dissipation numérique implique que le résultat n'est pas exact.\\
 \textbf{Conclusion} :\\
+Ce modèle de fluide semble le plus adapté si nous choisissons d'utiliser un modèle de fluide pour le feu, la fumée et la propagation.
 
 
 \subsubsection{An Interactive Simulation Framework for Burning Objets}
-\textbf{Auteurs} : Zeki Melek, John Keyser.\\
+\textbf{Auteur(s)} : Zeki Melek, John Keyser.\\
 \textbf{Publication} :\\
 \textbf{Sujet(s) abordé(s)} : \\
+\textbf{Principe} :\\	
 \textbf{Point(s) positif(s)} :\\
 \textbf{Point(s) négatif(s)} :\\
 \textbf{Conclusion} :\\
 
 
 \subsubsection{Visual Simulation of Smoke}
-\textbf{Auteurs} : Ronald Fedkiw, Jos Stam, Henrik Wann Jensen.\\
-\textbf{Publication} :\\
+\textbf{Auteur(s)} : Ronald Fedkiw, Jos Stam, Henrik Wann Jensen.\\
+\textbf{Publication} : SIGGRAPH 2001 Conference Proceedings \\
 \textbf{Sujet(s) abordé(s)} : \\
+	Création d'un modèle de fumée, basé sur le travail de Stam ( Stable Fluids ).\\
+	Rendu réaliste de la fumée.\\
+\textbf{Principe} :\\	
+	L'équation du fluide est résolue comme dans "Stable Fluids". Cette fois la chaleur est prise en compte, et traitée de la même manière que la densité. Il en résulte une force de préssion qui s'ajoute simplement au modèle. Le modèle prend en compte les petits phénomènes de vortex qui se créent dans le fluide, basée sur la méthode de Steinhoff ("Vorticity confinement"). Ainsi ils rajoutent une force de rotation pour créer les minis vortex.\\
+Pour le rendu : ils découpent la grille de voxels en plusieurs plans, rendus comme une superposition de plans transparents.
+Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de rayons.\\
 \textbf{Point(s) positif(s)} :\\
+	Gestion de la chaleur.\\
+	Rendu très réaliste de la fumée.\\
 \textbf{Point(s) négatif(s)} :\\
+	Pas en temps réel.\\
 \textbf{Conclusion} :\\
+	La méthode de rendu semble interessante. De plus la création de minis vortex est un atout pour le côté réaliste du modèle.
 
 \subsubsection{Simulating Water and Smoke with an Octree Data Structure}
-\textbf{Auteurs} : Frank Losasso, Frédéric Gibou, Ron Fedkiw.\\
+\textbf{Auteur(s)} : Frank Losasso, Frédéric Gibou, Ron Fedkiw.\\
 \textbf{Publication} :\\
 \textbf{Sujet(s) abordé(s)} : \\
+\textbf{Principe} :\\	
 \textbf{Point(s) positif(s)} :\\
 \textbf{Point(s) négatif(s)} :\\
 \textbf{Conclusion} :\\
@@ -148,9 +163,10 @@ utiliser...
 
 
 \subsubsection{Real-Time Simulation of Deformation and Fracture of Stiff Materials}
-\textbf{Auteurs} : Matthias Müller, Leonard McMillan, Julie Dorsey, Robert Jagnow.\\
+\textbf{Auteur(s)} : Matthias Müller, Leonard McMillan, Julie Dorsey, Robert Jagnow.\\
 \textbf{Publication} :\\
 \textbf{Sujet(s) abordé(s)} : \\
+\textbf{Principe} :\\	
 \textbf{Point(s) positif(s)} :\\
 \textbf{Point(s) négatif(s)} :\\
 \textbf{Conclusion} :\\
@@ -158,25 +174,35 @@ utiliser...
 
 
 \subsubsection{Voxels On Fire}
-\textbf{Auteurs} : Ye Zhao, Xiaoming Wei, Zhe Fan, Arie Kaufman, Hong Qin.\\
+\textbf{Auteur(s)} : Ye Zhao, Xiaoming Wei, Zhe Fan, Arie Kaufman, Hong Qin.\\
 \textbf{Publication} :\\
 \textbf{Sujet(s) abordé(s)} : \\
+\textbf{Principe} :\\	
 \textbf{Point(s) positif(s)} :\\
 \textbf{Point(s) négatif(s)} :\\
 \textbf{Conclusion} :\\
 
 \subsubsection{Meshes On Fire}
-\textbf{Auteurs} : Haeyoung Lee, Laehyun, Mark Meyer, Mathieu Desbrun.\\
-\textbf{Publication} :\\
-\textbf{Sujet(s) abordé(s)} : Propagation des flammes à la surface d'un objet.\\
+\textbf{Auteur(s)} : Haeyoung Lee, Laehyun, Mark Meyer, Mathieu Desbrun.\\
+\textbf{Publication} : Eurographics Workshop on Computer Animation and Simulation '2001 \\
+\textbf{Sujet(s) abordé(s)} : \\
+	Propagation des flammes à la surface d'un objet.\\
+\textbf{Principe} : \\
+	La propagation est un parcours géodésique de la surface.\\	
+	Les flammes sont rendues sont formes de particules avec des blobs.\\
 \textbf{Point(s) positif(s)} :\\
+	Prise en compte de plusieurs feu.\\
+	Rapide à calculer.\\
 \textbf{Point(s) négatif(s)} :\\
+	Propagation non réaliste sur des objets non convexes( pas fonction de la distance du feu à une flamme, mais en fonction de la distance à parcourir sur l'objet )\\
+	
 \textbf{Conclusion} :\\
 
 \subsubsection{Real-time Procedural Volumetric Fire}
-\textbf{Auteurs} : Alfred R. Fuller, Hari Krishnan, Karim Mahrous, Bernd Hamann, Kenneth I. Joy.\\
+\textbf{Auteur(s)} : Alfred R. Fuller, Hari Krishnan, Karim Mahrous, Bernd Hamann, Kenneth I. Joy.\\
 \textbf{Publication} :\\
 \textbf{Sujet(s) abordé(s)} : \\
+\textbf{Principe} :\\	
 \textbf{Point(s) positif(s)} :\\
 \textbf{Point(s) négatif(s)} :\\
 \textbf{Conclusion} :\\

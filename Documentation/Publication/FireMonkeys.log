@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=latex 2010.5.21)  24 MAY 2010 15:20
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=latex 2010.5.21)  24 MAY 2010 16:50
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -348,84 +348,55 @@ Overfull \hbox (0.44511pt too wide) in paragraph at lines 12--12
 \tf@toc=\write3
 \openout3 = `FireMonkeys.toc'.
 
- [2]
-Underfull \hbox (badness 10000) in paragraph at lines 86--87
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 88--89
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 90--92
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 93--97
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 99--106
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 107--109
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 114--120
-
- []
-
-[3]
-Underfull \hbox (badness 10000) in paragraph at lines 123--129
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 132--138
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 140--146
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 150--156
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 160--166
+ [2] [3]
+Underfull \hbox (badness 10000) in paragraph at lines 127--134
 
  []
 
 [4]
-Underfull \hbox (badness 10000) in paragraph at lines 168--174
+Underfull \hbox (badness 10000) in paragraph at lines 155--162
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 176--182
+Underfull \hbox (badness 10000) in paragraph at lines 166--173
 
  []
 
-[5] (./FireMonkeys.aux) ) 
+
+Underfull \hbox (badness 10000) in paragraph at lines 177--184
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 186--198
+
+ []
+
+[5]
+Underfull \hbox (badness 10000) in paragraph at lines 199--200
+
+ []
+
+
+Overfull \hbox (6.82114pt too wide) in paragraph at lines 202--209
+[]\OT1/cmr/bx/n/10 Auteur(s) \OT1/cmr/m/n/10 : Al-fred R. Fuller, Hari Kr-ish-n
+an, Karim Mahrous, Bernd Hamann,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 202--209
+
+ []
+
+[6] (./FireMonkeys.aux) ) 
 Here is how much of TeX's memory you used:
  1532 strings out of 495062
  18928 string characters out of 1182644
- 78319 words of memory out of 3000000
+ 79319 words of memory out of 3000000
  4725 multiletter control sequences out of 15000+50000
  5158 words of font info for 19 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
- 25i,4n,24p,282b,211s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 25i,4n,24p,486b,211s stack positions out of 5000i,500n,10000p,200000b,50000s
 
-Output written on FireMonkeys.dvi (5 pages, 11156 bytes).
+Output written on FireMonkeys.dvi (6 pages, 14824 bytes).
