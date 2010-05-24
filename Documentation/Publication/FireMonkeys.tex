@@ -263,6 +263,25 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
 
 
 
+\subsubsection{FireStarter – A Real-Time Fire Simulator}
+\textbf{Auteur(s)} : Marc de Kruijf.\\
+\textbf{Sujet(s) abordé(s)} : \\ 
+	Description du feu réel, des différents modèles utilisés, et réalisation d'un modèle avec des particules.\\
+\textbf{Principe} :\\	
+	Le feu est un système de particules, les flammes sont générées avec une vie aléatoire, une vitesse verticale dépendant de la chaleur, et une vitesse horizontale aléatoire. De plus, un test aléatoire fonction de la durée de vie de la particule est effectué pour qu'elle se transforme en fumée. Le tout est effectué dans une grille cylindrique 3D. Au niveau de l'affichage, les particules sont reliées pour former des faces qui seront ensuite texturées et colorées en fonction de la chaleur.\\
+\textbf{Point(s) positif(s)} :\\
+	Temps réel.\\
+	Calcul très rapide et très simple.\\
+\textbf{Point(s) négatif(s)} :\\
+	Pas très réaliste.\\
+	De gros défauts sont visibles au niveau du rendu.\\
+	Les particules suivent une pseudo mécanique des fluides.\\
+	Le feu n'est pas adapté à plusieurs cas de figures.\\
+\textbf{Conclusion} :\\
+	La bonne idée de transformer une particule de feu en fumée à partir d'un tirage aléatoire est une bonne idée.
+	Sinon, l'utilisation de particules pour simuler une mécanique peut suffire pour un simple effet mais pas pour une 		simulation réaliste.
+
+
 %----------------------------------------------------------------------------------------------------------------------------------------
 %%%%%%%%%%%%%%%%%
 \section{Mise en place du modèle global}
