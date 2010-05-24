@@ -92,12 +92,14 @@ utiliser...
 	Pour résoudre les deux équations, il utilise une astuce permettant de résoudre le système très rapidement.
 	Enfin, il utilise le principe de conservation de la masse, qui rajoute des effets réalistes de vortex, avec la 		décomposition de Hodge.\\
 \textbf{Point(s) positif(s)} :\\
+	Temps réel.\\
 	C'est facile à implémenter (moins de 100 lignes pour la version 2D)\\
 	Peut être adapté pour la propagation du feu.\\
 	Peut être adapté pour qu'un objet influe sur le modèle.\\
 	Résultat réellement joli et réaliste.\\
 	Très bien expliqué.\\
 	Il a fournit un exemple 2D pour de la fumée, plutôt impréssionant.\\
+	Le modèle peut s'adapter au feu, à la fumée, et à l'eau.\\
 \textbf{Point(s) négatif(s)} :\\
 	La zone d'influence est assez petite, il faut voir si c'est possible de l'étendre sans trop allourdir les calculs. (Octree?) \\
 	Pas trop de détails sur la représentation graphique du feu.\\	
@@ -153,12 +155,20 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
 
 \subsubsection{Simulating Water and Smoke with an Octree Data Structure}
 \textbf{Auteur(s)} : Frank Losasso, Frédéric Gibou, Ron Fedkiw.\\
-\textbf{Publication} :\\
+\textbf{Publication} : SIGGRAPH 2004\\
 \textbf{Sujet(s) abordé(s)} : \\
+	Simulation d'eau et de fumée. L'équation de Navier-Stockes est résolue sur une grille Octree.\\
+	La grille du modèle de fluide s'adapte selon le niveau de détail du phénomène ( par exemple plus de détails là o`u il y a des minis vortex)\\
 \textbf{Principe} :\\	
+	Le calcul de l'équation des fluides est effectué sur un Octree.\\
 \textbf{Point(s) positif(s)} :\\
+	L'octree n'est pas restreint ( ce qui était le cas des travaux précédents ).\\
+	Réduction des calculs de 75\% pour un résultat équivalent avec une grille à pas constant.\\
 \textbf{Point(s) négatif(s)} :\\
+	Pas temps réel.\\
+	Compliqué à mettre en place.\\
 \textbf{Conclusion} :\\
+	La complexité de la programmation est assez importante. L'avantage de cette méthode est d'avoir un très haut niveau de détail en effectuant plus de calculs là o`u cela est nécessaire. La précision que nous désiront n'est peut être pas suffisante pour nécessiter un tel modèle.
 
 
 
@@ -188,24 +198,38 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
 \textbf{Sujet(s) abordé(s)} : \\
 	Propagation des flammes à la surface d'un objet.\\
 \textbf{Principe} : \\
-	La propagation est un parcours géodésique de la surface.\\	
+	La propagation est un parcours géodésique de la surface, et subit le vent environnant.\\	
 	Les flammes sont rendues sont formes de particules avec des blobs.\\
+	Les flammes générées subissent le champ de vent ce qui les rend plus réaliste.\\
 \textbf{Point(s) positif(s)} :\\
+	Temps réel.\\
 	Prise en compte de plusieurs feu.\\
 	Rapide à calculer.\\
+	Très efficace pour changer la texture d'un objet brulé.\\
+	Propagation fonction d'un champ de vent.\\
+	Les particules de feu générées peuvent être utilisées pour génerer un feu sur un autre objet ou sur une autre partie de l'objet.\\
 \textbf{Point(s) négatif(s)} :\\
-	Propagation non réaliste sur des objets non convexes( pas fonction de la distance du feu à une flamme, mais en fonction de la distance à parcourir sur l'objet )\\
-	
+	Ne peut pas s'adapter à la destruction d'un objet.\\
+	Peut être une perte de performance si on utilise les particules de feu pour allumer des foyer aux autres endroits du mesh.\\
+	La propagation surfacique n'est pas toujours adaptés.\\	
 \textbf{Conclusion} :\\
+	Ce modèle est interessant, mais nécessite d'être beaucoup modifié pour correspondre à notre but. Il n'est pas très adapté à la destruction des objets. (Sauf si nous voulons uniquement dégrader la texture de l'objet) \\
 
 \subsubsection{Real-time Procedural Volumetric Fire}
 \textbf{Auteur(s)} : Alfred R. Fuller, Hari Krishnan, Karim Mahrous, Bernd Hamann, Kenneth I. Joy.\\
-\textbf{Publication} :\\
+\textbf{Publication} : Proceedings of the 2007 symposium on Interactive 3D graphics and games\\
 \textbf{Sujet(s) abordé(s)} : \\
-\textbf{Principe} :\\	
+	Rendu de feu réaliste en temps réel, utilisant le bruit de perlin.
+\textbf{Principe} :\\
+	La flamme est calculée en 3 dimensions, et le rendu est effectué par le GPU.\\
+	L'animation de la texture est procédurale.\\	
 \textbf{Point(s) positif(s)} :\\
+	Temps réel.\\
+	Réaliste.\\
 \textbf{Point(s) négatif(s)} :\\
+	Représentation du feu uniquement, pas de propagation et de fumée.\\
 \textbf{Conclusion} :\\
+	La qualité du feu est importante, mais ce modèle de flamme ne concerne que la partie "affichage". Il faudra voir si le modèle de propagation choisi peut utiliser un tel modèle de flammes.
 
 
 
