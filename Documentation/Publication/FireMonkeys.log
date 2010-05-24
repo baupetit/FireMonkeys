@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=latex 2010.5.21)  24 MAY 2010 17:52
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=latex 2010.5.21)  24 MAY 2010 18:37
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -354,34 +354,45 @@ Underfull \hbox (badness 10000) in paragraph at lines 129--136
  []
 
 [4]
-Underfull \hbox (badness 10000) in paragraph at lines 176--183
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 187--194
-
+Overfull \hbox (9.69489pt too wide) in paragraph at lines 176--192
+\OT1/cmr/m/n/10 La m^^Sethode de de-struc-tion de l'ob-jet bas^^See sur des t^^
+Setrah^^Redres est tr^^Res int^^Seressante. 
  []
 
 [5]
-Underfull \hbox (badness 10000) in paragraph at lines 196--217
+Underfull \hbox (badness 10000) in paragraph at lines 195--202
 
  []
 
 
-Overfull \hbox (6.82114pt too wide) in paragraph at lines 219--233
+Underfull \hbox (badness 10000) in paragraph at lines 204--211
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 215--222
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 224--245
+
+ []
+
+[6]
+Overfull \hbox (6.82114pt too wide) in paragraph at lines 247--261
 []\OT1/cmr/bx/n/10 Auteur(s) \OT1/cmr/m/n/10 : Al-fred R. Fuller, Hari Kr-ish-n
 an, Karim Mahrous, Bernd Hamann,
  []
 
-[6] [7] (./FireMonkeys.aux) ) 
+[7] [8] (./FireMonkeys.aux) ) 
 Here is how much of TeX's memory you used:
- 1532 strings out of 495062
- 18928 string characters out of 1182644
+ 1533 strings out of 495062
+ 18936 string characters out of 1182644
  79319 words of memory out of 3000000
- 4725 multiletter control sequences out of 15000+50000
+ 4726 multiletter control sequences out of 15000+50000
  5158 words of font info for 19 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
  25i,4n,24p,486b,211s stack positions out of 5000i,500n,10000p,200000b,50000s
 
-Output written on FireMonkeys.dvi (7 pages, 18040 bytes).
+Output written on FireMonkeys.dvi (8 pages, 20304 bytes).
