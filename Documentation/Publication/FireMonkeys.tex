@@ -179,12 +179,16 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
 	Destruction réaliste et temps réel d'un objet. 
 \textbf{Principe} :\\	
 	C'est la simplification d'un problème de propagation en négligeant les effets microscopiques, qui ne sont pas vraiment visibles en temps réel, mais coûtent énormement en calcul.\\
-	Les meshs sont représentés par des "tetrahedral meshes".
+	Les meshs sont représentés par des "tetrahedral meshes". Le modèle de propagation continu est transformé en modèle discret. L'élasticité des objets est prise en compte.
 \textbf{Point(s) positif(s)} :\\
 	Temps réel.\\
 	Le système est stable est rapide.\\
+	La méthode de destruction de l'objet basée sur des tétrahèdres est très intéressante.\\
+	Propagation des effets de la destruction à l'intérieur de l'objet.\\
 \textbf{Point(s) négatif(s)} :\\
+	Peut être lourd à utiliser si il y a trop d'objets à l'écran.\\
 \textbf{Conclusion} :\\
+	Le principe de déformation sur un mesh tétrahédral est très intéressant, et peut facilement s'adapter à un modèle de fluide.
 
 
 
