@@ -2,7 +2,7 @@
 %----------------------------------------------------------------------------------------------------------------------------------------
 
 % définit le type de document et ses options
-\documentclass[a4paper,10pt]{paper}
+\documentclass[a4paper,10pt]{article}
 
 % des paquetages indispensables, qui ajoutent des fonctionnalites
 \usepackage[utf8]{inputenc}
@@ -11,7 +11,7 @@
 \usepackage{url}
 \usepackage{xspace}
 \usepackage[francais]{babel}
-\usepackage{fullpage}
+%\usepackage{fullpage}
 
 \pagestyle{plain}
 
@@ -25,18 +25,17 @@
 
 %----------------------------------------------------------------------------------------------------------------------------------------
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%Page d'accueil
 \begin{center}
 	%%
-	\hspace{8cm}
+	\hspace{3cm}
 	\includegraphics[scale=0.8]{logo.ps}
 
 	%%
-	\vspace{3cm}
-	{\huge Projet de spécialité 2010}\\
-	{\huge Conception d'un modèle de feu 3D temps réel}\\
+	\vspace{1cm}
+	{\large Projet de spécialité 2010}\\
+	{\Large Conception d'un modèle de feu 3D temps réel}\\
 	{\large Organisation du projet}\\
 	\vspace{1cm}
 
@@ -50,7 +49,7 @@
 	Arnaud Emilien - IRVM - arnaud.emilien@ensimag.imag.fr\\
 	~\\
 	Encadrants :\\
-	Marie-Paule Cani  -  Marie-Paule.Cani@inrialpes.fr 
+	Marie-Paule Cani  -  Marie-Paule.Cani@inrialpes.fr \\
 	Aurélie Catel - aurelie.catel@grenoble-inp.fr
 	~ \\
 	\vspace{3mm}
@@ -59,6 +58,12 @@
 \end{center}
 
 \newpage
+
+\tableofcontents
+
+\newpage
+
+
 
 
 
@@ -144,6 +149,10 @@ de chacun :\\
 %%%%%%%%%%%%%%%%%
 \section{Planning prévisionnel}
 %%%%%%%%%%%%%%%%%
+
+	\includegraphics[scale=0.8]{../Planning/GANTT.ps}
+	
+	\includegraphics[scale=0.8]{../Planning/Planning.ps}
 
 
 %----------------------------------------------------------------------------------------------------------------------------------------
