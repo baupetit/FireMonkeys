@@ -84,16 +84,37 @@ utiliser...
 
 \subsubsection{Real-Time Fluid Dynamics for Games}
 \textbf{Auteurs} : Jos Stam.\\
-\textbf{Publication} : \\
-\textbf{Sujet(s) abordé(s)} : \\
+
+\textbf{Publication} : Proceedings of the Game Developer Conference, March 2003 \\
+
+\textbf{Sujet(s) abordé(s)} : \\Modèle de fluide temps réel, pouvant être utilisé pour le feu, la fumée\\
+	Le modèle gère: le deplacement du fluide, la gestion de combustible,les forces appliquées sur le fluide.\\
+	
+\textbf{Principe} :\\
+	Le modèle a été décomposé sur plusieurs étapes : génération du fluide par des sources, ajout des forces, diffusion du 		fluide, puis résolution de l'équation de la densité et de l'équation de la vitesse (équations de Navier-Stockes).
+	Pour résoudre les deux équations, il utilise une astuce permettant de résoudre le système très rapidement.
+	Enfin, il utilise le principe de conservation de la masse, qui rajoute des effets réalistes de vortex, avec la 		décomposition de Hodge.\\
+
+
 \textbf{Point(s) positif(s)} :\\
+	C'est facile à implémenter (moins de 100 lignes pour la version 2D)\\
+	Peut être adapté pour la propagation du feu.\\
+	Peut être adapté pour qu'un objet influe sur le modèle.\\
+	Résultat réellement joli et réaliste.\\
+	Très bien expliqué.\\
+	Il a fournit un exemple 2D pour de la fumée, plutôt impréssionant.\\
+
 \textbf{Point(s) négatif(s)} :\\
+	La zone d'influence est assez petite, il faut voir si c'est possible de l'étendre sans trop allourdir les calculs. (Octree?) \\
+	Pas trop de détails sur la représentation graphique du feu.\\
+	
 \textbf{Conclusion} :\\
+	C'est sans doute ce que nous allons adapter, pour qu'il serve à la fois pour le feu, la fumée, et la propagation.
 
 \subsubsection{Stable Fluids}
 \textbf{Auteurs} : Jos Stam.\\
-\textbf{Publication} :\\
-\textbf{Sujet(s) abordé(s)} : \\
+\textbf{Publication} : SIGGRAPH 99 Conference Proceedings\\
+\textbf{Sujet(s) abordé(s)} : Résolution de l'équation des fluides ( Navier-Stockes) avec un algorithme stable.\\
 \textbf{Point(s) positif(s)} :\\
 \textbf{Point(s) négatif(s)} :\\
 \textbf{Conclusion} :\\
