@@ -57,6 +57,7 @@
 
 \end{center}
 
+
 \newpage
 
 \tableofcontents
@@ -89,13 +90,48 @@ Notre solution devra ainsi répondre aux critères suivants :
 \item Propagation à l'environnement
 \end{itemize}
 
-
-
-
 \subsection{Aperçu}
 
+%%%%%%%%%%%%%%%%%
+\section{Aperçu de notre modèle}
+Ici nous présentons un résumé de notre modèle global. Ce modèle a été
+établi pour avoir un idée générale et ainsi choisir les modèles
+adaptés pour chaque parties. En effet nous devons nous assurer de la
+compatibilité de ceux ci, pour eviter les incohérences entre les
+différentes étapes, ou des calculs de syncrhonisation entre les
+phases. Par exemple la représentation des objets doit être définié dès
+le début mais aussi permettre toutes les opérations que nous pourrions
+être amenné à y apporter.
 
-\subsection{Analyses Bibliographiques}
+\subsection{Les flammes}
+Pour modéliser les flammes il faut différencier deux aspects. Le rendu
+des flammes d'une part, et la modélisation du phénomène associé
+d'autre part.
+
+\subsubsection{Un modèle de fluide pour le feu}
+Basé sur les travaux de \textbf{Jos Stam} (stable fluids). Ce modèle inclu la
+diffusion de la densité, la chaleur, la vitesse des fluides utilisés (
+``combustible'', fumée, air ). Il permettra aussi de gerer plus
+simplement la diffusion du feu dans l'environnement.
+
+\subsubsection{Le rendu des flammes et de la fumée}
+Pour rendre les flammes nous avons besoin d'une méthode rapide mais
+donnant une impression de réalisme. Pour faire ceci nous utilisons une
+méthode expliquée \textbf{Zeki Melek}. Cette méthode consiste à
+découper le fluide en ``tranches'' othogonale à l'orientation de la
+camera. Dans chaque tranche on calcule une texture d'après la densité
+de fluide représentant la flamme. Ensuite avant le rendu on applique
+un bruit de Perlin ( en 3D ) sur chaque tranche, et enfin on applique
+un effet de ``bloom'' sur chaque texture pour modéliser la luminosité
+du feu. La fumée sera rendue avec la flamme pour simplifier la phase
+de rendu.
+
+\subsection{Les objets}
+
+
+
+
+\section{Analyses Bibliographiques}
 %%%%%%%%%%%%%%%%%
 Cette section regroupe les différents articles lus, concernant les travaux déjà effectués dans ce domaine. 
 Nous allons expliquer brièvement de quoi ils parlent, ce que nous en avons retenu de bien ou de mal, ce que nous allons 
