@@ -1,0 +1,1717 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html><head>
+
+
+
+
+
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+	<title>GPU Gems 3 - Chapter 34. Signed Distance Fields Using 
+Single-Pass GPU Scan Conversion of Tetrahedra</title>
+
+	<meta name="keywords" content="GPU GPGPU NVIDIA OpenGL Open_GL DirectX 
+DX8 DX9 DX10 texture texture_mapping texturemap texture_map shading 
+shader shaders realtime real_time CAD highperformancecomputing hpc 
+gpu_compute tesla quadroplex geforce quadro hair skin cloth motion_blur 
+dof depth_of_field anisotropic image_processing filtering filters volume
+ volume_rendering financial">
+
+	<link type="image/x-icon" 
+href="http://www.nvidia.com/content/images/NVSphere.ico" rel="shortcut 
+icon">
+
+  <!-- <link rel="stylesheet" href="books.css" type="text/css" />	 -->
+
+
+
+<style type="text/css">
+
+
+
+body {
+
+  min-width: 700px;      /* 2x LC width + RC width */
+
+  
+
+  font-family:Verdana, Geneva, Arial, Helvetica, Sans Serif;
+
+  font-size: 11px;
+
+  background-image:url('http://developer.nvidia.com/docs/TEMPLATE/423/developers_1px_bg_alt2.jpg');
+
+  background-repeat: repeat-x;
+
+  margin-left:5px;
+
+  margin-top:0px;
+
+}
+
+#container {
+
+  padding-top:55px;
+
+  padding-left: 200px;   /* LC width */
+
+  padding-right: 280px;  /* RC width */  
+
+}
+
+#container .column {
+
+  position: relative;
+
+  float: left;
+
+}
+
+#center {
+
+  width: 100%;
+
+  padding: 3px;
+
+  background-color: #FFFFFF;
+
+  border: medium solid #cccccc;
+
+  border-width: 1px;
+
+  
+
+/*  borderColor: #dfdfe7;
+
+  borderColorLight: #e9eaed; */
+
+}
+
+#left {
+
+  width: 200px;          /* LC width */
+
+  right: 200px;          /* LC width */  
+
+  margin-left: -100%;
+
+}
+
+
+
+#container > #left {
+
+  left: -200px;
+
+  margin-left: expression(document.all.center.offsetWidth * -1);
+
+}
+
+
+
+
+
+#right {
+
+  width: 280px;          /* RC width */
+
+  margin-right: -280px;  /* RC width */  
+
+}
+
+#footer {
+
+  clear: both;
+
+}
+
+
+
+#header {
+
+height:80px;
+
+background: transparent url(dev_site_header.jpg) no-repeat fixed top left;
+
+clear: both;
+
+}
+
+
+
+
+
+
+
+
+
+#searchbar {
+
+position: absolute;
+
+top: 25px;
+
+right:200px;
+
+}
+
+	
+
+	
+
+A { 
+
+text-decoration:none;
+
+/* color: #008000; */
+
+/* green color: #76b900; */
+
+/*font-weight:bold; */
+
+color: #5B8C00;
+
+}
+
+
+
+A:hover { 
+
+text-decoration:underline;
+
+color: #000000;
+
+}
+
+
+
+A:visited { 
+
+color: #5B8C00;
+
+}	
+
+
+
+input.searchbox {
+
+font-family: Arial, Helvetica, sans-serif;
+
+font-size: 11px;
+
+color: #666666;
+
+text-indent: 3px;
+
+}
+
+
+
+H1 { 
+
+font-size:15px;
+
+color: #000000;
+
+font-weight:bold;
+
+}
+
+H2 { 
+
+font-size:14px;
+
+color: #000000;
+
+font-weight:bold;
+
+}
+
+H3 { 
+
+font-size:14px;
+
+color: #000080;
+
+font-weight:bold;
+
+}
+
+H4 { 
+
+font-size:12px;
+
+color: #000000;
+
+font-weight:bold;
+
+}
+
+H5 { 
+
+font-size:12px;
+
+color: #000080;
+
+font-weight:bold;
+
+}
+
+H6 { 
+
+font-size:10px;
+
+color: #000000;
+
+font-weight:bold;
+
+}
+
+H6 { 
+
+font-size:10px;
+
+color: #000080;
+
+font-weight:bold;
+
+}
+
+
+
+li.comingsoon {
+
+font-size:11px;
+
+color: #cccccc;
+
+}
+
+
+
+table thead td {
+
+	font-weight: bold;
+
+	background: #E1E1E1;
+
+	text-align: center;
+
+	border-bottom: 3px solid black;
+
+}
+
+
+
+td {
+
+border: 1px solid black;
+
+padding-left: 3px;
+
+padding-right: 3px;
+
+}
+
+
+
+table {
+
+border-collapse: collapse;
+
+border: 3px solid black;
+
+padding: 3px;
+
+}
+
+
+
+pre {
+
+   line-height:50%;
+
+}
+
+pre strong {
+
+white-space: normal;
+
+}
+
+</style>
+
+
+
+<script>
+
+function popUp(url) {
+
+    window.open(url,'Gems3Target',''); 
+
+}
+
+
+
+</script>
+
+
+
+<style type="text/css">.dp-cpp .datatypes { color: #2E8B57; font-weight: bold; }</style><style type="text/css">.dp-cpp .datatypes { color: #2E8B57; font-weight: bold; }</style></head><body>
+
+
+
+
+
+<div id="header">
+
+
+
+</div>
+
+
+
+
+
+
+
+<div id="searchbar">
+
+
+
+
+
+
+
+<form method="get" action="http://search.developer.nvidia.com/" 
+name="search">
+
+
+
+
+
+
+
+<input style="font-size: 11px; color: rgb(102, 102, 102); text-indent: 
+3px;" name="q" size="20" maxlength="50" 
+onfocus="javascript:document.search.q.value = '';" value="Search" 
+type="text">
+
+
+
+
+
+
+
+</form>
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+<div id="container">
+
+  <div id="center" class="column">
+
+		<a href="http://developer.nvidia.com/object/gpu-gems-3.html"><img 
+src="gpugems3_ch34_fichiers/gpu_gems_3_icon.jpg" border="0" hspace="5" 
+align="left"> <h1>GPU Gems 3</h1></a>
+
+		<b>GPU Gems 3</b> is now available for free online! 
+
+<br><br>
+
+Please visit our <a 
+href="http://developer.nvidia.com/object/all_documents.html">Recent 
+Documents</a> page to see all the latest whitepapers and conference 
+presentations that can help you with your projects.	
+
+<br><br>
+
+You can also subscribe to our <a 
+href="http://news.developer.nvidia.com/rss.xml">Developer News Feed</a> 
+to get notifications of new material on the site.		
+
+		
+
+		<br><br><br>
+
+		<hr>
+<h2>Chapter 34. Signed Distance Fields Using Single-Pass GPU Scan 
+Conversion of Tetrahedra</h2>
+<p>
+   <em>Kenny Erleben <br>University of Copenhagen</em>
+</p>
+<p>
+   <em>Henrik Dohlmann <br>3Dfacto R&amp;D</em>
+</p>
+<h2>34.1 Introduction</h2>
+<p>In this chapter we address the practicalities in computing a signed 
+distance field. We present a method that accelerates the computation by 
+using graphics hardware. Our method is simple to implement and offers a 
+trade-off between performance and quality.</p>
+<h4>34.1.1 Overview of Signed Distance Fields</h4>
+<p>A signed distance field is represented as a grid sampling of the 
+closest distance to the surface of an object represented as a polygonal 
+model. Usually the convention of using negative values inside the object
+ and positive values outside the object is applied. Signed distance 
+fields are very attractive in computer graphics and related fields. 
+Often they are used for collision detection in cloth animation (Bridson 
+et al. 2003), multi-body dynamics (Guendelman et al. 2003), deformable 
+objects (Fisher and Lin 2001), mesh generation (Molino et al. 2003), 
+motion planning (Hoff et al. 1999), and sculpting (Bærentzen 2001).</p>
+<p>However, fast and robust signed distance field computation is often 
+either a performance bottleneck, because of high-resolution fields, or a
+ nearly impossible task because of degeneracies in input meshes. Thus, 
+computation can be tedious and time-consuming. For example, a naive 
+implementation on a CPU can take hours, even days, to complete for 
+high-resolution grids (256<sup>3</sup> resolution or greater).</p>
+<p>Methods for computing distance fields on graphics hardware fall into 
+two different approaches: <em>distance meshing</em> or <em>scan 
+conversion of bounded volumes</em>. Section 34.7 gives a short survey of
+ these and other approaches.</p>
+<h4>34.1.2 Overview of Our Method</h4>
+<p>Our approach is a novel scan conversion method. In addition to being 
+GPU-accelerated, our method fixes the leaking artifacts sometimes 
+produced by the prism scan (Sigg et al. 2003) and characteristic scan 
+conversion (CSC) (Mauch 2003) methods. It is therefore able to handle 
+"inconsistent meshes" (Bischoff et al. 2005), which are polygonal models
+ that have holes, flipped surfaces, overlapping faces, and worse. In 
+practice, these polygonal models are often encountered on object 
+surfaces that are modeled by an animator or obtained by scanning or 
+segmentation.</p>
+<p>More precisely, our method does not need any scan line and combines 
+the novel fragment program from prism scan with the pseudonormal method 
+(Aanæs and Bærentzen 2003). Thus, it is single-pass and avoids any sign 
+errors of other scan conversion algorithms. Note that the correct sign 
+computation in the fragment program relies on the angle-weighted 
+pseudonormals of the vertices and edges; if these pseudonormals cannot 
+be computed correctly, there is no guarantee that the method will 
+compute the proper sign of the distance field.</p>
+<p>In the prism scan and CSC methods, the signed distance is computed 
+within a narrowband shell along the surface of objects. The size of the 
+shell is user specified. Our method, too, is limited by a narrow-band 
+size. Previous methods often used narrowband sizes of three to five 
+voxels. These small narrow-band sizes can hide computation errors at 
+farther distances, so we use narrow-band sizes on the order of 30 to 50 
+voxels.</p>
+<h2>34.2 Leaking Artifacts in Scan Methods</h2>
+<p>Characteristic scan conversion uses a subdivision of space, which is 
+inspired by Voronoi regions. More precisely, a bounded volume, or <em>characteristic
+ polyhedron</em>, is created for each feature of the polygonal model 
+(that is, the vertex, edge, and face) such that it encloses the set of 
+the voxels that is closer to this feature than any other features. The 
+union of all these potentially overlapping bounded volumes defines the 
+narrow-band shell.</p>
+<p>To avoid aliasing artifacts from discretization, we slightly enlarge 
+the bounded volumes. Each feature's bounded volume is then 
+scan-converted, and for each voxel that is inside the volume, its signed
+ distance to the feature is computed. For any voxel inside the 
+narrow-band shell, the signed distance to the object is then chosen. 
+From all the signed distances to some feature previously computed for 
+this voxel, this signed distance is chosen as the one with minimum 
+absolute value.</p>
+<p>Prism scan works similarly, except that no bounded volumes are 
+created for the edges and vertices; instead, a single type of bounded 
+volume—a tower prism—is created for each face.</p>
+<p>Both methods sometimes produce <em>leaking artifacts</em>, whereby 
+the sign of the distance computed for some voxels is wrong. These 
+artifacts come from the following three sources.</p>
+<h4>34.2.1 The Plane Test</h4>
+<p>Both scan methods—distance meshing and scan conversion of bounded 
+volumes—use a plane test to determine the sign of the distance function,
+ as illustrated in <a 
+href="javascript:popUp('elementLinks/34fig01.jpg')">Figure 34-1</a>. As 
+shown in this figure, this usage may lead to an incorrect computation of
+ the sign.</p>
+<div class="figure">
+   <a href="javascript:popUp('elementLinks/34fig01.jpg')">
+      <img src="gpugems3_ch34_fichiers/34fig01.jpg" alt="34fig01.jpg">
+   </a>
+   <p>
+      <a href="javascript:popUp('elementLinks/34fig01.jpg')">Figure 34-1</a>
+ Plane Test Sign Error</p>
+</div>
+<p>The figure shows a cross section of a polygonal model focused on two 
+faces, A and B. A and B are shown together with the bounded volume 
+around A, in which the signed distance is calculated. In the dashed-red 
+area, the points are closest to A and the sign will therefore become 
+positive. This is clearly wrong. The points in the dashed-red region are
+ located inside the object, so the sign should be negative. The sign 
+will be correct in the green-dashed region. If the planes alone are used
+ to determine the distance, the distance will be wrong in both the 
+red-dashed and in the green-dashed areas.</p>
+<p>In the characteristic scan conversion method, this problem is worse 
+because the characteristic polyhedra are enlarged to avoid aliasing. So 
+for a face, the distance of voxels outside the face's Voronoi region is 
+also computed with respect to the face plane. This means that the dashed
+ lines shown in <a href="javascript:popUp('elementLinks/34fig01.jpg')">Figure
+ 34-1</a> will produce voxels with distances close to zero inside 
+Voronoi regions of the neighboring faces. Prism scan performs a case 
+analysis of voxels in enlarged regions and will only suffer from a wrong
+ sign computation.</p>
+<p>
+   <a href="javascript:popUp('elementLinks/34fig02.jpg')">Figure 34-2</a>
+ shows real-life examples of these problems. As is the case for all such
+ examples in this chapter, for better visualization, we cut the 
+isosurface by a plane such that the inside and outside parts are shown 
+in blue and red colors, respectively. <a 
+href="javascript:popUp('elementLinks/34fig05.jpg')">Figure 34-5</a>, in 
+the next section, shows the results of using our method.</p>
+<div class="figure">
+   <a href="javascript:popUp('elementLinks/34fig02.jpg')">
+      <img src="gpugems3_ch34_fichiers/34fig02.jpg" alt="34fig02.jpg">
+   </a>
+   <p>
+      <a href="javascript:popUp('elementLinks/34fig02.jpg')">Figure 34-2</a>
+ Leaking Due to the Plane Test Problem</p>
+</div>
+<h4>34.2.2 How a Bounding Volume Is Constructed</h4>
+<p>The second source of leaking artifacts lies in the way bounding 
+volumes are constructed, as shown in <a 
+href="javascript:popUp('elementLinks/34fig03.jpg')">Figure 34-3</a>. The
+ narrow-band shells have different widths on opposite sides of a thin 
+region, which causes the inside region of one side to extend beyond the 
+outside region on the opposite side. For the configuration shown in the 
+figure, the bounding region of the top face extrudes below the bounding 
+region of the bottom face. This results in the small gray area in the 
+figure, where the distance becomes negative. In <a 
+href="javascript:popUp('elementLinks/34fig04.jpg')">Figure 34-4</a>, a 
+real-life example is shown.</p>
+<div class="figure">
+   <a href="javascript:popUp('elementLinks/34fig03.jpg')">
+      <img src="gpugems3_ch34_fichiers/34fig03.jpg" alt="34fig03.jpg">
+   </a>
+   <p>
+      <a href="javascript:popUp('elementLinks/34fig03.jpg')">Figure 34-3</a>
+ A Cross Section of a Mesh with Thin Structure, Shown Together with 
+Their Bounding Regions</p>
+</div>
+<div class="figure">
+   <a href="javascript:popUp('elementLinks/34fig04.jpg')">
+      <img src="gpugems3_ch34_fichiers/34fig04.jpg" alt="34fig04.jpg">
+   </a>
+   <p>
+      <a href="javascript:popUp('elementLinks/34fig04.jpg')">Figure 34-4</a>
+ Leaking by Construction</p>
+</div>
+<p>Our method, which is described in Section 34.3, is capable of 
+handling these two first sources of leaking artifacts—use of a plane 
+test and how a bound volume is constructed—as shown in <a 
+href="javascript:popUp('elementLinks/34fig05.jpg')">Figure 34-5</a>.</p>
+<div class="figure">
+   <a href="javascript:popUp('elementLinks/34fig05.jpg')">
+      <img src="gpugems3_ch34_fichiers/34fig05.jpg" alt="34fig05.jpg">
+   </a>
+   <p>
+      <a href="javascript:popUp('elementLinks/34fig05.jpg')">Figure 34-5</a>
+ Results Produced with Our Tetrahedra GPU Scan Method</p>
+</div>
+<h4>34.2.3 Folds in the Polygonal Model</h4>
+<p>The last source of leaking artifacts is due to folds present in the 
+polygonal model. Although both scan methods rely on the model's surface 
+to be a perfect two-manifold, this condition is not sufficient to avoid 
+sign problems. In fact, if the surface contains folds, then the 
+orientation of a triangle face can be flipped.</p>
+<p>A fold typically overlaps other triangles in the mesh, with its 
+inside pointing in the same direction as the other triangles' outsides. 
+If the folded triangle's outside has an absolute distance to a voxel 
+that is less than the absolute distance to the overlapped triangles, the
+ distance value computed will have the wrong sign and distance. A 
+special case of this problem occurs when the folded triangle and the 
+overlapped triangles have the same absolute distance. In this scenario, 
+the sign that's selected depends upon the scan order, and this order can
+ give some weird-looking errors, where the distance is correct but the 
+sign is wrong. This situation creates a strange leaking effect. <a 
+href="javascript:popUp('elementLinks/34fig06.jpg')">Figure 34-6</a> 
+illustrates the mesh topology of a fold, and <a 
+href="javascript:popUp('elementLinks/34fig07.jpg')">Figure 34-7</a> 
+shows a real-life example.</p>
+<div class="figure">
+   <a href="javascript:popUp('elementLinks/34fig06.jpg')">
+      <img src="gpugems3_ch34_fichiers/34fig06.jpg" alt="34fig06.jpg">
+   </a>
+   <p>
+      <a href="javascript:popUp('elementLinks/34fig06.jpg')">Figure 34-6</a>
+ The Mesh Topology of a Fold</p>
+</div>
+<div class="figure">
+   <a href="javascript:popUp('elementLinks/34fig07.jpg')">
+      <img src="gpugems3_ch34_fichiers/34fig07.jpg" alt="34fig07.jpg">
+   </a>
+   <p>
+      <a href="javascript:popUp('elementLinks/34fig07.jpg')">Figure 34-7</a>
+ Leaking by Folding</p>
+</div>
+<p>Folds cannot be handled by a single-pass algorithm. Our method could 
+be extended with a second pass to deal with sign problems caused by 
+folding, as done in Houston et al. 2006.</p>
+<h2>34.3 Our Tetrahedra GPU Scan Method</h2>
+<p>Given a surface of an object as a collection of triangles, we compute
+ the signed distance within a user-specified narrow-band shell.</p>
+<p>Our approach, the tetrahedra (T4) GPU scan method, uses a shell made 
+of tetrahedra: that is, only tetrahedral volumes are considered. Section
+ 34.3.1 describes how we compute the shell from the mesh triangles on 
+the CPU. Several tetrahedra are computed per triangle, and each of these
+ tetrahedra bounds a region of space containing a subset of the grid 
+voxels. For each of these voxels, the signed closest distance to the 
+triangle is computed on the GPU.</p>
+<p>To ensure complete coverage, we make sure the generated tetrahedra 
+covers the Voronoi regions of the mesh within a specified narrow-band 
+distance. Thus, the generated tetrahedra from a triangle must cover all 
+voxels of the Voronoi region of the triangle. The union of generated 
+tetrahedra from a one-ring neighborhood of a vertex must, likewise, 
+cover the Voronoi region of the vertex. In addition, the union of 
+tetrahedra from two neighboring triangles of an edge must cover the 
+Voronoi region of that edge. Our tetrahedra generation method generates 
+tetrahedra so that there are large overlaps in the Voronoi regions of 
+vertices and edges.</p>
+<p>Using tetrahedra allows us to employ a fast tetrahedron slicer to 
+compute the intersections of the shell with the grid voxels. The 
+technique of slicing tetrahedra is well known from volume visualization 
+and is extremely efficient. It is thus cheaper than doing a 3D scan 
+conversion of more-complex prisms, cones, or wedges.</p>
+<p>To determine the voxels lying inside each tetrahedron, we move a 
+z-plane in the direction of the positive <em>z</em> axis. At each 
+z-slice of the regular grid, we halt the z-plane and find the cross 
+sections between the tetrahedra and the z-plane, as described in Section
+ 34.3.2. A <em>status set</em> contains all the tetrahedra that 
+intersect the z-slice at any given step. We adopted a simple sweep-line 
+algorithm (de Berg et al. 1997) to quickly find all tetrahedra that 
+intersect the z-plane. This algorithm requires the tetrahedra to be 
+sorted by increasing z-value. As an alternative, we could use the 
+occlusion query method from Sud et al. 2004.</p>
+<p>Having found the cross sections, we render them and use a GPU 
+fragment program to compute the signed distances, as described in 
+Section 34.3.3. The fragment program outputs the signed distance to the 
+color buffer and outputs the absolute value of the signed distance to 
+the depth buffer. A depth test is set up so that the final result in the
+ color buffer is the signed distance with minimum absolute value, as 
+wanted. Before moving to the next z-slice of the regular grid, we read 
+back the computed distance values from the frame buffer and store them 
+in an internal data structure. Listing 34-1 shows the overall steps of 
+the T4 GPU scan method.</p>
+<h4>Example 34-1. Pseudocode for Our T4 GPU Scan Conversion Method</h4>
+<div class="dp-highlighter"><div class="bar"></div><ol class="dp-cpp" 
+start="1"><li class="alt"><span><span>algorithm&nbsp;T4-GPU-scan()&nbsp;&nbsp;</span></span></li><li
+ class=""><span>&nbsp;<span class="keyword">for</span><span>&nbsp;z&nbsp;=&nbsp;min&nbsp;z&nbsp;plane&nbsp;to&nbsp;max&nbsp;z&nbsp;plane&nbsp;&nbsp;</span></span></li><li
+ class="alt"><span>&nbsp;&nbsp;foreach&nbsp;tetrahedra&nbsp;t&nbsp;that&nbsp;intersects&nbsp;the&nbsp;z&nbsp;plane&nbsp;&nbsp;</span></li><li
+ class=""><span>&nbsp;&nbsp;&nbsp;find&nbsp;cross-section&nbsp;with&nbsp;z&nbsp;&nbsp;</span></li><li
+ class="alt"><span>&nbsp;&nbsp;&nbsp;render&nbsp;cross&nbsp;section&nbsp;&nbsp;</span></li><li
+ class=""><span>&nbsp;&nbsp;next&nbsp;t&nbsp;&nbsp;</span></li><li 
+class="alt"><span>&nbsp;&nbsp;read&nbsp;back&nbsp;distance&nbsp;values&nbsp;&nbsp;</span></li><li
+ class=""><span>&nbsp;next&nbsp;z&nbsp;&nbsp;</span></li><li class="alt"><span>end&nbsp;algorithm&nbsp;&nbsp;</span></li></ol></div><pre style="display: none;" name="code" class="cpp:nocontrols">algorithm T4-GPU-scan()
+ for z = min z plane to max z plane
+  foreach tetrahedra t that intersects the z plane
+   find cross-section with z
+   render cross section
+  next t
+  read back distance values
+ next z
+end algorithm</pre>
+<p>Note that we could have created the shell during the scan conversion 
+to minimize storage usage. However, in our implementation we have chosen
+ to keep the shell creation as a separate stage for better modularity of
+ the implementation.</p>
+<p>Our shell creation method has linear time complexity, <em>O</em>(<em>n</em>),
+ in the number of triangle faces, <em>n</em>, because it iterates once 
+over the triangle faces, and it generates a fixed number of tetrahedra 
+for each triangle face. The initialization of the sweep line (the 
+z-sorting of the tetrahedra) has <em>O</em>(<em>n</em> log <em>n</em>) 
+time complexity, although the actual scan conversion can be expected to 
+have linear complexity in the number of generated tetrahedra.</p>
+<p>Observe that we make one render pass for each z-increment. Also, we 
+make one render call per cross section. Currently, cross-section 
+geometry is transferred to the GPU using OpenGL's immediate mode. We 
+could optimize this step considerably by using vertex arrays and 
+geometry shaders for creating the cross sections. This will be the 
+subject of future work.</p>
+<h4>34.3.1 Computing the Shell</h4>
+<p>The shell is computed by iterating over the mesh triangles and 
+generating five tetrahedra per triangle.</p>
+<p>Using the longest edge, <strong>e</strong>, and the orthogonal height
+ vector, <strong>h</strong>, a tight-fitting rectangle can be placed in 
+the plane of the triangle. From now on, the rectangle is enlarged by the
+ user-specified narrow-band size, <em><font face="symbol">e</font></em>.
+ Finally, the four vertices of the rectangle are extruded an <em><font 
+face="symbol">e</font></em>-distance outward and inward along the face 
+normal, <strong>n,</strong> to produce an enclosing <em>oriented 
+bounding box</em> (OBB) around the triangle face. <a 
+href="javascript:popUp('elementLinks/34fig08.jpg')">Figure 34-8</a> 
+illustrates the steps involved.</p>
+<div class="figure">
+   <a href="javascript:popUp('elementLinks/34fig08.jpg')">
+      <img src="gpugems3_ch34_fichiers/34fig08.jpg" alt="34fig08.jpg">
+   </a>
+   <p>
+      <a href="javascript:popUp('elementLinks/34fig08.jpg')">Figure 34-8</a>
+ Fitting an Oriented Bounding Box Around a Triangle Face</p>
+</div>
+<p>The OBB is then directly decomposed into five tetrahedra. This step 
+is simple to implement and nearly impossible to get wrong. It ensures 
+complete coverage of the narrow band, although large parts may stick 
+outside or overlap. Thus, simplicity comes at a performance degradation.</p>
+<p>The shell creation method makes no assumption about the mesh and can 
+be used for unstructured meshes with all kinds of degeneracies. Note 
+that any kind of tetrahedral shell generation method could be used in 
+our scan conversion method, such as the adaptive thin tetrahedral shell 
+mesh (Erleben et al. 2005), which allows a trade-off between simplicity 
+of creation and efficiency of scan conversion.</p>
+<h4>34.3.2 Computing the Cross Section of a Tetrahedron</h4>
+<p>To calculate the cross section of a tetrahedron by using z-plane, we 
+sort the four points of the tetrahedron by increasing z-value. This 
+method allows a very simple algorithm to find the number of 
+intersections and to create polygons to be processed by the fragment 
+program.</p>
+<p>Consider <a href="javascript:popUp('elementLinks/34fig09.jpg')">Figure
+ 34-9</a>. If the z-plane under consideration is below the lowest point 
+in the tetrahedron, there will be no intersections. Similarly, if the 
+z-plane is above the highest point in the tetrahedron, there will be no 
+intersections, as shown in <a 
+href="javascript:popUp('elementLinks/34fig09.jpg')">Figure 34-9</a>.</p>
+<div class="figure">
+   <a href="javascript:popUp('elementLinks/34fig09.jpg')">
+      <img src="gpugems3_ch34_fichiers/34fig09.jpg" alt="34fig09.jpg">
+   </a>
+   <p>
+      <a href="javascript:popUp('elementLinks/34fig09.jpg')">Figure 34-9</a>
+ The Possible Different Topological Slicings of a Tetrahedron</p>
+</div>
+<p>There are only three topologically distinct ways a z-plane can 
+actually slice the tetrahedron:</p>
+<ol type="1">
+   <li>
+      <strong>The z-plane lies below <em>p</em>
+         <sub>1</sub>.</strong> In this case the plane cuts the lines <em>p</em>
+      <sub>0</sub> 
+      <em>p</em>
+      <sub>3</sub>, <em>p</em>
+      <sub>0</sub> 
+      <em>p</em>
+      <sub>1</sub>, and <em>p</em>
+      <sub>0</sub> 
+      <em>p</em>
+      <sub>2</sub> (case A in the figure).</li>
+   <li>
+      <strong>The z-plane lies between <em>p</em>
+         <sub>1</sub> and <em>p</em>
+         <sub>2</sub>.</strong> In this case the plane cuts the lines <em>p</em>
+      <sub>0</sub> 
+      <em>p</em>
+      <sub>3</sub>, <em>p</em>
+      <sub>1</sub> 
+      <em>p</em>
+      <sub>3</sub>, <em>p</em>
+      <sub>1</sub> 
+      <em>p</em>
+      <sub>2</sub>, and <em>p</em>
+      <sub>0</sub> 
+      <em>p</em>
+      <sub>2</sub> (case B in the figure).</li>
+   <li>
+      <strong>The z-plane lies above <em>p</em>
+         <sub>2</sub>.</strong> In this case the plane cuts the lines <em>p</em>
+      <sub>0</sub> 
+      <em>p</em>
+      <sub>3</sub>, <em>p</em>
+      <sub>1</sub> 
+      <em>p</em>
+      <sub>3</sub>, and <em>p</em>
+      <sub>2</sub> 
+      <em>p</em>
+      <sub>3</sub> (case C in the figure).</li>
+</ol>
+<p>In case B, the polygon will always be convex, which can be seen by 
+drawing all the possible configurations of a tetrahedron and considering
+ the order in which the plane cuts the four lines. A tetrahedron that is
+ sliced in only one point, or sliced along a line, has no area and 
+should not be considered. The slicing algorithm we described ensures 
+this never happens. The polygons might be clockwise or counterclockwise,
+ so a postprocess might be necessary to ensure proper orientation. 
+However, the T4 GPU scan method does not need this property.</p>
+<h4>34.3.3 Computing Signed Distance Using Angle-Weighted Pseudonormals</h4>
+<p>A novel fragment program was introduced in Sigg et al. 2003, which 
+calculated the distance to a triangle. We describe here the case 
+analysis used to determine the distance, together with our extension 
+that calculates the correct sign through use of angle-weighted 
+pseudonormals.</p>
+<p>The triangle is used to create a local triangle frame consisting of 
+vectors <strong>r</strong>, <strong>s</strong>, and <strong>t</strong>, 
+as shown in <a href="javascript:popUp('elementLinks/34fig10.jpg')">Figure
+ 34-10</a>.</p>
+<div class="figure">
+   <a href="javascript:popUp('elementLinks/34fig10.jpg')">
+      <img src="gpugems3_ch34_fichiers/34fig10.jpg" alt="34fig10.jpg">
+   </a>
+   <p>
+      <a href="javascript:popUp('elementLinks/34fig10.jpg')">Figure 
+34-10</a> A Local Triangle Frame for a Triangle in the Mesh and a 
+Related Cross Section</p>
+</div>
+<p>The <strong>t</strong> vector is set to the face normal, <strong>n</strong>.
+ Next, the longest edge of the triangle is found, and vertices are 
+numbered counterclockwise with respect to the face normal. By 
+convention, the longest edge is always going from vertex 0 to vertex 1, 
+as shown in <a href="javascript:popUp('elementLinks/34fig11.jpg')">Figure
+ 34-11</a>. The origin of the triangle frame is computed by projecting 
+vertex 2 onto the longest triangle edge. Next, <strong>r</strong> is 
+computed as the unit vector from the origin to vertex 1, and <strong>s</strong>
+ as the unit vector from the origin to vertex 2.</p>
+<div class="figure">
+   <a href="javascript:popUp('elementLinks/34fig11.jpg')">
+      <img src="gpugems3_ch34_fichiers/34fig11.jpg" alt="34fig11.jpg">
+   </a>
+   <p>
+      <a href="javascript:popUp('elementLinks/34fig11.jpg')">Figure 
+34-11</a> A Local Triangle with Lengths , , and , and Pseudonormals</p>
+</div>
+<p>The coordinates of the cross section of the tetrahedron are converted
+ to the local triangle frame and sent to the GPU as texture coordinates <strong>p</strong>
+ = (<em>r</em>, <em>s</em>, <em>t</em>), where <em>r</em>, <em>s</em>, 
+and <em>t</em> are the local triangle coordinates with respect to the <strong>r</strong>,
+ <strong>s</strong>, and <strong>t</strong> vectors, respectively.</p>
+<p>The triangle is analyzed to produce three lengths, as shown in <a 
+href="javascript:popUp('elementLinks/34fig11.jpg')">Figure 34-11</a>: 
+the height, <em>h</em>; the length, <em>a</em>, from the origin of the 
+triangle frame to vertex <strong>v</strong>
+   <sub>1</sub>; and the length, <em>b</em>, from the origin to vertex <strong>v</strong>
+   <sub>0</sub>.</p>
+<p>Further, the six angle-weighted pseudonormals for the vertices (<strong>n</strong>
+   <sub>v0</sub>, <strong>n</strong>
+   <sub>v1</sub>, and <strong>n</strong>
+   <sub>v2</sub>) and edges (<strong>n</strong>
+   <sub>e0</sub>
+   <strong>,</strong> 
+   <strong>n</strong>
+   <sub>e1</sub>
+   <strong>,</strong> and <strong>n</strong>
+   <sub>e2</sub>
+   <strong>,</strong>) are calculated and transformed to the local 
+triangle frame by using a rotation matrix constructed from unit column 
+vectors, as follows:</p>
+<p>
+   <img src="gpugems3_ch34_fichiers/753equ01.jpg" alt="753equ01.jpg">
+</p>
+<p>where <strong>n</strong>' is the transformed normal of <strong>n</strong>.
+ These pseudonormals and the three lengths are sent to the GPU as 
+texture coordinates.</p>
+<p>The first thing that happens on the GPU is a reduction of the problem
+ to the halfplane, where <em>r</em> <img 
+src="gpugems3_ch34_fichiers/U2265.GIF" class="articleIcon" 
+alt="U2265.GIF"> 0. That is, if <em>r</em> is negative, we flip the data
+ such that <em>r</em> = -<em>r</em>, <em>a</em> = <em>b</em>, <strong>n</strong>
+   <sub>v1</sub> = <strong>n</strong>
+   <sub>v0</sub>, and <strong>n</strong>
+   <sub>e1</sub> = <strong>n</strong>
+   <sub>e2</sub>. This considerably reduces further analysis.</p>
+<p>A primed coordinate system with coordinates <em>r</em>' and <em>s</em>'
+ is used in the case analysis. The origin of the primed coordinate 
+system is vertex 2, and the <em>r</em>' axis is the vector from vertex 2
+ to vertex 1. The <em>s</em>' axis is simply the hat of the <em>r</em>' 
+axis. Note that the primed coordinate system does not have unit axis 
+vectors. <em>r</em>' and <em>s</em>' are derived from <em>r</em> and <em>s</em>,
+ and a case analysis is performed according to regions shown in <a 
+href="javascript:popUp('elementLinks/34fig12.jpg')">Figure 34-12</a>.</p>
+<div class="figure">
+   <a href="javascript:popUp('elementLinks/34fig12.jpg')">
+      <img src="gpugems3_ch34_fichiers/34fig12.jpg" alt="34fig12.jpg">
+   </a>
+   <p>
+      <a href="javascript:popUp('elementLinks/34fig12.jpg')">Figure 
+34-12</a> Regions Used in the Case Analysis for the Triangle</p>
+</div>
+<p>From the case analysis, we can compute the distance to the closest 
+feature and determine the corresponding pseudonormal. The sign can be 
+computed using the pseudonormal of the closest feature, <strong>n</strong>(<strong>c</strong>),
+ and some point, <strong>c</strong>, on the closest feature, as the sign
+ of</p>
+<table>
+   <thead>
+   </thead><tbody>
+      <tr>
+         <td>
+            <p>
+               <em>d</em> = <strong>n</strong>(c)·(p - c),</p>
+         </td>
+      </tr>
+   </tbody>
+</table>
+<p>as described in Bærentzen and Aanæs 2005.</p>
+<p>The complete Cg program for the signed distance field computation is 
+shown in Listing 34-2.</p>
+<h4>Example 34-2. Cg Program Using Case Analysis and Pseudonormals to 
+Correctly Compute the Sign</h4>
+<div class="dp-highlighter"><div class="bar"></div><ol class="dp-cpp" 
+start="1"><li class="alt"><span><span>&nbsp;&nbsp;&nbsp;</span><span 
+class="keyword">void</span><span>&nbsp;main(&nbsp;&nbsp;</span></span></li><li
+ class=""><span>&nbsp;&nbsp;in&nbsp;float3&nbsp;local&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;TEXCOORD0,&nbsp;&nbsp;</span></li><li
+ class="alt"><span>&nbsp;&nbsp;in&nbsp;float3&nbsp;triangle&nbsp;&nbsp;:&nbsp;TEXCOORD1,&nbsp;&nbsp;</span></li><li
+ class=""><span>&nbsp;&nbsp;in&nbsp;float3&nbsp;nv0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;TEXCOORD2,&nbsp;&nbsp;</span></li><li
+ class="alt"><span>&nbsp;&nbsp;in&nbsp;float3&nbsp;nv1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;TEXCOORD3,&nbsp;&nbsp;</span></li><li
+ class=""><span>&nbsp;&nbsp;in&nbsp;float3&nbsp;nv2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;TEXCOORD4,&nbsp;&nbsp;</span></li><li
+ class="alt"><span>&nbsp;&nbsp;in&nbsp;float3&nbsp;ne0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;TEXCOORD5,&nbsp;&nbsp;</span></li><li
+ class=""><span>&nbsp;&nbsp;in&nbsp;float3&nbsp;ne1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;TEXCOORD6,&nbsp;&nbsp;</span></li><li
+ class="alt"><span>&nbsp;&nbsp;in&nbsp;float3&nbsp;ne2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;TEXCOORD7,&nbsp;&nbsp;</span></li><li
+ class=""><span>&nbsp;&nbsp;out&nbsp;float4&nbsp;dist&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;COLOR0,&nbsp;&nbsp;</span></li><li
+ class="alt"><span>&nbsp;&nbsp;out&nbsp;<span class="datatypes">float</span><span>&nbsp;&nbsp;absDist&nbsp;&nbsp;:&nbsp;DEPTH,&nbsp;&nbsp;</span></span></li><li
+ class=""><span>&nbsp;&nbsp;<span class="keyword">const</span><span>&nbsp;uniform&nbsp;</span><span
+ class="datatypes">float</span><span>&nbsp;narrowbandSize)&nbsp;&nbsp;</span></span></li><li
+ class="alt"><span>{&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;<span
+ class="comment">//&nbsp;Copy&nbsp;to&nbsp;temporaries.</span><span>&nbsp;&nbsp;</span></span></li><li
+ class="alt"><span>&nbsp;&nbsp;&nbsp;<span class="datatypes">float</span><span>&nbsp;&nbsp;&nbsp;a&nbsp;=&nbsp;triangle.x;&nbsp;&nbsp;</span></span></li><li
+ class=""><span>&nbsp;&nbsp;<span class="datatypes">float</span><span>&nbsp;&nbsp;&nbsp;b&nbsp;=&nbsp;triangle.y;&nbsp;&nbsp;</span></span></li><li
+ class="alt"><span>&nbsp;&nbsp;<span class="datatypes">float</span><span>&nbsp;&nbsp;&nbsp;h&nbsp;=&nbsp;triangle.z;&nbsp;&nbsp;</span></span></li><li
+ class=""><span>&nbsp;&nbsp;<span class="datatypes">float</span><span>&nbsp;&nbsp;&nbsp;r&nbsp;=&nbsp;local.x;&nbsp;&nbsp;</span></span></li><li
+ class="alt"><span>&nbsp;&nbsp;<span class="datatypes">float</span><span>&nbsp;&nbsp;&nbsp;s&nbsp;=&nbsp;local.y;&nbsp;&nbsp;</span></span></li><li
+ class=""><span>&nbsp;&nbsp;<span class="datatypes">float</span><span>&nbsp;&nbsp;&nbsp;t&nbsp;=&nbsp;local.z;&nbsp;&nbsp;</span></span></li><li
+ class="alt"><span>&nbsp;&nbsp;float3&nbsp;nv&nbsp;=&nbsp;nv1;&nbsp;&nbsp;</span></li><li
+ class=""><span>&nbsp;&nbsp;float3&nbsp;ne&nbsp;=&nbsp;ne1;&nbsp;&nbsp;</span></li><li
+ class="alt"><span>&nbsp;&nbsp;<span class="comment">//&nbsp;Normalize&nbsp;to&nbsp;half-space&nbsp;r&nbsp;&gt;=&nbsp;0.</span><span>&nbsp;&nbsp;</span></span></li><li
+ class=""><span>&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>&nbsp;(r&nbsp;&lt;&nbsp;0)&nbsp;{&nbsp;&nbsp;</span></span></li><li
+ class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;r&nbsp;=&nbsp;-r;&nbsp;&nbsp;</span></li><li
+ class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;a&nbsp;=&nbsp;&nbsp;b;&nbsp;&nbsp;</span></li><li
+ class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;nv&nbsp;=&nbsp;nv0;&nbsp;&nbsp;</span></li><li
+ class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;ne&nbsp;=&nbsp;ne2;&nbsp;&nbsp;</span></li><li
+ class="alt"><span>}&nbsp;&nbsp;</span></li><li class=""><span><span 
+class="comment">//&nbsp;Transform&nbsp;to&nbsp;the&nbsp;primed&nbsp;coordinate&nbsp;frame.</span><span>&nbsp;&nbsp;</span></span></li><li
+ class="alt"><span>&nbsp;&nbsp;&nbsp;<span class="datatypes">float</span><span>&nbsp;lensqr&nbsp;=&nbsp;(a&nbsp;*&nbsp;a&nbsp;+&nbsp;h&nbsp;*&nbsp;h);&nbsp;&nbsp;</span></span></li><li
+ class=""><span><span class="datatypes">float</span><span>&nbsp;rprime&nbsp;=&nbsp;(a&nbsp;*&nbsp;r&nbsp;+&nbsp;h&nbsp;*&nbsp;h&nbsp;-&nbsp;h&nbsp;*&nbsp;s)&nbsp;/&nbsp;lensqr;&nbsp;&nbsp;</span></span></li><li
+ class="alt"><span><span class="datatypes">float</span><span>&nbsp;sprime&nbsp;=&nbsp;(a&nbsp;*&nbsp;s&nbsp;+&nbsp;h&nbsp;*&nbsp;r&nbsp;-&nbsp;h&nbsp;*&nbsp;a)&nbsp;/&nbsp;lensqr;&nbsp;&nbsp;</span></span></li><li
+ class=""><span><span class="comment">//&nbsp;Case&nbsp;analysis</span><span>&nbsp;&nbsp;</span></span></li><li
+ class="alt"><span>&nbsp;&nbsp;&nbsp;<span class="comment">//&nbsp;Default&nbsp;to&nbsp;region&nbsp;I</span><span>&nbsp;&nbsp;</span></span></li><li
+ class=""><span>&nbsp;&nbsp;&nbsp;float3&nbsp;c&nbsp;=&nbsp;float3(0,&nbsp;0,&nbsp;0);&nbsp;&nbsp;</span></li><li
+ class="alt"><span>float3&nbsp;n&nbsp;=&nbsp;float3(0,&nbsp;0,&nbsp;1);&nbsp;&nbsp;</span></li><li
+ class=""><span><span class="keyword">if</span><span>&nbsp;(s&nbsp;&lt;&nbsp;0)&nbsp;{&nbsp;&nbsp;</span></span></li><li
+ class="alt"><span>&nbsp;&nbsp;<span class="comment">//&nbsp;Region&nbsp;III&nbsp;or&nbsp;II</span><span>&nbsp;&nbsp;</span></span></li><li
+ class=""><span>&nbsp;&nbsp;c.x&nbsp;=&nbsp;a;&nbsp;&nbsp;</span></li><li
+ class="alt"><span>&nbsp;&nbsp;n&nbsp;=&nbsp;(r&nbsp;&gt;&nbsp;a)&nbsp;?&nbsp;nv&nbsp;:&nbsp;ne0;&nbsp;&nbsp;</span></li><li
+ class=""><span>}&nbsp;&nbsp;</span></li><li class="alt"><span><span 
+class="keyword">else</span><span>&nbsp;</span><span class="keyword">if</span><span>&nbsp;(sprime&nbsp;&gt;&nbsp;0)&nbsp;{&nbsp;&nbsp;</span></span></li><li
+ class=""><span>&nbsp;&nbsp;<span class="keyword">if</span><span>&nbsp;(rprime&nbsp;&lt;&nbsp;0)&nbsp;{&nbsp;&nbsp;</span></span></li><li
+ class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//&nbsp;Region&nbsp;VI</span><span>&nbsp;&nbsp;</span></span></li><li
+ class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;c.y&nbsp;=&nbsp;h;&nbsp;&nbsp;</span></li><li
+ class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;n&nbsp;=&nbsp;nv2;&nbsp;&nbsp;</span></li><li
+ class=""><span>&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;<span
+ class="keyword">else</span><span>&nbsp;{&nbsp;&nbsp;</span></span></li><li
+ class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//&nbsp;Region&nbsp;IV&nbsp;or&nbsp;V</span><span>&nbsp;&nbsp;</span></span></li><li
+ class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;c.x&nbsp;=&nbsp;a;&nbsp;&nbsp;</span></li><li
+ class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;n&nbsp;=&nbsp;(rprime&nbsp;&gt;&nbsp;1)&nbsp;?&nbsp;nv&nbsp;:&nbsp;ne;&nbsp;&nbsp;</span></li><li
+ class="alt"><span>&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class=""><span>}&nbsp;&nbsp;</span></li><li
+ class="alt"><span><span class="comment">//&nbsp;IV,&nbsp;V,&nbsp;VI</span><span>&nbsp;&nbsp;</span></span></li><li
+ class=""><span>rprime&nbsp;=&nbsp;max(max(-&nbsp;rprime,0),&nbsp;rprime&nbsp;-&nbsp;1);&nbsp;&nbsp;</span></li><li
+ class="alt"><span><span class="comment">//&nbsp;I,&nbsp;V</span><span>&nbsp;&nbsp;</span></span></li><li
+ class=""><span>sprime&nbsp;=&nbsp;max(sprime,0);&nbsp;&nbsp;</span></li><li
+ class="alt"><span><span class="comment">//&nbsp;II,&nbsp;III</span><span>&nbsp;&nbsp;</span></span></li><li
+ class=""><span>r&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;max(r-a,0);&nbsp;&nbsp;</span></li><li
+ class="alt"><span><span class="comment">//&nbsp;Compute&nbsp;the&nbsp;distance.</span><span>&nbsp;&nbsp;</span></span></li><li
+ class=""><span>&nbsp;&nbsp;&nbsp;<span class="datatypes">float</span><span>&nbsp;tmp&nbsp;=&nbsp;(s&nbsp;&lt;&nbsp;0)&nbsp;?&nbsp;(r&nbsp;*&nbsp;r&nbsp;+&nbsp;s&nbsp;*&nbsp;s)&nbsp;&nbsp;</span></span></li><li
+ class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;((rprime&nbsp;*&nbsp;rprime&nbsp;+&nbsp;sprime&nbsp;*&nbsp;sprime)&nbsp;*&nbsp;lensqr);&nbsp;&nbsp;</span></li><li
+ class=""><span>absDist&nbsp;=&nbsp;sqrt(tmp&nbsp;+&nbsp;t&nbsp;*&nbsp;t);&nbsp;&nbsp;</span></li><li
+ class="alt"><span><span class="comment">//&nbsp;Compute&nbsp;the&nbsp;sign.</span><span>&nbsp;&nbsp;</span></span></li><li
+ class=""><span>&nbsp;&nbsp;&nbsp;<span class="datatypes">float</span><span>&nbsp;sign_tst&nbsp;=&nbsp;sign(dot(n,&nbsp;local&nbsp;-&nbsp;c));&nbsp;&nbsp;</span></span></li><li
+ class="alt"><span>dist&nbsp;=&nbsp;float4(sign_tst&nbsp;*&nbsp;absDist,&nbsp;local);&nbsp;&nbsp;</span></li><li
+ class=""><span><span class="comment">//&nbsp;Depth&nbsp;buffer&nbsp;is&nbsp;clamped&nbsp;to&nbsp;0..1,&nbsp;so&nbsp;we&nbsp;rescale.</span><span>&nbsp;&nbsp;</span></span></li><li
+ class="alt"><span>absDist&nbsp;/=&nbsp;narrowbandSize;&nbsp;&nbsp;</span></li><li
+ class=""><span>}&nbsp;&nbsp;</span></li></ol></div><pre style="display: none;" name="code" class="cpp:nocontrols">   void main(
+  in float3 local     : TEXCOORD0,
+  in float3 triangle  : TEXCOORD1,
+  in float3 nv0       : TEXCOORD2,
+  in float3 nv1       : TEXCOORD3,
+  in float3 nv2       : TEXCOORD4,
+  in float3 ne0       : TEXCOORD5,
+  in float3 ne1       : TEXCOORD6,
+  in float3 ne2       : TEXCOORD7,
+  out float4 dist     : COLOR0,
+  out float  absDist  : DEPTH,
+  const uniform float narrowbandSize)
+{
+  // Copy to temporaries.
+   float   a = triangle.x;
+  float   b = triangle.y;
+  float   h = triangle.z;
+  float   r = local.x;
+  float   s = local.y;
+  float   t = local.z;
+  float3 nv = nv1;
+  float3 ne = ne1;
+  // Normalize to half-space r &gt;= 0.
+   if (r &lt; 0) {
+    r = -r;
+    a =  b;
+    nv = nv0;
+    ne = ne2;
+}
+// Transform to the primed coordinate frame.
+   float lensqr = (a * a + h * h);
+float rprime = (a * r + h * h - h * s) / lensqr;
+float sprime = (a * s + h * r - h * a) / lensqr;
+// Case analysis
+   // Default to region I
+   float3 c = float3(0, 0, 0);
+float3 n = float3(0, 0, 1);
+if (s &lt; 0) {
+  // Region III or II
+  c.x = a;
+  n = (r &gt; a) ? nv : ne0;
+}
+else if (sprime &gt; 0) {
+  if (rprime &lt; 0) {
+    // Region VI
+    c.y = h;
+    n = nv2;
+  }
+  else {
+    // Region IV or V
+    c.x = a;
+    n = (rprime &gt; 1) ? nv : ne;
+  }
+}
+// IV, V, VI
+rprime = max(max(- rprime,0), rprime - 1);
+// I, V
+sprime = max(sprime,0);
+// II, III
+r      = max(r-a,0);
+// Compute the distance.
+   float tmp = (s &lt; 0) ? (r * r + s * s)
+                    : ((rprime * rprime + sprime * sprime) * lensqr);
+absDist = sqrt(tmp + t * t);
+// Compute the sign.
+   float sign_tst = sign(dot(n, local - c));
+dist = float4(sign_tst * absDist, local);
+// Depth buffer is clamped to 0..1, so we rescale.
+absDist /= narrowbandSize;
+}</pre>
+<h2>34.4 Results</h2>
+<p>All measurements in <a 
+href="javascript:popUp('elementLinks/34fig13.jpg')">Figures 34-13</a> 
+and <a href="javascript:popUp('elementLinks/34fig14.jpg')">34-14</a> 
+were performed on a 2.4 GHz Pentium 4 with 4 GB of RAM, running Gentoo 
+Linux with an NVIDIA GeForce 6800 GT with 256 MB of RAM. We used a 
+narrow-band size corresponding to 10 percent of the maximum mesh extent,
+ so roughly to an order of 30 to 50 voxels. All timings are in seconds 
+and plotted in <a href="javascript:popUp('elementLinks/34fig13.jpg')">Figures
+ 34-13</a> and <a href="javascript:popUp('elementLinks/34fig14.jpg')">34-14</a>.
+ As expected, all figures show linear complexity in the mesh size.</p>
+<div class="figure">
+   <a href="javascript:popUp('elementLinks/34fig13.jpg')">
+      <img src="gpugems3_ch34_fichiers/34fig13.jpg" alt="34fig13.jpg">
+   </a>
+   <p>
+      <a href="javascript:popUp('elementLinks/34fig13.jpg')">Figure 
+34-13</a> The Time to Process the Geometry on the CPU for the OBB Shell 
+Creation Method</p>
+</div>
+<div class="figure">
+   <a href="javascript:popUp('elementLinks/34fig14.jpg')">
+      <img src="gpugems3_ch34_fichiers/34fig14.jpg" alt="34fig14.jpg">
+   </a>
+   <p>
+      <a href="javascript:popUp('elementLinks/34fig14.jpg')">Figure 
+34-14</a> The Time to Process the Geometry on the GPU</p>
+</div>
+<p>
+   <a href="javascript:popUp('elementLinks/34fig13.jpg')">Figure 34-13</a>
+ shows the CPU time overhead. Clearly, the lookup operations into our 
+tetrahedra mesh data structure are bottlenecks in our implementation. 
+Why? Because all our mesh data structures are designed for making 
+topological operations easy, not for quickly retrieving information. The
+ second most expensive operations are local triangle initialization, 
+slicing, surface mesh lookup of vertex coordinates and normals, and 
+transformation of normals. Except for the mesh vertex and normal lookup,
+ these operations could be offloaded to the GPU by using vertex and 
+geometry shaders. <a href="javascript:popUp('elementLinks/34fig14.jpg')">Figure
+ 34-14</a>, which charts the GPU time overhead, shows that the fragment 
+program is computationally the most expensive part and outweighs the 
+frame buffer readback for large mesh sizes.</p>
+<p>In <a href="javascript:popUp('elementLinks/34fig15.jpg')">Figure 
+34-15</a>, we show a few of our signed distance field results. The left 
+column shows the sign computation, the middle column shows the signed 
+distance field, and the right column has the mesh superimposed. Note 
+that no leaking is present and that the signed distance field appears 
+smooth everywhere.</p>
+<div class="figure">
+   <a href="javascript:popUp('elementLinks/34fig15.jpg')">
+      <img src="gpugems3_ch34_fichiers/34fig15.jpg" alt="34fig15.jpg">
+   </a>
+   <p>
+      <a href="javascript:popUp('elementLinks/34fig15.jpg')">Figure 
+34-15</a> Sign Verification and Signed Distance Field Results</p>
+</div>
+<p>
+   <a href="javascript:popUp('elementLinks/34fig16.jpg')">Figure 34-16</a>
+ compares the running times of a CPU implementation of our method and 
+our GPU implementation. Various meshes of different sizes were 
+scan-converted into 256<sup>3</sup> grids by using a narrowband size of 
+roughly 20 pixels, which corresponds to 10 percent of the mesh extent. 
+These tests were done on a Dell Precision M90, with Intel Core Duo, 2.33
+ GHz, and 2 GB of RAM, running Windows XP and having an NVIDIA Quadro FX
+ 2500 graphics card with 512 MB of RAM. On average, the GPU version 
+gives a speedup factor of 6. The CPU version exploits random access to 
+the memory, so there is no need to use the scan line; instead, 
+tetrahedra slices are rendered directly into the 3D grids in the CPU 
+memory.</p>
+<div class="figure">
+   <a href="javascript:popUp('elementLinks/34fig16.jpg')">
+      <img src="gpugems3_ch34_fichiers/34fig16.jpg" alt="34fig16.jpg">
+   </a>
+   <p>
+      <a href="javascript:popUp('elementLinks/34fig16.jpg')">Figure 
+34-16</a> Performance Comparison</p>
+</div>
+<h2>34.5 Conclusion</h2>
+<p>We have presented an approach for scan conversion of signed distance 
+fields that offers these features:</p>
+<ul>
+   <li>It is based on a single type of simple geometry: a tetrahedron.</li>
+   <li>It uses pseudonormals to handle correct sign computations.</li>
+   <li>Part of it lends itself naturally to a GPU implementation, 
+yielding an average speedup factor of 6.</li>
+</ul>
+<p>We have also presented a shell generation method that is simple to 
+understand and easy to implement. Put together, our work yields a 
+flexible, simple, and efficient system for computing signed distance 
+fields.</p>
+<h2>34.6 Future Work</h2>
+<p>Future work includes improvements to the algorithm itself and to its 
+GPU implementation.</p>
+<h4>34.6.1 Improvements to the Algorithm</h4>
+<p>Fast methods that generate more tight-fitting tetrahedral shell 
+meshes could be used to boost performance. Indeed, the OBB creation 
+method clearly yields good quality. However, because of the large OBBs 
+extending far beyond the narrow-band size and having large overlaps, 
+redundant and unneeded computations are done during the scan conversion.</p>
+<p>Next, although we have presented a shell generation method that 
+doesn't rely on pseudonormals, the fragment program actually needs the 
+pseudonormals. This may be a disadvantage for several degenerate meshes 
+that have redundant vertices, creating open boundaries that meet but are
+ not topologically connected. So, future work could focus on the 
+dependence on pseudonormals—for instance, by figuring out an algorithm 
+capable of computing meaningful pseudonormals for degenerate meshes. 
+Other than that, the method is capable of handling open boundaries, even
+ overlapping faces.</p>
+<h4>34.6.2 Improvements to Our Implementation</h4>
+<p>Our GPU implementation could be much improved to achieve even higher 
+speedups.</p>
+<p>First, we could replace OpenGL's immediate mode by using vertex 
+buffer objects to obtain better triangle batching. Second, the scan-line
+ method could be moved onto the GPU by using occlusion queries to 
+quickly determine the set of tetrahedra that intersects the current 
+z-plane. Third, the multiple readbacks that occur for every z-slice 
+could be reduced to a single readback by creating a flattened 3D texture
+ (that is, a 2D texture containing all z-slices of the signed distance 
+field and having uniforms to indicate offsets into the flattened texture
+ for each render pass). These three improvements would still keep the 
+implementation backward-compatible with all graphics cards that support 
+programmable GPUs.</p>
+<p>In addition, on more recent GPUs we could use a vertex texture fetch 
+to set up the actual tetrahedral slicing in a vertex program and to 
+generate the tetrahedral geometries in geometry shaders.</p>
+<h2>34.7 Further Reading</h2>
+<p>The brute-force approach to computing distance fields can be 
+described as "For each voxel, compute the closest distance to the faces 
+in a polygonal model." Acceleration techniques exist, such as only 
+querying voxels against a bounding volume hierarchy, or reversing the 
+iteration to iterate over bounding volumes around faces.</p>
+<p>A straightforward parallelization of the naive approach is possible 
+by reversing the order of iteration; that is, for each face, compute the
+ distance to all voxels, as was done in Hoff et al. 1999. The authors 
+mesh the distance function of a vertex, edge, or face and render it 
+directly to the depth buffer. For volumes, this is done in a 
+slice-by-slice manner, and the distance field is read back from the 
+depth buffer. Any distance metric can be used, but signs are not 
+handled. The simplicity of this method is attractive, although it 
+requires tessellating elliptical cones and hyperboloid sheets in 3D. 
+Obviously, the tessellation causes discretization errors in the distance
+ computation, but the errors can be controlled. This approach is termed <em>distance
+ meshing</em>.</p>
+<p>Scan conversion algorithms using the GPU have become quite popular. 
+Here various external regions, which bound the space of points lying 
+closer to a geometric feature than any other geometric feature, are 
+scan-converted. These methods require the construction of bounded 
+volumes that are scan-converted slice by slice using a CPU-based 
+scan-line method extended for 3D volumes. Previous CPU methods used a 
+two-pass strategy to resolve the sign issue. In Aanæs and Bærentzen 
+2003, angle-weighted pseudonormals were used to determine the correct 
+sign, which allows for a single pass only.</p>
+<p>In Mauch 2003, the characteristic scan conversion algorithm was 
+presented, and three different kinds of characteristic polyhedra were 
+used: a prism (for faces), a cone (for vertices), and a wedge (for 
+edges). Although this algorithm is conceptually easy to understand, it's
+ not clear how the curved surfaces of the cones and wedges should be 
+tessellated. To avoid aliasing, you must enlarge the polyhedra; however,
+ the author did not describe the possible errors in the computations 
+caused by voxels getting caught on the wrong side of the surface. This 
+artifact is described in detail in Section 34.2.</p>
+<p>Sigg et al. 2003 presented an optimized GPU version of CSC together 
+with a more aggressive scan conversion method, named <em>prism scan</em>.
+ Prisms are constructed for faces only, reducing the number of bounded 
+volumes that need to be scan-converted. Also, a novel fragment program 
+was presented for computing the signed distances of the rasterized 
+voxels. Prism scan suffers from the same sign problems as CSC, because 
+only the face planes are used to determine the sign, as explained in 
+detail in Section 34.2. These sign errors may seem innocent because they
+ occur rarely for small-sized narrow-bands and smooth curved objects. 
+However, if narrow-band size is increased and objects with sharp ridges 
+and valleys are scan-converted, the sign errors immediately blow up as 
+huge areas of discontinuities where the wrong side of the surface is 
+leaked into the other side.</p>
+<p>Both prism scan and CSC are limited by a user-specified narrow-band 
+size.</p>
+<p>Both these methods rely on the input surface mesh to be a perfect 
+two-manifold. When working with real-world models, we find that this is 
+often not the case, so we must often resort to a mesh reconstruction 
+(Nooruddin and Turk 2003).</p>
+<p>Sud et al. 2004 presents several performance improvements for 
+computing distance fields on graphics hardware. The two main 
+contributions are a culling method based on occlusion queries and a 
+conservative clamping computation based on the spatial coherency of the 
+distance field.</p>
+<p>To summarize, methods for computing distance fields on graphics 
+hardware fall into two different approaches: distance meshing and scan 
+conversion of bounded volumes. In Hsieh and Tai 2005, a hybrid of these 
+two approaches is presented for the 2D case.</p>
+<p>Other approaches involve solving the eikonal equation by using, for 
+instance, a two-stage fast-marching method (Sethian 1999a). Whereas the 
+scan conversion methods we just described compute exact signed distance 
+fields, fast-marching methods usually have a discretization error of 
+order <em>O</em>(1), but higher-order accurate versions do exist 
+(Sethian 1999b). Other methods deal with the computation of distance 
+fields, such as Danielsson's distance field algorithm (Danielsson 1980).
+ Danielsson uses a four-pass scan method to propagate distance 
+information on a regular 2D grid. This method, which can be extended to 
+3D, somewhat resembles the fast-marching method.</p>
+<p>Frisken et al. (2000) take a different approach by introducing 
+adaptive distance fields.</p>
+<h2>34.8 References</h2>
+
+<p>
+   Aanæs, H., and J. A. Bærentzen. 2003. "Pseudo-normals for Signed 
+Distance Computation." In <em>Proceedings of Vision, Modeling, and 
+Visualization 2003</em>.</p>
+<p>
+   Bærentzen, J. A. 2001. "Manipulation of Volumetric Solids, with 
+Application to Sculpting." Ph.D. dissertation, IMM, Technical University
+ of Denmark.</p>
+<p>
+   Bærentzen, J. A., and H. Aanæs. 2005. "Signed Distance Computation 
+Using the Angle Weighted Pseudo-normal." <em>Transactions on 
+Visualization and Computer Graphics</em> 11(3), pp. 243–253.</p>
+<p>
+   Bischoff, S., D. Pavic, and L. Kobbelt. 2005. "Automatic Restoration 
+of Polygon Models." <em>ACM Transactions on Graphics</em> 24(4), pp. 
+1332–1352.</p>
+<p>
+   Bridson, R., S. Marino, and R. Fedkiw. 2003. "Simulation of Clothing 
+with Folds and Wrinkles." In <em>Proceedings of the 2003 ACM 
+SIGGRAPH/Eurographics Symposium on Computer Animation</em>, pp. 28–36.</p>
+<p>
+   Danielsson, P. E. 1980. "Euclidean Distance Mapping." <em>Computer 
+Graphics and Image Processing</em> 14, pp. 227–248.</p>
+<p>
+   de Berg, M., M. van Kreveld, M. Overmars, and O. Schwarzkopf. 1997. <em>Computational
+ Geometry: Algorithms and Applications</em>. Springer-Verlag.</p>
+<p>
+   Erleben, K., H. Dohlmann, and J. Sporring. 2005. "The Adaptive Thin 
+Shell Tetrahedral Mesh." <em>The Journal of WSCG</em> 13, pp. 17–24.</p>
+<p>
+   Fisher, S., and M. C. Lin. 2001. "Deformed Distance Fields for 
+Simulation of Nonpenetrating Flexible Bodies." In <em>Proceedings of the
+ Eurographics Workshop on Computer Animation and Simulation</em>, pp. 
+99–111.</p>
+<p>
+   Frisken, S. F., R. N. Perry, A. P. Rockwood, and T. R. Jones. 2000. 
+"Adaptively Sampled Distance Fields: A General Representation of Shape 
+for Computer Graphics." In <em>Proceedings of the 27th Annual Conference
+ on Computer Graphics and Interactive Techniques</em>, pp. 249–254.</p>
+<p>
+   Guendelman, E., R. Bridson, and R. Fedkiw. 2003. "Nonconvex Rigid 
+Bodies with Stacking." In <em>ACM Transactions on Graphics (Proceedings 
+of SIGGRAPH 2003)</em> 22(3).</p>
+<p>
+   Hasselgren, J., T. Akenine-Möller, and L. Ohlsson. 2005. 
+"Conservative Rasterization." In <em>GPU Gems 2</em>, edited by Matt 
+Pharr, pp. 677–690. Addison-Wesley.</p>
+<p>
+   Hoff III, K. E., J. Keyser, M. Lin, D. Manocha, and T. Culver. 1999. 
+"Fast Computation of Generalized Voronoi Diagrams Using Graphics 
+Hardware." In <em>Proceedings of the 26th Annual Conference on Computer 
+Graphics and Interactive Techniques</em>, pp. 277–286.</p>
+<p>
+   Houston, B., M. B. Nielsen, C. Batty, O. Nilsson, and K. Museth. 
+2006. "Hierarchical RLE Level Set: A Compact and Versatile Deformable 
+Surface Representation." <em>ACM Transactions on Graphics</em> 25(1), 
+pp. 151–175.</p>
+<p>
+   Hsieh, H.-H., and W.-K. Tai. 2005. "A Simple GPU-Based Approach for 
+3D Voronoi Diagram Construction and Visualization." <em>Simulation 
+Modelling Practice and Theory</em> 13(8), pp. 681–692.</p>
+<p>
+   Mauch, S. 2003. "Efficient Algorithms for Solving Static 
+Hamilton-Jacobi Equations." Ph.D. dissertation, California Institute of 
+Technology.</p>
+<p>
+   Molino, N., R. Bridson, J. Teran, and R. Fedkiw. 2003. "A 
+Crystalline, Red Green Strategy for Meshing Highly Deformable Objects 
+with Tetrahedra." <em>International Meshing Roundtable</em> 12, pp. 
+103–114.</p>
+<p>
+   Nooruddin, F. S., and G. Turk. 2003. "Simplification and Repair of 
+Polygonal Models Using Volumetric Techniques." <em>IEEE Transactions on 
+Visualization and Computer Graphics</em> 9(2), pp. 191–205.</p>
+<p>
+   O'Rourke, J. 1998. <em>Computational Geometry in C</em>, 2nd ed. 
+Cambridge University Press.</p>
+<p>
+   Sethian, J. A. 1999a. <em>Level Set Methods and Fast Marching 
+Methods: Evolving Interfaces in Computational Geometry, Fluid Mechanics,
+ Computer Vision, and Materials Science</em>. Cambridge University 
+Press.</p>
+<p>
+   Sethian, J. A. 1999b. "Fast Marching Methods." <em>SIAM Review</em> 
+41(2), pp. 199–235.</p>
+<p>
+   Sigg, C., R. Peikert, and M. Gross. 2003. "Signed Distance Transform 
+Using Graphics Hardware." In <em>Proceedings of IEEE Visualization</em>,
+ pp. 83–90.</p>
+<p>
+   Sud, A., M. A. Otaduy, and D. Manocha. 2004. "DiFi: Fast 3D Distance 
+Field Computation Using Graphics Hardware." In <em>Proceedings of 
+Eurographics</em> 23(3).</p>
+
+
+		<!-- generated html end -->
+
+
+
+<!-- <div align="right" style=" color:#999999;">Last Update: 12:39 07/17/2009</div> -->
+
+  </div>
+
+  
+
+  <div id="left" class="column">		
+
+    <a href="http://developer.nvidia.com/">Developer Site Homepage</a><br><br>
+
+		<a href="http://news.developer.nvidia.com/">Developer News Homepage</a><br><br>
+
+
+
+		<img src="gpugems3_ch34_fichiers/divider.gif" alt="" border="0" 
+align=""><br><br>
+
+
+
+		<a href="https://nvdeveloper.nvidia.com/">Developer Login</a><br><br>
+
+		<a 
+href="http://developer.nvidia.com/page/registered_developer_program.html">Become
+ a<br>Registered Developer</a><br><br>
+
+
+
+		<img src="gpugems3_ch34_fichiers/divider.gif" alt="" border="0" 
+align=""><br><br>
+
+
+
+		<a href="http://developer.nvidia.com/page/tools.html">Developer Tools</a><br><br>
+
+		<a href="http://developer.nvidia.com/page/documentation.html">Documentation</a><br><br>
+
+		<a href="http://developer.nvidia.com/page/directx.html">DirectX</a><br><br>
+
+		<a href="http://developer.nvidia.com/page/opengl.html">OpenGL</a><br><br>
+
+		<a href="http://developer.nvidia.com/object/cuda.html">GPU Computing</a><br><br>
+
+		<a href="http://developer.nvidia.com/page/handheld.html">Handheld</a><br><br>
+
+		<a href="http://developer.nvidia.com/page/event_calendar.html">Events 
+Calendar</a><br><br>
+
+
+
+		<img src="gpugems3_ch34_fichiers/divider.gif" alt="" border="0" 
+align=""><br><br>
+
+
+
+		<a href="http://developer.nvidia.com/object/newsletter_signup.html">Newsletter
+ Sign-Up</a><br><br>
+
+		<a href="http://developer.nvidia.com/object/downloading_drivers.html">Drivers</a><br><br>
+
+		<a href="http://developer.nvidia.com/page/jobs.html">Jobs (1)</a><br><br>
+
+		<a href="http://developer.nvidia.com/object/contact_us.html">Contact</a><br><br>
+
+		<a href="http://developer.nvidia.com/object/legal_info.html">Legal 
+Information</a><br><br>
+
+
+
+		<img src="gpugems3_ch34_fichiers/divider.gif" alt="" border="0" 
+align=""><br><br>
+
+		<a 
+href="http://surveys.nvidia.com/index.jsp?pi=c1655cd3f4d0fb4bfdee853f141f9a75">Site
+ Feedback</a>		
+
+	</div>
+
+	
+
+  <div id="right" class="column"><ul><li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_pref01.html">Foreword</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_pref02.html">Preface</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_pref03.html">Contributors</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_copyrightpg.html">Copyright</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_part01.html"><i>Part
+ I: Geometry</i></a></li>
+<ul>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch01.html">Chapter
+ 1. Generating Complex Procedural Terrains Using the GPU</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch02.html">Chapter
+ 2. Animated Crowd Rendering</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch03.html">Chapter
+ 3. DirectX 10 Blend Shapes: Breaking the Limits</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch04.html">Chapter
+ 4. Next-Generation SpeedTree Rendering</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch05.html">Chapter
+ 5. Generic Adaptive Mesh Refinement</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch06.html">Chapter
+ 6. GPU-Generated Procedural Wind Animations for Trees</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch07.html">Chapter
+ 7. Point-Based Visualization of Metaballs on a GPU</a></li>
+</ul><li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_part02.html"><i>Part
+ II: Light and Shadows</i></a></li>
+<ul>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch08.html">Chapter
+ 8. Summed-Area Variance Shadow Maps</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch09.html">Chapter
+ 9. Interactive Cinematic Relighting with Global Illumination</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch10.html">Chapter
+ 10. Parallel-Split Shadow Maps on Programmable GPUs</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch11.html">Chapter
+ 11. Efficient and Robust Shadow Volumes Using Hierarchical Occlusion 
+Culling and Geometry Shaders</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch12.html">Chapter
+ 12. High-Quality Ambient Occlusion</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch13.html">Chapter
+ 13. Volumetric Light Scattering as a Post-Process</a></li>
+</ul><li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_part03.html"><i>Part
+ III: Rendering</i></a></li>
+<ul>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch14.html">Chapter
+ 14. Advanced Techniques for Realistic Real-Time Skin Rendering</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch15.html">Chapter
+ 15. Playable Universal Capture</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch16.html">Chapter
+ 16. Vegetation Procedural Animation and Shading in Crysis</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch17.html">Chapter
+ 17. Robust Multiple Specular Reflections and Refractions</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch18.html">Chapter
+ 18. Relaxed Cone Stepping for Relief Mapping</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch19.html">Chapter
+ 19. Deferred Shading in Tabula Rasa</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch20.html">Chapter
+ 20. GPU-Based Importance Sampling</a></li>
+</ul><li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_part04.html"><i>Part
+ IV: Image Effects</i></a></li>
+<ul>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch21.html">Chapter
+ 21. True Impostors</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch22.html">Chapter
+ 22. Baking Normal Maps on the GPU</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch23.html">Chapter
+ 23. High-Speed, Off-Screen Particles</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch24.html">Chapter
+ 24. The Importance of Being Linear</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch25.html">Chapter
+ 25. Rendering Vector Art on the GPU</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch26.html">Chapter
+ 26. Object Detection by Color: Using the GPU for Real-Time Video Image 
+Processing</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch27.html">Chapter
+ 27. Motion Blur as a Post-Processing Effect</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch28.html">Chapter
+ 28. Practical Post-Process Depth of Field</a></li>
+</ul><li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_part05.html"><i>Part
+ V: Physics Simulation</i></a></li>
+<ul>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch29.html">Chapter
+ 29. Real-Time Rigid Body Simulation on GPUs</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch30.html">Chapter
+ 30. Real-Time Simulation and Rendering of 3D Fluids</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch31.html">Chapter
+ 31. Fast N-Body Simulation with CUDA</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch32.html">Chapter
+ 32. Broad-Phase Collision Detection with CUDA</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch33.html">Chapter
+ 33. LCP Algorithms for Collision Detection Using CUDA</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch34.html"><font
+ color="#45b900;"><b><i>Chapter 34. Signed Distance Fields Using 
+Single-Pass GPU Scan Conversion of Tetrahedra</i></b></font></a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch35.html">Chapter
+ 35. Fast Virus Signature Matching on the GPU</a></li>
+</ul><li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_part06.html"><i>Part
+ VI: GPU Computing</i></a></li>
+<ul>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch36.html">Chapter
+ 36. AES Encryption and Decryption on the GPU</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch37.html">Chapter
+ 37. Efficient Random Number Generation and Application Using CUDA</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch38.html">Chapter
+ 38. Imaging Earth's Subsurface Using CUDA</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch39.html">Chapter
+ 39. Parallel Prefix Sum (Scan) with CUDA</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch40.html">Chapter
+ 40. Incremental Computation of the Gaussian</a></li>
+<li><a 
+href="http://http.developer.nvidia.com/GPUGems3/gpugems3_ch41.html">Chapter
+ 41. Using the Geometry Shader for Compact and Variable-Length GPU 
+Feedback</a></li>
+</ul>
+</ul></div>
+
+</div>
+
+
+
+<div id="footer"></div>
+
+
+
+
+
+<!--WEBSIDESTORY CODE HBX1.0 (Universal)-->
+
+<!--COPYRIGHT 1997-2005 WEBSIDESTORY,INC. ALL RIGHTS RESERVED. U.S.PATENT No. 6,393,479B1. MORE INFO:http://websidestory.com/privacy-->
+
+<script language="javascript">
+
+var _hbEC=0,_hbE=new Array;function _hbEvent(a,b){b=_hbE[_hbEC++]=new Object();b._N=a;b._C=0;return b;}
+
+var hbx=_hbEvent("pv");hbx.vpc="HBX0100u";hbx.gn="a.nvidia.com";
+
+hbx.acct="DM55061879AA96EN3";//developer
+
+hbx.pn="PUT+PAGE+NAME+HERE";
+
+hbx.mlc="CONTENT+CATEGORY";
+
+hbx.pndef="home.html";
+
+hbx.ctdef="full";
+
+hbx.lt="auto";
+
+hbx.dlf=".run,.8bi,.asx,.bat,.cg,.chm,.cpp,.db,.dds,.dll,.dsp,.dsw,.fp,.fx,.fxcomposer,.fxproj,.h,.hdr,.hpp,.ico,.img,.inf,.ini,.key,.lib,.lst,.msi,.ncb,.opt,.P3D,.plg,.exr,.rc,.res,.sh,.sln,.spc,.str,.tga,.txt,.vcproj,.xml";
+
+</script><script language="javascript1.1" defer="defer" src="gpugems3_ch34_fichiers/hbx.js"></script>
+
+<!--END WEBSIDESTORY CODE-->
+
+
+
+<link type="text/css" rel="stylesheet" 
+href="gpugems3_ch34_fichiers/SyntaxHighlighter.css">
+
+<script language="javascript" src="gpugems3_ch34_fichiers/shCore.js"></script>
+
+<script language="javascript" src="gpugems3_ch34_fichiers/shBrushCpp.js"></script>
+
+<script language="javascript">
+
+dp.SyntaxHighlighter.ClipboardSwf = 'dp.SyntaxHighlighter/Scripts/clipboard.swf';
+
+dp.SyntaxHighlighter.HighlightAll('code');
+
+</script>
+
+
+
+<script type="text/javascript">
+
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+</script><script src="gpugems3_ch34_fichiers/ga.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+
+var pageTracker = _gat._getTracker("UA-4670658-1");
+
+pageTracker._initData();
+
+pageTracker._trackPageview();
+
+</script>
+
+
+
+
+
+</body></html>
