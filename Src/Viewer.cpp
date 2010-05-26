@@ -27,7 +27,7 @@ Viewer::~Viewer(){}
 	
 void Viewer::_setCamera(){
     glLoadIdentity();
-	gluLookAt(_posx, _posy, _posz, 0.0f, 2.0f, -40.0f, 0.0f, 1.0f, 0.0f);
+	gluLookAt(_posx, _posy, _posz, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 	glutPostRedisplay();
 }	
 
@@ -82,10 +82,10 @@ void Viewer::start(){
 
 void Viewer::_initCamera(){
 	cout << "Initialisation de la camera " << endl;
-	_cameraAngle = M_PI*0.75f;
-	_posx = 0;
-	_posy = 2;
-	_posz = 10;
+	_cameraAngle = 0;
+	_posx = -10;
+	_posy = 1;
+	_posz = -10;
 }
 
 void Viewer::_initDepth(){
@@ -99,7 +99,7 @@ void Viewer::_initRendering(){
 	cout << "Initialisation du rendu " << endl;
 	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
 	glShadeModel(GL_SMOOTH);
-	glPolygonMode(GL_FRONT, GL_FILL);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glLineWidth(1.0f);
 	glPointSize(2.0f);
     glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
@@ -119,9 +119,10 @@ void Viewer::_initLighting(){
 }
 	
 void Viewer::_displayFunc(){
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+	_instance->_setCamera();
 	_instance->rendu();
-	glFlush();
+	//glFlush();
 	glutSwapBuffers();
 }
 

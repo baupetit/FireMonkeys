@@ -30,6 +30,9 @@ Solver::Solver( int N ) : _N(N) {
 	        _w[IX(i,j,k)] = 0.0f;
 	        _w0[IX(i,j,k)] = 0.0f;
         END_FOR
+
+		_d[IX(1,1,1)] = 100.;
+
 }
 
 Solver::~Solver(){
