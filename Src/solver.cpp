@@ -1,6 +1,5 @@
 #define SIZE ((N+2)*(N+2)*(N+2))
-#define IX(i,j,k) ((i)+(N+2)*(j)+(N+2*N+2)*k)
-#define SWAP(x0,x) {double * tmp=x0;x0=x;x=tmp;}
+#define SWAP(x0,x) {float * tmp=x0;x0=x;x=tmp;}
 #define FOR_EACH_CELL for ( k=1 ; k<=N ; k++ ) { for ( j=1 ; j<=N ; j++ ) { for( i=1; i<N ; i++ ) {
 #define END_FOR }}}
 
@@ -10,14 +9,14 @@
 Solver::Solver( int N ) : _N(N) {
 	
 	/* allocation */
-	_d = new double[SIZE];
-	_d0 = new double[SIZE];
-	_u = new double[SIZE];
-	_u0 = new double[SIZE];
-	_v = new double[SIZE];
-	_v0 = new double[SIZE];		
-	_w = new double[SIZE];
-	_w0 = new double[SIZE];		
+	_d = new float[SIZE];
+	_d0 = new float[SIZE];
+	_u = new float[SIZE];
+	_u0 = new float[SIZE];
+	_v = new float[SIZE];
+	_v0 = new float[SIZE];		
+	_w = new float[SIZE];
+	_w0 = new float[SIZE];		
 
 	int i,j,k;
 
@@ -44,13 +43,22 @@ Solver::~Solver(){
 	delete [] _w0;
 }
 
-void addSource ( int N, double *x , double *s , double dt )
+const float* Solver::getDensities() const {
+	return _d;
+}
+
+
+int Solver::getSize() const{
+	return _N ;
+}
+
+void addSource ( int N, float *x , float *s , float dt )
 {
 	int i;
 	for ( i=0 ; i<SIZE ; i++ ) x[i] += dt*s[i];
 }
 
-void setBoundaries ( int N, int b, double *x )
+void setBoundaries ( int N, int b, float *x )
 {
 /*	
 	int i;
@@ -68,7 +76,7 @@ void setBoundaries ( int N, int b, double *x )
 */
 }
 
-void linearSolve ( int N, int b, double * x, double * x0, double a, double c )
+void linearSolve ( int N, int b, float * x, float * x0, float a, float c )
 {
 	int i, j, k, l;
 
@@ -85,16 +93,16 @@ void linearSolve ( int N, int b, double * x, double * x0, double a, double c )
 	}
 }
 
-void diffuse ( int N, int b, double * x, double * x0, double diff, double dt )
+void diffuse ( int N, int b, float * x, float * x0, float diff, float dt )
 {
-	double a=dt*diff*N*N*N;
+	float a=dt*diff*N*N*N;
 	linearSolve ( N, b, x, x0, a, 1+4*a );
 }
 
-void advect ( int N, int b, double * d, double * d0, double * u, double * v, double *w, double dt )
+void advect ( int N, int b, float * d, float * d0, float * u, float * v, float *w, float dt )
 {
 	int i, j, k, i0, j0, k0, i1, j1, k1;
-	double x, y, z, s0, t0, r0, s1, t1, r1, dt0;
+	float x, y, z, s0, t0, r0, s1, t1, r1, dt0;
 
 	dt0 = dt*N;
 	FOR_EACH_CELL
@@ -131,7 +139,7 @@ void advect ( int N, int b, double * d, double * d0, double * u, double * v, dou
 	setBoundaries ( N, b, d );
 }
 
-void project ( int N, double * u, double * v, double *w, double * p, double * div )
+void project ( int N, float * u, float * v, float *w, float * p, float * div )
 {
 	int i, j, k;
 
@@ -156,14 +164,14 @@ void project ( int N, double * u, double * v, double *w, double * p, double * di
 	setBoundaries( N, 3, w);
 }
 
-void Solver::densitiesStep ( double diff, double dt )
+void Solver::densitiesStep ( float diff, float dt )
 {
 	addSource ( _N, _d, _d0, dt );
 	SWAP ( _d0, _d ); diffuse ( _N, 0, _d, _d0, diff, dt );
 	SWAP ( _d0, _d ); advect ( _N, 0, _d, _d0, _u, _v, _w, dt );
 }
 
-void Solver::velocitiesStep ( double visc, double dt )
+void Solver::velocitiesStep ( float visc, float dt )
 {
 	addSource ( _N, _u, _u0, dt ); 
 	addSource ( _N, _v, _v0, dt );
