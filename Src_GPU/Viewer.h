@@ -16,11 +16,11 @@
 #include <iostream>
 using namespace std;
 
-#define USE_GLEW
-#ifdef USE_GLEW
-	#include <GL/glew.h>	// OpenGL extensions
-#endif
+#include <GL/glew.h>
 #include <GL/glut.h>
+
+
+#include "Fluid_GPU.h"
 
 class Viewer{
 
@@ -31,6 +31,7 @@ public :
     
     void start();
     
+    void initScene();
     void rendu();
     
 private :
@@ -59,6 +60,12 @@ private :
 	static void _reshapeFunc(int w, int h);
 	static void _specialFunc(int key, int x, int y);
 	static void _visibilityFunc(int visible);
+	
+	
+	
+private:
+    // Systeme de fluide associé
+    Fluid_GPU *_fluid;
 };
 
 
