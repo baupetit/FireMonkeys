@@ -14,7 +14,7 @@ OBJ = $(SRC:%.cpp=$(OBJDIR)%.o)
 all : $(EXEC_NAME)
 
 clean :
-	rm $(EXEC_NAME) $(OBJDIR)*.o
+	rm -f $(EXEC_NAME) $(OBJDIR)*.o
 
 $(EXEC_NAME) : $(OBJ)
 	$(CC) -o $(EXEC_NAME) $(OBJ) $(LIBS)

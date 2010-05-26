@@ -17,6 +17,7 @@ Viewer::Viewer(const string & title, int width, int height,
 	_initCamera();
 	_reshapeFunc(width, height);
 	_setCamera();
+	initScene();
 	
 	Viewer::_instance = this;
 }
@@ -41,16 +42,16 @@ void Viewer::_initGlut(const string & title, int width, int height,
 	int dummy_argc = 1;
 	glutInit(&dummy_argc, (char **)dummy_argv);
 	
-	// Initialisation de GL
+	// Initialisation de GLUT
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DEPTH | GLUT_DOUBLE);
 	glutInitWindowSize(width, height);
 	glutInitWindowPosition(initPositionX, initPositionY);
-	
+		
 	// Creation de la fenetre
     int windowID = glutCreateWindow(title.c_str());
     
     // Initialisation des callbacks de glut
-        glutDisplayFunc(_displayFunc);
+    glutDisplayFunc(_displayFunc);
 	glutKeyboardFunc(_keyboardFunc);
 	glutSpecialFunc(_specialFunc);
 	glutMouseFunc(_mouseFunc);
@@ -65,14 +66,12 @@ void Viewer::_initGlut(const string & title, int width, int height,
 	//cout << glGetString(GL_EXTENSIONS) << endl;
 	
 	// Initialisation de Glew
-    #ifdef USE_GLEW	
 	GLenum err = glewInit();
 	if (err != GLEW_OK)
 	{
 		cerr << "Error glew init: " << glewGetErrorString(err) << endl;
 	}
 	cout << "Glew initialized " << endl;
-    #endif
 }
 
 void Viewer::start(){
@@ -82,10 +81,10 @@ void Viewer::start(){
 
 void Viewer::_initCamera(){
 	cout << "Initialisation de la camera " << endl;
-	_cameraAngle = 0;
-	_posx = -10;
-	_posy = 1;
-	_posz = -10;
+	_cameraAngle = M_PI*0.75f;
+	_posx = 0;
+	_posy = 2;
+	_posz = -3;
 }
 
 void Viewer::_initDepth(){
@@ -99,7 +98,7 @@ void Viewer::_initRendering(){
 	cout << "Initialisation du rendu " << endl;
 	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
 	glShadeModel(GL_SMOOTH);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glPolygonMode(GL_FRONT, GL_FILL);
 	glLineWidth(1.0f);
 	glPointSize(2.0f);
     glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
@@ -119,10 +118,9 @@ void Viewer::_initLighting(){
 }
 	
 void Viewer::_displayFunc(){
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-	_instance->_setCamera();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	_instance->rendu();
-	//glFlush();
+	glFlush();
 	glutSwapBuffers();
 }
 
@@ -130,10 +128,41 @@ void Viewer::_keyboardFunc(unsigned char key, int x, int y){}
 void Viewer::_motionFunc(int x, int y){}
 void Viewer::_mouseFunc(int button, int state, int x, int y){}
 void Viewer::_passiveMotionFunc(int x, int y){}
-void Viewer::_reshapeFunc(int w, int h){}
+
+void Viewer::_reshapeFunc(int w, int h){
+	// Prevent a divide by zero, when window is too short
+	// (you cant make a window of zero width).
+	if(h == 0)
+		h = 1;
+
+	float ratio = 1.0f * w / h;
+	// Reset the coordinate system before modifying
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
+	// Set the viewport to be the entire window
+	glViewport(0, 0, w, h);
+
+	// Set the clipping volume (perspective camera)
+	gluPerspective(45,ratio,1,1000);
+	glMatrixMode(GL_MODELVIEW);
+}
+
 void Viewer::_specialFunc(int key, int x, int y){}
 void Viewer::_visibilityFunc(int visible){}
 
 
 
-void Viewer::rendu(){}
+void Viewer::initScene(){
+	/*cout << "Initialisation de la Scene " << endl;
+	_fluid = new Fluid_GPU();
+	_fluid -> initialiserSpeedField();*/
+}
+void Viewer::rendu(){/*
+	//if ( _fluid!= 0 ) _fluid -> resolutionSpeedField();
+	//if ( _fluid!= 0 ) _fluid -> displaySpeedField();
+	glBegin(GL_POINTS);
+		glVertex3d(0.0f,0.0f,0.0f);
+	glEnd();
+		     */
+}

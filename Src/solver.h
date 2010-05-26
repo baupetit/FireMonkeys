@@ -49,6 +49,17 @@ public :
 	 */
 	int getSize() const ;
 
+	/**
+	 * @brief : set density in the given cell
+	 */ 
+	void setDensity( int i , int j , int k , float dens );
+
+	/**
+	 * @brief : set the velocity in the given cell
+	 */
+	void setVelocity( int i, int j , int k , float u, float v, float w );
+
+
 protected :
 	/* size of the grid */
 	int _N ;

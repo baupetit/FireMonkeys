@@ -1,6 +1,6 @@
 #define SIZE ((N+2)*(N+2)*(N+2))
 #define SWAP(x0,x) {float * tmp=x0;x0=x;x=tmp;}
-#define FOR_EACH_CELL for ( k=1 ; k<=N ; k++ ) { for ( j=1 ; j<=N ; j++ ) { for( i=1; i<N ; i++ ) {
+#define FOR_EACH_CELL for ( k=1 ; k< N+1 ; k++ ) { for ( j=1 ; j<N+1 ; j++ ) { for( i=1; i<N+1 ; i++ ) {
 #define END_FOR }}}
 
 #include "solver.h"
@@ -20,18 +20,21 @@ Solver::Solver( int N ) : _N(N) {
 
 	int i,j,k;
 
-	FOR_EACH_CELL
-		_d[IX(i,j,k)] = 0.0f;
-        	_d0[IX(i,j,k)] = 0.0f;
-	        _u[IX(i,j,k)] = 0.0f;
-	        _u0[IX(i,j,k)] = 0.0f;
-	        _v[IX(i,j,k)] = 0.0f;
-	        _v0[IX(i,j,k)] = 0.0f;
-	        _w[IX(i,j,k)] = 0.0f;
-	        _w0[IX(i,j,k)] = 0.0f;
-        END_FOR
+	for ( k=0 ; k<N+2 ; k++ ) { 
+		for ( j=0 ; j<N+2 ; j++ ) { 
+			for( i=0; i<N+2 ; i++ ) {
+				_d[IX(i,j,k)] = 0.0f;
+				_d0[IX(i,j,k)] = 0.0f;
+				_u[IX(i,j,k)] = 0.0f;
+				_u0[IX(i,j,k)] = 0.0f;
+				_v[IX(i,j,k)] = 0.0f;
+				_v0[IX(i,j,k)] = 0.0f;
+				_w[IX(i,j,k)] = 0.0f;
+				_w0[IX(i,j,k)] = 0.0f;
+			}
+		}
+	}
 
-		_d[IX(1,1,1)] = 100.;
 
 }
 
@@ -55,6 +58,18 @@ int Solver::getSize() const{
 	return _N ;
 }
 
+void Solver::setDensity( int i , int j , int k , float dens ){
+	int N = _N ;
+	_d[IX(i,j,k)] = dens ;
+}
+
+void Solver::setVelocity( int i, int j , int k , float u, float v, float w ){
+	int N = _N ;
+	_u[IX(i,j,k)] = u ;
+	_v[IX(i,j,k)] = v ;
+	_w[IX(i,j,k)] = w ;
+}
+
 void addSource ( int N, float *x , float *s , float dt )
 {
 	int i;
@@ -63,20 +78,27 @@ void addSource ( int N, float *x , float *s , float dt )
 
 void setBoundaries ( int N, int b, float *x )
 {
-/*	
-	int i;
+	int i,j;
 
 	for ( i=1 ; i<=N ; i++ ) {
-		x[IX(0  ,i)] = b==1 ? -x[IX(1,i)] : x[IX(1,i)];
-		x[IX(N+1,i)] = b==1 ? -x[IX(N,i)] : x[IX(N,i)];
-		x[IX(i,0  )] = b==2 ? -x[IX(i,1)] : x[IX(i,1)];
-		x[IX(i,N+1)] = b==2 ? -x[IX(i,N)] : x[IX(i,N)];
+		for( j=1 ; j<=N ; j++ ) {
+			x[IX(0  ,i,j)] = b==1 ? -x[IX(1,i,j)] : x[IX(1,i,j)];
+			x[IX(N+1,i,j)] = b==1 ? -x[IX(N,i,j)] : x[IX(N,i,j)];
+			x[IX(i,0  ,j)] = b==2 ? -x[IX(i,1,j)] : x[IX(i,1,j)];
+			x[IX(i,N+1,j)] = b==2 ? -x[IX(i,N,j)] : x[IX(i,N,j)];
+			x[IX(i,j  ,0)] = b==3 ? -x[IX(i,j,1)] : x[IX(i,j,1)];
+			x[IX(i,j  ,N+1)] = b==3 ? -x[IX(i,j,N)] : x[IX(i,j,N)];
+		}
 	}
-	x[IX(0  ,0  )] = 0.5f*(x[IX(1,0  )]+x[IX(0  ,1)]);
-	x[IX(0  ,N+1)] = 0.5f*(x[IX(1,N+1)]+x[IX(0  ,N)]);
-	x[IX(N+1,0  )] = 0.5f*(x[IX(N,0  )]+x[IX(N+1,1)]);
-	x[IX(N+1,N+1)] = 0.5f*(x[IX(N,N+1)]+x[IX(N+1,N)]);
-*/
+
+	x[IX(0  ,0  ,0)] = (x[IX(1,0  ,0)]+x[IX(0  ,1,0)]+x[IX(0,0    ,1)]);
+	x[IX(0  ,N+1,0)] = (x[IX(1,N+1,0)]+x[IX(0  ,N,0)]+x[IX(0,N+1  ,1)]);
+	x[IX(N+1,0  ,0)] = (x[IX(N,0  ,0)]+x[IX(N+1,1,0)]+x[IX(N+1,0  ,1)]);
+	x[IX(N+1,N+1,0)] = (x[IX(N,N+1,0)]+x[IX(N+1,N,0)]+x[IX(N+1,N+1,1)]);
+	x[IX(0  ,0  ,N+1)] = (x[IX(1,0  ,N+1)]+x[IX(0  ,1,N+1)]+x[IX(0,0    ,N)]);
+	x[IX(0  ,N+1,N+1)] = (x[IX(1,N+1,N+1)]+x[IX(0  ,N,N+1)]+x[IX(0,N+1  ,1)]);
+	x[IX(N+1,0  ,N+1)] = (x[IX(N,0  ,N+1)]+x[IX(N+1,1,N+1)]+x[IX(N+1,0  ,N)]);
+	x[IX(N+1,N+1,N+1)] = (x[IX(N,N+1,N+1)]+x[IX(N+1,N,N+1)]+x[IX(N+1,N+1,N)]);
 }
 
 void linearSolve ( int N, int b, float * x, float * x0, float a, float c )
@@ -98,8 +120,8 @@ void linearSolve ( int N, int b, float * x, float * x0, float a, float c )
 
 void diffuse ( int N, int b, float * x, float * x0, float diff, float dt )
 {
-	float a=dt*diff*N*N*N;
-	linearSolve ( N, b, x, x0, a, 1+4*a );
+	float a=dt*diff*N*N;
+	linearSolve ( N, b, x, x0, a, 1+6*a );
 }
 
 void advect ( int N, int b, float * d, float * d0, float * u, float * v, float *w, float dt )
@@ -126,7 +148,7 @@ void advect ( int N, int b, float * d, float * d0, float * u, float * v, float *
 		if (z<0.5f) z=0.5f; 
 		if (z>N+0.5f) z=N+0.5f; 
 		k0=(int)z; 
-		k1=j0+1;
+		k1=k0+1;
 
 
 	        s1 = x-i0; s0 = 1-s1; 
@@ -135,8 +157,8 @@ void advect ( int N, int b, float * d, float * d0, float * u, float * v, float *
 
 	        d[IX(i,j,k)] = s0*(t0*(r0*d0[IX(i0,j0,k0)] + r1*d0[IX(i0,j0,k1)]) + 
 				 t1*(r0*d0[IX(i0,j1,k0)] + r1*d0[IX(i0,j1,k1)]))
-			+
-			     s1*(t0*(r0*d0[IX(i1,j0,k0)] + r1*d0[IX(i1,j0,k1)]) + 
+			   +
+			       s1*(t0*(r0*d0[IX(i1,j0,k0)] + r1*d0[IX(i1,j0,k1)]) + 
 				 t1*(r0*d0[IX(i1,j1,k0)] + r1*d0[IX(i1,j1,k1)]));
 	END_FOR
 	setBoundaries ( N, b, d );
@@ -150,12 +172,12 @@ void project ( int N, float * u, float * v, float *w, float * p, float * div )
 		div[IX(i,j,k)] = -0.5f*(
 			u[IX(i+1,j,k)]-u[IX(i-1,j,k)]+
 			v[IX(i,j+1,k)]-v[IX(i,j-1,k)]+
-			w[IX(i,j,k+1)]-v[IX(i,j,k-1)] )/N;
+			w[IX(i,j,k+1)]-w[IX(i,j,k-1)] )/N;
 	        p[IX(i,j,k)] = 0;
 	END_FOR	
 	setBoundaries ( N, 0, div ); setBoundaries ( N, 0, p );
 
-	linearSolve ( N, 0, p, div, 1, 4 );
+	linearSolve ( N, 0, p, div, 1, 6 );
 
 	FOR_EACH_CELL
 		u[IX(i,j,k)] -= 0.5f*N*(p[IX(i+1,j,k)]-p[IX(i-1,j,k)]);
@@ -168,7 +190,7 @@ void project ( int N, float * u, float * v, float *w, float * p, float * div )
 }
 
 void Solver::densitiesStep ( float diff, float dt )
-{
+{	
 	addSource ( _N, _d, _d0, dt );
 	SWAP ( _d0, _d ); diffuse ( _N, 0, _d, _d0, diff, dt );
 	SWAP ( _d0, _d ); advect ( _N, 0, _d, _d0, _u, _v, _w, dt );

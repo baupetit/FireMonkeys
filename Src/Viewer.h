@@ -16,10 +16,7 @@
 #include <iostream>
 using namespace std;
 
-#define USE_GLEW
-#ifdef USE_GLEW
-	#include <GL/glew.h>	// OpenGL extensions
-#endif
+#include <GL/glew.h>
 #include <GL/glut.h>
 
 class Viewer{
@@ -31,6 +28,7 @@ public :
     
     void start();
     
+    void initScene();
     virtual void rendu();
     
 private :
@@ -59,6 +57,8 @@ private :
 	static void _reshapeFunc(int w, int h);
 	static void _specialFunc(int key, int x, int y);
 	static void _visibilityFunc(int visible);
+	
+
 };
 
 
