@@ -27,8 +27,13 @@ Viewer::~Viewer(){}
 	
 	
 void Viewer::_setCamera(){
-    glLoadIdentity();
-	gluLookAt(_posx, _posy, _posz, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+    float x = _distToOrigin*cos(_cameraAngle);
+	float y = _cameraHeight;
+	float z = _distToOrigin*sin(_cameraAngle);
+
+	glLoadIdentity();
+	gluLookAt(x, y, z, -x, y, -z, 0.0f, 1.0f, 0.0f);
+
 	glutPostRedisplay();
 }	
 
@@ -82,9 +87,8 @@ void Viewer::start(){
 void Viewer::_initCamera(){
 	cout << "Initialisation de la camera " << endl;
 	_cameraAngle = M_PI*0.75f;
-	_posx = 0;
-	_posy = 2;
-	_posz = -10;
+	_distToOrigin = 5.0f;
+	_cameraHeight = 0.5f;
 }
 
 void Viewer::_initDepth(){
@@ -148,7 +152,44 @@ void Viewer::_reshapeFunc(int w, int h){
 	glMatrixMode(GL_MODELVIEW);
 }
 
-void Viewer::_specialFunc(int key, int x, int y){}
+void Viewer::_specialFunc(int key, int x, int y){
+    _instance->_keyMap(key, x, y);
+}
+
+void Viewer::_keyMap(int key, int x, int y){
+    float cam_speed = 5.0;
+	switch (key) {
+		case GLUT_KEY_LEFT :
+			_cameraAngle += 0.1f * cam_speed;
+			_setCamera();
+			break;
+		case GLUT_KEY_RIGHT :
+			_cameraAngle -=0.1f * cam_speed;
+			_setCamera();
+			break;
+		case GLUT_KEY_UP :
+			_distToOrigin -= 0.2f * cam_speed;
+			if (_distToOrigin<1.5f)
+				_distToOrigin = 1.5f;
+			_setCamera();
+			break;
+		case GLUT_KEY_DOWN :
+			_distToOrigin += 0.2f * cam_speed;
+			_setCamera();
+			break;
+		case GLUT_KEY_PAGE_UP :
+			_cameraHeight += 0.1f * cam_speed;
+			_setCamera();
+			break;
+		case GLUT_KEY_PAGE_DOWN :
+			_cameraHeight -= 0.1f * cam_speed;
+			_setCamera();
+			break;
+	    default:
+	        break;
+	}
+}
+
 void Viewer::_visibilityFunc(int visible){}
 
 
@@ -159,10 +200,6 @@ void Viewer::initScene(){
 	_fluid -> initialiserSpeedField();
 }
 void Viewer::rendu(){
-	//if ( _fluid!= 0 ) _fluid -> resolutionSpeedField();
-	//if ( _fluid!= 0 ) _fluid -> displaySpeedField();
-	glBegin(GL_POINTS);
-		glVertex3d(0.0f,0.0f,0.0f);
-	glEnd();
-	
+	if ( _fluid!= 0 ) _fluid -> resolutionSpeedField();
+	if ( _fluid!= 0 ) _fluid -> displaySpeedField();	
 }
