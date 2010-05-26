@@ -1,11 +1,11 @@
-#define IX(i,j) ((i)+(N+2)*(j))
+#define IX(i,j,k) ((i)+(N+2)*(j)+(N+2*N+2)*k)
 #define SWAP(x0,x) {float * tmp=x0;x0=x;x=tmp;}
 #define FOR_EACH_CELL for ( i=1 ; i<=N ; i++ ) { for ( j=1 ; j<=N ; j++ ) {
 #define END_FOR }}
 
 void add_source ( int N, float * x, float * s, float dt )
 {
-	int i, size=(N+2)*(N+2);
+	int i, size=(N+2)*(N+2)*(N+2);
 	for ( i=0 ; i<size ; i++ ) x[i] += dt*s[i];
 }
 
