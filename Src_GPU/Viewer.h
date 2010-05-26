@@ -40,7 +40,9 @@ private :
 
     // Camera
 	float _cameraAngle;
-	float _posx,_posy,_posz;
+	float _distToOrigin;
+	float _cameraHeight;
+	
 	void  _setCamera();
 	
     // Initialisations
@@ -61,7 +63,8 @@ private :
 	static void _specialFunc(int key, int x, int y);
 	static void _visibilityFunc(int visible);
 	
-	
+	// Touches clavier
+	void  _keyMap(int key, int x, int y);
 	
 private:
     // Systeme de fluide associé
