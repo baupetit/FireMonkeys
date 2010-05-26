@@ -6,6 +6,8 @@
 #endif
 
 
+#include "Fluid_GPU.h"
+
 Viewer *Viewer::_instance = NULL;
 
 Viewer::Viewer(const string & title, int width, int height,
@@ -17,8 +19,10 @@ Viewer::Viewer(const string & title, int width, int height,
 	_initCamera();
 	_reshapeFunc(width, height);
 	_setCamera();
+	initScene();
 	
 	Viewer::_instance = this;
+	_fluid = NULL;
 }
 
 
@@ -62,17 +66,20 @@ void Viewer::_initGlut(const string & title, int width, int height,
 	
 	// Affichage de la version et des extensions
 	cout << "GL Version: " << glGetString(GL_VERSION) << endl;
-	//cout << glGetString(GL_EXTENSIONS) << endl;
+	cout << glGetString(GL_EXTENSIONS) << endl;
 	
 	// Initialisation de Glew
-    #ifdef USE_GLEW	
 	GLenum err = glewInit();
 	if (err != GLEW_OK)
 	{
 		cerr << "Error glew init: " << glewGetErrorString(err) << endl;
 	}
 	cout << "Glew initialized " << endl;
-    #endif
+	
+	if(glCreateShader == NULL)
+        cout << "ECHEC : shaders non supportes          \n";
+    else
+        cout << "Info : Shaders supporté \n";
 }
 
 void Viewer::start(){
@@ -135,4 +142,11 @@ void Viewer::_visibilityFunc(int visible){}
 
 
 
-void Viewer::rendu(){}
+void Viewer::initScene(){
+	cout << "Initialisation de la Scene " << endl;
+	_fluid = new Fluid_GPU();
+	_fluid -> initialiserSpeedField();
+}
+void Viewer::rendu(){
+	if ( _fluid!= 0 ) _fluid -> resolutionSpeedField();
+}
