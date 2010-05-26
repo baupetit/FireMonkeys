@@ -31,9 +31,12 @@ public :
     
     void start();
     
-    static void rendu();
+    void rendu();
     
 private :
+    // Instance
+    static Viewer *_instance;
+
     // Camera
 	float _cameraAngle;
 	float _posx,_posy,_posz;

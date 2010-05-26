@@ -6,6 +6,8 @@
 #endif
 
 
+Viewer *Viewer::_instance = NULL;
+
 Viewer::Viewer(const string & title, int width, int height,
 	           int initPositionX, int initPositionY){
 	_initGlut(title, width, height, initPositionX, initPositionY);
@@ -15,6 +17,8 @@ Viewer::Viewer(const string & title, int width, int height,
 	_initCamera();
 	_reshapeFunc(width, height);
 	_setCamera();
+	
+	Viewer::_instance = this;
 }
 
 
@@ -116,7 +120,7 @@ void Viewer::_initLighting(){
 	
 void Viewer::_displayFunc(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-    rendu();
+    _instance->rendu();
 	glFlush();
 	glutSwapBuffers();
 }
