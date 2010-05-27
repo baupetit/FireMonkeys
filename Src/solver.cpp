@@ -18,24 +18,18 @@ Solver::Solver( int N ) : _N(N) {
 	_w = new float[SIZE];
 	_w0 = new float[SIZE];		
 
-	int i,j,k;
+	int i;
 
-	for ( k=0 ; k<N+2 ; k++ ) { 
-		for ( j=0 ; j<N+2 ; j++ ) { 
-			for( i=0; i<N+2 ; i++ ) {
-				_d[IX(i,j,k)] = 0.0f;
-				_d0[IX(i,j,k)] = 0.0f;
-				_u[IX(i,j,k)] = 0.0f;
-				_u0[IX(i,j,k)] = 0.0f;
-				_v[IX(i,j,k)] = 0.0f;
-				_v0[IX(i,j,k)] = 0.0f;
-				_w[IX(i,j,k)] = 0.0f;
-				_w0[IX(i,j,k)] = 0.0f;
-			}
-		}
+	for( i=0; i<SIZE ; i++ ) {
+		_d[i] = 0.0f;
+		_d0[i] = 0.0f;
+		_u[i] = 0.0f;
+		_u0[i] = 0.0f;
+		_v[i] = 0.0f;
+		_v0[i] = 0.0f;
+		_w[i] = 0.0f;
+		_w0[i] = 0.0f;
 	}
-
-
 }
 
 Solver::~Solver(){

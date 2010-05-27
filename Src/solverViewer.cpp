@@ -13,7 +13,7 @@ using namespace std;
 SolverViewer::SolverViewer()
         :Viewer("Solver Viewer", 640, 480)
 {
-        s = new Solver(30);
+        s = new Solver(20);
 	//s->setVelocity( 5,5,5,0,0.2,0);
 }
 
@@ -34,9 +34,6 @@ void SolverViewer::rendu(){
 	elapsed += dt ;
 
 	// dessin de la grille
-	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ) ;
-	//glClearColor( 0. , 0. , 0. , 0. );
-	glClearColor( 1. , 1. , 1. , 0. );
 	
 	const float *dens = s->getDensities();
 	const int N = s->getSize();
@@ -51,7 +48,7 @@ void SolverViewer::rendu(){
 		for( int j = 1; j<N ; j++ ){
 			for( int i = 1; i<N ; i++ ){
 				c = dens[IX(i,j,k)];
-				glColor4f( c,c,c,c );
+				glColor4f( c,c,c, c );
 				
 				glVertex3f( i/(float)N , j/(float)N , k/(float)N );
 				// cout << "d["<<i<<","<<j<<","<<k<<"] = " << c << endl ;
@@ -63,20 +60,12 @@ void SolverViewer::rendu(){
 	s->densitiesStep( 0.2 , dt/10 );
 	s->velocitiesStep( 0.1 , dt/10);
 
-        	
-	glutSwapBuffers();
-	
 	frame += 1;
 	if( elapsed > 1. ){
 		cout << " FPS : " << frame << endl;
 		elapsed -= 1.;
 		frame = 0 ;
 
-		s->setDensity( 5 , 5 , 5 , 10 );
-
-
-		//s->setVelocity( N/2,N/2,N/2,0,0.0002,0);
-		
+		s->setDensity( N/2 , N/2 , N/2 , 10 );
 	}
-	
 }

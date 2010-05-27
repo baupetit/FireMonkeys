@@ -12,7 +12,7 @@
  * @brief : This class is used to modelise the fluid motion in the environnement
  */
 
-#define IX(i,j,k) ((i)+(N+2)*(j)+(N+2*N+2)*k)
+#define IX(i,j,k) ((i)+(N+2)*(j)+((N+2)*(N+2))*(k))
 
 
 class Solver {
