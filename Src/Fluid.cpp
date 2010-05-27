@@ -177,7 +177,9 @@ void Fluid::dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans){
 	
     glPushMatrix();
     //glLoadIdentity();    
-	//glOrtho(0, 1, 1, 0, 0, 1);
+	glOrtho(0, 1, 1, 0, 0, 1);
+    //glTranslatef(position.x, position.y, position.z);
+	
 
 
     glDisable(GL_LIGHTING);
@@ -247,8 +249,8 @@ void Fluid::dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans){
 
 void Fluid::Mise_A_Jour(){
 
-	s->densitiesStep(0., 0.01);
-	s->velocitiesStep(0., 0.01);
+	s->densitiesStep(0., 0.1);
+	s->velocitiesStep(0., 0.1);
 }
 
 
