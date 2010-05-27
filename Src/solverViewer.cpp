@@ -13,7 +13,7 @@ using namespace std;
 SolverViewer::SolverViewer()
         :Viewer("Solver Viewer", 640, 480)
 {
-        s = new Solver(10);
+        s = new Solver(100);
 	//s->setVelocity( 5,5,5,0,0.2,0);
 }
 
@@ -36,7 +36,7 @@ void SolverViewer::rendu(){
 	// dessin de la grille
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ) ;
 	//glClearColor( 0. , 0. , 0. , 0. );
-	glClearColor( 1. , 1. , 1. , 0. );
+	glClearColor( 1. , 0. , 1. , 0. );
 	
 	const float *dens = s->getDensities();
 	const int N = s->getSize();
@@ -51,7 +51,7 @@ void SolverViewer::rendu(){
 		for( int j = 1; j<N ; j++ ){
 			for( int i = 1; i<N ; i++ ){
 				c = dens[IX(i,j,k)];
-				glColor3f( c,c,c );
+				glColor4f( c,c,c, 0.5 );
 				
 				glVertex3f( i/(float)N , j/(float)N , k/(float)N );
 				// cout << "d["<<i<<","<<j<<","<<k<<"] = " << c << endl ;
