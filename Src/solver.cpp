@@ -5,7 +5,6 @@
 
 #include "solver.h"
 
-
 Solver::Solver( int N ) : _N(N) {
 	
 	/* allocation */
@@ -82,6 +81,7 @@ void addSource ( int N, float *x , float *s , float dt )
 
 void setBoundaries ( int N, int b, float *x )
 {
+/*
 	int i,j;
 
 	for ( i=1 ; i<=N ; i++ ) {
@@ -95,14 +95,26 @@ void setBoundaries ( int N, int b, float *x )
 		}
 	}
 
-	x[IX(0  ,0  ,0)] = (x[IX(1,0  ,0)]+x[IX(0  ,1,0)]+x[IX(0,0    ,1)]);
-	x[IX(0  ,N+1,0)] = (x[IX(1,N+1,0)]+x[IX(0  ,N,0)]+x[IX(0,N+1  ,1)]);
-	x[IX(N+1,0  ,0)] = (x[IX(N,0  ,0)]+x[IX(N+1,1,0)]+x[IX(N+1,0  ,1)]);
-	x[IX(N+1,N+1,0)] = (x[IX(N,N+1,0)]+x[IX(N+1,N,0)]+x[IX(N+1,N+1,1)]);
-	x[IX(0  ,0  ,N+1)] = (x[IX(1,0  ,N+1)]+x[IX(0  ,1,N+1)]+x[IX(0,0    ,N)]);
-	x[IX(0  ,N+1,N+1)] = (x[IX(1,N+1,N+1)]+x[IX(0  ,N,N+1)]+x[IX(0,N+1  ,1)]);
-	x[IX(N+1,0  ,N+1)] = (x[IX(N,0  ,N+1)]+x[IX(N+1,1,N+1)]+x[IX(N+1,0  ,N)]);
-	x[IX(N+1,N+1,N+1)] = (x[IX(N,N+1,N+1)]+x[IX(N+1,N,N+1)]+x[IX(N+1,N+1,N)]);
+	x[IX(0  ,0  ,0)] = (x[IX(1,0  ,0)]+x[IX(0  ,1,0)]+x[IX(0,0    ,1)])/3;
+	x[IX(0  ,N+1,0)] = (x[IX(1,N+1,0)]+x[IX(0  ,N,0)]+x[IX(0,N+1  ,1)])/3;
+	x[IX(N+1,0  ,0)] = (x[IX(N,0  ,0)]+x[IX(N+1,1,0)]+x[IX(N+1,0  ,1)])/3;
+	x[IX(N+1,N+1,0)] = (x[IX(N,N+1,0)]+x[IX(N+1,N,0)]+x[IX(N+1,N+1,1)])/3;
+	x[IX(0  ,0  ,N+1)] = (x[IX(1,0  ,N+1)]+x[IX(0  ,1,N+1)]+x[IX(0,0    ,N)])/3;
+	x[IX(0  ,N+1,N+1)] = (x[IX(1,N+1,N+1)]+x[IX(0  ,N,N+1)]+x[IX(0,N+1  ,1)])/3;
+	x[IX(N+1,0  ,N+1)] = (x[IX(N,0  ,N+1)]+x[IX(N+1,1,N+1)]+x[IX(N+1,0  ,N)])/3;
+	x[IX(N+1,N+1,N+1)] = (x[IX(N,N+1,N+1)]+x[IX(N+1,N,N+1)]+x[IX(N+1,N+1,N)])/3;
+*/
+	for ( int i=1 ; i<=N ; i++ ) {
+		for( int j=1 ; j<=N ; j++ ) {
+			x[IX(0  ,i,j)] = 0;
+			x[IX(N+1,i,j)] = 0;
+			x[IX(i,0  ,j)] = 0;
+			x[IX(i,N+1,j)] = 0;
+			x[IX(i,j  ,0)] = 0;
+			x[IX(i,j  ,N+1)] = 0;
+		}
+	}
+
 }
 
 void linearSolve ( int N, int b, float * x, float * x0, float a, float c )
@@ -173,10 +185,9 @@ void project ( int N, float * u, float * v, float *w, float * p, float * div )
 	int i, j, k;
 
 	FOR_EACH_CELL
-		div[IX(i,j,k)] = -0.5f*(
-			u[IX(i+1,j,k)]-u[IX(i-1,j,k)]+
-			v[IX(i,j+1,k)]-v[IX(i,j-1,k)]+
-			w[IX(i,j,k+1)]-w[IX(i,j,k-1)] )/N;
+		div[IX(i,j,k)] = -(u[IX(i+1,j,k)]-u[IX(i-1,j,k)]+
+				   v[IX(i,j+1,k)]-v[IX(i,j-1,k)]+
+				   w[IX(i,j,k+1)]-w[IX(i,j,k-1)] )/(3*N);
 	        p[IX(i,j,k)] = 0;
 	END_FOR	
 	setBoundaries ( N, 0, div ); setBoundaries ( N, 0, p );
