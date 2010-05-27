@@ -17,7 +17,6 @@ Viewer::Viewer(const string & title, int width, int height,
 	_initCamera();
 	_reshapeFunc(width, height);
 	_setCamera();
-	initScene();
 	
 	Viewer::_instance = this;
 }
@@ -192,14 +191,5 @@ void Viewer::_keyMap(int key, int x, int y){
 
 void Viewer::_visibilityFunc(int visible){}
 
+void Viewer::rendu(){}
 
-
-void Viewer::initScene(){
-	cout << "Initialisation de la Scene " << endl;
-	_fluid = new Fluid_GPU();
-	_fluid -> initialiserSpeedField();
-}
-void Viewer::rendu(){
-	if ( _fluid!= 0 ) _fluid -> resolutionSpeedField();
-	if ( _fluid!= 0 ) _fluid -> displaySpeedField();	
-}

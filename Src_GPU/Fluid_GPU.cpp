@@ -73,6 +73,7 @@ void Fluid_GPU::displaySpeedField(){
 
 void Fluid_GPU::display_3DTexture(int details, int textureid){
 
+
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     glEnable( GL_BLEND );
     glAlphaFunc(GL_GREATER,0.1f);
