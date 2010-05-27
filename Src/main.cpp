@@ -10,11 +10,11 @@
 *******************************************************************************/
 
 
-#include "solverViewer.h"
+#include "FluidViewer.h"
 
 int main(int argc, char **argv)
 {
-	SolverViewer window;
+	FluidViewer window;
 	window.start();
 	return 0;
 }
