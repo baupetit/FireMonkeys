@@ -68,9 +68,9 @@ void SolverViewer::rendu(){
 	//glColor3f( 1,0,0 );
 	//glVertex3f( 0, 0 , 0 );
 	
-	for( int k = 1; k<N ; k++ ){
-		for( int j = 1; j<N ; j++ ){
-			for( int i = 1; i<N ; i++ ){
+	for( int k = 1; k<=N ; k++ ){
+		for( int j = 1; j<=N ; j++ ){
+			for( int i = 1; i<=N ; i++ ){
 				c = dens[IX(i,j,k)];
 				glColor4f( c,c,c, 0.5 );
 				
@@ -120,9 +120,9 @@ void SolverViewer::rendu(){
 	glEnd();
 	*/
 	////////////////////////////////////////////////////////////////////////////
-		
-	s->densitiesStep( 0.0, dt );
-	s->velocitiesStep( 0.0 , dt);
+	s->velocitiesStep( 0.0 , dt);	
+	s->densitiesStep( 0.0005, dt );
+	
 
 	frame += 1;
 	if( elapsed > 1. ){
@@ -130,7 +130,7 @@ void SolverViewer::rendu(){
 		elapsed -= 1.;
 		frame = 0 ;
 		if( toto < 10 ){
-			s->setDensity( N/2 , 5 , N/2 , 0.5 );
+			s->setDensity( N/2 , N/2 , N/2 , 0.5 );
 			s->setVelocity( N/2,1,N/2,0,100,0);
 			toto +=1;
 		}			
