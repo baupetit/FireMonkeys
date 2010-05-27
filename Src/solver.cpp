@@ -53,6 +53,16 @@ const float* Solver::getDensities() const {
 	return _d;
 }
 
+const float* Solver::getVelocityU() const {
+	return _u;
+}
+const float* Solver::getVelocityV() const {
+	return _v;
+}
+const float* Solver::getVelocityW() const {
+	return _w;
+}
+
 
 int Solver::getSize() const{
 	return _N ;

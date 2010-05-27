@@ -14,7 +14,7 @@ SolverViewer::SolverViewer()
         :Viewer("Solver Viewer", 640, 480)
 {
 
-        s = new Solver(30);
+        s = new Solver(4);
 }
 
 SolverViewer::~SolverViewer(){
@@ -33,9 +33,10 @@ void SolverViewer::rendu(){
 	old = cur ; 
 	elapsed += dt ;
 
-	// dessin de la grille
-	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ) ;
-	//glClearColor( 0. , 0. , 0. , 0. );
+    ////////////////////////////////////////////////////////////////////////////
+    //// DENSITE
+	// dessin de la grille de densite
+	/*
 	glClearColor( 1. , 0. , 1. , 0. );
 	
 	const float *dens = s->getDensities();
@@ -51,6 +52,7 @@ void SolverViewer::rendu(){
 		for( int j = 1; j<N ; j++ ){
 			for( int i = 1; i<N ; i++ ){
 				c = dens[IX(i,j,k)];
+				cout << "i,j,k : "<< i << " , " << j << " , " << k << "densite : " << c << endl;
 				glColor4f( c,c,c, 0.5 );
 				
 				glVertex3f( i/(float)N , j/(float)N , k/(float)N );
@@ -59,12 +61,54 @@ void SolverViewer::rendu(){
 		}
 	}
 	glEnd();
+	*/
+    ////////////////////////////////////////////////////////////////////////////
+    
+    
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //// VITESSE
+	// dessin de la grille de vitesse
+	
+	glClearColor( 1. , 0. , 1. , 0. );
+	
+	const float *u = s->getVelocityU();
+	const float *v = s->getVelocityV();
+	const float *w = s->getVelocityW();
+	const int N = s->getSize();
+	float u1,v1,w1;
+
+	glPointSize( 4.0f );
+	glBegin( GL_POINTS );
+	//glColor3f( 1,0,0 );
+	//glVertex3f( 0, 0 , 0 );
+
+	for( int k = 1; k<N ; k++ ){
+		for( int j = 1; j<N ; j++ ){
+			for( int i = 1; i<N ; i++ ){
+				u1 = u[IX(i,j,k)];
+				v1 = v[IX(i,j,k)];
+				w1 = w[IX(i,j,k)];	
+				
+				glColor4f( u1,v1,w1, 0.5 );
+				
+				glVertex3f( i/(float)N , j/(float)N , k/(float)N );
+				// cout << "d["<<i<<","<<j<<","<<k<<"] = " << c << endl ;
+			}
+		}
+	}
+	glEnd();
+	
+    ////////////////////////////////////////////////////////////////////////////
+    
+    
+    
 	
 	s->densitiesStep( 0.2 , dt/10 );
 	s->velocitiesStep( 0.1 , dt/10);
 
         	
-	glutSwapBuffers();
+        	
 	
 	frame += 1;
 	if( elapsed > 1. ){
