@@ -44,6 +44,21 @@ public :
 	 */
 	const float* getDensities() const ;
 
+
+	/**
+	 * @brief : return the velocityU matrix
+	 */
+	const float* getVelocityU() const;
+	/**
+	 * @brief : return the velocityV matrix
+	 */
+	const float* getVelocityV()const;
+	/**
+	 * @brief : return the velocityW matrix
+	 */
+	const float* getVelocityW()const;
+
+
 	/**
 	 * @brief : return the grid size
 	 */
