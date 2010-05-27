@@ -13,9 +13,7 @@ using namespace std;
 SolverViewer::SolverViewer()
         :Viewer("Solver Viewer", 640, 480)
 {
-        s = new Solver(10);
-	s->setDensity( 5 , 5 , 5 , 100 );
-
+        s = new Solver(30);
 	//s->setVelocity( 5,5,5,0,0.2,0);
 }
 
@@ -53,7 +51,7 @@ void SolverViewer::rendu(){
 		for( int j = 1; j<N ; j++ ){
 			for( int i = 1; i<N ; i++ ){
 				c = dens[IX(i,j,k)];
-				glColor3f( c,c,c );
+				glColor4f( c,c,c,c );
 				
 				glVertex3f( i/(float)N , j/(float)N , k/(float)N );
 				// cout << "d["<<i<<","<<j<<","<<k<<"] = " << c << endl ;
@@ -62,8 +60,8 @@ void SolverViewer::rendu(){
 	}
 	glEnd();
 	
-	s->densitiesStep( 0.2 , 0.01 );
-	s->velocitiesStep( 0. , 0.01);
+	s->densitiesStep( 0.2 , dt/10 );
+	s->velocitiesStep( 0.1 , dt/10);
 
         	
 	glutSwapBuffers();
@@ -74,9 +72,11 @@ void SolverViewer::rendu(){
 		elapsed -= 1.;
 		frame = 0 ;
 
+		s->setDensity( 5 , 5 , 5 , 10 );
+
+
 		//s->setVelocity( N/2,N/2,N/2,0,0.0002,0);
 		
 	}
 	
-	sleep(1);
 }
