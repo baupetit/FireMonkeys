@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -Wall -O3 
+CFLAGS = -Wall -O3 -g 
 EXEC_NAME = FireMonkeys
 INCLUDES = -I/usr/include/GL  
 LIBS =  -lglut -lGLEW -lGLU -lGL -lrt
