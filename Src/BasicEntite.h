@@ -1,9 +1,9 @@
-#ifndef SOLVERVIEWER_H
-#define SOLVERVIEWER_H
+#ifndef BASICENTITE_H
+#define BASICENTITE_H
 
 /*!*****************************************************************************
 *
-*       \file       :      solverViewer.h
+*       \file       :      BasicEntite.h
 *
 *       \author     :      Benjamin Aupetit, Champeau Julien, Arnaud Emilien
 *       \date       :      26 mai 2010
@@ -11,17 +11,12 @@
 *
 *******************************************************************************/
 
-#include "Viewer.h"
-#include "solver.h"
+#include "Noeud.h"
 
-class SolverViewer : public Viewer {
-private :
-	Solver *s;
-public :
-	SolverViewer();
-	~SolverViewer();
-
-	virtual void rendu();
+class BasicEntite : public Noeud{
+public:
+    virtual void Afficher() = 0;
 };
+
 
 #endif

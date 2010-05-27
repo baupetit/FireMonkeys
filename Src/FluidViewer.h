@@ -1,7 +1,9 @@
+#ifndef FLUIDVIEWER_H
+#define FLUIDVIEWER_H
 
 /*!*****************************************************************************
 *
-*       \file       :      main.cpp
+*       \file       :      FluidViewer.h
 *
 *       \author     :      Benjamin Aupetit, Champeau Julien, Arnaud Emilien
 *       \date       :      26 mai 2010
@@ -9,12 +11,17 @@
 *
 *******************************************************************************/
 
+#include "Viewer.h"
+#include "Fluid.h"
 
-#include "FluidViewer.h"
+class FluidViewer : public Viewer {
+private :
+	Fluid *_fluid;
+public :
+	FluidViewer();
+	~FluidViewer();
 
-int main(int argc, char **argv)
-{
-	FluidViewer window;
-	window.start();
-	return 0;
-}
+	void rendu();
+};
+
+#endif
