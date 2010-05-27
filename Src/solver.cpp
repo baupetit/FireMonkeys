@@ -92,8 +92,8 @@ void addSource ( int N, float *x , float *s , float dt )
 
 void setBoundaries ( int N, int b, float *x )
 {
-	int i,j;
-/*
+/*	int i,j;
+
 	for ( i=1 ; i<=N ; i++ ) {
 		for( j=1 ; j<=N ; j++ ) {
 			x[IX(0  ,i,j)] = b==1 ? -x[IX(1,i,j)] : x[IX(1,i,j)];

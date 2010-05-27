@@ -12,8 +12,17 @@ Fluid::Fluid()
         tailleGrille = 20;
         
         s = new Solver(tailleGrille);
-        s->setVelocity( tailleGrille/2,1,tailleGrille/2,0,100,0);
-	s->setDensity( tailleGrille /2 , tailleGrille/2, tailleGrille/2, 10 );        
+	
+        //s->setVelocity( tailleGrille/2,1,tailleGrille/2,0,100,0);
+	for( int i = 1; i < tailleGrille+1 ; ++i ){
+		for( int j = 1; j < tailleGrille+1 ; ++j ){
+			s->setVelocity( i,1,j,0,10,0);
+		}
+	}
+
+
+	s->setDensity( tailleGrille /4 ,5, tailleGrille/4, 5 );        
+	s->setDensity( 3*tailleGrille /4 ,5, 3*tailleGrille/4, 5 );        
         initialiserRenduGPU();
 }
 
@@ -236,9 +245,9 @@ void Fluid::dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans){
 
 
 void Fluid::Mise_A_Jour(){
+	s->velocitiesStep(0.0, 0.1);
 
-	s->densitiesStep(0., 0.01);
-	s->velocitiesStep(0., 0.01);
+	s->densitiesStep(0.0, 0.1);
 }
 
 
