@@ -181,6 +181,16 @@ void Fluid::initialiserRenduGPU(){
 
 
 void Fluid::dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans){
+
+
+	
+    glPushMatrix();
+    //glLoadIdentity();    
+	glOrtho(0, 1, 1, 0, 0, 1);
+    //glTranslatef(position.x, position.y, position.z);
+	
+
+
     glDisable(GL_LIGHTING);
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     glEnable( GL_BLEND );
@@ -240,6 +250,8 @@ void Fluid::dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans){
 	glDisable(GL_TEXTURE_3D);
     glDisable( GL_BLEND );    
     glEnable(GL_LIGHTING);
+    
+    glPopMatrix();
 	
 }
 

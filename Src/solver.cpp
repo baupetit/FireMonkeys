@@ -93,7 +93,6 @@ void addSource ( int N, float *x , float *s , float dt )
 void setBoundaries ( int N, int b, float *x )
 {
 /*	int i,j;
-
 	for ( i=1 ; i<=N ; i++ ) {
 		for( j=1 ; j<=N ; j++ ) {
 			x[IX(0  ,i,j)] = b==1 ? -x[IX(1,i,j)] : x[IX(1,i,j)];
@@ -113,7 +112,9 @@ void setBoundaries ( int N, int b, float *x )
 	x[IX(0  ,N+1,N+1)] = (x[IX(1,N+1,N+1)]+x[IX(0  ,N,N+1)]+x[IX(0,N+1  ,1)])/3;
 	x[IX(N+1,0  ,N+1)] = (x[IX(N,0  ,N+1)]+x[IX(N+1,1,N+1)]+x[IX(N+1,0  ,N)])/3;
 	x[IX(N+1,N+1,N+1)] = (x[IX(N,N+1,N+1)]+x[IX(N+1,N,N+1)]+x[IX(N+1,N+1,N)])/3;
-*/
+	
+	*/
+
 }
 
 void linearSolve ( int N, int b, float * x, float * x0, float a, float c )
@@ -243,4 +244,3 @@ void Solver::velocitiesStep ( float visc, float dt )
 	advect ( _N, 3, _w, _w0, _u0, _v0, _w0, dt );
 	project ( _N, _u, _v, _w, _u0, _v0 );
 }
-
