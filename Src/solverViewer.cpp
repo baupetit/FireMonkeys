@@ -13,8 +13,8 @@ using namespace std;
 SolverViewer::SolverViewer()
         :Viewer("Solver Viewer", 640, 480)
 {
-
-        s = new Solver(4);
+        s = new Solver(20);
+	//s->setVelocity( 5,5,5,0,0.2,0);
 }
 
 SolverViewer::~SolverViewer(){
@@ -33,41 +33,43 @@ void SolverViewer::rendu(){
 	old = cur ; 
 	elapsed += dt ;
 
-    ////////////////////////////////////////////////////////////////////////////
-    //// DENSITE
+
+	// dessin de la grille
+	////////////////////////////////////////////////////////////////////////////
+	//// DENSITE
 	// dessin de la grille de densite
 	/*
-	glClearColor( 1. , 0. , 1. , 0. );
-	
-	const float *dens = s->getDensities();
-	const int N = s->getSize();
-	float c;
-
-	glPointSize( 4.0f );
-	glBegin( GL_POINTS );
-	//glColor3f( 1,0,0 );
-	//glVertex3f( 0, 0 , 0 );
-
-	for( int k = 1; k<N ; k++ ){
-		for( int j = 1; j<N ; j++ ){
-			for( int i = 1; i<N ; i++ ){
-				c = dens[IX(i,j,k)];
-				cout << "i,j,k : "<< i << " , " << j << " , " << k << "densite : " << c << endl;
-				glColor4f( c,c,c, 0.5 );
-				
-				glVertex3f( i/(float)N , j/(float)N , k/(float)N );
-				// cout << "d["<<i<<","<<j<<","<<k<<"] = " << c << endl ;
-			}
-		}
-	}
-	glEnd();
+	  glClearColor( 1. , 0. , 1. , 0. );
+	  >>>>>>> 3753f2333b49cfb2dae970e17cffa9f9888bc31f
+	  
+	  const float *dens = s->getDensities();
+	  const int N = s->getSize();
+	  float c;
+	  
+	  glPointSize( 4.0f );
+	  glBegin( GL_POINTS );
+	  //glColor3f( 1,0,0 );
+	  //glVertex3f( 0, 0 , 0 );
+	  
+	  for( int k = 1; k<N ; k++ ){
+	  for( int j = 1; j<N ; j++ ){
+	  for( int i = 1; i<N ; i++ ){
+	  c = dens[IX(i,j,k)];
+	  glColor4f( c,c,c, 0.5 );
+	  
+	  glVertex3f( i/(float)N , j/(float)N , k/(float)N );
+		
+	  }
+	  }
+	  }
+	  glEnd();
 	*/
-    ////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
     
     
     
-    ////////////////////////////////////////////////////////////////////////////
-    //// VITESSE
+	////////////////////////////////////////////////////////////////////////////
+	//// VITESSE
 	// dessin de la grille de vitesse
 	
 	glClearColor( 1. , 0. , 1. , 0. );
@@ -99,28 +101,17 @@ void SolverViewer::rendu(){
 	}
 	glEnd();
 	
-    ////////////////////////////////////////////////////////////////////////////
-    
-    
-    
-	
+	////////////////////////////////////////////////////////////////////////////
+		
 	s->densitiesStep( 0.2 , dt/10 );
 	s->velocitiesStep( 0.1 , dt/10);
 
-        	
-        	
-	
 	frame += 1;
 	if( elapsed > 1. ){
 		cout << " FPS : " << frame << endl;
 		elapsed -= 1.;
 		frame = 0 ;
 
-		s->setDensity( 5 , 5 , 5 , 10 );
-
-
-		//s->setVelocity( N/2,N/2,N/2,0,0.0002,0);
-		
+		s->setDensity( N/2 , N/2 , N/2 , 10 );
 	}
-	
 }
