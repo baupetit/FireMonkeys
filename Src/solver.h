@@ -14,7 +14,6 @@
 
 #define IX(i,j,k) ((i)+(N+2)*(j)+((N+2)*(N+2))*(k))
 
-
 class Solver {
 public :
 	/**
