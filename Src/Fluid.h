@@ -17,7 +17,7 @@
 #include <GL/glut.h>
 #include <GL/gl.h>
 
-class Fluid : BasicEntite {
+class Fluid : public BasicEntite {
 
 private :
     /** Solver 3D */

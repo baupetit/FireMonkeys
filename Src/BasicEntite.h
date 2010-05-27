@@ -16,6 +16,7 @@
 class BasicEntite : public Noeud{
 public:
     virtual void Afficher() = 0;
+    void Afficher_Entite();
 };
 
 
