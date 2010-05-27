@@ -132,7 +132,7 @@ void Fluid::majMatriceFumeeEnMatriceRGBA(){
         *pointeurMatriceRGBA = 0.5;
         pointeurMatriceRGBA++;
         // A
-        *pointeurMatriceRGBA = 1.0;//*pointeurMatriceACopier;
+        *pointeurMatriceRGBA = *pointeurMatriceACopier;
         pointeurMatriceRGBA++;
         // MAJ
         pointeurMatriceACopier++;
