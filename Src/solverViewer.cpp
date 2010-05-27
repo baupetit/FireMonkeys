@@ -14,6 +14,8 @@ SolverViewer::SolverViewer()
         :Viewer("Solver Viewer", 640, 480)
 {
         s = new Solver(10);
+	s->setDensity( 5 , 5 , 5 , 100 );
+
 	//s->setVelocity( 5,5,5,0,0.2,0);
 }
 
@@ -60,8 +62,8 @@ void SolverViewer::rendu(){
 	}
 	glEnd();
 	
-	s->densitiesStep( 1 , 0.15 );
-	s->velocitiesStep( 0. , 0.15);
+	s->densitiesStep( 0.2 , 0.01 );
+	s->velocitiesStep( 0. , 0.01);
 
         	
 	glutSwapBuffers();
@@ -72,7 +74,6 @@ void SolverViewer::rendu(){
 		elapsed -= 1.;
 		frame = 0 ;
 
-		s->setDensity( N/2 , N/2 , N/2 , 10 );
 		//s->setVelocity( N/2,N/2,N/2,0,0.0002,0);
 		
 	}
