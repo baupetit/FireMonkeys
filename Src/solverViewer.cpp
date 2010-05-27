@@ -13,8 +13,8 @@ using namespace std;
 SolverViewer::SolverViewer()
         :Viewer("Solver Viewer", 640, 480)
 {
-        s = new Solver(100);
-	//s->setVelocity( 5,5,5,0,0.2,0);
+
+        s = new Solver(30);
 }
 
 SolverViewer::~SolverViewer(){
@@ -60,8 +60,8 @@ void SolverViewer::rendu(){
 	}
 	glEnd();
 	
-	s->densitiesStep( 1 , 0.15 );
-	s->velocitiesStep( 0. , 0.15);
+	s->densitiesStep( 0.2 , dt/10 );
+	s->velocitiesStep( 0.1 , dt/10);
 
         	
 	glutSwapBuffers();
@@ -72,10 +72,11 @@ void SolverViewer::rendu(){
 		elapsed -= 1.;
 		frame = 0 ;
 
-		s->setDensity( N/2 , N/2 , N/2 , 10 );
+		s->setDensity( 5 , 5 , 5 , 10 );
+
+
 		//s->setVelocity( N/2,N/2,N/2,0,0.0002,0);
 		
 	}
 	
-	sleep(1);
 }
