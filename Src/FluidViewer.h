@@ -1,9 +1,9 @@
-#ifndef SOLVERVIEWER_H
-#define SOLVERVIEWER_H
+#ifndef FLUIDVIEWER_H
+#define FLUIDVIEWER_H
 
 /*!*****************************************************************************
 *
-*       \file       :      solverViewer.h
+*       \file       :      FluidViewer.h
 *
 *       \author     :      Benjamin Aupetit, Champeau Julien, Arnaud Emilien
 *       \date       :      26 mai 2010
@@ -12,16 +12,16 @@
 *******************************************************************************/
 
 #include "Viewer.h"
-#include "solver.h"
+#include "Fluid.h"
 
-class SolverViewer : public Viewer {
+class FluidViewer : public Viewer {
 private :
-	Solver *s;
+	Fluid *_fluid;
 public :
-	SolverViewer();
-	~SolverViewer();
+	FluidViewer();
+	~FluidViewer();
 
-	virtual void rendu();
+	void rendu();
 };
 
 #endif

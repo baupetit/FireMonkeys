@@ -85,6 +85,12 @@ protected :
 	float *_v, *_v0;
 	float *_u, *_u0;
 	float *_w, *_w0;
+
+	/* Sources */
+	float *_srcd;
+	float *_srcu;
+	float *_srcv;
+	float *_srcw;
 };
 
 #endif

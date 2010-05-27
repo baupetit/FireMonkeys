@@ -20,19 +20,17 @@ using namespace std;
 #include <GL/glut.h>
 
 
-#include "Fluid_GPU.h"
-
 class Viewer{
 
 public :
     Viewer(const string & title, int width, int height,
 	       int initPositionX = 0, int initPositionY = 0);
+	       
     ~Viewer();
     
     void start();
     
-    void initScene();
-    void rendu();
+    virtual void rendu();
     
 private :
     // Instance
@@ -65,10 +63,7 @@ private :
 	
 	// Touches clavier
 	void  _keyMap(int key, int x, int y);
-	
-private:
-    // Systeme de fluide associé
-    Fluid_GPU *_fluid;
+
 };
 
 

@@ -1,7 +1,9 @@
+#ifndef BASICENTITE_H
+#define BASICENTITE_H
 
 /*!*****************************************************************************
 *
-*       \file       :      main.cpp
+*       \file       :      BasicEntite.h
 *
 *       \author     :      Benjamin Aupetit, Champeau Julien, Arnaud Emilien
 *       \date       :      26 mai 2010
@@ -9,12 +11,13 @@
 *
 *******************************************************************************/
 
+#include "Noeud.h"
 
-#include "FluidViewer.h"
+class BasicEntite : public Noeud{
+public:
+    virtual void Afficher() = 0;
+    void Afficher_Entite();
+};
 
-int main(int argc, char **argv)
-{
-	FluidViewer window;
-	window.start();
-	return 0;
-}
+
+#endif

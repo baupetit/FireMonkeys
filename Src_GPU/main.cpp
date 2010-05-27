@@ -10,11 +10,11 @@
 *******************************************************************************/
 
 
-#include "Viewer.h"
+#include "ViewerGPU.h"
 
 int main(int argc, char **argv)
 {
-	Viewer window(string("GPU Fluid - Ensimag 2010"),
+	ViewerGPU window(string("GPU Fluid - Ensimag 2010"),
 	              800, 800,    
 	              200, 100);
 	window.start();

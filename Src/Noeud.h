@@ -1,7 +1,9 @@
+#ifndef NOEUD_H
+#define NOEUD_H
 
 /*!*****************************************************************************
 *
-*       \file       :      main.cpp
+*       \file       :      Noeud.h
 *
 *       \author     :      Benjamin Aupetit, Champeau Julien, Arnaud Emilien
 *       \date       :      26 mai 2010
@@ -9,12 +11,14 @@
 *
 *******************************************************************************/
 
+#include "Vecteur.h"
 
-#include "FluidViewer.h"
+class Noeud{
+public:
+    Vecteur3D position;
+    Vecteur3D echelle;
+    Vecteur3D anglesEuler;
+};
 
-int main(int argc, char **argv)
-{
-	FluidViewer window;
-	window.start();
-	return 0;
-}
+
+#endif
