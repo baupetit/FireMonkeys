@@ -18,6 +18,8 @@ public:
     Vecteur3D position;
     Vecteur3D echelle;
     Vecteur3D anglesEuler;
+    
+    Noeud() : echelle(1,1,1){}
 };
 
 
