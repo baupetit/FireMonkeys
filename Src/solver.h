@@ -43,20 +43,38 @@ public :
 	 * @brief : move densities over a dt timestep with a certain
 	 * diffusion factor with Temperature
 	 */
-	void densitiesStepWithTemp( float diff, float cool, float dt );
+	void densitiesStepWithTemp ( float diffFire,
+				     float diffSmoke,
+				     float diffTemp,
+				     float cool, 
+				     float sub, 
+				     float fireTosmoke, 
+				     float dt );
 
 	/**
 	 * @brief : compute velocities evolution over a dt timestep
 	 * using visc as the viscosity of the fluid with Temperature
 	 */
-	void velocitiesStepWithTemp( float visc , float buoy, float dt );
+	void velocitiesStepWithTemp( float visc , 
+				     float buoy, 
+				     float vc_eps, 
+				     float dt );
 
+
+	/**
+	 * @brief : return the fire density matrix
+	 */
+	const float* getDensities() const ;
+
+	/**
+	 * @brief : return the smoke density matrix
+	 */
+	const float* getSmokes() const ;
 
 	/**
 	 * @brief : return the density matrix
 	 */
-	const float* getDensities() const ;
-
+	const float* getTemperatures() const ;
 
 	/**
 	 * @brief : return the velocityU matrix
@@ -99,6 +117,7 @@ protected :
 	
 	/* densities */
 	float *_d, *_d0;
+	float *_f, *_f0;
 
 	/* temperature */
 	float *_T, *_T0;

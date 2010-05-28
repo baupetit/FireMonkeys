@@ -1,11 +1,19 @@
 #include "Fluid.h"
 
-
-
 #include <iostream>
 #include <unistd.h>
+#include <cstdlib>
 
 using namespace std;
+
+static inline float getTempVal( int i, int j, int T ){
+	float val;
+	if( i < T/2 ) val = i ;
+	else          val = T - i ;
+	if( j < T/2 ) val *= j ;
+	else          val *= T - j ;
+	return val * ((random()+1)/(float)RAND_MAX)*4;
+}
 
 Fluid::Fluid()
 {
@@ -13,16 +21,16 @@ Fluid::Fluid()
         
         s = new Solver(tailleGrille);
 	
-        //s->setVelocity( tailleGrille/2,1,tailleGrille/2,0,100,0);
-	for( int i = 1; i < tailleGrille+1 ; ++i ){
-		for( int j = 1; j < tailleGrille+1 ; ++j ){
-			s->setVelocity( i,1,j,0,30,0);
+	tempIndex = new TempToRGB(128,200);
+	
+	for( int i = 7 ; i < tailleGrille-6 ; ++i ){
+		for( int j = 7 ; j < tailleGrille-6 ; ++j ){
+			s->setDensity( i ,5, j, 1.0f );        
+			s->setTemperature( i ,5, j, (getTempVal(i,j,tailleGrille))/13);        
 		}
 	}
-
-
-	s->setDensity( tailleGrille /4 ,5, tailleGrille/4, 50 );        
-	s->setDensity( 3*tailleGrille /4 ,5, 3*tailleGrille/4, 50 );        
+	//s->setDensity( 3*tailleGrille /4 ,5, 3*tailleGrille/4, 1 );        
+	//s->setTemperature( 3*tailleGrille /4 ,5, 3*tailleGrille/4, 50 );        
         initialiserRenduGPU();
 }
 
@@ -130,21 +138,26 @@ void Fluid::majMatriceFumeeEnMatriceRGBA(){
     // Creation de la texture
     float *pointeurMatriceRGBA = matriceRGBA;
     const float *pointeurMatriceACopier = s->getDensities();
+    const float *pointeurMatriceACopier2 = s->getSmokes();
+    const float *pointeurMatriceACopier3 = s->getTemperatures();
+    float R,G,B;
     for (int i = 0; i < (tailleGrille+2)*(tailleGrille+2)*(tailleGrille+2); i ++){
-        // R
-        *pointeurMatriceRGBA = 0.5;
-        pointeurMatriceRGBA++;
-        // G
-        *pointeurMatriceRGBA = 0.5;
-        pointeurMatriceRGBA++;
-        // B
-        *pointeurMatriceRGBA = 0.5;
-        pointeurMatriceRGBA++;
-        // A
-        *pointeurMatriceRGBA = *pointeurMatriceACopier;
-        pointeurMatriceRGBA++;
-        // MAJ
-        pointeurMatriceACopier++;
+	    tempIndex->getRGB( (*pointeurMatriceACopier3)*4000 , &R, &G, &B );
+	    // R
+	    *pointeurMatriceRGBA = B;
+	    pointeurMatriceRGBA++;
+	    // G
+	    *pointeurMatriceRGBA = G;
+	    pointeurMatriceRGBA++;
+	    // B
+	    *pointeurMatriceRGBA = R;
+	    pointeurMatriceRGBA++;
+	    // A
+	    *pointeurMatriceRGBA = *pointeurMatriceACopier * 4 - *pointeurMatriceACopier3*2;
+	    pointeurMatriceRGBA++;
+	    // MAJ
+	    pointeurMatriceACopier++;
+	    pointeurMatriceACopier3++;
     }    
 }
 	
@@ -257,9 +270,8 @@ void Fluid::dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans){
 
 
 void Fluid::Mise_A_Jour(){
-	s->velocitiesStep(0.0, 0.1);
-
-	s->densitiesStep(0.0, 0.1);
+	s->velocitiesStepWithTemp(0.0, 1, 2.0,0.1);
+	s->densitiesStepWithTemp(0.00001,0.001,0.0001, 1, 0.4, 0.01, 0.1);
 }
 
 

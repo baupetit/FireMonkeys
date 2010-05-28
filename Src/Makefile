@@ -1,5 +1,5 @@
-CC = g++
-CFLAGS = -Wall -O3 -g 
+CXX = g++
+CXXFLAGS = -Wall -O3 -g 
 EXEC_NAME = FireMonkeys
 INCLUDES = -I/usr/include/GL  
 LIBS =  -lglut -lGLEW -lGLU -lGL -lrt
@@ -11,18 +11,22 @@ OBJDIR=../obj/
 SRC = $(wildcard *.cpp) 
 OBJ = $(SRC:%.cpp=$(OBJDIR)%.o) 
 
+
+boundaries:CXXFLAGS:=$(CXXFLAGS) -D_BOUNDARIES_SOLVE_
+boundaries: all
+
 all : $(EXEC_NAME)
 
 clean :
 	rm -f $(EXEC_NAME) $(OBJDIR)*.o
 
 $(EXEC_NAME) : $(OBJ)
-	$(CC) -o $(EXEC_NAME) $(OBJ) $(LIBS)
+	$(CXX) -o $(EXEC_NAME) $(OBJ) $(LIBS)
 
 $(OBJDIR)%.o: %.cpp %.h
-	$(CC) $(CFLAGS) $(INCLUDES) -o $@ -c $<
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ -c $<
 
 $(OBJDIR)%.o: %.cpp
-	$(CC) $(CFLAGS) $(INCLUDES) -o $@ -c $<
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ -c $<
 
 
