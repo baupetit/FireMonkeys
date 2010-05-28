@@ -96,7 +96,7 @@ void Fluid_GPU::resolutionSpeedField(){
 
 void Fluid_GPU::displaySpeedField(){
 
-    display_3DTexture(16, _speedField);
+    display_3DTexture(30, _speedField);
     
 }
 
