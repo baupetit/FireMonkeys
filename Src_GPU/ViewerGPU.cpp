@@ -23,9 +23,8 @@ ViewerGPU::~ViewerGPU(){
 void ViewerGPU::initScene(){
 	cout << "Initialisation de la Scene " << endl;
 	_fluid = new Fluid_GPU();
-	_fluid -> initialiserSpeedField();
 }
 void ViewerGPU::rendu(){
 	if ( _fluid!= 0 ) _fluid -> resolutionSpeedField();
-	if ( _fluid!= 0 ) _fluid -> displaySpeedField();	
+	//if ( _fluid!= 0 ) _fluid -> displaySpeedField();	
 }

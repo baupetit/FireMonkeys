@@ -38,11 +38,43 @@ public :
 	 */
 	void velocitiesStep( float visc , float dt );
 
+
 	/**
-	 * @brief : return the density matrix
+	 * @brief : move densities over a dt timestep with a certain
+	 * diffusion factor with Temperature
+	 */
+	void densitiesStepWithTemp ( float diffFire,
+				     float diffSmoke,
+				     float diffTemp,
+				     float cool, 
+				     float sub, 
+				     float fireTosmoke, 
+				     float dt );
+
+	/**
+	 * @brief : compute velocities evolution over a dt timestep
+	 * using visc as the viscosity of the fluid with Temperature
+	 */
+	void velocitiesStepWithTemp( float visc , 
+				     float buoy, 
+				     float vc_eps, 
+				     float dt );
+
+
+	/**
+	 * @brief : return the fire density matrix
 	 */
 	const float* getDensities() const ;
 
+	/**
+	 * @brief : return the smoke density matrix
+	 */
+	const float* getSmokes() const ;
+
+	/**
+	 * @brief : return the density matrix
+	 */
+	const float* getTemperatures() const ;
 
 	/**
 	 * @brief : return the velocityU matrix
@@ -69,6 +101,11 @@ public :
 	void setDensity( int i , int j , int k , float dens );
 
 	/**
+	 * @brief : set temperature at the given cell
+	 */
+	void setTemperature( int i, int j, int k, float temp );
+
+	/**
 	 * @brief : set the velocity in the given cell
 	 */
 	void setVelocity( int i, int j , int k , float u, float v, float w );
@@ -80,6 +117,10 @@ protected :
 	
 	/* densities */
 	float *_d, *_d0;
+	float *_f, *_f0;
+
+	/* temperature */
+	float *_T, *_T0;
 
 	/* velocities */
 	float *_v, *_v0;
@@ -88,6 +129,7 @@ protected :
 
 	/* Sources */
 	float *_srcd;
+	float *_srcT;
 	float *_srcu;
 	float *_srcv;
 	float *_srcw;

@@ -1,12 +1,26 @@
-uniform sampler3D SpeedField;
+
+
+
+
+
+
+
+#define TAILLE          30
+#define TAILLE_CELL     (1.0/TAILLE)
+
+uniform sampler3D TextureSpeedField;
 
 
 
 void main (){
-    vec3 centre = vec3 (0.0, 1.0, 0.0);    
-    vec3 speed = texture3D(SpeedField,gl_TexCoord[0].xyz).xyz;
-    speed.y = 1.0;
-    gl_FragColor = vec4 ( 1.0, 1.0, 0.0, 0.2);
+    
+    vec4 speed = vec4(texture3D(TextureSpeedField,gl_TexCoord[0].stp));
+    gl_FragColor = vec4(speed.x, speed.y, speed.z, 1.0);
+
+    
+    
 }
+
+
 
 
