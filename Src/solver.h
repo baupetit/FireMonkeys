@@ -38,6 +38,20 @@ public :
 	 */
 	void velocitiesStep( float visc , float dt );
 
+
+	/**
+	 * @brief : move densities over a dt timestep with a certain
+	 * diffusion factor with Temperature
+	 */
+	void densitiesStepWithTemp( float diff, float cool, float dt );
+
+	/**
+	 * @brief : compute velocities evolution over a dt timestep
+	 * using visc as the viscosity of the fluid with Temperature
+	 */
+	void velocitiesStepWithTemp( float visc , float buoy, float dt );
+
+
 	/**
 	 * @brief : return the density matrix
 	 */
@@ -69,6 +83,11 @@ public :
 	void setDensity( int i , int j , int k , float dens );
 
 	/**
+	 * @brief : set temperature at the given cell
+	 */
+	void setTemperature( int i, int j, int k, float temp );
+
+	/**
 	 * @brief : set the velocity in the given cell
 	 */
 	void setVelocity( int i, int j , int k , float u, float v, float w );
@@ -81,6 +100,9 @@ protected :
 	/* densities */
 	float *_d, *_d0;
 
+	/* temperature */
+	float *_T, *_T0;
+
 	/* velocities */
 	float *_v, *_v0;
 	float *_u, *_u0;
@@ -88,6 +110,7 @@ protected :
 
 	/* Sources */
 	float *_srcd;
+	float *_srcT;
 	float *_srcu;
 	float *_srcv;
 	float *_srcw;
