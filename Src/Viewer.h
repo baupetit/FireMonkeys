@@ -31,7 +31,7 @@ public :
     void initScene();
     virtual void rendu();
     
-private :
+protected :
     // Instance
     static Viewer *_instance;
 
