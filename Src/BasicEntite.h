@@ -15,8 +15,10 @@
 
 class BasicEntite : public Noeud{
 public:
-    virtual void Afficher() = 0;
     void Afficher_Entite();
+    void Afficher_Entite_Face_Camera(Vecteur3D& positionCamera );
+    virtual void Afficher() = 0;
+    virtual void Afficher_Face_Camera(Vecteur3D& positionCamera ) = 0; 
 };
 
 

@@ -6,6 +6,13 @@
 #include <iostream>
 #include <unistd.h>
 
+
+#include <cmath>
+#ifndef M_PI
+	#define M_PI 3.14159265358979323846f
+#endif
+
+
 using namespace std;
 
 FluidViewer::FluidViewer()
@@ -53,7 +60,15 @@ void FluidViewer::rendu(){
 
 	////////////////////////////////////////////////////////////////////////////
 	//// OBJETS
-	_fluid->Afficher_Entite();
+	glPushMatrix();
+    glMatrixMode (GL_MODELVIEW);
+    Vecteur3D positionCamera;
+	positionCamera.x = _distToOrigin*cos(_cameraAngle);
+	positionCamera.y = _cameraHeight;
+	positionCamera.z = _distToOrigin*sin(_cameraAngle);
+	_fluid->Afficher_Entite_Face_Camera(positionCamera);
+   	//_fluid->Afficher_Entite();
+	glPopMatrix();
 	
     
 	////////////////////////////////////////////////////////////////////////////
