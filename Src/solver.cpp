@@ -1,4 +1,7 @@
 #define SIZE ((N+2)*(N+2)*(N+2))
+#ifndef NB_ITERATION_SOLVE
+#define NB_ITERATION_SOLVE 20
+#endif
 
 #include "solver.h"
 
@@ -189,7 +192,7 @@ void linearSolve ( int N, int b, float * x, float * x0, float a, float c )
 {
 	int i, j, k, l;
 
-	for ( l=0 ; l<20 ; l++ ) {
+	for ( l=0 ; l<NB_ITERATION_SOLVE ; l++ ) {
 		for( k=1; k<N+1; ++k ){ 
 			for( j = 1; j<N+1 ; ++j) { 
 				for( i=1 ; i<N+1 ; ++i ){
@@ -229,7 +232,7 @@ void diffuseFireAndSmoke ( int N, int b1, int b2, int b3,
 	//linearSolve ( N, b, x, x0, a, 1+6*a );
 	int i, j, k, l, ijk;
 	
-	for ( l=0 ; l<20 ; l++ ) {
+	for ( l=0 ; l<NB_ITERATION_SOLVE ; l++ ) {
 		for( k=1; k<N+1; ++k ){ 
 			for( j = 1; j<N+1 ; ++j) { 
 				for( i=1 ; i<N+1 ; ++i ){

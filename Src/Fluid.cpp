@@ -24,17 +24,18 @@ static inline float getTempVal( int i, int j, int T ){
 
 Fluid::Fluid()
 {
-        tailleGrille = 25;
+        tailleGrille = 20;
         
         s = new Solver(tailleGrille);
 
 	
-	tempIndex = new TempToRGB(128,200);
+	tempIndex = new TempToRGB(256,50);
 	
+
 	for( int i = 7 ; i < tailleGrille-6 ; ++i ){
 		for( int j = 7 ; j < tailleGrille-6 ; ++j ){
-			s->setDensity( i ,5, j, 1.0f );        
-			s->setTemperature( i ,5, j, (getTempVal(i,j,tailleGrille))/13);        
+			s->setDensity( i ,5, j, 0.5f );        
+			s->setTemperature( i ,5, j, (getTempVal(i,j,tailleGrille))/10);        
 		}
 	}
 
@@ -178,7 +179,7 @@ void Fluid::majMatriceFumeeEnMatriceRGBA(){
     const float *pointeurMatriceACopier3 = s->getTemperatures();
     float R,G,B;
     for (int i = 0; i < (tailleGrille+2)*(tailleGrille+2)*(tailleGrille+2); i ++){
-	    tempIndex->getRGB( (*pointeurMatriceACopier3)*4000 , &R, &G, &B );
+	    tempIndex->getRGB( (1+(*pointeurMatriceACopier3))*1555 , &R, &G, &B );
 	    // R
 	    *pointeurMatriceRGBA = B;
 	    pointeurMatriceRGBA++;
@@ -516,9 +517,8 @@ void Fluid::dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans){
 	
 }
 
-
 void Fluid::Mise_A_Jour(){
-	s->velocitiesStepWithTemp(0.0, 1, 2.0,0.1);
+	s->velocitiesStepWithTemp(0.0, 0.5, 2.0,0.1);
 	s->densitiesStepWithTemp(0.00001,0.001,0.0001, 1, 0.4, 0.01, 0.1);
 }
 

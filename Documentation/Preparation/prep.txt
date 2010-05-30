@@ -1,0 +1,15 @@
+ordre du jour :
+
+      - montrer les résultats de fluide ( flamme et fumme )
+      - demander info gpu ( calcul shaders )
+      - expliquer methode destruction et propagation
+      - demander info voxels, tetrahedre, etc...
+      - demander info perlin 4D
+      
+
+repartition :
+
+	    - Fumee :                     Arnaud
+	    - Doc stable fluid :          Benjamin
+	    - Doc : completer articles    Julien et ARnaud et Benjamin
+	    
