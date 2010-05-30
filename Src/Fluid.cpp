@@ -24,7 +24,7 @@ static inline float getTempVal( int i, int j, int T ){
 
 Fluid::Fluid()
 {
-        tailleGrille = 30;
+        tailleGrille = 25;
         
         s = new Solver(tailleGrille);
 
@@ -44,9 +44,13 @@ Fluid::Fluid()
         initialiserRenduGPU();
         
         
-        position.x = 1;
-        position.y = 1;
-        position.z = -1;
+        position.x = 0;
+        position.y = 0.5;
+        position.z = 0;
+        
+        echelle.x = 10;
+        echelle.y = 10;
+        echelle.z = 10;
 }
 
 Fluid::~Fluid(){
@@ -56,10 +60,10 @@ Fluid::~Fluid(){
 
 
 
-void Fluid::Afficher_Face_Camera(Vecteur3D& positionCamera ){
+void Fluid::Afficher_Face_Camera(Vecteur3D& positionCamera, Vecteur3D& directionCamera ){
 
     Mise_A_Jour();
-    renduFumeeGPUFaceCamera(positionCamera);
+    renduFumeeGPUFaceCamera(positionCamera, directionCamera);
 }    
     
 void Fluid::Afficher(){
@@ -143,7 +147,7 @@ void Fluid::Afficher(){
 void Fluid::renduFumeeGPU(){
     majMatriceFumeeEnMatriceRGBA();
     matriceRGBACarreeToTexture3D(matriceRGBA, tailleGrille + 2 , _id_texture_fumee);
-    dessinerPlansDansTexture3D(_id_texture_fumee, 50);
+    dessinerPlansDansTexture3D(_id_texture_fumee, 20);
 }
 
 
@@ -153,15 +157,15 @@ void Fluid::renduFlammeGPU(){
 
 
 	
-void Fluid::renduFumeeGPUFaceCamera(Vecteur3D& positionCamera ){
+void Fluid::renduFumeeGPUFaceCamera(Vecteur3D& positionCamera, Vecteur3D& directionCamera ){
     majMatriceFumeeEnMatriceRGBA();
     matriceRGBACarreeToTexture3D(matriceRGBA, tailleGrille + 2 , _id_texture_fumee);
-    dessinerPlansDansTexture3DFaceALaCamera(_id_texture_fumee, 50, positionCamera);
+    dessinerPlansDansTexture3DFaceALaCamera(_id_texture_fumee, 40, positionCamera, directionCamera);
 }
 
 
 
-void Fluid::renduFlammeGPUFaceCamera(Vecteur3D& positionCamera ){
+void Fluid::renduFlammeGPUFaceCamera(Vecteur3D& positionCamera, Vecteur3D& directionCamera ){
 }
 
 
@@ -185,13 +189,38 @@ void Fluid::majMatriceFumeeEnMatriceRGBA(){
 	    *pointeurMatriceRGBA = R;
 	    pointeurMatriceRGBA++;
 	    // A
-	    *pointeurMatriceRGBA = *pointeurMatriceACopier * 4 - *pointeurMatriceACopier3*2;
+	    *pointeurMatriceRGBA = *pointeurMatriceACopier* 4 - *pointeurMatriceACopier3*2;
 	    pointeurMatriceRGBA++;
 	    // MAJ
 	    pointeurMatriceACopier++;
 	    pointeurMatriceACopier3++;
     }    
+    
+    ///////////////////////////////////////////////
+    // A SUPPRIMER
+    ///////////////////////////////////////////////
+    /*
+    
+    pointeurMatriceRGBA = matriceRGBA;
+    for (int i = (tailleGrille+2)*(tailleGrille+2)*5; i < (tailleGrille+2)*(tailleGrille+2)*(tailleGrille-5); i ++){
+	    // R
+	    *pointeurMatriceRGBA = 1.0;//B;
+	    pointeurMatriceRGBA++;
+	    // G
+	    *pointeurMatriceRGBA = 1.0;//G;
+	    pointeurMatriceRGBA++;
+	    // B
+	    *pointeurMatriceRGBA = 0.0;//R;
+	    pointeurMatriceRGBA++;
+	    // A
+	    *pointeurMatriceRGBA = 1.0;// *pointeurMatriceACopier ;// * 4 - *pointeurMatriceACopier3*2;
+	    pointeurMatriceRGBA++;
+    } 
+    
+    */ 
+    ///////////////////////////////////////////////
 }
+
 	
 
 void Fluid::matriceRGBACarreeToTexture3D(const float *matrice, int cote, GLuint id_texture){
@@ -199,14 +228,17 @@ void Fluid::matriceRGBACarreeToTexture3D(const float *matrice, int cote, GLuint 
     // Chargement en mémoire
     glBindTexture(GL_TEXTURE_3D, id_texture);
     
-/*
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_REPEAT);
-    */
+    
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP);
+    
+    
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+    
     
     glTexImage3D(GL_TEXTURE_3D,0,GL_RGBA,cote,cote,cote,
                  0, GL_BGRA, GL_FLOAT, matrice);
@@ -226,10 +258,96 @@ void Fluid::initialiserRenduGPU(){
 
 
 void Fluid::dessinerPlansDansTexture3DFaceALaCamera(GLuint id_texture, int nb_plans,
-	                                     Vecteur3D& positionCamera){
+	                                     Vecteur3D& positionCamera, Vecteur3D& directionCamera){
 	       
-    glPushMatrix();
+
+       
+    Vecteur3D directionInitiale = Vecteur3D (0,0,1);
+    /*
+    cout << "directionInitiale ";
+    directionInitiale.afficher();
+    */
     
+    Vecteur3D N = positionCamera - position;
+    N.normaliser();
+    /*
+    cout << "N ";
+    N.afficher();
+    */
+    
+    // Calcul de l'angle Oxz
+    float angleOxz = atan2(N.z, N.x) - atan2(directionInitiale.z, directionInitiale.x);
+    while ( angleOxz >= M_PI ) angleOxz -= 2*M_PI;
+    while ( angleOxz <= -M_PI ) angleOxz += 2*M_PI;
+    /*
+    cout << "Angle Oxz " << angleOxz << endl;
+    */
+    
+    // Calcul de l'angle Oyz
+    Vecteur3D distance = - positionCamera + position;
+    float angleOyz = asin(distance.y / norme(distance));
+    while ( angleOyz >= M_PI ) angleOyz -= 2*M_PI;
+    while ( angleOyz <= -M_PI ) angleOyz += 2*M_PI;
+    /*
+    cout << "Angle Oyz " << angleOyz << endl;
+    */
+    
+
+    // Vecteur directeurs    
+    Vecteur3D Boitev0 = Vecteur3D(-0.5, -0.5, -0.5);
+    Vecteur3D Boitev1 = Vecteur3D(-0.5, +0.5, -0.5);
+    Vecteur3D Boitev2 = Vecteur3D(+0.5, +0.5, -0.5);
+    Vecteur3D Boitev3 = Vecteur3D(+0.5, -0.5, -0.5);
+    // Rotation autour de X pour garder le cube face à la camera 
+    Boitev0.rotationAutourAxeX(angleOyz);
+    Boitev1.rotationAutourAxeX(angleOyz);
+    Boitev2.rotationAutourAxeX(angleOyz);
+    Boitev3.rotationAutourAxeX(angleOyz);
+    // Rotation autour de Y pour garder le cube face à la camera     
+    Boitev0.rotationAutourAxeY(angleOxz);
+    Boitev1.rotationAutourAxeY(angleOxz);
+    Boitev2.rotationAutourAxeY(angleOxz);
+    Boitev3.rotationAutourAxeY(angleOxz);
+    
+    
+    // Coordonnées de textures  
+    
+    Vecteur3D Tex0 = Vecteur3D(-0.0, -0.0, -0.0);
+    Vecteur3D Tex1 = Vecteur3D(-0.0, +1.0, -0.0);
+    Vecteur3D Tex2 = Vecteur3D(+1.0, +1.0, -0.0);
+    Vecteur3D Tex3 = Vecteur3D(+1.0, -0.0, -0.0);   
+    
+    Vecteur3D centre = Vecteur3D(0.5,0.5,0.5);
+    Tex0 -= centre; 
+    Tex1 -= centre; 
+    Tex2 -= centre; 
+    Tex3 -= centre; 
+    // Rotation 1
+    Tex0.rotationAutourAxeX(angleOyz);
+    Tex1.rotationAutourAxeX(angleOyz);
+    Tex2.rotationAutourAxeX(angleOyz);
+    Tex3.rotationAutourAxeX(angleOyz);
+    // Rotation 2
+    Tex0.rotationAutourAxeY(angleOxz);
+    Tex1.rotationAutourAxeY(angleOxz);
+    Tex2.rotationAutourAxeY(angleOxz);
+    Tex3.rotationAutourAxeY(angleOxz);
+    
+    Tex0 += centre; 
+    Tex1 += centre; 
+    Tex2 += centre; 
+    Tex3 += centre; 
+    
+    
+    // Direction des autres faces
+    Vecteur3D profondeur = produitVectoriel(Boitev2-Boitev1 , Boitev0-Boitev1);
+    Boitev0.normaliser();
+    Boitev1.normaliser();
+    Boitev2.normaliser();
+    Boitev3.normaliser();
+    profondeur.normaliser();
+    
+    // Activation de la texture
     glDisable(GL_LIGHTING);
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     glEnable( GL_BLEND );
@@ -238,96 +356,84 @@ void Fluid::dessinerPlansDansTexture3DFaceALaCamera(GLuint id_texture, int nb_pl
 	glEnable(GL_TEXTURE_3D);
     glActiveTexture(id_texture);
     
-    
-    Vecteur3D Boitev0 = Vecteur3D(-0.5, -0.5, 0);
-    Vecteur3D Boitev1 = Vecteur3D(-0.5, 0.5, 0);
-    Vecteur3D Boitev2 = Vecteur3D(0.5, 0.5, 0);
-    Vecteur3D Boitev3 = Vecteur3D(0.5, -0.5, 0);
-    
-    Vecteur3D direction = position - positionCamera;
-    position.afficher();
-    positionCamera.afficher();
-    direction.afficher();
-    
-    float distOZY = sqrt ( direction.z*direction.z + direction.y*direction.y);
-    float distOXZ = sqrt ( direction.z*direction.z + direction.x*direction.x);
-    float anglePlanOZY = asinf(direction.y/distOZY);
-    float anglePlanOXZ = asinf(direction.x/distOXZ);    
-    
-    
-    cout << "angle 1 : " << anglePlanOZY << endl;      
-    Boitev0.rorationAutourAxeX(anglePlanOZY);
-    Boitev1.rorationAutourAxeX(anglePlanOZY);
-    Boitev2.rorationAutourAxeX(anglePlanOZY);
-    Boitev3.rorationAutourAxeX(anglePlanOZY);
-    
-    
-    cout << "angle 2 : " << anglePlanOXZ << endl;
-    Boitev0.rorationAutourAxeY(anglePlanOXZ);
-    Boitev1.rorationAutourAxeY(anglePlanOXZ);
-    Boitev2.rorationAutourAxeY(anglePlanOXZ);
-    Boitev3.rorationAutourAxeY(anglePlanOXZ);
-    
-  
-    
-    GLfloat verts[4][3] = { {Boitev0.x, Boitev0.y, Boitev0.z}, 
-                            {Boitev1.x, Boitev1.y, Boitev1.z}, 
-                            {Boitev2.x, Boitev2.y, Boitev2.z}, 
-                            {Boitev3.x, Boitev3.y, Boitev3.z}};
+    // Vecteur de coordonnées
+    Vecteur3D coord;
+    Vecteur3D decalageTex;
+    Vecteur3D decalageVert;
+	N = profondeur;
 	
-	glBegin(GL_TRIANGLES);	
-	    glVertex3d(verts[0][0], verts[0][1], verts[0][2]);
-	    glVertex3d(verts[1][0], verts[1][1], verts[1][2]);
-	    glVertex3d(verts[2][0], verts[2][1], verts[2][2]);
-	    
-	    glVertex3d(verts[2][0], verts[2][1], verts[2][2]);
-	    glVertex3d(verts[3][0], verts[3][1], verts[3][2]);
-	    glVertex3d(verts[0][0], verts[0][1], verts[0][2]);
-	    
-	    
-	    
-	
-	/*
-	for (int i = 0; i < 0; i++){
-		glTexCoord3d(verts[0][0] + N.x * (float)i/nb_plans, 
-		             verts[0][1] + N.y * (float)i/nb_plans, 
-		             verts[0][2] + N.z * (float)i/nb_plans);
-		glVertex3d(verts[0][0], verts[0][1], verts[0][2]+ (float)i/nb_plans);
+    // Affichage
+    glBegin(GL_TRIANGLES);
+    for (int i = 0; i < nb_plans; i++){
+        decalageTex  = - float(i)/nb_plans * N;//Vecteur3D(0,0,+ float(i)/nb_plans);// * N;
+        decalageVert = - float(i)/nb_plans * N;
+        
+        
+        coord = (Tex0 + decalageTex);
+        /*
+        cout << "Tex 0 : ";
+        coord.afficher();
+        */
+        glTexCoord3d(coord.x, coord.y, coord.z);                
+        coord = Boitev0 + decalageVert;
+        /*
+        cout << "Point 0 : ";
+        coord.afficher();
+        */
+        glVertex3d(coord.x, coord.y, coord.z);
+        
+        coord = (Tex1 + decalageTex);
+        /*
+        cout << "Tex 1 : ";
+        coord.afficher();
+        */
+        glTexCoord3d(coord.x, coord.y, coord.z);        
+        coord = Boitev1 + decalageVert;
+        /*
+        cout << "Point 1 : ";
+        coord.afficher();
+        */
+        glVertex3d(coord.x, coord.y, coord.z);
+        
+        coord = (Tex2 + decalageTex);  
+        /*
+        cout << "Tex 2 : ";
+        coord.afficher();
+        */
+        glTexCoord3d(coord.x, coord.y, coord.z);
+        coord = Boitev2 + decalageVert;
+        /*
+        cout << "Point 2 : ";
+        coord.afficher();
+        */
+        glVertex3d(coord.x, coord.y, coord.z);
+          
+        
+        coord = (Tex2 + decalageTex);
+        glTexCoord3d(coord.x, coord.y, coord.z);
+        coord = Boitev2 + decalageVert;
+        glVertex3d(coord.x, coord.y, coord.z);
+        
+        
+        coord = (Tex3 + decalageTex);
+        glTexCoord3d(coord.x, coord.y, coord.z);
+        coord = Boitev3 + decalageVert;
+        glVertex3d(coord.x, coord.y, coord.z);
+        
+        
+        coord = (Tex0 + decalageTex);
+        glTexCoord3d(coord.x, coord.y, coord.z);
+        coord = Boitev0 + decalageVert;
+        glVertex3d(coord.x, coord.y, coord.z);
+    }
 		
-		glTexCoord3d(verts[1][0] + N.x * (float)i/nb_plans, 
-		             verts[1][1] + N.y * (float)i/nb_plans, 
-		             verts[1][2] + N.z * (float)i/nb_plans);
-		glVertex3d(verts[1][0], verts[1][1], verts[1][2] + (float)i/nb_plans);
-				
-		glTexCoord3d(verts[2][0] + N.x * (float)i/nb_plans, 
-		             verts[2][1] + N.y * (float)i/nb_plans, 
-		             verts[2][2] + N.z * (float)i/nb_plans);
-		glVertex3d(verts[2][0], verts[2][1], verts[2][2] + (float)i/nb_plans);
-		
-		glTexCoord3d(verts[2][0] + N.x * (float)i/nb_plans, 
-		             verts[2][1] + N.y * (float)i/nb_plans, 
-		             verts[2][2] + N.z * (float)i/nb_plans);
-		glVertex3d(verts[2][0], verts[2][1], verts[2][2] + (float)i/nb_plans);
-		
-		glTexCoord3d(verts[3][0] + N.x * (float)i/nb_plans, 
-		             verts[3][1] + N.y * (float)i/nb_plans, 
-		             verts[3][2] + N.z * (float)i/nb_plans);
-		glVertex3d(verts[3][0], verts[3][1], verts[3][2] + (float)i/nb_plans);
-		
-		glTexCoord3d(verts[0][0] + N.x * (float)i/nb_plans, 
-		             verts[0][1] + N.y * (float)i/nb_plans, 
-		             verts[0][2] + N.z * (float)i/nb_plans);
-		glVertex3d(verts[0][0], verts[0][1], verts[0][2] + (float)i/nb_plans);	
-	}
-	*/
 	glEnd();
 	
-	
+	// Desactivation des elements
 	glDisable(GL_TEXTURE_3D);
     glDisable( GL_BLEND );    
     glEnable(GL_LIGHTING);
     
-    glPopMatrix();
 }
 
 
