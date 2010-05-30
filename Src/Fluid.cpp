@@ -64,12 +64,14 @@ Fluid::~Fluid(){
 void Fluid::Afficher_Face_Camera(Vecteur3D& positionCamera, Vecteur3D& directionCamera ){
 
     Mise_A_Jour();
+    renduFlammeGPUFaceCamera(positionCamera, directionCamera);
     renduFumeeGPUFaceCamera(positionCamera, directionCamera);
 }    
     
 void Fluid::Afficher(){
 
     Mise_A_Jour();
+    renduFlammeGPU();
     renduFumeeGPU();
 
 	////////////////////////////////////////////////////////////////////////////
@@ -154,6 +156,9 @@ void Fluid::renduFumeeGPU(){
 
 
 void Fluid::renduFlammeGPU(){
+    majMatriceFlammeEnMatriceRGBA();
+    matriceRGBACarreeToTexture3D(matriceRGBA, tailleGrille + 2 , _id_texture_flamme);
+    dessinerPlansDansTexture3D(_id_texture_flamme, 20);
 }
 
 
@@ -167,10 +172,13 @@ void Fluid::renduFumeeGPUFaceCamera(Vecteur3D& positionCamera, Vecteur3D& direct
 
 
 void Fluid::renduFlammeGPUFaceCamera(Vecteur3D& positionCamera, Vecteur3D& directionCamera ){
+    majMatriceFlammeEnMatriceRGBA();
+    matriceRGBACarreeToTexture3D(matriceRGBA, tailleGrille + 2 , _id_texture_flamme);
+    dessinerPlansDansTexture3DFaceALaCamera(_id_texture_flamme, 20, positionCamera, directionCamera);
 }
 
 
-void Fluid::majMatriceFumeeEnMatriceRGBA(){
+void Fluid::majMatriceFlammeEnMatriceRGBA(){
 
     // Creation de la texture
     float *pointeurMatriceRGBA = matriceRGBA;
@@ -220,6 +228,33 @@ void Fluid::majMatriceFumeeEnMatriceRGBA(){
     
     */ 
     ///////////////////////////////////////////////
+}
+
+	
+void Fluid::majMatriceFumeeEnMatriceRGBA(){
+
+    // Creation de la texture
+    float *pointeurMatriceRGBA = matriceRGBA;
+    const float *pointeurMatriceACopier  = s->getDensities();
+    const float *pointeurMatriceACopier2 = s->getSmokes();
+    const float *pointeurMatriceACopier3 = s->getTemperatures();
+    float R,G,B;
+    for (int i = 0; i < (tailleGrille+2)*(tailleGrille+2)*(tailleGrille+2); i ++){
+	    // R
+	    *pointeurMatriceRGBA = 0.1;
+	    pointeurMatriceRGBA++;
+	    // G
+	    *pointeurMatriceRGBA = 0.1;
+	    pointeurMatriceRGBA++;
+	    // B
+	    *pointeurMatriceRGBA = 0.1;
+	    pointeurMatriceRGBA++;
+	    // A
+	    *pointeurMatriceRGBA = 1500 * *pointeurMatriceACopier2;
+	    pointeurMatriceRGBA++;
+	    // MAJ
+	    pointeurMatriceACopier2++;
+    }    
 }
 
 	
