@@ -161,7 +161,7 @@ void Fluid::renduFlammeGPU(){
 void Fluid::renduFumeeGPUFaceCamera(Vecteur3D& positionCamera, Vecteur3D& directionCamera ){
     majMatriceFumeeEnMatriceRGBA();
     matriceRGBACarreeToTexture3D(matriceRGBA, tailleGrille + 2 , _id_texture_fumee);
-    dessinerPlansDansTexture3DFaceALaCamera(_id_texture_fumee, 40, positionCamera, directionCamera);
+    dessinerPlansDansTexture3DFaceALaCamera(_id_texture_fumee, 20, positionCamera, directionCamera);
 }
 
 
