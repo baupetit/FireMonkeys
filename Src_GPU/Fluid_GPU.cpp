@@ -31,7 +31,7 @@ void Fluid_GPU::initialiserSpeedField(){
         for (int j = 0; j < TAILLE_GRILLE; j++){
             for (int i = 0; i < TAILLE_GRILLE; i++){    
                 texture[ID(i,j,k)].x = 0.0f;
-                texture[ID(i,j,k)].y = 0.0f;
+                texture[ID(i,j,k)].y = 0.5f;
                 texture[ID(i,j,k)].z = 0.0f;
             }
         }
@@ -90,6 +90,36 @@ void Fluid_GPU::initialiserSpeedField(){
 							GL_TEXTURE_3D, _speedField_2, 0 , 0);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
     
+
+	/* Create a depth buffer for our framebuffer */
+	glGenRenderbuffers( 1, &_renderbuffer_1 );
+	glBindRenderbuffer( GL_RENDERBUFFER, _renderbuffer_1  );
+	glRenderbufferStorage( GL_RENDERBUFFER, GL_DEPTH_COMPONENT24,
+ 						   TAILLE_GRILLE, TAILLE_GRILLE );
+
+
+	/* Create a depth buffer for our framebuffer */
+	glGenRenderbuffers( 1, &_renderbuffer_2 );
+	glBindRenderbuffer( GL_RENDERBUFFER, _renderbuffer_2  );
+	glRenderbufferStorage( GL_RENDERBUFFER, GL_DEPTH_COMPONENT24,
+						   TAILLE_GRILLE, TAILLE_GRILLE );
+
+
+	/* Attach the texture and depth buffer to the framebuffer */
+
+	glBindFramebuffer( GL_DRAW_FRAMEBUFFER, _FBO_speed_1 );
+	glFramebufferRenderbuffer( GL_DRAW_FRAMEBUFFER,
+	   GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _renderbuffer_1 );
+	glBindFramebuffer( GL_DRAW_FRAMEBUFFER, 0 );
+
+	glBindFramebuffer( GL_DRAW_FRAMEBUFFER, _FBO_speed_2 );
+	glFramebufferRenderbuffer( GL_DRAW_FRAMEBUFFER,
+	   GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _renderbuffer_2 );
+	glBindFramebuffer( GL_DRAW_FRAMEBUFFER, 0 );
+
+	glEnable( GL_DEPTH_TEST );
+
+
     // On lie les variables uniforme du shader
 //  _speedFieldLocation_Prec = glGetUniformLocation ( _speed_program, "TextureSpeedField_Prec");
 //    glUniform1i(_speedFieldLocation_Prec,_speedField_1);
@@ -105,28 +135,99 @@ void Fluid_GPU::resolutionSpeedField(){
 	_speedFieldLocation_Prec = glGetUniformLocation ( _speed_program, "TextureSpeedField_Prec");
     glUniform1i(_speedFieldLocation_Prec,_speedField_1);
 
-	//on se place dans le FBO 2 on va donc ecrire dans la texture2
+	//on se place dans le FBO 2 on va donc dessiner dans la texture2
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _FBO_speed_2);
-
-    glUseProgram(_speed_program);
+	//glClearColor( 1.0,0.0,0.0,0.0);
+	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+	//rendu du calcul	
+	glUseProgram(_speed_program);
 	//la texture est dessiné dans le FBO 2
     displaySpeedField(); 
     glUseProgram(0);
-
+	// generation texture
+	glGenerateMipmap( GL_TEXTURE_CUBE_MAP );
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); 
 
-	GLuint bufferObject;
-	glGenBuffers(1, &bufferObject);
-	glBindBufferARB(PIXEL_PACK_BUFFER, bufferObject);
-	glBufferDataARB(PIXEL_PACK_BUFFER, 50, NULL, GL_DYNAMIC_DRAW_ARB);
+	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
+	int details = 10;
+	glEnable(GL_TEXTURE_3D);
+	glActiveTexture(_speedField_2);
+    glBindTexture(GL_TEXTURE_3D,_speedField_2);
+    
+
+    GLfloat verts[4][3] = { { 0.0, 0.0, 0.5}, {0.0, 1.0, 0.5}, {1.0, 1.0, 0.5}, {1.0, 0.0, 0.5} };
+
+	glBegin(GL_TRIANGLES);	
+		glTexCoord3d(verts[0][0], verts[0][1], verts[0][2]);
+		glVertex3d(verts[0][0], verts[0][1], verts[0][2]);
+		
+		glTexCoord3d(verts[1][0], verts[1][1], verts[1][2]);
+		glVertex3d(verts[1][0], verts[1][1], verts[1][2]);
+		
+		glTexCoord3d(verts[2][0], verts[2][1], verts[2][2]);
+		glVertex3d(verts[2][0], verts[2][1], verts[2][2]);
+		
+		glTexCoord3d(verts[2][0], verts[2][1], verts[2][2]);
+		glVertex3d(verts[2][0], verts[2][1], verts[2][2]);
+		
+		glTexCoord3d(verts[3][0], verts[3][1], verts[3][2]);
+		glVertex3d(verts[3][0], verts[3][1], verts[3][2]);
+		
+		glTexCoord3d(verts[0][0], verts[0][1], verts[0][2]);
+		glVertex3d(verts[0][0], verts[0][1], verts[0][2]);		
+	glEnd();
+	
+	for (int i = 1; i < details/2; i++){
+	glBegin(GL_TRIANGLES);	
+		glTexCoord3d(verts[0][0], verts[0][1], verts[0][2] + (float)i/details);
+		glVertex3d(verts[0][0], verts[0][1], verts[0][2]+ (float)i/details);
+		
+		glTexCoord3d(verts[1][0], verts[1][1], verts[1][2] + (float)i/details);
+		glVertex3d(verts[1][0], verts[1][1], verts[1][2] + (float)i/details);
+		
+		glTexCoord3d(verts[2][0], verts[2][1], verts[2][2] + (float)i/details);
+		glVertex3d(verts[2][0], verts[2][1], verts[2][2] + (float)i/details);
+		
+		glTexCoord3d(verts[2][0], verts[2][1], verts[2][2] + (float)i/details);
+		glVertex3d(verts[2][0], verts[2][1], verts[2][2] + (float)i/details);
+		
+		glTexCoord3d(verts[3][0], verts[3][1], verts[3][2] + (float)i/details);
+		glVertex3d(verts[3][0], verts[3][1], verts[3][2] + (float)i/details);
+		
+		glTexCoord3d(verts[0][0], verts[0][1], verts[0][2] + (float)i/details);
+		glVertex3d(verts[0][0], verts[0][1], verts[0][2] + (float)i/details);	
+	glEnd();
+	}
 	
 	
+	for (int i = 1; i < details/2; i++){
+	glBegin(GL_TRIANGLES);	
+		glTexCoord3d(verts[0][0], verts[0][1], verts[0][2] - (float)i/details);
+		glVertex3d(verts[0][0], verts[0][1], verts[0][2]- (float)i/details);
+		
+		glTexCoord3d(verts[1][0], verts[1][1], verts[1][2] - (float)i/details);
+		glVertex3d(verts[1][0], verts[1][1], verts[1][2] - (float)i/details);
+		
+		glTexCoord3d(verts[2][0], verts[2][1], verts[2][2] - (float)i/details);
+		glVertex3d(verts[2][0], verts[2][1], verts[2][2] - (float)i/details);
+		
+		glTexCoord3d(verts[2][0], verts[2][1], verts[2][2] - (float)i/details);
+		glVertex3d(verts[2][0], verts[2][1], verts[2][2] - (float)i/details);
+		
+		glTexCoord3d(verts[3][0], verts[3][1], verts[3][2] - (float)i/details);
+		glVertex3d(verts[3][0], verts[3][1], verts[3][2] - (float)i/details);
+		
+		glTexCoord3d(verts[0][0], verts[0][1], verts[0][2] - (float)i/details);
+		glVertex3d(verts[0][0], verts[0][1], verts[0][2] - (float)i/details);	
+	glEnd();
+	}
 
-	glReadPixels(0, 0, 50, 1, GL_RGBA, GL_FLOAT, BUFFER_OFFSET(0));
-	display_3DTexture(30, _speedField_2);
-	glBindBuffer(GL_ARRAY_BUFFER, bufferObject);
+	glDisable(GL_TEXTURE_3D);
 
+    
 
+	
 
 
 }
@@ -134,7 +235,7 @@ void Fluid_GPU::resolutionSpeedField(){
 
 void Fluid_GPU::displaySpeedField(){
 
-    display_3DTexture(30, _speedField_2);
+    display_3DTexture(20, _speedField_2);
     
 }
 

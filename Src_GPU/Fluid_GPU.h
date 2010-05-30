@@ -23,10 +23,12 @@ private:
 	GLuint _speedField_2;
     /** Position des variables ChampsDeVitesse prec et cour dans le Shader */
     GLuint _speedFieldLocation_Prec;
-    GLuint _speedFieldLocation_Cour;
 	/** FBOs pour les textures que l'on utilise pour le calcul de champ de vitesse */
 	GLuint _FBO_speed_1;
 	GLuint _FBO_speed_2;
+
+	GLuint _renderbuffer_1;
+	GLuint _renderbuffer_2;
     
 
 public:

@@ -148,9 +148,9 @@ utiliser...
 \textbf{Sujet(s) abordé(s)} : \\Modèle de fluide temps réel, pouvant être utilisé pour le feu, la fumée\\
 	Le modèle gère: le deplacement du fluide, la gestion de combustible,les forces appliquées sur le fluide.\\	
 \textbf{Principe} :\\
-	Le modèle a été décomposé sur plusieurs étapes : génération du fluide par des sources, ajout des forces, diffusion du 		fluide, puis résolution de l'équation de la densité et de l'équation de la vitesse (équations de Navier-Stockes).
+	Le modèle a été décomposé sur plusieurs étapes : génération du fluide par des sources, ajout des forces, diffusion du fluide, puis résolution de l'équation de la densité et de l'équation de la vitesse (équations de Navier-Stockes).
 	Pour résoudre les deux équations, il utilise une astuce permettant de résoudre le système très rapidement.
-	Enfin, il utilise le principe de conservation de la masse, qui rajoute des effets réalistes de vortex, avec la 		décomposition de Hodge.\\
+	Enfin, il utilise le principe de conservation de la masse, qui rajoute des effets réalistes de vortex, avec la décomposition de Hodge.\\
 \textbf{Point(s) positif(s)} :\\
 	Temps réel.\\
 	C'est facile à implémenter (moins de 100 lignes pour la version 2D)\\
@@ -261,7 +261,7 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
 \textbf{Conclusion} :\\
 
 
-\subsubsection{Adaptated Physics Based Tetrahedral Mesh Generation Using Level Sets}
+\subsubsection{Adaptative Physics Based Tetrahedral Mesh Generation Using Level Sets}
 \textbf{Auteur(s)} : Robert Bridson, Joseph Teran, Neil Molino, Ronald Fedkiw.\\
 \textbf{Publication} : Engineering with Computers (2005)\\
 \textbf{Sujet(s) abordé(s)} : \\
@@ -318,6 +318,7 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
 	Réaliste.\\
 \textbf{Point(s) négatif(s)} :\\
 	Représentation du feu uniquement, pas de propagation et de fumée.\\
+	Pas d'utilisation d'équation de dynamique des fluides, le feu est manuellement confiné dans un volume controlable grace à des points de controle.
 \textbf{Conclusion} :\\
 	La qualité du feu est importante, mais ce modèle de flamme ne concerne que la partie "affichage". Il faudra voir si le modèle de propagation choisi peut utiliser un tel modèle de flammes.
 
@@ -326,14 +327,17 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
 \textbf{Auteur(s)} : Frank Losasso, Geoffrey Irving, Eran Guendelman, Ron Fedkiw.\\
 \textbf{Publication} : IEEE TVCG 12, 343-352 (2006).\\
 \textbf{Sujet(s) abordé(s)} : \\
+	Modification des propriétés physiques d'un matériau tel que l'eau sous différentes phases, et intéraction entre les solides et les liquides et gas. 
 
 \textbf{Principe} :\\	
 
 \textbf{Point(s) positif(s)} :\\
 
 \textbf{Point(s) négatif(s)} :\\
-
+	Peu de détails mathématiques, juste des explications.
+	Pas assez de lien avec le feu et la fumée.
 \textbf{Conclusion} :\\
+	Peu utilisable
 
 
 
@@ -365,6 +369,22 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
 \textbf{Principe} :\\	
 \textbf{Point(s) positif(s)} :\\
 \textbf{Conclusion} :\\
+
+
+\subsubsection{Physically Based Modeling and Animation of Fire}
+\textbf{Auteur(s)} : Duc Quang Nguyen, Ronald Fedkiw, Henrik Wann Jensen.\\
+\textbf{Publication} :  \\
+\textbf{Sujet(s) abordé(s)} : \\ 
+	Modélisation du feu comme le comportement d'un fluide suivant les équation de Navier-Stokes de la dynamique des fluide.\\
+\textbf{Principe} :\\	
+	De même que les articles de Stam, Le principe est de considérer le feu comme un fluide auquel on applique les équations de Navier Stokes  pour les fluides incompressibles. On prend aussi en compte la densité du fluide mais aussi l'impact de la température sur celui ci. Cela permet d'avoir un champ de mouvement pour le fluide qui réagit avec la température. De plus l'utilisation de la température pour ce modéle permet d'être utilisé pour le rendu en considérant le feu comme un "corps noir" et de déterminer la coleur de la flamme grace au modéle du corps noir de planck en utilisant un spectre de couleur adapté.
+\textbf{Point(s) positif(s)} :\\
+	Plus de réalisme dans le modéle grace à l'impact de la température pour l'advection et la gestion du spectre lumineux du feu	
+\textbf{Point(s) negatif(s)} :\\
+	rajoute du temps de calcul pour la prise en compte de la température.
+\textbf{Conclusion} :\\
+	Certains points comme la température peuvent être à rajouter pour un effet de réalisme intéressant.\\
+
 
 %----------------------------------------------------------------------------------------------------------------------------------------
 %%%%%%%%%%%%%%%%%

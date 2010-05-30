@@ -9,13 +9,9 @@ void main (){
 
 
 	speed = vec4( texture3D( TextureSpeedField_Prec,gl_TexCoord[0].stp) );
-	speed = vec4( speed.x + 1.0 , speed.y, speed.z,speed.w);
+	speed = vec4( speed.x + 0.0 , speed.y + 0.8, speed.z + 0.8,speed.w);
 
-    
-	
-
-
-    gl_FragColor = vec4(speed.xyz , 1.0);
+    gl_FragColor = vec4(1.0,1.0,0.0 , 1.0);
     
 }
 
