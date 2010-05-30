@@ -49,54 +49,92 @@ void Fluid_GPU::initialiserSpeedField(){
         }
     } 
     
-    /*
-    for (int k = 0; k < TAILLE_GRILLE; k++){
-        for (int j = 0; j < TAILLE_GRILLE; j++){
-            for (int i = 0; i < TAILLE_GRILLE; i++){    
-                cout << texture[ID(i,j,k)].x << " , "; 
-                cout << texture[ID(i,j,k)].y << " , ";
-                cout << texture[ID(i,j,k)].z << endl;
-            }
-        }
-    }
-    */
-    
-    // Creation de la texture 3D sur la carte
-    glGenTextures(1,&_speedField);
-    glBindTexture(GL_TEXTURE_3D, _speedField);
-    cout << "Speed Field : " << _speedField << endl;
+	/** Initialisation des 2 textures de calculs avec la matrice 3D initiale */
+    // Creation de la texture 3D sur la carte pour speedfiled1
+    glGenTextures(1,&_speedField_1);
+    glBindTexture(GL_TEXTURE_3D, _speedField_1);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_REPEAT);
-    
     glTexImage3D(GL_TEXTURE_3D,0,GL_RGB,
                  TAILLE_GRILLE,TAILLE_GRILLE,TAILLE_GRILLE,
                  0, GL_RGB, GL_FLOAT, texture);
     glBindTexture(GL_TEXTURE_3D,0);
+
+ 	// Creation de la texture 3D sur la carte pour speedfiled2
+    glGenTextures(1,&_speedField_2);
+    glBindTexture(GL_TEXTURE_3D, _speedField_2);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_REPEAT);
+    glTexImage3D(GL_TEXTURE_3D,0,GL_RGB,
+                 TAILLE_GRILLE,TAILLE_GRILLE,TAILLE_GRILLE,
+                 0, GL_RGB, GL_FLOAT, texture);
+    glBindTexture(GL_TEXTURE_3D,0);
+
+	//FBO#1 pour la texture speedfield1
+	glGenFramebuffers(1, &_FBO_speed_1);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _FBO_speed_1);
+	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+							GL_TEXTURE_3D, _speedField_1, 0 , 0);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+
+	//FBO#2 pour la texture speedfield1
+	glGenFramebuffers(1, &_FBO_speed_2);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _FBO_speed_2);
+	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+							GL_TEXTURE_3D, _speedField_2, 0 , 0);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
     
     // On lie les variables uniforme du shader
-    _speedFieldLocation = glGetUniformLocation ( _speed_program, "TextureSpeedField");
-    glUniform1i(_speedFieldLocation,_speedField);
-    //glUseProgram(_speed_program);
-    //glUseProgram(0);    
+//  _speedFieldLocation_Prec = glGetUniformLocation ( _speed_program, "TextureSpeedField_Prec");
+//    glUniform1i(_speedFieldLocation_Prec,_speedField_1);
+//    _speedFieldLocation_Cour = glGetUniformLocation ( _speed_program, "TextureSpeedField_Cour");
+//    glUniform1i(_speedFieldLocation_Cour,_speedField_2);
     
     
 }
 
 
 void Fluid_GPU::resolutionSpeedField(){
+	//on lie la texture courante avec la variable uniforme (texturespeedfield) du shader
+	_speedFieldLocation_Prec = glGetUniformLocation ( _speed_program, "TextureSpeedField_Prec");
+    glUniform1i(_speedFieldLocation_Prec,_speedField_1);
+
+	//on se place dans le FBO 2 on va donc ecrire dans la texture2
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _FBO_speed_2);
+
     glUseProgram(_speed_program);
-    displaySpeedField();
+	//la texture est dessiné dans le FBO 2
+    displaySpeedField(); 
     glUseProgram(0);
+
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); 
+
+	GLuint bufferObject;
+	glGenBuffers(1, &bufferObject);
+	glBindBufferARB(PIXEL_PACK_BUFFER, bufferObject);
+	glBufferDataARB(PIXEL_PACK_BUFFER, 50, NULL, GL_DYNAMIC_DRAW_ARB);
+	
+	
+
+	glReadPixels(0, 0, 50, 1, GL_RGBA, GL_FLOAT, BUFFER_OFFSET(0));
+	display_3DTexture(30, _speedField_2);
+	glBindBuffer(GL_ARRAY_BUFFER, bufferObject);
+
+
+
+
 }
 
 
 void Fluid_GPU::displaySpeedField(){
 
-    display_3DTexture(30, _speedField);
+    display_3DTexture(30, _speedField_2);
     
 }
 
