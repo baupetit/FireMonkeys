@@ -189,7 +189,7 @@ Ce modèle de fluide semble le plus adapté si nous choisissons d'utiliser un mo
 
 \subsubsection{An Interactive Simulation Framework for Burning Objets}
 \textbf{Auteur(s)} : Zeki Melek, John Keyser.\\
-\textbf{Publication} :\\
+\textbf{Publication} : \\
 \textbf{Sujet(s) abordé(s)} : \\
 \textbf{Principe} :\\	
 \textbf{Point(s) positif(s)} :\\
@@ -214,6 +214,7 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
 	Pas en temps réel.\\
 \textbf{Conclusion} :\\
 	La méthode de rendu semble interessante. De plus la création de minis vortex est un atout pour le côté réaliste du modèle.
+	
 
 \subsubsection{Simulating Water and Smoke with an Octree Data Structure}
 \textbf{Auteur(s)} : Frank Losasso, Frédéric Gibou, Ron Fedkiw.\\
@@ -253,35 +254,16 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
 	Le principe de déformation sur un mesh tétrahédral est très intéressant, et peut facilement s'adapter à un modèle de fluide.
 
 
-\subsubsection{Reliable Isotropic Tetrahedral Mesh Generation Based On An Advancing Front Method}
-\textbf{Auteur(s)} : Yasushi Ito, Alan M. Shih and Bharat K. Soni.\\
-\textbf{Publication} :\\
-\textbf{Sujet(s) abordé(s)} : \\
-\textbf{Principe} :\\	
-\textbf{Point(s) positif(s)} :\\
-\textbf{Point(s) négatif(s)} :\\
-\textbf{Conclusion} :\\
-
-
-\subsubsection{Adaptative Physics Based Tetrahedral Mesh Generation Using Level Sets}
-\textbf{Auteur(s)} : Robert Bridson, Joseph Teran, Neil Molino, Ronald Fedkiw.\\
-\textbf{Publication} : Engineering with Computers (2005)\\
-\textbf{Sujet(s) abordé(s)} : \\
-	Présentation d'un algorithme de génération de Mesh Tetrahédral, dont l'entrée est une fonction distance, une grille cartésienne ou un octree.
-\textbf{Principe} :\\	
-\textbf{Point(s) positif(s)} :\\
-\textbf{Point(s) négatif(s)} :\\
-\textbf{Conclusion} :\\
-
-
-
 \subsubsection{Voxels On Fire}
 \textbf{Auteur(s)} : Ye Zhao, Xiaoming Wei, Zhe Fan, Arie Kaufman, Hong Qin.\\
-\textbf{Publication} :\\
-\textbf{Sujet(s) abordé(s)} : \\
-\textbf{Principe} :\\	
+\textbf{Sujet(s) abordé(s)} : \\  Animation et propagation de flammes, avec brulure de l'objet.\\
+\textbf{Principe} :\\ L'animation et la propagation sont gérés par un modèle de fluide ( Lattice Boltzmann Model ), avec une grille régulière. L'objet est représenté sous forme de voxels, sur lequel est calculé un champs de distance. Le voxel de l'objet est considéré comme un combustible. Pour le rendu ils utilisent des particules et le splatting ( \textbf{Westover}.\\
 \textbf{Point(s) positif(s)} :\\
+    - temps réel ( 24fps pour une grille 64*64*64)\\
+    - propagation réaliste\\
+    - l'objet est brulé progressivement\\
 \textbf{Point(s) négatif(s)} :\\
+    - le rendu utilise un grandn ombre de particules pour être réaliste\\
 \textbf{Conclusion} :\\
 
 \subsubsection{Meshes On Fire}
@@ -386,6 +368,41 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
 	rajoute du temps de calcul pour la prise en compte de la température.
 \textbf{Conclusion} :\\
 	Certains points comme la température peuvent être à rajouter pour un effet de réalisme intéressant.\\
+
+
+
+
+
+
+
+\subsubsection{Reliable Isotropic Tetrahedral Mesh Generation Based On An Advancing Front Method}
+\textbf{Auteur(s)} : Yasushi Ito, Alan M. Shih and Bharat K. Soni.\\
+\textbf{Publication} :\\
+\textbf{Sujet(s) abordé(s)} : \\
+\textbf{Principe} :\\	
+\textbf{Point(s) positif(s)} :\\
+\textbf{Point(s) négatif(s)} :\\
+\textbf{Conclusion} :\\
+
+
+\subsubsection{Adaptative Physics Based Tetrahedral Mesh Generation Using Level Sets}
+\textbf{Auteur(s)} : Robert Bridson, Joseph Teran, Neil Molino, Ronald Fedkiw.\\
+\textbf{Publication} : Engineering with Computers (2005)\\
+\textbf{Sujet(s) abordé(s)} : \\
+	Présentation d'un algorithme de génération de Mesh Tetrahédral, dont l'entrée est une fonction distance, une grille cartésienne ou un octree.
+\textbf{Principe} :\\	
+\textbf{Point(s) positif(s)} :\\
+\textbf{Point(s) négatif(s)} :\\
+\textbf{Conclusion} :\\
+
+
+
+
+
+
+
+
+
 
 
 %----------------------------------------------------------------------------------------------------------------------------------------
