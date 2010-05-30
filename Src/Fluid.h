@@ -59,6 +59,8 @@ private:
 	                              Vecteur3D& directionCamera );
 	/** Permet de charger le tableau de la fumée dans la matrice RGBA */
 	void majMatriceFumeeEnMatriceRGBA();
+	/** Permet de charger le tableau de la flamme dans la matrice RGBA */
+	void majMatriceFlammeEnMatriceRGBA();
 	/** Permet de charger la matrice RGBA de la classe dans une texture 3D */
 	void matriceRGBACarreeToTexture3D(const float *matrice, int cote, GLuint id_texture);
 	/** Dessine des plans dans la texture3D */
