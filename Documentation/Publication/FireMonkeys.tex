@@ -392,34 +392,38 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
 
 \subsubsection{Real-Time Simulation and Rendering of 3D Fluids}
 \textbf{Auteur(s)} : Keenan Crane, Ignacio Llamas, Sarah Tariq.\\
-\textbf{Publication} : GPU GEM \\
+\textbf{Publication} : GPU GEMS \\
 \textbf{Sujet(s) abordé(s)} : \\ 
 	Résolution des équations de Navier-Stokes grace a la programmation GPU pour atteindre le temps réel. Les travaux étant réalisé par NVIDIA sur des cartes graphiques performantes et utilisant le shader langage GS ou CUDA.\\
 	La Technique de collision entre gas et objets est aussi détaillée ainsi que la voxelisation de certains objets.\\
 \textbf{Principe} :\\	
 	Utilisation des langages de programmation utilisant les shaders GPU pour permettre un calcul bien plus rapide que par CPU et donc atteindre le temps réel bien plus facilement.\\
 \textbf{Point(s) positif(s)} :\\
-	Les temps de calcul atteint par les GPU sont néttement plus faibles que ceux du CPU. On gagne donc a traiter les equations de dynamique des fluides par la carte graphique et non par le processeur. Les equations de la dynamique des fluides sont traitées de la meme maniere que dans les différents documents de Stam vus précédement.
+	Les temps de calcul atteint par les GPU sont néttement plus faibles que ceux du CPU. On gagne donc a traiter les equations de dynamique des fluides par la carte graphique et non par le processeur. Les equations de la dynamique des fluides sont traitées de la meme maniere que dans les différents documents de Stam vus précédement.\\
 \textbf{Point(s) negatif(s)} :\\
 	Nous n'allons pas utiliser le shading langage du document mais plutot le GLSL (openGL Shading Langage) qui est légérement différent dans la facon de coder. Il nous faut donc chercher un peu plus de documentation sur le codage GLSL.\\
 \textbf{Conclusion} :\\
 	L'utilisation des shaders GPU semble être la clé pour nous permettre de réaliser quelquechose de réaliste en temps réel.\\
 
 
-\subsubsection{Real-Time Simulation and Rendering of 3D Fluids}
-\textbf{Auteur(s)} : Keenan Crane, Ignacio Llamas, Sarah Tariq.\\
-\textbf{Publication} : GPU GEM \\
+\subsubsection{Fast Fluid Dynamics Simulation on the GPU}
+\textbf{Auteur(s)} : Mark J. Harris.\\
+\textbf{Publication} : GPU GEMS \\
 \textbf{Sujet(s) abordé(s)} : \\ 
-	Résolution des équations de Navier-Stokes grace a la programmation GPU pour atteindre le temps réel. Les travaux étant réalisé par NVIDIA sur des cartes graphiques performantes et utilisant le shader langage GS ou CUDA.\\
-	La Technique de collision entre gas et objets est aussi détaillée ainsi que la voxelisation de certains objets.\\
+	Chapitre du livre GPU Gems de NVIDIA traitant d'une méthode de resolution des équations de "stable fluids" entierement réalisées sur GPU.\\
 \textbf{Principe} :\\	
-	Utilisation des langages de programmation utilisant les shaders GPU pour permettre un calcul bien plus rapide que par CPU et donc atteindre le temps réel bien plus facilement.\\
+	Tous les calculs pour les champs de vitesses et de densités pour les fluides (diffusion, advection, forces, conservation de la masse) sont réalisé sur GPU pour augmenter la vitesse et la puissance de calcul.\\
 \textbf{Point(s) positif(s)} :\\
-	Les temps de calcul atteint par les GPU sont néttement plus faibles que ceux du CPU. On gagne donc a traiter les equations de dynamique des fluides par la carte graphique et non par le processeur. Les equations de la dynamique des fluides sont traitées de la meme maniere que dans les différents documents de Stam vus précédement.
+	Les termes de l'équation de Navier stokes sont tous décortiqués et trés bien expliqués.\\
+	Facilement Compréhensible et tous les calculs mathématiques sont bien détaillés.\\
+	Modéle 2D pour que la compréhension soit facile.\\
+	Prise en compte d'un terme de pression.\\
+	Utilisation de la décomposition de Helmholtz-Hodge\\
+	Exemple de programmation GPU (type CUDA ou GS)\\
 \textbf{Point(s) negatif(s)} :\\
-	Nous n'allons pas utiliser le shading langage du document mais plutot le GLSL (openGL Shading Langage) qui est légérement différent dans la facon de coder. Il nous faut donc chercher un peu plus de documentation sur le codage GLSL.\\
+	Toujours pas de "cours" GLSL.\\
 \textbf{Conclusion} :\\
-	L'utilisation des shaders GPU semble être la clé pour nous permettre de réaliser quelquechose de réaliste en temps réel.\\
+	Document qui peut servir de référence pour analyser et comprendre les equations de la dynamique des fluides et pour initier les bases de la programmation GPU.\\
 
 
 %----------------------------------------------------------------------------------------------------------------------------------------
