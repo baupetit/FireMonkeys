@@ -17,12 +17,22 @@ void main (){
     
     vec4 speed;
     
+    /*
+    
     if(gl_TexCoord[0].s>TAILLE_CELL){
         speed = vec4(texture3D(TextureSpeedField,gl_TexCoord[0].stp+vec3(TAILLE_CELL,TAILLE_CELL,TAILLE_CELL)));
         //speed = vec4(texture3D(TextureSpeedField,gl_TexCoord[0].stp));
     }else{
         speed = vec4(texture3D(TextureSpeedField,gl_TexCoord[0].stp));
     }
+    
+    */
+    speed.x = 1.0;
+    
+    speed.y = 0.0;
+    
+    speed.z = 1.0;
+    
     
     gl_FragColor = vec4(speed.x, speed.y, speed.z, 1.0);
     
