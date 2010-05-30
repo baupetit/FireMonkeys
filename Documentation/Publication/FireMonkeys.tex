@@ -121,10 +121,11 @@ méthode expliquée \textbf{Zeki Melek}. Cette méthode consiste à
 découper le fluide en ``tranches'' othogonale à l'orientation de la
 camera. Dans chaque tranche on calcule une texture d'après la densité
 de fluide représentant la flamme. Ensuite avant le rendu on applique
-un bruit de Perlin ( en 3D ) sur chaque tranche, et enfin on applique
+un bruit de Perlin ( en 4D ) sur chaque tranche, et enfin on applique
 un effet de ``bloom'' sur chaque texture pour modéliser la luminosité
-du feu. La fumée sera rendue avec la flamme pour simplifier la phase
-de rendu.
+du feu. De plus nous appliquons une couleur à la flamme qui est fonction de 
+sa chaleur ( principe du corps noir ).\\
+La fumée sera rendue de la même manière que la flamme.
 
 \subsection{Les objets}
 Dans un premier temps nous nous concentrerons sur des objets qui se
@@ -145,7 +146,8 @@ utiliser...
 \subsubsection{Real-Time Fluid Dynamics for Games}
 \textbf{Auteur(s)} : Jos Stam.\\
 \textbf{Publication} : Proceedings of the Game Developer Conference, March 2003 \\
-\textbf{Sujet(s) abordé(s)} : \\Modèle de fluide temps réel, pouvant être utilisé pour le feu, la fumée\\
+\textbf{Sujet(s) abordé(s)} : \\
+    Modèle de fluide temps réel, pouvant être utilisé pour le feu, la fumée\\
 	Le modèle gère: le deplacement du fluide, la gestion de combustible,les forces appliquées sur le fluide.\\	
 \textbf{Principe} :\\
 	Le modèle a été décomposé sur plusieurs étapes : génération du fluide par des sources, ajout des forces, diffusion du fluide, puis résolution de l'équation de la densité et de l'équation de la vitesse (équations de Navier-Stockes).
