@@ -361,15 +361,13 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
 \textbf{Sujet(s) abordé(s)} : \\ 
 	Modélisation du feu comme le comportement d'un fluide suivant les équation de Navier-Stokes de la dynamique des fluide.\\
 \textbf{Principe} :\\	
-	De même que les articles de Stam, Le principe est de considérer le feu comme un fluide auquel on applique les équations de Navier Stokes  pour les fluides incompressibles. On prend aussi en compte la densité du fluide mais aussi l'impact de la température sur celui ci. Cela permet d'avoir un champ de mouvement pour le fluide qui réagit avec la température. De plus l'utilisation de la température pour ce modéle permet d'être utilisé pour le rendu en considérant le feu comme un "corps noir" et de déterminer la coleur de la flamme grace au modéle du corps noir de planck en utilisant un spectre de couleur adapté.
+	De même que les articles de Stam, Le principe est de considérer le feu comme un fluide auquel on applique les équations de Navier Stokes  pour les fluides incompressibles. On prend aussi en compte la densité du fluide mais aussi l'impact de la température sur celui ci. Cela permet d'avoir un champ de mouvement pour le fluide qui réagit avec la température. De plus l'utilisation de la température pour ce modéle permet d'être utilisé pour le rendu en considérant le feu comme un "corps noir" et de déterminer la coleur de la flamme grace au modéle du corps noir de planck en utilisant un spectre de couleur adapté.\\
 \textbf{Point(s) positif(s)} :\\
-	Plus de réalisme dans le modéle grace à l'impact de la température pour l'advection et la gestion du spectre lumineux du feu	
+	Plus de réalisme dans le modéle grace à l'impact de la température pour l'advection et la gestion du spectre lumineux du feu.\\	
 \textbf{Point(s) negatif(s)} :\\
-	rajoute du temps de calcul pour la prise en compte de la température.
+	rajoute du temps de calcul pour la prise en compte de la température.\\
 \textbf{Conclusion} :\\
 	Certains points comme la température peuvent être à rajouter pour un effet de réalisme intéressant.\\
-
-
 
 
 
@@ -403,7 +401,40 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
 
 
 
+\subsubsection{Real-Time Simulation and Rendering of 3D Fluids}
+\textbf{Auteur(s)} : Keenan Crane, Ignacio Llamas, Sarah Tariq.\\
+\textbf{Publication} : GPU GEMS \\
+\textbf{Sujet(s) abordé(s)} : \\ 
+	Résolution des équations de Navier-Stokes grace a la programmation GPU pour atteindre le temps réel. Les travaux étant réalisé par NVIDIA sur des cartes graphiques performantes et utilisant le shader langage GS ou CUDA.\\
+	La Technique de collision entre gas et objets est aussi détaillée ainsi que la voxelisation de certains objets.\\
+\textbf{Principe} :\\	
+	Utilisation des langages de programmation utilisant les shaders GPU pour permettre un calcul bien plus rapide que par CPU et donc atteindre le temps réel bien plus facilement.\\
+\textbf{Point(s) positif(s)} :\\
+	Les temps de calcul atteint par les GPU sont néttement plus faibles que ceux du CPU. On gagne donc a traiter les equations de dynamique des fluides par la carte graphique et non par le processeur. Les equations de la dynamique des fluides sont traitées de la meme maniere que dans les différents documents de Stam vus précédement.\\
+\textbf{Point(s) negatif(s)} :\\
+	Nous n'allons pas utiliser le shading langage du document mais plutot le GLSL (openGL Shading Langage) qui est légérement différent dans la facon de coder. Il nous faut donc chercher un peu plus de documentation sur le codage GLSL.\\
+\textbf{Conclusion} :\\
+	L'utilisation des shaders GPU semble être la clé pour nous permettre de réaliser quelquechose de réaliste en temps réel.\\
 
+
+\subsubsection{Fast Fluid Dynamics Simulation on the GPU}
+\textbf{Auteur(s)} : Mark J. Harris.\\
+\textbf{Publication} : GPU GEMS \\
+\textbf{Sujet(s) abordé(s)} : \\ 
+	Chapitre du livre GPU Gems de NVIDIA traitant d'une méthode de resolution des équations de "stable fluids" entierement réalisées sur GPU.\\
+\textbf{Principe} :\\	
+	Tous les calculs pour les champs de vitesses et de densités pour les fluides (diffusion, advection, forces, conservation de la masse) sont réalisé sur GPU pour augmenter la vitesse et la puissance de calcul.\\
+\textbf{Point(s) positif(s)} :\\
+	Les termes de l'équation de Navier stokes sont tous décortiqués et trés bien expliqués.\\
+	Facilement Compréhensible et tous les calculs mathématiques sont bien détaillés.\\
+	Modéle 2D pour que la compréhension soit facile.\\
+	Prise en compte d'un terme de pression.\\
+	Utilisation de la décomposition de Helmholtz-Hodge\\
+	Exemple de programmation GPU (type CUDA ou GS)\\
+\textbf{Point(s) negatif(s)} :\\
+	Toujours pas de "cours" GLSL.\\
+\textbf{Conclusion} :\\
+	Document qui peut servir de référence pour analyser et comprendre les equations de la dynamique des fluides et pour initier les bases de la programmation GPU.\\
 
 %----------------------------------------------------------------------------------------------------------------------------------------
 %%%%%%%%%%%%%%%%%
