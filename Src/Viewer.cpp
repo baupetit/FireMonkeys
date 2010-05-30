@@ -2,13 +2,13 @@
 
 #include <cmath>
 #ifndef M_PI
-	#define M_PI 3.14159265358979323846f
+#define M_PI 3.14159265358979323846f
 #endif
 
 Viewer *Viewer::_instance = NULL;
 
 Viewer::Viewer(const string & title, int width, int height,
-	           int initPositionX, int initPositionY){
+	       int initPositionX, int initPositionY){
 	_initGlut(title, width, height, initPositionX, initPositionY);
 	_initDepth();
 	_initRendering();
@@ -26,7 +26,7 @@ Viewer::~Viewer(){}
 	
 	
 void Viewer::_setCamera(){
-    float x = _distToOrigin*cos(_cameraAngle);
+	float x = _distToOrigin*cos(_cameraAngle);
 	float y = _cameraHeight;
 	float z = _distToOrigin*sin(_cameraAngle);
 
@@ -52,10 +52,10 @@ void Viewer::_initGlut(const string & title, int width, int height,
 	glutInitWindowPosition(initPositionX, initPositionY);
 		
 	// Creation de la fenetre
-    int windowID = glutCreateWindow(title.c_str());
+	int windowID = glutCreateWindow(title.c_str());
     
-    // Initialisation des callbacks de glut
-    glutDisplayFunc(_displayFunc);
+	// Initialisation des callbacks de glut
+	glutDisplayFunc(_displayFunc);
 	glutKeyboardFunc(_keyboardFunc);
 	glutSpecialFunc(_specialFunc);
 	glutMouseFunc(_mouseFunc);
@@ -104,7 +104,7 @@ void Viewer::_initRendering(){
 	glPolygonMode(GL_FRONT, GL_FILL);
 	glLineWidth(1.0f);
 	glPointSize(2.0f);
-    glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 }
 
 void Viewer::_initLighting(){
@@ -123,6 +123,7 @@ void Viewer::_initLighting(){
 	
 void Viewer::_displayFunc(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	glClearColor( 0,0,0,1);
 	_instance->rendu();
 	glFlush();
 	glutSwapBuffers();
@@ -153,39 +154,39 @@ void Viewer::_reshapeFunc(int w, int h){
 }
 
 void Viewer::_specialFunc(int key, int x, int y){
-    _instance->_keyMap(key, x, y);
+	_instance->_keyMap(key, x, y);
 }
 
 void Viewer::_keyMap(int key, int x, int y){
-    float cam_speed = 1.0;
+	float cam_speed = 1.0;
 	switch (key) {
-		case GLUT_KEY_LEFT :
-			_cameraAngle += 0.1f * cam_speed;
-			_setCamera();
-			break;
-		case GLUT_KEY_RIGHT :
-			_cameraAngle -=0.1f * cam_speed;
-			_setCamera();
-			break;
-		case GLUT_KEY_UP :
-			_distToOrigin -= 0.2f * cam_speed;
-			if (_distToOrigin<1.5f)
-				_distToOrigin = 1.5f;
-			_setCamera();
-			break;
-		case GLUT_KEY_DOWN :
-			_distToOrigin += 0.2f * cam_speed;
-			_setCamera();
-			break;
-		case GLUT_KEY_PAGE_UP :
-			_cameraHeight += 0.1f * cam_speed;
-			_setCamera();
-			break;
-		case GLUT_KEY_PAGE_DOWN :
-			_cameraHeight -= 0.1f * cam_speed;
-			_setCamera();
-			break;
-	    default:
+	case GLUT_KEY_LEFT :
+		_cameraAngle += 0.1f * cam_speed;
+		_setCamera();
+		break;
+	case GLUT_KEY_RIGHT :
+		_cameraAngle -=0.1f * cam_speed;
+		_setCamera();
+		break;
+	case GLUT_KEY_UP :
+		_distToOrigin -= 0.2f * cam_speed;
+		if (_distToOrigin<1.5f)
+			_distToOrigin = 1.5f;
+		_setCamera();
+		break;
+	case GLUT_KEY_DOWN :
+		_distToOrigin += 0.2f * cam_speed;
+		_setCamera();
+		break;
+	case GLUT_KEY_PAGE_UP :
+		_cameraHeight += 0.1f * cam_speed;
+		_setCamera();
+		break;
+	case GLUT_KEY_PAGE_DOWN :
+		_cameraHeight -= 0.1f * cam_speed;
+		_setCamera();
+		break;
+	default:
 	        break;
 	}
 }
@@ -194,14 +195,14 @@ void Viewer::_visibilityFunc(int visible){}
 
 void Viewer::initScene(){
 	/*cout << "Initialisation de la Scene " << endl;
-	_fluid = new Fluid_GPU();
-	_fluid -> initialiserSpeedField();*/
+	  _fluid = new Fluid_GPU();
+	  _fluid -> initialiserSpeedField();*/
 }
 void Viewer::rendu(){/*
-	//if ( _fluid!= 0 ) _fluid -> resolutionSpeedField();
-	//if ( _fluid!= 0 ) _fluid -> displaySpeedField();
-	glBegin(GL_POINTS);
-		glVertex3d(0.0f,0.0f,0.0f);
-	glEnd();
+		     //if ( _fluid!= 0 ) _fluid -> resolutionSpeedField();
+		     //if ( _fluid!= 0 ) _fluid -> displaySpeedField();
+		     glBegin(GL_POINTS);
+		     glVertex3d(0.0f,0.0f,0.0f);
+		     glEnd();
 		     */
 }
