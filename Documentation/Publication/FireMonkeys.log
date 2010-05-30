@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=latex 2010.5.21)  24 MAY 2010 22:08
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=latex 2010.5.21)  30 MAY 2010 23:31
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -339,7 +339,7 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <5> on input line 3.
 
-Overfull \hbox (0.44511pt too wide) in paragraph at lines 12--12
+Overfull \hbox (0.44511pt too wide) in paragraph at lines 17--17
  [][] []\OT1/cmr/m/n/10 Real-Time Sim-u-la-tion of De-for-ma-tion and Frac-ture
  of Stiff 
  []
@@ -348,86 +348,93 @@ Overfull \hbox (0.44511pt too wide) in paragraph at lines 12--12
 \tf@toc=\write3
 \openout3 = `FireMonkeys.toc'.
 
- [2] [3]
-Underfull \hbox (badness 10000) in paragraph at lines 129--136
+ [2]
+Underfull \hbox (badness 10000) in paragraph at lines 75--82
 
  []
 
+[3]
+Overfull \hbox (21.38937pt too wide) in paragraph at lines 131--137
+[]\OT1/cmr/m/n/10 Dans un pre-mier temps nous nous con-cen-trerons sur des ob-j
+ets qui se d^^Secomposent
+ []
+
 [4]
-Overfull \hbox (9.69489pt too wide) in paragraph at lines 176--192
+Underfull \hbox (badness 10000) in paragraph at lines 192--206
+
+ []
+
+[5]
+Overfull \hbox (9.69489pt too wide) in paragraph at lines 247--263
 \OT1/cmr/m/n/10 La m^^Sethode de de-struc-tion de l'ob-jet bas^^See sur des t^^
 Setrah^^Redres est tr^^Res int^^Seressante. 
  []
 
-[5]
-Underfull \hbox (badness 10000) in paragraph at lines 195--202
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 205--213
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 217--224
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 226--247
-
- []
-
 [6]
-Overfull \hbox (6.82114pt too wide) in paragraph at lines 249--263
+Underfull \hbox (badness 10000) in paragraph at lines 266--276
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 278--303
+
+ []
+
+[7]
+Overfull \hbox (6.82114pt too wide) in paragraph at lines 305--323
 []\OT1/cmr/bx/n/10 Auteur(s) \OT1/cmr/m/n/10 : Al-fred R. Fuller, Hari Kr-ish-n
 an, Karim Mahrous, Bernd Hamann,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 266--269
+Overfull \hbox (0.94696pt too wide) in paragraph at lines 326--335
+\OT1/cmr/m/n/10 phases, et int^^Seraction en-tre les solides et les liq-uides e
+t gas. \OT1/cmr/bx/n/10 Point(s) n^^Segatif(s) \OT1/cmr/m/n/10 : 
+ []
+
+[8]
+Underfull \hbox (badness 10000) in paragraph at lines 341--357
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 270--271
+Underfull \hbox (badness 10000) in paragraph at lines 360--366
 
  []
 
-[7]
-Underfull \hbox (badness 10000) in paragraph at lines 272--273
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 274--275
+[9]
+Underfull \hbox (badness 10000) in paragraph at lines 369--381
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 276--277
+Underfull \hbox (badness 10000) in paragraph at lines 387--400
+
+ []
+
+[10]
+Underfull \hbox (badness 10000) in paragraph at lines 403--420
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 283--299
+Underfull \hbox (badness 10000) in paragraph at lines 428--435
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 302--308
+Underfull \hbox (badness 10000) in paragraph at lines 438--446
 
  []
 
-[8] [9] (./FireMonkeys.aux) ) 
+[11] [12] (./FireMonkeys.aux) ) 
 Here is how much of TeX's memory you used:
  1533 strings out of 495062
  18936 string characters out of 1182644
- 80319 words of memory out of 3000000
+ 81319 words of memory out of 3000000
  4726 multiletter control sequences out of 15000+50000
  5158 words of font info for 19 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
- 25i,4n,24p,534b,211s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 25i,4n,24p,661b,211s stack positions out of 5000i,500n,10000p,200000b,50000s
 
-Output written on FireMonkeys.dvi (9 pages, 24644 bytes).
+Output written on FireMonkeys.dvi (12 pages, 38500 bytes).

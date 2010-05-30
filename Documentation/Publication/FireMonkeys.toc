@@ -1,27 +1,35 @@
 \select@language {french}
 \contentsline {section}{\numberline {1}Pr\IeC {\'e}sentation du projet}{3}
 \contentsline {subsection}{\numberline {1.1}Introduction}{3}
-\contentsline {subsection}{\numberline {1.2}Objectifs}{3}
+\contentsline {subsection}{\numberline {1.2}Objectifs initiaux}{3}
 \contentsline {subsection}{\numberline {1.3}Aper\IeC {\c c}u}{3}
-\contentsline {subsection}{\numberline {1.4}Analyses Bibliographiques}{3}
-\contentsline {subsubsection}{\numberline {1.4.1}Real-Time Fluid Dynamics for Games}{3}
-\contentsline {subsubsection}{\numberline {1.4.2}Stable Fluids}{3}
-\contentsline {subsubsection}{\numberline {1.4.3}An Interactive Simulation Framework for Burning Objets}{4}
-\contentsline {subsubsection}{\numberline {1.4.4}Visual Simulation of Smoke}{4}
-\contentsline {subsubsection}{\numberline {1.4.5}Simulating Water and Smoke with an Octree Data Structure}{5}
-\contentsline {subsubsection}{\numberline {1.4.6}Real-Time Simulation of Deformation and Fracture of Stiff Materials}{5}
-\contentsline {subsubsection}{\numberline {1.4.7}Reliable Isotropic Tetrahedral Mesh Generation Based On An Advancing Front Method}{6}
-\contentsline {subsubsection}{\numberline {1.4.8}Adaptated Physics Based Tetrahedral Mesh Generation Using Level Sets}{6}
-\contentsline {subsubsection}{\numberline {1.4.9}Voxels On Fire}{6}
-\contentsline {subsubsection}{\numberline {1.4.10}Meshes On Fire}{6}
-\contentsline {subsubsection}{\numberline {1.4.11}Real-time Procedural Volumetric Fire}{7}
-\contentsline {subsubsection}{\numberline {1.4.12}Melting and Burning Solids into Liquids and Gases}{7}
-\contentsline {subsubsection}{\numberline {1.4.13}FireStarter \IeC {\textendash } A Real-Time Fire Simulator}{8}
-\contentsline {subsubsection}{\numberline {1.4.14}Simulating Fire With Texture Splats}{8}
-\contentsline {section}{\numberline {2}Mise en place du mod\IeC {\`e}le global}{9}
-\contentsline {section}{\numberline {3}Mod\IeC {\`e}le de flamme}{9}
-\contentsline {section}{\numberline {4}Mod\IeC {\`e}le de fum\IeC {\'e}e}{9}
-\contentsline {section}{\numberline {5}Propagation sur l'objet}{9}
-\contentsline {section}{\numberline {6}Destruction de l'objet}{9}
-\contentsline {section}{\numberline {7}Propagation dans l'environnement}{9}
-\contentsline {section}{\numberline {8}R\IeC {\'e}f\IeC {\'e}rences}{9}
+\contentsline {section}{\numberline {2}Aper\IeC {\c c}u de notre mod\IeC {\`e}le}{3}
+\contentsline {subsection}{\numberline {2.1}Les flammes}{3}
+\contentsline {subsubsection}{\numberline {2.1.1}Un mod\IeC {\`e}le de fluide pour le feu}{3}
+\contentsline {subsubsection}{\numberline {2.1.2}Le rendu des flammes et de la fum\IeC {\'e}e}{3}
+\contentsline {subsection}{\numberline {2.2}Les objets}{4}
+\contentsline {section}{\numberline {3}Analyses Bibliographiques}{4}
+\contentsline {subsubsection}{\numberline {3.0.1}Real-Time Fluid Dynamics for Games}{4}
+\contentsline {subsubsection}{\numberline {3.0.2}Stable Fluids}{5}
+\contentsline {subsubsection}{\numberline {3.0.3}An Interactive Simulation Framework for Burning Objets}{5}
+\contentsline {subsubsection}{\numberline {3.0.4}Visual Simulation of Smoke}{6}
+\contentsline {subsubsection}{\numberline {3.0.5}Simulating Water and Smoke with an Octree Data Structure}{6}
+\contentsline {subsubsection}{\numberline {3.0.6}Real-Time Simulation of Deformation and Fracture of Stiff Materials}{7}
+\contentsline {subsubsection}{\numberline {3.0.7}Voxels On Fire}{7}
+\contentsline {subsubsection}{\numberline {3.0.8}Meshes On Fire}{7}
+\contentsline {subsubsection}{\numberline {3.0.9}Real-time Procedural Volumetric Fire}{8}
+\contentsline {subsubsection}{\numberline {3.0.10}Melting and Burning Solids into Liquids and Gases}{9}
+\contentsline {subsubsection}{\numberline {3.0.11}FireStarter \IeC {\textendash } A Real-Time Fire Simulator}{9}
+\contentsline {subsubsection}{\numberline {3.0.12}Simulating Fire With Texture Splats}{9}
+\contentsline {subsubsection}{\numberline {3.0.13}Physically Based Modeling and Animation of Fire}{10}
+\contentsline {subsubsection}{\numberline {3.0.14}Real-Time Simulation and Rendering of 3D Fluids}{10}
+\contentsline {subsubsection}{\numberline {3.0.15}Fast Fluid Dynamics Simulation on the GPU}{11}
+\contentsline {subsubsection}{\numberline {3.0.16}Reliable Isotropic Tetrahedral Mesh Generation Based On An Advancing Front Method}{11}
+\contentsline {subsubsection}{\numberline {3.0.17}Adaptative Physics Based Tetrahedral Mesh Generation Using Level Sets}{12}
+\contentsline {section}{\numberline {4}Mise en place du mod\IeC {\`e}le global}{12}
+\contentsline {section}{\numberline {5}Mod\IeC {\`e}le de flamme}{12}
+\contentsline {section}{\numberline {6}Mod\IeC {\`e}le de fum\IeC {\'e}e}{12}
+\contentsline {section}{\numberline {7}Propagation sur l'objet}{12}
+\contentsline {section}{\numberline {8}Destruction de l'objet}{12}
+\contentsline {section}{\numberline {9}Propagation dans l'environnement}{12}
+\contentsline {section}{\numberline {10}R\IeC {\'e}f\IeC {\'e}rences}{12}

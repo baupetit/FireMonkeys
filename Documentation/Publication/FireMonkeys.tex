@@ -172,7 +172,8 @@ utiliser...
 \subsubsection{Stable Fluids}
 \textbf{Auteur(s)} : Jos Stam.\\
 \textbf{Publication} : SIGGRAPH 99 Conference Proceedings\\
-\textbf{Sujet(s) abordé(s)} : Résolution de l'équation des fluides ( Navier-Stockes) avec, pour la première fois, un algorithme inconditionnellement stable.\\
+\textbf{Sujet(s) abordé(s)} : \\
+Résolution de l'équation des fluides ( Navier-Stockes) avec, pour la première fois, un algorithme inconditionnellement stable.\\
 \textbf{Principe} :\\
 C'est une résolution de Navier-Stockes orientée "Computer Graphic", dans le sens o`u la résolution n'est pas exacte, et ne serait pas utilisable pour des vraies simulations de fluides, mais est "graphiquement adaptée" au problème de fluides.\\
 Résolution en quatre étapes : ajout des forces, advection, diffusion, conservation de la masse.\\
@@ -189,11 +190,18 @@ Ce modèle de fluide semble le plus adapté si nous choisissons d'utiliser un mo
 
 \subsubsection{An Interactive Simulation Framework for Burning Objets}
 \textbf{Auteur(s)} : Zeki Melek, John Keyser.\\
-\textbf{Publication} : \\
+\textbf{Publication} : Technical Report 2005 3 1, Texas AM Department of Computer Science, 2005. \\
 \textbf{Sujet(s) abordé(s)} : \\
+Premier modèle essayant de réaliser en même temps une propagation
+de feu réaliste avec un modèle de fluide, de la propagation sur un objet et entre les objets, et de la destruction
+d'objets.\\
 \textbf{Principe} :\\	
+Le modèle de fluide utilise Stable Fluid de \textbf{Stam}. \\
 \textbf{Point(s) positif(s)} :\\
+    Temps réel\\
+    Modèle de fluide, propagation, gestion des objets, destruction des objets.\\
 \textbf{Point(s) négatif(s)} :\\
+    L'implémentation CPU est lente ( 4fps pour une grille 20*20*20 )\\      
 \textbf{Conclusion} :\\
 
 
@@ -257,7 +265,7 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
 \subsubsection{Voxels On Fire}
 \textbf{Auteur(s)} : Ye Zhao, Xiaoming Wei, Zhe Fan, Arie Kaufman, Hong Qin.\\
 \textbf{Sujet(s) abordé(s)} : \\  Animation et propagation de flammes, avec brulure de l'objet.\\
-\textbf{Principe} :\\ L'animation et la propagation sont gérés par un modèle de fluide ( Lattice Boltzmann Model ), avec une grille régulière. L'objet est représenté sous forme de voxels, sur lequel est calculé un champs de distance. Le voxel de l'objet est considéré comme un combustible. Pour le rendu ils utilisent des particules et le splatting ( \textbf{Westover}.\\
+\textbf{Principe} :\\ L'animation et la propagation sont gérés par un modèle de fluide ( Lattice Boltzmann Model ), avec une grille régulière. L'objet est représenté sous forme de voxels, sur lequel est calculé un champs de distance. Le voxel de l'objet est considéré comme un combustible. Pour le rendu ils utilisent des particules et le splatting ( \textbf{Westover} ).\\
 \textbf{Point(s) positif(s)} :\\
     - temps réel ( 24fps pour une grille 64*64*64)\\
     - propagation réaliste\\
@@ -281,13 +289,17 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
 	Rapide à calculer.\\
 	Très efficace pour changer la texture d'un objet brulé.\\
 	Propagation fonction d'un champ de vent.\\
-	Les particules de feu générées peuvent être utilisées pour génerer un feu sur un autre objet ou sur une autre partie de l'objet.\\
+	Les particules de feu générées peuvent être utilisées pour génerer un feu 
+	sur un autre objet ou sur une autre partie de l'objet.\\
 \textbf{Point(s) négatif(s)} :\\
 	Ne peut pas s'adapter à la destruction d'un objet.\\
-	Peut être une perte de performance si on utilise les particules de feu pour allumer des foyer aux autres endroits du mesh.\\
+	Peut être une perte de performance si on utilise les particules de feu pour 
+	allumer des foyer aux autres endroits du mesh.\\
 	La propagation surfacique n'est pas toujours adaptés.\\	
 \textbf{Conclusion} :\\
-	Ce modèle est interessant, mais nécessite d'être beaucoup modifié pour correspondre à notre but. Il n'est pas très adapté à la destruction des objets. (Sauf si nous voulons uniquement dégrader la texture de l'objet) \\
+	Ce modèle est interessant, mais nécessite d'être beaucoup modifié pour 
+	correspondre à notre but. Il n'est pas très adapté à la destruction des objets. 
+	(Sauf si nous voulons uniquement dégrader la texture de l'objet) \\
 
 \subsubsection{Real-time Procedural Volumetric Fire}
 \textbf{Auteur(s)} : Alfred R. Fuller, Hari Krishnan, Karim Mahrous, Bernd Hamann, Kenneth I. Joy.\\
@@ -302,9 +314,12 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
 	Réaliste.\\
 \textbf{Point(s) négatif(s)} :\\
 	Représentation du feu uniquement, pas de propagation et de fumée.\\
-	Pas d'utilisation d'équation de dynamique des fluides, le feu est manuellement confiné dans un volume controlable grace à des points de controle.
+	Pas d'utilisation d'équation de dynamique des fluides, le feu est manuellement 
+	confiné dans un volume controlable grace à des points de controle.
 \textbf{Conclusion} :\\
-	La qualité du feu est importante, mais ce modèle de flamme ne concerne que la partie "affichage". Il faudra voir si le modèle de propagation choisi peut utiliser un tel modèle de flammes.
+	La qualité du feu est importante, mais ce modèle de flamme ne concerne que 
+	la partie "affichage". Il faudra voir si le modèle de propagation choisi 
+	peut utiliser un tel modèle de flammes.
 
 
 \subsubsection{Melting and Burning Solids into Liquids and Gases}
@@ -312,13 +327,8 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
 \textbf{Publication} : IEEE TVCG 12, 343-352 (2006).\\
 \textbf{Sujet(s) abordé(s)} : \\
 	Modification des propriétés physiques d'un matériau tel que l'eau sous différentes phases, et intéraction entre les solides et les liquides et gas. 
-
-\textbf{Principe} :\\	
-
-\textbf{Point(s) positif(s)} :\\
-
 \textbf{Point(s) négatif(s)} :\\
-	Peu de détails mathématiques, juste des explications.
+	Peu de détails mathématiques, juste des explications.\\
 	Pas assez de lien avec le feu et la fumée.
 \textbf{Conclusion} :\\
 	Peu utilisable
@@ -341,7 +351,7 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
 	De gros défauts sont visibles au niveau du rendu.\\
 	Les particules suivent une pseudo mécanique des fluides.\\
 	Le feu n'est pas adapté à plusieurs cas de figures, il faudrait un système de génération des générateurs de particules, ce qui n'est pas forcement permis par le système.\\
-	Pas de prise en compte des objets ( à moins d'ajouter des détections de collisions)
+	Pas de prise en compte des objets ( à moins d'ajouter des détections de collisions)\\
 \textbf{Conclusion} :\\
 	La bonne idée de transformer une particule de feu en fumée à partir d'un tirage aléatoire est une bonne idée. Ce modèle permet de représenter du feu d'une manière qui pourrait être suffisamment réaliste pour ne pas se lancer dans une résolution de mécanique du fluide.\\
 
@@ -368,34 +378,6 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
 	rajoute du temps de calcul pour la prise en compte de la température.\\
 \textbf{Conclusion} :\\
 	Certains points comme la température peuvent être à rajouter pour un effet de réalisme intéressant.\\
-
-
-
-
-
-\subsubsection{Reliable Isotropic Tetrahedral Mesh Generation Based On An Advancing Front Method}
-\textbf{Auteur(s)} : Yasushi Ito, Alan M. Shih and Bharat K. Soni.\\
-\textbf{Publication} :\\
-\textbf{Sujet(s) abordé(s)} : \\
-\textbf{Principe} :\\	
-\textbf{Point(s) positif(s)} :\\
-\textbf{Point(s) négatif(s)} :\\
-\textbf{Conclusion} :\\
-
-
-\subsubsection{Adaptative Physics Based Tetrahedral Mesh Generation Using Level Sets}
-\textbf{Auteur(s)} : Robert Bridson, Joseph Teran, Neil Molino, Ronald Fedkiw.\\
-\textbf{Publication} : Engineering with Computers (2005)\\
-\textbf{Sujet(s) abordé(s)} : \\
-	Présentation d'un algorithme de génération de Mesh Tetrahédral, dont l'entrée est une fonction distance, une grille cartésienne ou un octree.
-\textbf{Principe} :\\	
-\textbf{Point(s) positif(s)} :\\
-\textbf{Point(s) négatif(s)} :\\
-\textbf{Conclusion} :\\
-
-
-
-
 
 
 
@@ -435,6 +417,40 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
 	Toujours pas de "cours" GLSL.\\
 \textbf{Conclusion} :\\
 	Document qui peut servir de référence pour analyser et comprendre les equations de la dynamique des fluides et pour initier les bases de la programmation GPU.\\
+
+
+
+
+
+
+
+\subsubsection{Reliable Isotropic Tetrahedral Mesh Generation Based On An Advancing Front Method}
+\textbf{Auteur(s)} : Yasushi Ito, Alan M. Shih and Bharat K. Soni.\\
+\textbf{Publication} :\\
+\textbf{Sujet(s) abordé(s)} : \\
+\textbf{Principe} :\\	
+\textbf{Point(s) positif(s)} :\\
+\textbf{Point(s) négatif(s)} :\\
+\textbf{Conclusion} :\\
+
+
+\subsubsection{Adaptative Physics Based Tetrahedral Mesh Generation Using Level Sets}
+\textbf{Auteur(s)} : Robert Bridson, Joseph Teran, Neil Molino, Ronald Fedkiw.\\
+\textbf{Publication} : Engineering with Computers (2005)\\
+\textbf{Sujet(s) abordé(s)} : \\
+	Présentation d'un algorithme de génération de Mesh Tetrahédral, dont l'entrée est une fonction distance, une grille cartésienne ou un octree.
+\textbf{Principe} :\\	
+\textbf{Point(s) positif(s)} :\\
+\textbf{Point(s) négatif(s)} :\\
+\textbf{Conclusion} :\\
+
+
+
+
+
+
+
+
 
 %----------------------------------------------------------------------------------------------------------------------------------------
 %%%%%%%%%%%%%%%%%
