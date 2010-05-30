@@ -21,7 +21,7 @@ void BasicEntite::Afficher_Entite(){
 }
 
 
-void BasicEntite::Afficher_Entite_Face_Camera(Vecteur3D& positionCamera ){
+void BasicEntite::Afficher_Entite_Face_Camera(Vecteur3D& positionCamera,Vecteur3D& directionCamera ){
  
     glPushMatrix();
     glMatrixMode (GL_MODELVIEW);
@@ -33,7 +33,7 @@ void BasicEntite::Afficher_Entite_Face_Camera(Vecteur3D& positionCamera ){
     
     glScalef(echelle.x, echelle.y, echelle.z);
 
-    Afficher_Face_Camera(positionCamera);    
+    Afficher_Face_Camera(positionCamera, directionCamera);    
     
     glPopMatrix();
 }  

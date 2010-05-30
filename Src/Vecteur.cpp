@@ -34,9 +34,21 @@ void Vecteur3D::normaliser(){
         return res;
     }
     
+     Vecteur3D operator+ (const Vecteur3D& v1){
+        Vecteur3D res(0,0,0);
+        res+=v1;
+        return res;
+    }
+    
      Vecteur3D operator- (const Vecteur3D& v1, const Vecteur3D& v2){
         Vecteur3D res(v1);
         res-=v2;
+        return res;
+    }
+    
+     Vecteur3D operator- (const Vecteur3D& v1){
+        Vecteur3D res(0,0,0);
+        res-=v1;
         return res;
     }
     
@@ -77,7 +89,7 @@ void Vecteur3D::normaliser(){
         cout << "x : "<< x <<", y : "<<y<<", z : "<< z <<endl;
     }
     
-    void Vecteur3D::rorationAutourAxeX(float angleRad){
+    void Vecteur3D::rotationAutourAxeX(float angleRad){
         // x = x;
         float y2, z2;
         y2 = y * cosf(angleRad) - z * sinf(angleRad);
@@ -86,7 +98,7 @@ void Vecteur3D::normaliser(){
         z = z2;
     }
     
-    void Vecteur3D::rorationAutourAxeY(float angleRad){
+    void Vecteur3D::rotationAutourAxeY(float angleRad){
         float x2, z2;
         x2 = x * cosf(angleRad) - z * sinf(angleRad);
         z2 = x * sinf(angleRad) + z * cosf(angleRad);
@@ -94,7 +106,7 @@ void Vecteur3D::normaliser(){
         z = z2;
     }
     
-    void Vecteur3D::rorationAutourAxeZ(float angleRad){
+    void Vecteur3D::rotationAutourAxeZ(float angleRad){
         float x2, y2;
         x2 = x * cosf(angleRad) - y * sinf(angleRad);
         y2 = x * sinf(angleRad) + y * cosf(angleRad);

@@ -52,9 +52,11 @@ private:
 	/** Affiche la flamme */
 	void renduFlammeGPU();
 	/** Affiche la fumee face a la camera*/
-	void renduFumeeGPUFaceCamera(Vecteur3D& positionCamera );
+	void renduFumeeGPUFaceCamera(Vecteur3D& positionCamera, 
+	                             Vecteur3D& directionCamera );
 	/** Affiche la flamme face a la camera*/
-	void renduFlammeGPUFaceCamera(Vecteur3D& positionCamera );
+	void renduFlammeGPUFaceCamera(Vecteur3D& positionCamera, 
+	                              Vecteur3D& directionCamera );
 	/** Permet de charger le tableau de la fumée dans la matrice RGBA */
 	void majMatriceFumeeEnMatriceRGBA();
 	/** Permet de charger la matrice RGBA de la classe dans une texture 3D */
@@ -64,11 +66,11 @@ private:
 	                                
 	/** Dessine des plans dans la texture3D face a la camera*/
 	void dessinerPlansDansTexture3DFaceALaCamera(GLuint id_texture, int nb_plans,
-	                                     Vecteur3D& positionCamera);
+	                     Vecteur3D& positionCamera, Vecteur3D& directionCamera);
 	
 public :
 	void Afficher();
-	void Afficher_Face_Camera(Vecteur3D& positionCamera );
+	void Afficher_Face_Camera(Vecteur3D& positionCamera, Vecteur3D& directionCamera );
 	void Mise_A_Jour();
 };
 
