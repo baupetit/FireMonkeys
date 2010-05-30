@@ -512,3 +512,4 @@ void Solver::velocitiesStepWithTemp ( float visc, float buoy, float vc_eps, floa
 	advect ( _N, 3, _w, _w0, _u0, _v0, _w0, dt );
 	project ( _N, _u, _v, _w, _u0, _v0 );
 }
+
