@@ -272,6 +272,7 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
     - l'objet est brulé progressivement\\
 \textbf{Point(s) négatif(s)} :\\
     - le rendu utilise un grandn ombre de particules pour être réaliste\\
+    - l'objet n'est pas détruit seule la texture est altérée\\
 \textbf{Conclusion} :\\
 
 \subsubsection{Meshes On Fire}
@@ -464,10 +465,24 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
 %%%%%%%%%%%%%%%%%
 \section{Modèle de flamme}
 %%%%%%%%%%%%%%%%%
+Comme décris dans l'aperçu, nous nous sommes focalisé sur un modèle
+``réaliste'' qui peut être exploité en temps réel. Pour cela nous
+avons choisit un modèle de fluide pour représenter les flammes ainsi
+que pour la fumée.\\
 
+Le principe de base est le suivant: lorsqu'un objet brûle il libère un
+fluide inflammable, si la température est suffisante ce gas
+s'enflamme, sinon il devient en partie de la fumée. Quand le
+combustible enflammé s'éloigne de la source de chaleur, il refroidi et
+lorsqu'il ateint une température suffisament faible il se transforme
+en un autre gas( invisible ) et en fumée.\\
 
+Pour faire cela nous avons besoin de quatre informations en permanance
+: le champ de vitesse, de température, de combustible et de fumée. En
+appliquant ensuite le modèle développé par \textbf{Jos Stam} dans
+\textbf{Stable Fluid} nous pouvons faire évoluer le système.\\
 
-
+%% TODO : détailler plus
 
 %----------------------------------------------------------------------------------------------------------------------------------------
 %%%%%%%%%%%%%%%%%
