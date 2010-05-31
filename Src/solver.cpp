@@ -238,26 +238,26 @@ void diffuseFireAndSmoke ( int N, int b1, int b2, int b3,
 				for( i=1 ; i<N+1 ; ++i ){
 					ijk = IX(i,j,k);
 					// Fire
-					x[ijk] = ( x0[ijk] + a1*( t[IX(i-1,j,k)] +
-									     t[IX(i+1,j,k)] +
-									     t[IX(i,j-1,k)] +
-									     t[IX(i,j+1,k)] +
-									     t[IX(i,j,k-1)] +
-									     t[IX(i,j,k+1)] ))/c1;
+					x[ijk] = ( x0[ijk] + a1*( x[IX(i-1,j,k)] +
+								  x[IX(i+1,j,k)] +
+								  x[IX(i,j-1,k)] +
+								  x[IX(i,j+1,k)] +
+								  x[IX(i,j,k-1)] +
+								  x[IX(i,j,k+1)] ))/c1;
 					// Smoke
-					x[ijk] = ( x0[ijk] + a2*( t[IX(i-1,j,k)] +
-									     t[IX(i+1,j,k)] +
-									     t[IX(i,j-1,k)] +
-									     t[IX(i,j+1,k)] +
-									     t[IX(i,j,k-1)] +
-									     t[IX(i,j,k+1)] ))/c2;
+					f[ijk] = ( f0[ijk] + a2*( f[IX(i-1,j,k)] +
+								  f[IX(i+1,j,k)] +
+								  f[IX(i,j-1,k)] +
+								  f[IX(i,j+1,k)] +
+								  f[IX(i,j,k-1)] +
+								  f[IX(i,j,k+1)] ))/c2;
 					// Temp
 					t[ijk] = ( t0[ijk] + a3*( t[IX(i-1,j,k)] +
-									     t[IX(i+1,j,k)] +
-									     t[IX(i,j-1,k)] +
-									     t[IX(i,j+1,k)] +
-									     t[IX(i,j,k-1)] +
-									     t[IX(i,j,k+1)] ))/c3;
+								  t[IX(i+1,j,k)] +
+								  t[IX(i,j-1,k)] +
+								  t[IX(i,j+1,k)] +
+								  t[IX(i,j,k-1)] +
+								  t[IX(i,j,k+1)] ))/c3;
 					
 				}
 			}

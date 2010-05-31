@@ -34,7 +34,7 @@ Fluid::Fluid()
 
 	for( int i = 7 ; i < tailleGrille-6 ; ++i ){
 		for( int j = 7 ; j < tailleGrille-6 ; ++j ){
-			s->setDensity( i ,5, j, 0.5f );        
+			s->setDensity( i ,5, j, 10.0f );        
 			s->setTemperature( i ,5, j, (getTempVal(i,j,tailleGrille))/10);        
 		}
 	}
@@ -140,9 +140,6 @@ void Fluid::Afficher(){
 	}
 	glEnd();
 	*/
-    
-    
-		
 }
 
 
@@ -150,7 +147,7 @@ void Fluid::Afficher(){
 void Fluid::renduFumeeGPU(){
     majMatriceFumeeEnMatriceRGBA();
     matriceRGBACarreeToTexture3D(matriceRGBA, tailleGrille + 2 , _id_texture_fumee);
-    dessinerPlansDansTexture3D(_id_texture_fumee, 20);
+    dessinerPlansDansTexture3D(_id_texture_fumee, 10);
 }
 
 
@@ -158,7 +155,7 @@ void Fluid::renduFumeeGPU(){
 void Fluid::renduFlammeGPU(){
     majMatriceFlammeEnMatriceRGBA();
     matriceRGBACarreeToTexture3D(matriceRGBA, tailleGrille + 2 , _id_texture_flamme);
-    dessinerPlansDansTexture3D(_id_texture_flamme, 20);
+    dessinerPlansDansTexture3D(_id_texture_flamme, 30);
 }
 
 
@@ -166,7 +163,7 @@ void Fluid::renduFlammeGPU(){
 void Fluid::renduFumeeGPUFaceCamera(Vecteur3D& positionCamera, Vecteur3D& directionCamera ){
     majMatriceFumeeEnMatriceRGBA();
     matriceRGBACarreeToTexture3D(matriceRGBA, tailleGrille + 2 , _id_texture_fumee);
-    dessinerPlansDansTexture3DFaceALaCamera(_id_texture_fumee, 20, positionCamera, directionCamera);
+    dessinerPlansDansTexture3DFaceALaCamera(_id_texture_fumee, 50, positionCamera, directionCamera);
 }
 
 
@@ -174,7 +171,7 @@ void Fluid::renduFumeeGPUFaceCamera(Vecteur3D& positionCamera, Vecteur3D& direct
 void Fluid::renduFlammeGPUFaceCamera(Vecteur3D& positionCamera, Vecteur3D& directionCamera ){
     majMatriceFlammeEnMatriceRGBA();
     matriceRGBACarreeToTexture3D(matriceRGBA, tailleGrille + 2 , _id_texture_flamme);
-    dessinerPlansDansTexture3DFaceALaCamera(_id_texture_flamme, 20, positionCamera, directionCamera);
+    dessinerPlansDansTexture3DFaceALaCamera(_id_texture_flamme, 50, positionCamera, directionCamera);
 }
 
 
@@ -245,12 +242,12 @@ void Fluid::majMatriceFumeeEnMatriceRGBA(){
 	    pointeurMatriceRGBA++;
 	    // G
 	    *pointeurMatriceRGBA = 0.1;
-	    pointeurMatriceRGBA++;
+	    pointeurMatriceRGBA++; 
 	    // B
 	    *pointeurMatriceRGBA = 0.1;
 	    pointeurMatriceRGBA++;
 	    // A
-	    *pointeurMatriceRGBA = 1500 * *pointeurMatriceACopier2;
+	    *pointeurMatriceRGBA = *pointeurMatriceACopier2 *4;
 	    pointeurMatriceRGBA++;
 	    // MAJ
 	    pointeurMatriceACopier2++;
@@ -389,7 +386,7 @@ void Fluid::dessinerPlansDansTexture3DFaceALaCamera(GLuint id_texture, int nb_pl
     glEnable( GL_BLEND );
     glAlphaFunc(GL_GREATER,0.0f);
     glEnable(GL_ALPHA_TEST);    
-	glEnable(GL_TEXTURE_3D);
+    glEnable(GL_TEXTURE_3D);
     glActiveTexture(id_texture);
     
     // Vecteur de coordonnées
@@ -463,13 +460,14 @@ void Fluid::dessinerPlansDansTexture3DFaceALaCamera(GLuint id_texture, int nb_pl
         glVertex3d(coord.x, coord.y, coord.z);
     }
 		
-	glEnd();
-	
-	// Desactivation des elements
-	glDisable(GL_TEXTURE_3D);
+    glEnd();
+    
+    // Desactivation des elements
+    glDisable(GL_TEXTURE_3D);
+    glDisable(GL_ALPHA_TEST);    
     glDisable( GL_BLEND );    
     glEnable(GL_LIGHTING);
-    
+	
 }
 
 
@@ -554,7 +552,7 @@ void Fluid::dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans){
 
 void Fluid::Mise_A_Jour(){
 	s->velocitiesStepWithTemp(0.0, 0.5, 2.0,0.1);
-	s->densitiesStepWithTemp(0.00001,0.001,0.0001, 1, 0.4, 0.01, 0.1);
+	s->densitiesStepWithTemp(0.00100,0.00001,0.0100, 1, 0.4, 1, 0.1);
 }
 
 
