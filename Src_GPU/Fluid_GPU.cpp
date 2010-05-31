@@ -1,6 +1,7 @@
 #include "Fluid_GPU.h"
 
 #include <iostream>
+
 using namespace std;
 
 
@@ -13,7 +14,7 @@ Fluid_GPU::Fluid_GPU(){
     // Shader d'advection
     advection = new Shader("./Shaders/advection.vert","./Shaders/advection.frag");
     // Frame buffer
-    buffer = new Framebuffer(taille_grille);
+    buffer = new Framebuffer();
     
 }
 
@@ -99,6 +100,9 @@ void Fluid_GPU::resolutionFluid(){
 }
 
 void Fluid_GPU::Afficher(){
+}
+
+void Fluid_GPU::Afficher_Face_Camera(Vecteur3D& positionCamera, Vecteur3D& orientationCamera){
 }
 
 void Fluid_GPU::afficherFlamme(){

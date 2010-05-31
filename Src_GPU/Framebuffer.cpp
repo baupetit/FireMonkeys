@@ -6,65 +6,64 @@
 
 
 
-Framebuffer::Framebuffer(int _taille_grille, Texture3D& texture){
-    // Creation de la texture 1
-    glGenTextures(1,&texture_buf1);
-    glBindTexture(GL_TEXTURE_3D, texture_buf1);
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_REPEAT);
-    glTexImage3D(GL_TEXTURE_3D,0,GL_RGB,
-                 taille_grille,taille_grille,taille_grille,
-                 0, GL_RGB, GL_FLOAT, NULL);
-                
-    // Creation de la texture 2
-    glGenTextures(1,&texture_buf2);
-    glBindTexture(GL_TEXTURE_3D, texture_buf2);
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_REPEAT);
-    glTexImage3D(GL_TEXTURE_3D,0,GL_RGB,
-                 taille_grille,taille_grille,taille_grille,
-                 0, GL_RGB, GL_FLOAT, NULL);
-                                  
+Framebuffer::Framebuffer(){
+    
     // Creation du frame buffer 1
-	glGenFramebuffers(1, &_FBO_speed_1);                       
-                                  
-    // Unbind
-    glBindTexture(GL_TEXTURE_3D,0);
-    
-    // Initialisation du pingpong
-    pingpong = PING;
-    
-    // Taille de la grille
-    taille_grille = _taille_grille;
+	glGenFramebuffers(1, &_buffer_id);
+	
+	// Texture associee  
+	_texture_associee = new Texture3D();
+	
 }
     
 Framebuffer::~Framebuffer(){
+    delete _texture_associee;
 }
+ 
+ 
     
-void Framebuffer::Bind_Buffer(){
+void Framebuffer::bind_Buffer(){
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _buffer_id);
+}
 
-	//FBO#1 pour la texture speedfield1
-	glGenFramebuffers(1, &_FBO_speed_1);
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _FBO_speed_1);
+void Framebuffer::attacher_layers_de_la_texture(int numero_layer, int nb_layer){
+    GLuint idtexture = get_id_texture();
+    
+    /* RED BOOK p 535 :
+    void glFramebufferTexture3D(GLenum target, GLenum attachment,
+                GLenum texturetarget, GLuint texture, GLint level,
+                GLint layer);
+    */
+
+    for (int i = 0; i < nb_layer; i++){
+        // j'attache les nb_layers au framebuffer
+    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+							GL_TEXTURE_3D, idtexture, 0 , numero_layer + i);    
+	}
+    
+}
+
+void Framebuffer::detacher_texture(){
+    // attacher à 0 == détacher les textures
 	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-							GL_TEXTURE_3D, _speedField_1, 0 , 0);
+							GL_TEXTURE_3D, 0, 0 , 0);    
+}
+    
+void Framebuffer::unbind_Buffer(){
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-    
 }
     
-void Framebuffer::Unbind_Buffer(){
+GLuint Framebuffer::get_id_texture(){
+    return _texture_associee->get_texture_id();
 }
     
-GLuint Framebuffer::Get_texture(){
-}
+void Framebuffer::initialiser_texture_buf(const float *tab,
+                                          const int grille_width, 
+                                          const int grille_height, 
+                                          const int grille_depth){
+    _grille_width  = grille_width;
+    _grille_height = grille_height;
+    _grille_depth  = grille_depth;
     
-void Framebuffer::Initialiser_texture_buf(const Texture3D& texture, 
-                                          const float *tab, 
-                                          const int taille){
+    _texture_associee->charger_matrice(tab, grille_width, grille_height, grille_depth);
 }

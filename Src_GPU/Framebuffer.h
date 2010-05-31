@@ -20,13 +20,19 @@
 class Framebuffer{
 private:
     /** Identifiant du buffer */
-    GLuint buffer_id;
+    GLuint _buffer_id;
     
     /** Texture associée au buffer*/
-    Texture3D *texture_associee;
+    Texture3D *_texture_associee;
         
-    /** Taille de la grille */
-    int taille_grille;
+    /** Largeur de la grille */
+    int _grille_width;
+    
+    /** Hauteur de la grille */
+    int _grille_height;
+    
+    /** Profondeur de la grille */
+    int _grille_depth;
     
     
 public:
@@ -37,17 +43,25 @@ public:
     ~Framebuffer();
     
     /** Charge le buffer courant */
-    void Bind_Buffer();
+    void bind_Buffer();
+    
+    /** Attache au buffer les layers de la texture associée */
+    void attacher_layers_de_la_texture(int numero_layer, int nb_layer);
+    
+    /** Detache du buffer la texture associée */
+    void detacher_texture();
     
     /** Decharge le buffer courant */
-    void Unbind_Buffer();
+    void unbind_Buffer();
     
     /** Retourne la texture associee*/
-    GLuint Get_texture(){
-        return texture_associee;
+    GLuint get_id_texture();
     
-    /** Initialise la texture id avec le tableau donné */
-    void Initialiser_texture_buf(const Texture3D& texture, const float *tab, const int taille);
+    /** Initialise la texture associee avec le tableau donné */
+    void initialiser_texture_buf(const float *tab, 
+                                 const int grille_width, 
+                                 const int grille_height, 
+                                 const int grille_depth);                                 
     
 };
 #endif

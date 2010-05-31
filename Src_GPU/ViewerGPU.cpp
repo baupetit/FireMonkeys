@@ -24,6 +24,8 @@ void ViewerGPU::initScene(){
 	cout << "Initialisation de la Scene " << endl;
 	_fluid = new Fluid_GPU();
 }
+
+
 void ViewerGPU::rendu(){
 
 
