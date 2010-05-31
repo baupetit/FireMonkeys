@@ -278,7 +278,7 @@ void advect ( int N, int b, float * d, float * d0, float * u, float * v, float *
 	for( k=1; k<N+1; ++k ){ 
 		for( j = 1; j<N+1 ; ++j) { 
 			for( i=1 ; i<N+1 ; ++i ){
-				x = i-dt0*u[IX(i,j,k)]; y = j-dt0*v[IX(i,j,k)];	z = k-dt0*w[IX(i,j,k)];
+				x = i-dt0*u[IX(i,j,k)] ; y = j-dt0*v[IX(i,j,k)];	z = k-dt0*w[IX(i,j,k)];
 
 				if (x<0.5f) x=0.5f; if (x>N+0.5f) x=N+0.5f; i0=(int)x; i1=i0+1;			
 				if (y<0.5f) y=0.5f; if (y>N+0.5f) y=N+0.5f; j0=(int)y; j1=j0+1;				
@@ -302,7 +302,7 @@ void advect_cool ( int N, int b,
 		   float * d, float * d0, float *f, float *f0, 
 		   float *T, float *T0,
 		   float * u, float * v, float *w, 
-		   float cool, float dt )
+		   float cool, float consume, float dt )
 {
 	int i, j, k, i0, j0, k0, i1, j1, k1;
 	float x, y, z, s0, t0, r0, s1, t1, r1, dt0;
@@ -326,7 +326,9 @@ void advect_cool ( int N, int b,
 				lhs = (t0*(r0*d0[IX(i1,j0,k0)] + r1*d0[IX(i1,j0,k1)]) + 
 				       t1*(r0*d0[IX(i1,j1,k0)] + r1*d0[IX(i1,j1,k1)]));
 
-				d[IX(i,j,k)] = (s0*rhs + s1*lhs );
+				
+				rhs = (s0*rhs + s1*lhs) - consume ;
+				d[IX(i,j,k)] = ( rhs < 0 ) ? 0 : rhs ;
 				
 				rhs = (t0*(r0*f0[IX(i0,j0,k0)] + r1*f0[IX(i0,j0,k1)]) + 
 				       t1*(r0*f0[IX(i0,j1,k0)] + r1*f0[IX(i0,j1,k1)]));
@@ -341,7 +343,7 @@ void advect_cool ( int N, int b,
 				lhs = (t0*(r0*T0[IX(i1,j0,k0)] + r1*T0[IX(i1,j0,k1)]) + 
 				       t1*(r0*T0[IX(i1,j1,k0)] + r1*T0[IX(i1,j1,k1)]));
 
-				T[IX(i,j,k)] = (s0*rhs + s1*lhs )*c0;
+				T[IX(i,j,k)] = (s0*rhs + s1*lhs )*c0 ;
 			}
 		}
 	}
@@ -443,6 +445,7 @@ void Solver::densitiesStepWithTemp ( float diffFire,
 				     float diffSmoke,
 				     float diffTemp,
 				     float cool, 
+					 float consume,
 				     float sub, 
 				     float fireToSmoke, 
 				     float dt )
@@ -461,7 +464,7 @@ void Solver::densitiesStepWithTemp ( float diffFire,
 			    diffFire, diffSmoke, diffTemp, 
 			    dt );
 	SWAP ( _d0, _d ); SWAP ( _f0, _f ); SWAP ( _T0, _T ); 
-	advect_cool ( _N, 0, _d, _d0, _f, _f0, _T, _T0, _u, _v, _w, cool, dt );
+	advect_cool ( _N, 0, _d, _d0, _f, _f0, _T, _T0, _u, _v, _w, cool, consume ,dt );
 }
 
 
