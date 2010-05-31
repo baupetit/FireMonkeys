@@ -1,6 +1,16 @@
 #ifndef FLUID_GPU_H
 #define FLUID_GPU_H
 
+/*!*****************************************************************************
+*
+*       \file       :      Fluid_GPU.h
+*
+*       \author     :      Benjamin Aupetit, Champeau Julien, Arnaud Emilien
+*       \date       :      31 mai 2010
+*       \version    :      0.1
+*
+*******************************************************************************/
+
 #include <GL/glew.h>
 #include <GL/glut.h>
 

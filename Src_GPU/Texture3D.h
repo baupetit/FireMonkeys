@@ -1,6 +1,16 @@
 #ifndef TEXTURE3D_H
 #define TEXTURE3D_H
 
+/*!*****************************************************************************
+*
+*       \file       :      Texture3D.h
+*
+*       \author     :      Benjamin Aupetit, Champeau Julien, Arnaud Emilien
+*       \date       :      31 mai 2010
+*       \version    :      0.1
+*
+*******************************************************************************/
+
 
 #include <GL/glew.h>
 #include <GL/glut.h>

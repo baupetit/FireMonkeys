@@ -1,6 +1,17 @@
 #ifndef VECTEUR_H
 #define VECTEUR_H
 
+/*!*****************************************************************************
+*
+*       \file       :      Vecteur.h
+*
+*       \author     :      Benjamin Aupetit, Champeau Julien, Arnaud Emilien
+*       \date       :      31 mai 2010
+*       \version    :      0.1
+*
+*******************************************************************************/
+
+
 #include <cmath>
 #ifndef M_PI
 	#define M_PI 3.14159265358979323846f
