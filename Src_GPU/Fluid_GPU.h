@@ -9,9 +9,9 @@
 #define TAILLE_GRILLE 10
 
 #include "Vecteur.h"
-#include "Framebuffer.h"
-#include "Shader.h" 
 #include "BasicEntite.h"
+#include "Shader.h" 
+#include "Framebuffer.h"
 
 class Fluid_GPU : public BasicEntite{
 
@@ -22,6 +22,9 @@ private:
     
     /** Gestionnaire de buffer */
     Framebuffer *buffer;
+    
+    /** Taille de la grille ( initialisée à TAILLE_GRILLE ) */
+    int taille_grille;
 
 public:
     /** Constructeur */
@@ -39,15 +42,15 @@ public:
     /** Affiche le modèle */
     void Afficher();
     
+    /** Affiche le modèle face à la camera*/
+    void Afficher_Face_Camera(Vecteur3D& positionCamera, Vecteur3D& orientationCamera);
+    
     /** Afficher les flammes*/
     void afficherFlamme();
     
     /** Afficher la fummée*/
     void afficherFumee();
-    
-    /** Afficher la fummée*/
-    void afficherObjets();
-    
+        
     /** Dessine des plans dans la texture3D */
 	void dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans);
 	                                

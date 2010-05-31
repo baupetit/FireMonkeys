@@ -11,6 +11,10 @@
 *
 *******************************************************************************/
 
+#include <GL/glew.h>
+#include <GL/glut.h>
+
+
 #include <iostream>
 using namespace std;
 
@@ -18,7 +22,7 @@ class Shader{
 
 private:
     /** Id du program */
-    Gluint program;
+    GLuint program;
     
 public:
     /** Constructeur de base */

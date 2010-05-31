@@ -1,7 +1,5 @@
 #include "BasicEntite.h"
 
-#include <GL/glut.h>
-#include <GL/gl.h>
 
 void BasicEntite::Afficher_Entite(){   
  

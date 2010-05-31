@@ -8,8 +8,13 @@ using namespace std;
 
 
 Fluid_GPU::Fluid_GPU(){
+    // Taille de la grille
+    taille_grille = TAILLE_GRILLE;
+    // Shader d'advection
     advection = new Shader("./Shaders/advection.vert","./Shaders/advection.frag");
-    buffer = NULL;
+    // Frame buffer
+    buffer = new Framebuffer(taille_grille);
+    
 }
 
 Fluid_GPU::~Fluid_GPU(){
@@ -21,11 +26,11 @@ void Fluid_GPU::initialiserFluid(){
 
     // Creation du champs de vitesse vide
     Vecteur3D *texture = new Vecteur3D[TAILLE_GRILLE*TAILLE_GRILLE*TAILLE_GRILLE];
-    for (int k = 0; k < TAILLE_GRILLE; k++){
-        for (int j = 0; j < TAILLE_GRILLE; j++){
-            for (int i = 0; i < TAILLE_GRILLE; i++){    
+    for (int k = 0; k < taille_grille; k++){
+        for (int j = 0; j < taille_grille; j++){
+            for (int i = 0; i < taille_grille; i++){    
                 texture[ID(i,j,k)].x = 0.0f;
-                texture[ID(i,j,k)].y = 0.5f;
+                texture[ID(i,j,k)].y = 0.0f;
                 texture[ID(i,j,k)].z = 0.0f;
             }
         }
@@ -34,14 +39,16 @@ void Fluid_GPU::initialiserFluid(){
     
     // Quelques valeurs initiales
     for (int k = 0; k < 1; k++){
-        for (int j = 0; j < TAILLE_GRILLE; j++){
-            for (int i = 0; i < TAILLE_GRILLE ; i++){    
+        for (int j = 0; j < taille_grille; j++){
+            for (int i = 0; i < taille_grille ; i++){    
                 texture[ID(i,j,k)].x = 0.0f;
                 texture[ID(i,j,k)].y = 1.0f;
                 texture[ID(i,j,k)].z = 0.0f;
             }
         }
     } 
+    
+    
     
     /*
 
@@ -101,15 +108,15 @@ void Fluid_GPU::afficherFlamme(){
 void Fluid_GPU::afficherFumee(){
 }
 
-void Fluid_GPU::afficherObjets(){
 
 
 
 
 
-
-void Fluid::dessinerPlansDansTexture3DFaceALaCamera(GLuint id_texture, int nb_plans,
-	                                     Vecteur3D& positionCamera, Vecteur3D& directionCamera){
+void Fluid_GPU::dessinerPlansDansTexture3DFaceALaCamera(GLuint id_texture, 
+                                                        int nb_plans,
+	                                                    Vecteur3D& positionCamera, 
+	                                                    Vecteur3D& directionCamera){
 	       
     Vecteur3D directionInitiale = Vecteur3D (0,0,1);
     
@@ -183,7 +190,7 @@ void Fluid::dessinerPlansDansTexture3DFaceALaCamera(GLuint id_texture, int nb_pl
     Tex3 += centre; 
     
     
-    // Direction des autres faces
+    // Direction de création des plans
     Vecteur3D profondeur = produitVectoriel(Boitev2-Boitev1 , Boitev0-Boitev1);
     Boitev0.normaliser();
     Boitev1.normaliser();
@@ -283,7 +290,7 @@ void Fluid::dessinerPlansDansTexture3DFaceALaCamera(GLuint id_texture, int nb_pl
 
 
 
-void Fluid::dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans){
+void Fluid_GPU::dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans){
     
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     glEnable( GL_BLEND );

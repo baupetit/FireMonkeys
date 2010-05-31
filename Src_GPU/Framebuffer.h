@@ -12,26 +12,21 @@
 *******************************************************************************/
 
 
+#include <GL/glew.h>
+#include <GL/glut.h>
 
-#define PING 1
-#define PONG 2
+#include "Texture3D.h"    
     
 class Framebuffer{
 private:
-    /** Identifiant du premier buffer */
-    GLuint buffer1;
+    /** Identifiant du buffer */
+    GLuint buffer_id;
     
-    /** Identifiant du deuxième buffer */
-    GLuint buffer2;
-    
-    /** Texture associée au buffer 1 */
-    GLuint texture_buf1;
-    
-    /** Texture associée au buffer 2 */
-    GLuint texture_buf2;
-    
-    /** Buffer/Texture courante */
-    int pingpong;
+    /** Texture associée au buffer*/
+    Texture3D *texture_associee;
+        
+    /** Taille de la grille */
+    int taille_grille;
     
     
 public:
@@ -41,33 +36,18 @@ public:
     /** Destructeur */
     ~Framebuffer();
     
-    /** Change le buffer actif */
-    void Swap_Active_Buffer();
-    
     /** Charge le buffer courant */
-    void Bind_Buffer_Courant();
+    void Bind_Buffer();
     
     /** Decharge le buffer courant */
     void Unbind_Buffer();
     
-    /** Retourne l'id de la texture 1*/
-    GLuint Get_texture_buf1(){
-        return texture_buf1;
-    }
-    
-    /** Retourne l'id de la texture 2*/
-    GLuint Get_texture_buf2(){
-        return texture_buf2;
-    }
-    
-    /** Retourne l'id de la texture courante */
-    GLuint Get_texture_courante();
-    
-    /** Retourne l'id du buffer courant */
-    GLuint Get_buffer_courant();
+    /** Retourne la texture associee*/
+    GLuint Get_texture(){
+        return texture_associee;
     
     /** Initialise la texture id avec le tableau donné */
-    void Initialiser_texture_buf(const int id_texture, const float *tab, const int taille);
+    void Initialiser_texture_buf(const Texture3D& texture, const float *tab, const int taille);
     
 };
 #endif

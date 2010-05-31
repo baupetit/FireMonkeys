@@ -11,7 +11,7 @@ Shader::Shader(string fichier_vert_shader, string fichier_frag_shader){
     cout << endl;
     
     // Chargement du programme
-    program = LoadProgram(fichier_vert_shader, fichier_frag_shader);
+    program = LoadProgram(fichier_vert_shader.c_str(), fichier_frag_shader.c_str());
     
     cout << "Shader program chargé" << endl;
     
