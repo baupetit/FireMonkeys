@@ -47,6 +47,7 @@ public :
 				     float diffSmoke,
 				     float diffTemp,
 				     float cool, 
+					 float consume,
 				     float sub, 
 				     float fireTosmoke, 
 				     float dt );

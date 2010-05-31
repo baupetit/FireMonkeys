@@ -24,7 +24,7 @@ static inline float getTempVal( int i, int j, int T ){
 
 Fluid::Fluid()
 {
-        tailleGrille = 20;
+        tailleGrille = 25;
         
         s = new Solver(tailleGrille);
 
@@ -185,7 +185,7 @@ void Fluid::majMatriceFlammeEnMatriceRGBA(){
     float R,G,B;
     for (int i = 0; i < (tailleGrille+2)*(tailleGrille+2)*(tailleGrille+2); i ++){
 	    tempIndex->getRGB( (1+(*pointeurMatriceACopier3))*1555 , &R, &G, &B );
-	    // R
+	    // R 
 	    *pointeurMatriceRGBA = B;
 	    pointeurMatriceRGBA++;
 	    // G
@@ -195,7 +195,16 @@ void Fluid::majMatriceFlammeEnMatriceRGBA(){
 	    *pointeurMatriceRGBA = R;
 	    pointeurMatriceRGBA++;
 	    // A
-	    *pointeurMatriceRGBA = *pointeurMatriceACopier* 4 - *pointeurMatriceACopier3*2;
+		if ( (*pointeurMatriceACopier* 4- *pointeurMatriceACopier3*3)*20 < 0 ){
+		*pointeurMatriceRGBA = 0; 
+		} else if ((*pointeurMatriceACopier* 4- *pointeurMatriceACopier3*3)*20 > 1 ){
+			*pointeurMatriceRGBA = 1; 
+		} else {
+		
+	   		*pointeurMatriceRGBA = (*pointeurMatriceACopier* 4 - *pointeurMatriceACopier3*3)*20;
+		}
+		//cout << "densité : " << *pointeurMatriceACopier << " temp= " << *pointeurMatriceACopier3 << endl;
+		//cout << "A : " << *pointeurMatriceRGBA << endl;
 	    pointeurMatriceRGBA++;
 	    // MAJ
 	    pointeurMatriceACopier++;
@@ -552,7 +561,8 @@ void Fluid::dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans){
 
 void Fluid::Mise_A_Jour(){
 	s->velocitiesStepWithTemp(0.0, 0.5, 2.0,0.1);
-	s->densitiesStepWithTemp(0.00100,0.00001,0.0100, 1, 0.4, 1, 0.1);
+	s->densitiesStepWithTemp(0.00001,0.001,0.0001, 1, 0.1 , 0.4, 0.01, 0.1);
+
 }
 
 
