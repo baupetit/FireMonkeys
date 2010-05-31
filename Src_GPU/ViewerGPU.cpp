@@ -25,6 +25,18 @@ void ViewerGPU::initScene(){
 	_fluid = new Fluid_GPU();
 }
 void ViewerGPU::rendu(){
-	if ( _fluid!= 0 ) _fluid -> resolutionSpeedField();
-	//if ( _fluid!= 0 ) _fluid -> displaySpeedField();	
+
+
+	////////////////////////////////////////////////////////////////////////////
+	//// OBJETS
+	glPushMatrix();
+    glMatrixMode (GL_MODELVIEW);
+		
+	//_fluid->Afficher_Entite_Face_Camera(positionCamera, directionCamera);
+   	_fluid->Afficher_Entite();
+   	
+	glPopMatrix();
+	
+    
+	////////////////////////////////////////////////////////////////////////////
 }

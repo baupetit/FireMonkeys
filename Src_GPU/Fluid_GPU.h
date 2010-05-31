@@ -36,6 +36,9 @@ public:
     /** Résoudre le champs de vitesse */
     void resolutionFluid();
     
+    /** Affiche le modèle */
+    void Afficher();
+    
     /** Afficher les flammes*/
     void afficherFlamme();
     
@@ -45,8 +48,13 @@ public:
     /** Afficher la fummée*/
     void afficherObjets();
     
-    /** Afficher une texture 3D face à la camera*/
-    void display_3DTexture(int details, int textureid);
+    /** Dessine des plans dans la texture3D */
+	void dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans);
+	                                
+	/** Dessine des plans dans la texture3D face a la camera*/
+	void dessinerPlansDansTexture3DFaceALaCamera(GLuint id_texture, int nb_plans,
+	                     Vecteur3D& positionCamera, Vecteur3D& directionCamera);
+	
 };
 
 #endif
