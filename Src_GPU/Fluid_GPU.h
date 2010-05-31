@@ -9,39 +9,43 @@
 #define TAILLE_GRILLE 10
 
 #include "Vecteur.h"
+#include "Framebuffer.h"
+#include "Shader.h" 
+#include "BasicEntite.h"
 
+class Fluid_GPU : public BasicEntite{
 
-class Fluid_GPU{
 private:
 
-    /** Identificateur du shader champs de vitesse */
-    GLuint _speed_program;  
-    /** Texture : Champs de viteses 
-		Besoin de 2 textures pour le ping-ponging avec les calculs
-    */
-    GLuint _speedField_1;
-	GLuint _speedField_2;
-    /** Position des variables ChampsDeVitesse prec et cour dans le Shader */
-    GLuint _speedFieldLocation_Prec;
-	/** FBOs pour les textures que l'on utilise pour le calcul de champ de vitesse */
-	GLuint _FBO_speed_1;
-	GLuint _FBO_speed_2;
-
-	GLuint _renderbuffer_1;
-	GLuint _renderbuffer_2;
+    /** Identificateur du shader qui calcule l'advection */
+    Shader *advection;
     
+    /** Gestionnaire de buffer */
+    Framebuffer *buffer;
 
 public:
+    /** Constructeur */
     Fluid_GPU();
+    
+    /** Destructeur */
     ~Fluid_GPU();
     
-    /** Initialisation du champs de vitesse */
-    void initialiserSpeedField();
+    /** Initialisation de la résolution */
+    void initialiserFluid();
+    
     /** Résoudre le champs de vitesse */
-    void resolutionSpeedField();
-    /** Afficher le champs de vitesse */
-    void displaySpeedField();
-    /** Afficher une texture 3D */
+    void resolutionFluid();
+    
+    /** Afficher les flammes*/
+    void afficherFlamme();
+    
+    /** Afficher la fummée*/
+    void afficherFumee();
+    
+    /** Afficher la fummée*/
+    void afficherObjets();
+    
+    /** Afficher une texture 3D face à la camera*/
     void display_3DTexture(int details, int textureid);
 };
 

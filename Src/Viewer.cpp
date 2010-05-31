@@ -99,7 +99,7 @@ void Viewer::_initDepth(){
 
 void Viewer::_initRendering(){
 	cout << "Initialisation du rendu " << endl;
-	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
+	glClearColor(1.0f, 0.0f, 1.0f, 0.0f);
 	glShadeModel(GL_SMOOTH);
 	glPolygonMode(GL_FRONT, GL_FILL);
 	glLineWidth(1.0f);

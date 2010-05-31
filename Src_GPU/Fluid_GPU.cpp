@@ -1,5 +1,4 @@
 #include "Fluid_GPU.h"
-#include "loadprogram.h"
 
 #include <iostream>
 using namespace std;
@@ -15,10 +14,10 @@ Fluid_GPU::Fluid_GPU(){
 
 Fluid_GPU::~Fluid_GPU(){}
 
-void Fluid_GPU::initialiserSpeedField(){
+void Fluid_GPU::initialiserFluid(){
 
     //// FRAGMENT PROGRAMME : _SPEED_PROGRAM
-    cout << "Fluid_GPU : Initialisation : Speed Field \n";
+    cout << "Fluid_GPU : Initialisation\n";
 
     // Chargement du programme
     cout << "Fluid_GPU : Chargement du shader \n";
