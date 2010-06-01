@@ -80,7 +80,7 @@ private :
 	
 	
 	Shader *shadoudoudoudoudoulolptdrMDRXD;
-    void draw_carre();
+
 	
 
 };
