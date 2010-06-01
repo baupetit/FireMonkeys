@@ -16,19 +16,47 @@ Framebuffer::Framebuffer(){
 	// Texture associee  
 	_texture_associee = new Texture3D();
 	
+	/*
+	int render;
+	glGenRenderbuffers(1,  &render);
+	glBinRenderbuffer(GL_RENDERBUFFER, &render);
+	glRenderbufferStorage(GL_RENDERBUFFER,GL_DEPTH_COMPONENT24, _grille_width, _grille_height);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, &_buffer_id);
+	glFramebuffer
+	
+	
+	glGenFramebuffersEXT(1, &_buffer_id);
+	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, _buffer_id);
+	GLuint depthbuffer;
+    glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, depthbuffer);
+    glGenRenderbuffersEXT(1, &depthbuffer);
+    glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, _grille_width, _grille_height);
+    glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, depthbuffer);
+    
+    */
+
 }
     
 Framebuffer::~Framebuffer(){
+    cout << " Destructeur Framebuffer " << endl;
     delete _texture_associee;
 }
  
  
     
 void Framebuffer::bind_Buffer(){
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _buffer_id);
+	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, _buffer_id);
+	glPushAttrib(GL_VIEWPORT_BIT);
+	glViewport(0,0,_grille_width, _grille_height);
 }
 
 void Framebuffer::attacher_layers_de_la_texture(int numero_layer, int nb_layer){
+    if (nb_layer > 8){
+	    cout << " Erreur : Impossible d'associer autant de layers en même temps.\n";
+	    cout << "          " << GL_MAX_COLOR_ATTACHMENTS << " layers max. ";
+        return;
+    }
+
     GLuint idtexture = get_id_texture();
     
     /* RED BOOK p 535 :
@@ -36,7 +64,7 @@ void Framebuffer::attacher_layers_de_la_texture(int numero_layer, int nb_layer){
                 GLenum texturetarget, GLuint texture, GLint level,
                 GLint layer);
     */
-
+    
     if(nb_layer==1){
         // j'attache les nb_layers au framebuffer
     	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
@@ -133,11 +161,16 @@ void Framebuffer::attacher_layers_de_la_texture(int numero_layer, int nb_layer){
     	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT7,
 							GL_TEXTURE_3D, idtexture, 0 , numero_layer+7);        
 	}
-	if(nb_layer > 8){
-	    cout << " Erreur : Impossible d'associer autant de layers en même temps.\n";
-	    cout << "          8 layers max. ";
-	}
-    
+	
+	
+	
+	
+    GLenum status = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
+    if (GL_FRAMEBUFFER_COMPLETE_EXT != status){
+        cout << "Erreur : lors de la liaison de la texture et du framebuffer" << endl;
+    }
+
+
 }
 
 void Framebuffer::detacher_texture(){
@@ -161,7 +194,8 @@ void Framebuffer::detacher_texture(){
 }
     
 void Framebuffer::unbind_Buffer(){
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+    glPopAttrib();
+	glBindFramebufferEXT(GL_DRAW_FRAMEBUFFER_EXT, 0);
 }
     
 GLuint Framebuffer::get_id_texture() const{

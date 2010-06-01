@@ -133,14 +133,14 @@ public :
     Framebuffer& getBufferFeuCourant () const ;
     Framebuffer& getBufferFeuDestination() const ;
     void swapBufferCourant();
-    void dessinerCarre();
+    void dessinerCarre(int layer_initial, int nb_layers);
     
     
     
     void diffuse ( Shader& calcul_shader, 
                string nom_texture, 
-               Framebuffer originBuffer,
-               Framebuffer destBuffer,
+               Framebuffer& originBuffer,
+               Framebuffer& destBuffer,
                float diff, 
                float dt );
     

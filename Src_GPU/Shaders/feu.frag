@@ -25,14 +25,14 @@ void main (){
         speed = vec4(texture3D(feu,gl_TexCoord[0].stp));
     }
     
-    
+    */
     speed.x = 1.0;
     
-    speed.y = 0.0;
+    speed.y = 0.2;
     
     speed.z = 1.0;
     
-    */
+    
     
     gl_FragColor = vec4(speed.x, speed.y, speed.z, 1.0);
 

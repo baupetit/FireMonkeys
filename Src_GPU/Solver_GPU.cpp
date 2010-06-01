@@ -136,11 +136,11 @@ void linearSolve ( int N, int b, float * x, float * x0, float a, float c ){
 
 void Solver_GPU::diffuse ( Shader& calcul_shader, 
                            string nom_texture, 
-                           Framebuffer originBuffer,
-                           Framebuffer destBuffer,
+                           Framebuffer& originBuffer,
+                           Framebuffer& destBuffer,
                            float diff, 
                            float dt ){
-                           /*
+                           
     GLuint	location = glGetUniformLocation ( calcul_shader.getProgramId(), nom_texture.c_str());
     glUniform1i(location,originBuffer.get_id_texture());
         
@@ -151,20 +151,37 @@ void Solver_GPU::diffuse ( Shader& calcul_shader,
     int layer_courant = 0;
     while ( _grille_depth - layer_courant > 8){        
         // On attache les layers
+        /*
+        originBuffer.bind_Buffer();
         originBuffer.attacher_layers_de_la_texture(layer_courant,8);
+        originBuffer.unbind_Buffer();
+        */
+        
+        destBuffer.bind_Buffer();
         destBuffer.attacher_layers_de_la_texture(layer_courant,8);
         
         // Calcul
         calcul_shader.Bind_Program();
-        dessinerCarre();
+        dessinerCarre(layer_courant,8);
         calcul_shader.Unbind_Program();
         
+        destBuffer.unbind_Buffer();
+        
+        //dessinerCarre();
+        
+        // On détache
+        originBuffer.detacher_texture();
+        destBuffer.detacher_texture();
+        
+        
+        dessinerCarre(layer_courant,8);
         
         // update
         layer_courant+=8;                
         
     } 
-    */
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+    
 }
 
 void diffuseFireAndSmoke ( int N, int b1, int b2, int b3,
@@ -200,17 +217,13 @@ void vorticity_confinement( int N, float *u, float *v, float *w,
 void Solver_GPU::densitiesStep ( float diff, float dt )
 {	
     
-    // feu
-    cout << "shader feu " << shader_feu << endl;
-    
-    cout << "plip \n";
     diffuse (  *shader_feu, 
-               (string)"feu", 
+               string("feu"), 
                getBufferFeuCourant(), 
                getBufferFeuDestination(),
                diff, 
                dt );
-    cout << "plop \n";
+    
     swapBufferCourant(); 
     
 }
@@ -264,26 +277,52 @@ void Solver_GPU::velocitiesStepWithTemp ( float visc, float buoy, float vc_eps, 
             buffer_courant = 1;
     }
     
-    void Solver_GPU::dessinerCarre(){
-    GLfloat verts[4][3] = { { 0.0, 0.0, 0.5}, {0.0, 1.0, 0.5}, {1.0, 1.0, 0.5}, {1.0, 0.0, 0.5} };
+    void Solver_GPU::dessinerCarre(int layer_initial, int nb_layers){
+    
+	glLoadIdentity();
+    glPushMatrix();
+	glOrtho(0, 1, 1, 0, 0, 1);
+	
+	glColor4f(0.0f, 2.0f, 0.0f, 0.2f);
+	
+	Vecteur3D v0 = Vecteur3D(0.0, 0.0, 0.0);
+	Vecteur3D v1 = Vecteur3D(0.0, _grille_height, 0.0);
+	Vecteur3D v2 = Vecteur3D(_grille_width, _grille_height, 0.0);
+	Vecteur3D v3 = Vecteur3D(_grille_width, 0.0, 0.0);
+	
+    Vecteur3D dirVect = Vecteur3D(0.0, 0.0, 1.0);
+    Vecteur3D dirText = Vecteur3D(0.0, 0.0, 1.0);
+    Vecteur3D coordVect;
+    Vecteur3D coordText;
 
 	glBegin(GL_TRIANGLES);	
-		glTexCoord3d(verts[0][0], verts[0][1], verts[0][2]);
-		glVertex3d(verts[0][0], verts[0][1], verts[0][2]);
-		
-		glTexCoord3d(verts[1][0], verts[1][1], verts[1][2]);
-		glVertex3d(verts[1][0], verts[1][1], verts[1][2]);
-		
-		glTexCoord3d(verts[2][0], verts[2][1], verts[2][2]);
-		glVertex3d(verts[2][0], verts[2][1], verts[2][2]);
-		
-		glTexCoord3d(verts[2][0], verts[2][1], verts[2][2]);
-		glVertex3d(verts[2][0], verts[2][1], verts[2][2]);
-		
-		glTexCoord3d(verts[3][0], verts[3][1], verts[3][2]);
-		glVertex3d(verts[3][0], verts[3][1], verts[3][2]);
-		
-		glTexCoord3d(verts[0][0], verts[0][1], verts[0][2]);
-		glVertex3d(verts[0][0], verts[0][1], verts[0][2]);		
+	    for(int i = 0; i < nb_layers; i ++){
+	        coordVect = v0 + i * dirVect;
+	        coordText = v0 + i * dirText;
+		    glTexCoord3d(coordText.x, coordText.y, coordText.y);
+		    glVertex3d(coordVect.x, coordVect.y, coordVect.y);
+	        coordVect = v1 + i * dirVect;
+	        coordText = v1 + i * dirText;
+		    glTexCoord3d(coordText.x, coordText.y, coordText.y);
+		    glVertex3d(coordVect.x, coordVect.y, coordVect.y);
+	        coordVect = v2 + i * dirVect;
+	        coordText = v2 + i * dirText;
+		    glTexCoord3d(coordText.x, coordText.y, coordText.y);
+		    glVertex3d(coordVect.x, coordVect.y, coordVect.y);
+		    
+	        coordVect = v2 + i * dirVect;
+	        coordText = v2 + i * dirText;
+		    glTexCoord3d(coordText.x, coordText.y, coordText.y);
+		    glVertex3d(coordVect.x, coordVect.y, coordVect.y);
+	        coordVect = v3 + i * dirVect;
+	        coordText = v3 + i * dirText;
+		    glTexCoord3d(coordText.x, coordText.y, coordText.y);
+		    glVertex3d(coordVect.x, coordVect.y, coordVect.y);
+	        coordVect = v0 + i * dirVect;
+	        coordText = v0 + i * dirText;
+		    glTexCoord3d(coordText.x, coordText.y, coordText.y);
+		    glVertex3d(coordVect.x, coordVect.y, coordVect.y);
+		}
 	glEnd();
+	glPopMatrix();
     }

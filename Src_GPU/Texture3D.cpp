@@ -39,3 +39,8 @@ void Texture3D::charger_matrice(const float *matrice,
 
 Texture3D::~Texture3D(){
 }
+
+
+    GLuint Texture3D::get_texture_id() const {
+        return texture_id;
+    }
