@@ -84,14 +84,26 @@ Cette discipline est d'autant plus importante pour nous que nous souhaitons en f
 ~\\
 La modélisation du feu est un domaine interessant car il fait le lien entre de nombreux principes physiques, de nombreux modèles mathématiques, de nombreuses méthodes de calcul et de rendu. De plus la contrainte temps réel permet de ne garder que les éléments importants pour la visualisation, en simplifiant les modèles.
 
-
 \subsection{Choix des membres}
 \subsubsection{Arnaud}
+    J'ai choisi ce sujet car c'est le domaine qui m'intéresse le plus. Je compte débuter ma carrière professionelle dans ce domaine ou dans un domaine s'en rapprochant énormement. De plus ce projet est un défis technique car nous allons devoir rapidement assimilé de nombreuses connaissances et les mettres en application. Par exemple, nous allons résoudre un système de fluide avec le langage GLSL, que nous ne connaissons pas encore au début du projet. Enfin ce projet peut consituer un aperçu du monde de la recherche en graphique 3D.\\
 \subsubsection{Benjamin}
 \subsubsection{Julien}
 
 
 \subsection{Forces et faiblesses de l'équipe}
+\subsubsection{Forces}
+Une bonne entente des membres du groupe.\\
+Julien et Arnaud ont travaillé ensemble sur des TP de nombreuses fois.\\
+Benjamin et Arnaud pratiquent le jujitsu ensemble.\\
+
+\subsubsection{Faiblesses}
+Personne ne connait (au début du projet) la programmation en Shader.\\
+
+
+
+
+
 
 
 %----------------------------------------------------------------------------------------------------------------------------------------
@@ -122,7 +134,7 @@ de chacun :\\
 
 \item \textbf{Arnaud}
 \begin{itemize}
-\item bonne connaissance d'openGL.
+\item bonne connaissance d'OpenGL.
 \end{itemize}
 \quad \\
 
@@ -135,15 +147,13 @@ de chacun :\\
 
 \item \textbf{Julien}
 \begin{itemize}
-\item les maths
+\item interêt pour l'informatique graphique
+\item apprecie la modélisation de phénomènes physique
 \end{itemize}
 \quad \\
 
 \end{itemize}
 %%%%%%%%%%%%%%%%%
-
-
-
 
 %----------------------------------------------------------------------------------------------------------------------------------------
 %%%%%%%%%%%%%%%%%
@@ -166,7 +176,130 @@ de chacun :\\
 \section{Déroulement du projet}
 %%%%%%%%%%%%%%%%%
 
+%----------------------------------------------------------------------------------------------------------------------------------------
+%%%%%%%%%%%%%%%%%
+\section{Compte rendu des réunions}
+%%%%%%%%%%%%%%%%%
 
+%%%%%%%%%%%%%%%%%
+\subsection{Suivis du  20 mai 2010}
+%%%%%%%%%%%%%%%%%
+
+\subsubsection{Présents}
+\textbf{Tuteur} : Marie Paule Cani \\
+\textbf{Élèves} : Benjamin, Julien, Arnaud \\
+
+\subsubsection{Sujets abordés}
+\textbf{Définition du but et de l'échelle du projet} :  \\
+se concentrer sur la propagation et la destruction des objets.\\
+
+\textbf{Pistes à regarder} : \\
+Jos Stam a fait de nombreux travaux à ce sujet, il faut regarder sur son site web de toronto. Par exemple : burning cross. Il a travaillé sur la représentation et  les modèles de feu temps réel.\\
+Mathieu Desbrun à fait "Voxels On fire" et "Meshes On Fire", deux travaux sur la propagation temps réel du feu sur un objet.\\
+Représentation du feu par voxels.\\
+
+\textbf{Conseil sur la démarche} : \\
+Reflechir beaucoup au BUT,
+identifier les phénomènes importants,
+lire beaucoup,
+faire des résumés régulièrement.\\
+
+\subsubsection{Prochain rendez vous}
+Lundi 31, à 10h à l'INRIA.\\
+Nous devrons y présenter le modèle de feu et de fumée.
+
+
+
+%%%%%%%%%%%%%%%%%
+\subsection{Suivis du  31 mai 2010}
+%%%%%%%%%%%%%%%%%
+\subsubsection{Présents}
+\textbf{Tuteur} : Marie Paule Cani\\
+\textbf{Élèves} : Benjamin, Julien, Arnaud \\
+\textbf{Et aussi : un chercheur de l'INRIA} : Cyril Crassin \\
+
+\subsubsection{Sujets abordés}
+\textbf{Présentation de l'avancement du projet} :  \\
+    Nous avons présenté à notre tutrice le modèle de fluide que nous avons implémenté en CPU.
+    Nous avons expliqué son fonctionnement, comment nous étions arrivés à ces résultats, 
+    quels étaient les articles qui nous avaient le plus aidé.\\
+    Notre tutrice semblait satisfaite du travail effectué.\\
+    
+\textbf{Explication de l'implémentation, discussion à propos des modifications/améliorations à apporter} :  \\
+    Nous discuté à propos des améliorations du rendu, notamment de l'ajout d'un bruit de perlin à la texture.\\
+    Nous avons aussi parlé de la fumée qui doit être générée d'un autre façon.\\
+    Nous avons de même parlé de la flamme qui doit perdre progressivement de la matière ( diminution du combustible présent )\\
+    
+\textbf{Discussions à propos du travail futur} :  \\
+    Nous avons parlé de plusieurs manières d'ajouter des objets au modèle de fluide, 
+    pour dégager le modèle le plus adéquat. En effet nous avions trouvé beaucoup de modèles 
+    possibles mais avions du mal à en choisir un. Avec les nouvelles pistes de 
+    réflexions et avec les conseils de notre tutrice nous allons pouvoir effectuer
+    ce choix plus facilement.\\
+    
+\textbf{Résolution des problèmes liés à la version GPU} :  \\
+    Dans le but de nous aider à comprendre les problèmes de notre version GPU, 
+    notre tutrice nous à fait rencontrer Cyril Crassin, un chercheur de l'INRIA qui
+    a beaucoup travaillé sur le GPU. Il a su répondre parfaitement à nos questions,
+    ce court dialogue a été extremement profitable. \\
+
+\subsubsection{Prochain rendez vous}
+Le prochain rendez-vous sera fixé dans la semaine par mail. Il s'agira sans doute de ventredi 4 Juin.\\
+Nous devrons présenter la version corrigée de notre modèle de fluide et un début d'implémentation de propagation
+sur objets.\\
+
+
+
+\subsection{Suivi Scheme n1 - 1er juin}
+\subsubsection{Qui?}
+Les personnes impliquées dans ce projet sont :
+\begin{itemize}
+\item L'équipe qui réalise le projet.
+\item Notre tutrice qui suit notre travail, et nous conseille.
+\item Les experts du domaine que nous avons intérogé pour des questions souvent techniques.
+\item L'encandrant de sheme.
+\end{itemize}
+
+\subsubsection{Quoi?}
+Dans ce projet nous devons mettre en avant un certain nombre de capacités :
+\begin{itemize}
+\item la recherche documentaire, en effet notre travail nécéssite de
+  connaitre ce qui ce fait de mieux, et de le comprendre.
+\item la compréhension du sujet, via les explications que nous faisont
+  des méthodes, ainsi que notre solution finale.
+\item une demonstration technique qui montre bien le résultat de notre
+  travail.
+\end{itemize}
+
+\subsubsection{Comment?}
+Notre démarche est simple, nous recherchons ce qui ce fait dans le
+domaine et selectionnons les méthodes qui nous semblent le plus
+interressantes. Bien sur notre travail ne doit pas consister a une
+recopie systèmatique des solutions mais plutôt d'adapter celles que
+nous avons choisis pour les intégrées dans notre solution.\\
+
+\subsubsection{Organisation}
+Pour organiser le travail, nous nous sommes d'abord mis d'acord sur le
+planning prévisionel. A partir de cette base nous nous sommes réparti
+le travail en fonction des préférences de chacun et aussi des
+impératif du projet. De plus nous avons aussi établis une charte de
+travail pour l'organisation journalière du travail.\\
+
+\subsubsection{Savoir faire technique}
+Pour la partie technique du projet, nous nous appuyons sur nos acquis
+de cours. Mais aussi sur les connaissances de chacun en fonction du
+domaine touché.\\ Cependant pour les point les plus pointus, ou qui
+nous sont trop obscures nous avons prévu de faire appel à des expert
+du domaine. Comme cela est déjà arrivé pour les calcul en GPU.
+
+\subsubsection{Communication}
+La communication au sein du groupe est simple, nous travaillons
+toujours ensemble et au même endroit. Cependant dans un but pratique,
+nous avons mis en place une archive git (gestionnaire de version pour
+nos fichiers informatiques) commune. De plus avant chaque recontre
+avec notre tutrice nous avons prévus des réunions pour convenir d'un
+ordre du jour. De même a la fin de ces rencontres nous fairons un
+bilan de l'entretient.
 
 %----------------------------------------------------------------------------------------------------------------------------------------
 %%%%%%%%%%%%%%%%%

@@ -23,8 +23,25 @@ ViewerGPU::~ViewerGPU(){
 void ViewerGPU::initScene(){
 	cout << "Initialisation de la Scene " << endl;
 	_fluid = new Fluid_GPU();
+	_fluid -> initialiserFluid();
+	cout << "Fin de l'initialisation de la Scene " << endl;
+	
 }
+
+
 void ViewerGPU::rendu(){
-	if ( _fluid!= 0 ) _fluid -> resolutionSpeedField();
-	//if ( _fluid!= 0 ) _fluid -> displaySpeedField();	
+
+
+	////////////////////////////////////////////////////////////////////////////
+	//// OBJETS
+	glPushMatrix();
+    glMatrixMode (GL_MODELVIEW);
+		
+	//_fluid->Afficher_Entite_Face_Camera(positionCamera, directionCamera);
+   	_fluid->Afficher_Entite();
+   	
+	glPopMatrix();
+	
+    
+	////////////////////////////////////////////////////////////////////////////
 }

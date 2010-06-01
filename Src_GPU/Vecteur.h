@@ -1,6 +1,17 @@
 #ifndef VECTEUR_H
 #define VECTEUR_H
 
+/*!*****************************************************************************
+*
+*       \file       :      Vecteur.h
+*
+*       \author     :      Benjamin Aupetit, Champeau Julien, Arnaud Emilien
+*       \date       :      31 mai 2010
+*       \version    :      0.1
+*
+*******************************************************************************/
+
+
 #include <cmath>
 #ifndef M_PI
 	#define M_PI 3.14159265358979323846f
@@ -44,6 +55,10 @@ public:
     
     friend Vecteur3D operator- (const Vecteur3D& v1, const Vecteur3D& v2);
     
+    friend Vecteur3D operator- (const Vecteur3D& v1);
+    
+    friend Vecteur3D operator+ (const Vecteur3D& v1);
+    
     Vecteur3D& operator+= (const Vecteur3D& v2);
     
         
@@ -57,11 +72,11 @@ public:
     
     void afficher();
     
-    void rorationAutourAxeX(float angleRad);
+    void rotationAutourAxeX(float angleRad);
     
-    void rorationAutourAxeY(float angleRad);
+    void rotationAutourAxeY(float angleRad);
     
-    void rorationAutourAxeZ(float angleRad);
+    void rotationAutourAxeZ(float angleRad);
     
     friend float norme(Vecteur3D& v);
 };

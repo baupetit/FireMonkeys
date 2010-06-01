@@ -36,7 +36,7 @@ Fluid::Fluid()
 	for( int i = 7 ; i < tailleGrille-6 ; ++i ){
 		for( int j = 7 ; j < tailleGrille-6 ; ++j ){
 			s->setDensity( i ,5, j, 10.0f );        
-			s->setTemperature( i ,5, j, (getTempVal(i,j,tailleGrille))/10);        
+			s->setTemperature( i ,5, j, (getTempVal(i,j,tailleGrille))/5);        
 		}
 	}
 */

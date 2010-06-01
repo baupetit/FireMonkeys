@@ -30,7 +30,7 @@ public :
     
     void start();
     
-    virtual void rendu();
+    virtual void rendu() = 0;;
     
 private :
     // Instance

@@ -1,6 +1,16 @@
 #ifndef FLUID_GPU_H
 #define FLUID_GPU_H
 
+/*!*****************************************************************************
+*
+*       \file       :      Fluid_GPU.h
+*
+*       \author     :      Benjamin Aupetit, Champeau Julien, Arnaud Emilien
+*       \date       :      31 mai 2010
+*       \version    :      0.1
+*
+*******************************************************************************/
+
 #include <GL/glew.h>
 #include <GL/glut.h>
 
@@ -9,40 +19,52 @@
 #define TAILLE_GRILLE 10
 
 #include "Vecteur.h"
+#include "BasicEntite.h"
+#include "Solver_GPU.h"
 
+class Fluid_GPU : public BasicEntite{
 
-class Fluid_GPU{
 private:
+    /** Solver associé */
+    Solver_GPU *s;
 
-    /** Identificateur du shader champs de vitesse */
-    GLuint _speed_program;  
-    /** Texture : Champs de viteses 
-		Besoin de 2 textures pour le ping-ponging avec les calculs
-    */
-    GLuint _speedField_1;
-	GLuint _speedField_2;
-    /** Position des variables ChampsDeVitesse prec et cour dans le Shader */
-    GLuint _speedFieldLocation_Prec;
-	/** FBOs pour les textures que l'on utilise pour le calcul de champ de vitesse */
-	GLuint _FBO_speed_1;
-	GLuint _FBO_speed_2;
-
-	GLuint _renderbuffer_1;
-	GLuint _renderbuffer_2;
-    
+    /** Taille de la grille ( initialisée à TAILLE_GRILLE ) */
+    int _grille_width;
+    int _grille_height;
+    int _grille_depth;
 
 public:
+    /** Constructeur */
     Fluid_GPU();
+    
+    /** Destructeur */
     ~Fluid_GPU();
     
-    /** Initialisation du champs de vitesse */
-    void initialiserSpeedField();
+    /** Initialisation de la résolution */
+    void initialiserFluid();
+    
     /** Résoudre le champs de vitesse */
-    void resolutionSpeedField();
-    /** Afficher le champs de vitesse */
-    void displaySpeedField();
-    /** Afficher une texture 3D */
-    void display_3DTexture(int details, int textureid);
+    void resolutionFluid();
+    
+    /** Affiche le modèle */
+    void Afficher();
+    
+    /** Affiche le modèle face à la camera*/
+    void Afficher_Face_Camera(Vecteur3D& positionCamera, Vecteur3D& orientationCamera);
+    
+    /** Afficher les flammes*/
+    void afficherFlamme();
+    
+    /** Afficher la fummée*/
+    void afficherFumee();
+        
+    /** Dessine des plans dans la texture3D */
+	void dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans);
+	                                
+	/** Dessine des plans dans la texture3D face a la camera*/
+	void dessinerPlansDansTexture3DFaceALaCamera(GLuint id_texture, int nb_plans,
+	                     Vecteur3D& positionCamera, Vecteur3D& directionCamera);
+	
 };
 
 #endif
