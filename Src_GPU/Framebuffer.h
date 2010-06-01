@@ -55,7 +55,10 @@ public:
     void unbind_Buffer();
     
     /** Retourne la texture associee*/
-    GLuint get_id_texture();
+    GLuint get_id_texture() const;
+    
+    /** Retourne l'id du buffer*/
+    GLuint get_id_buffer() const;
     
     /** Initialise la texture associee avec le tableau donné */
     void initialiser_texture_buf(const float *tab, 

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=latex 2010.5.21)  30 MAY 2010 23:31
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=latex 2010.5.21)  1 JUN 2010 09:47
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -371,63 +371,78 @@ Setrah^^Redres est tr^^Res int^^Seressante.
  []
 
 [6]
-Underfull \hbox (badness 10000) in paragraph at lines 266--276
+Underfull \hbox (badness 10000) in paragraph at lines 266--277
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 278--303
+Underfull \hbox (badness 10000) in paragraph at lines 279--304
 
  []
 
 [7]
-Overfull \hbox (6.82114pt too wide) in paragraph at lines 305--323
+Overfull \hbox (6.82114pt too wide) in paragraph at lines 306--324
 []\OT1/cmr/bx/n/10 Auteur(s) \OT1/cmr/m/n/10 : Al-fred R. Fuller, Hari Kr-ish-n
 an, Karim Mahrous, Bernd Hamann,
  []
 
-
-Overfull \hbox (0.94696pt too wide) in paragraph at lines 326--335
+[8]
+Overfull \hbox (0.94696pt too wide) in paragraph at lines 327--336
 \OT1/cmr/m/n/10 phases, et int^^Seraction en-tre les solides et les liq-uides e
 t gas. \OT1/cmr/bx/n/10 Point(s) n^^Segatif(s) \OT1/cmr/m/n/10 : 
  []
 
-[8]
-Underfull \hbox (badness 10000) in paragraph at lines 341--357
+
+Underfull \hbox (badness 10000) in paragraph at lines 342--358
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 360--366
+Underfull \hbox (badness 10000) in paragraph at lines 361--367
 
  []
 
 [9]
-Underfull \hbox (badness 10000) in paragraph at lines 369--381
+Underfull \hbox (badness 10000) in paragraph at lines 370--382
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 387--400
+Underfull \hbox (badness 10000) in paragraph at lines 388--401
 
  []
 
 [10]
-Underfull \hbox (badness 10000) in paragraph at lines 403--420
+Underfull \hbox (badness 10000) in paragraph at lines 404--421
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 428--435
+Underfull \hbox (badness 10000) in paragraph at lines 429--436
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 438--446
+Underfull \hbox (badness 10000) in paragraph at lines 439--447
 
  []
 
-[11] [12] (./FireMonkeys.aux) ) 
+[11]
+Underfull \hbox (badness 10000) in paragraph at lines 468--472
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 473--479
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 480--484
+
+ []
+
+[12] (./FireMonkeys.aux) ) 
 Here is how much of TeX's memory you used:
  1533 strings out of 495062
  18936 string characters out of 1182644
@@ -437,4 +452,4 @@ Here is how much of TeX's memory you used:
  28 hyphenation exceptions out of 8191
  25i,4n,24p,661b,211s stack positions out of 5000i,500n,10000p,200000b,50000s
 
-Output written on FireMonkeys.dvi (12 pages, 38500 bytes).
+Output written on FireMonkeys.dvi (12 pages, 39852 bytes).

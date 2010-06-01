@@ -1,56 +1,31 @@
 #include "Fluid_GPU.h"
 
 #include <iostream>
-
 using namespace std;
 
-
-#define ID(i,j,k) i+j*TAILLE_GRILLE+k*TAILLE_GRILLE*TAILLE_GRILLE
 
 
 Fluid_GPU::Fluid_GPU(){
     // Taille de la grille
-    taille_grille = TAILLE_GRILLE;
-    // Shader d'advection
-    advection = new Shader("./Shaders/advection.vert","./Shaders/advection.frag");
-    // Frame buffer
-    buffer = new Framebuffer();
+    _grille_width  = TAILLE_GRILLE;
+    _grille_height = TAILLE_GRILLE;
+    _grille_depth  = TAILLE_GRILLE;
     
+    s = NULL;
 }
 
 Fluid_GPU::~Fluid_GPU(){
-    delete advection;
-    delete buffer;
 }
 
 void Fluid_GPU::initialiserFluid(){
+    cout << "Nouveau FluideGPU" << endl;
+    
+        
+    // Solver
+    delete s;
+    s = new Solver_GPU(_grille_width, _grille_height, _grille_depth);
 
-    // Creation du champs de vitesse vide
-    Vecteur3D *texture = new Vecteur3D[TAILLE_GRILLE*TAILLE_GRILLE*TAILLE_GRILLE];
-    for (int k = 0; k < taille_grille; k++){
-        for (int j = 0; j < taille_grille; j++){
-            for (int i = 0; i < taille_grille; i++){    
-                texture[ID(i,j,k)].x = 0.0f;
-                texture[ID(i,j,k)].y = 0.0f;
-                texture[ID(i,j,k)].z = 0.0f;
-            }
-        }
-    } 
-    
-    
-    // Quelques valeurs initiales
-    for (int k = 0; k < 1; k++){
-        for (int j = 0; j < taille_grille; j++){
-            for (int i = 0; i < taille_grille ; i++){    
-                texture[ID(i,j,k)].x = 0.0f;
-                texture[ID(i,j,k)].y = 1.0f;
-                texture[ID(i,j,k)].z = 0.0f;
-            }
-        }
-    } 
-    
-    
-    
+        
     /*
 
 	//FBO#1 pour la texture speedfield1
@@ -100,12 +75,15 @@ void Fluid_GPU::resolutionFluid(){
 }
 
 void Fluid_GPU::Afficher(){
+    afficherFlamme();
 }
 
 void Fluid_GPU::Afficher_Face_Camera(Vecteur3D& positionCamera, Vecteur3D& orientationCamera){
 }
 
 void Fluid_GPU::afficherFlamme(){
+    // Feu
+    dessinerPlansDansTexture3D(s->getDensities(),5);
 }
 
 
@@ -339,201 +317,3 @@ void Fluid_GPU::dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans){
 
 
 
-
-
-/*
-void Fluid_GPU::resolutionSpeedField(){
-	//on lie la texture courante avec la variable uniforme (texturespeedfield) du shader
-	_speedFieldLocation_Prec = glGetUniformLocation ( _speed_program, "TextureSpeedField_Prec");
-    glUniform1i(_speedFieldLocation_Prec,_speedField_1);
-
-	//on se place dans le FBO 2 on va donc dessiner dans la texture2
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _FBO_speed_2);
-	//glClearColor( 1.0,0.0,0.0,0.0);
-	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-	//rendu du calcul	
-	glUseProgram(_speed_program);
-	//la texture est dessiné dans le FBO 2
-    displaySpeedField(); 
-    glUseProgram(0);
-	// generation texture
-	glGenerateMipmap( GL_TEXTURE_CUBE_MAP );
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); 
-
-	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-
-	int details = 10;
-	glEnable(GL_TEXTURE_3D);
-	glActiveTexture(_speedField_2);
-    glBindTexture(GL_TEXTURE_3D,_speedField_2);
-    
-
-    GLfloat verts[4][3] = { { 0.0, 0.0, 0.5}, {0.0, 1.0, 0.5}, {1.0, 1.0, 0.5}, {1.0, 0.0, 0.5} };
-
-	glBegin(GL_TRIANGLES);	
-		glTexCoord3d(verts[0][0], verts[0][1], verts[0][2]);
-		glVertex3d(verts[0][0], verts[0][1], verts[0][2]);
-		
-		glTexCoord3d(verts[1][0], verts[1][1], verts[1][2]);
-		glVertex3d(verts[1][0], verts[1][1], verts[1][2]);
-		
-		glTexCoord3d(verts[2][0], verts[2][1], verts[2][2]);
-		glVertex3d(verts[2][0], verts[2][1], verts[2][2]);
-		
-		glTexCoord3d(verts[2][0], verts[2][1], verts[2][2]);
-		glVertex3d(verts[2][0], verts[2][1], verts[2][2]);
-		
-		glTexCoord3d(verts[3][0], verts[3][1], verts[3][2]);
-		glVertex3d(verts[3][0], verts[3][1], verts[3][2]);
-		
-		glTexCoord3d(verts[0][0], verts[0][1], verts[0][2]);
-		glVertex3d(verts[0][0], verts[0][1], verts[0][2]);		
-	glEnd();
-	
-	for (int i = 1; i < details/2; i++){
-	glBegin(GL_TRIANGLES);	
-		glTexCoord3d(verts[0][0], verts[0][1], verts[0][2] + (float)i/details);
-		glVertex3d(verts[0][0], verts[0][1], verts[0][2]+ (float)i/details);
-		
-		glTexCoord3d(verts[1][0], verts[1][1], verts[1][2] + (float)i/details);
-		glVertex3d(verts[1][0], verts[1][1], verts[1][2] + (float)i/details);
-		
-		glTexCoord3d(verts[2][0], verts[2][1], verts[2][2] + (float)i/details);
-		glVertex3d(verts[2][0], verts[2][1], verts[2][2] + (float)i/details);
-		
-		glTexCoord3d(verts[2][0], verts[2][1], verts[2][2] + (float)i/details);
-		glVertex3d(verts[2][0], verts[2][1], verts[2][2] + (float)i/details);
-		
-		glTexCoord3d(verts[3][0], verts[3][1], verts[3][2] + (float)i/details);
-		glVertex3d(verts[3][0], verts[3][1], verts[3][2] + (float)i/details);
-		
-		glTexCoord3d(verts[0][0], verts[0][1], verts[0][2] + (float)i/details);
-		glVertex3d(verts[0][0], verts[0][1], verts[0][2] + (float)i/details);	
-	glEnd();
-	}
-	
-	
-	for (int i = 1; i < details/2; i++){
-	glBegin(GL_TRIANGLES);	
-		glTexCoord3d(verts[0][0], verts[0][1], verts[0][2] - (float)i/details);
-		glVertex3d(verts[0][0], verts[0][1], verts[0][2]- (float)i/details);
-		
-		glTexCoord3d(verts[1][0], verts[1][1], verts[1][2] - (float)i/details);
-		glVertex3d(verts[1][0], verts[1][1], verts[1][2] - (float)i/details);
-		
-		glTexCoord3d(verts[2][0], verts[2][1], verts[2][2] - (float)i/details);
-		glVertex3d(verts[2][0], verts[2][1], verts[2][2] - (float)i/details);
-		
-		glTexCoord3d(verts[2][0], verts[2][1], verts[2][2] - (float)i/details);
-		glVertex3d(verts[2][0], verts[2][1], verts[2][2] - (float)i/details);
-		
-		glTexCoord3d(verts[3][0], verts[3][1], verts[3][2] - (float)i/details);
-		glVertex3d(verts[3][0], verts[3][1], verts[3][2] - (float)i/details);
-		
-		glTexCoord3d(verts[0][0], verts[0][1], verts[0][2] - (float)i/details);
-		glVertex3d(verts[0][0], verts[0][1], verts[0][2] - (float)i/details);	
-	glEnd();
-	}
-
-	glDisable(GL_TEXTURE_3D);
-
-    
-
-	
-
-
-}
-
-
-void Fluid_GPU::displaySpeedField(){
-
-    display_3DTexture(20, _speedField_2);
-    
-}
-
-void Fluid_GPU::display_3DTexture(int details, int textureid){
-
-
-    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-    glEnable( GL_BLEND );
-    glAlphaFunc(GL_GREATER,0.0f);
-    glEnable(GL_ALPHA_TEST);
-    
-	glEnable(GL_TEXTURE_3D);
-    glActiveTexture(textureid);
-    glBindTexture(GL_TEXTURE_3D,textureid);
-
-    GLfloat verts[4][3] = { { 0.0, 0.0, 0.5}, {0.0, 1.0, 0.5}, {1.0, 1.0, 0.5}, {1.0, 0.0, 0.5} };
-
-	glBegin(GL_TRIANGLES);	
-		glTexCoord3d(verts[0][0], verts[0][1], verts[0][2]);
-		glVertex3d(verts[0][0], verts[0][1], verts[0][2]);
-		
-		glTexCoord3d(verts[1][0], verts[1][1], verts[1][2]);
-		glVertex3d(verts[1][0], verts[1][1], verts[1][2]);
-		
-		glTexCoord3d(verts[2][0], verts[2][1], verts[2][2]);
-		glVertex3d(verts[2][0], verts[2][1], verts[2][2]);
-		
-		glTexCoord3d(verts[2][0], verts[2][1], verts[2][2]);
-		glVertex3d(verts[2][0], verts[2][1], verts[2][2]);
-		
-		glTexCoord3d(verts[3][0], verts[3][1], verts[3][2]);
-		glVertex3d(verts[3][0], verts[3][1], verts[3][2]);
-		
-		glTexCoord3d(verts[0][0], verts[0][1], verts[0][2]);
-		glVertex3d(verts[0][0], verts[0][1], verts[0][2]);		
-	glEnd();
-	
-	for (int i = 1; i < details/2; i++){
-	glBegin(GL_TRIANGLES);	
-		glTexCoord3d(verts[0][0], verts[0][1], verts[0][2] + (float)i/details);
-		glVertex3d(verts[0][0], verts[0][1], verts[0][2]+ (float)i/details);
-		
-		glTexCoord3d(verts[1][0], verts[1][1], verts[1][2] + (float)i/details);
-		glVertex3d(verts[1][0], verts[1][1], verts[1][2] + (float)i/details);
-		
-		glTexCoord3d(verts[2][0], verts[2][1], verts[2][2] + (float)i/details);
-		glVertex3d(verts[2][0], verts[2][1], verts[2][2] + (float)i/details);
-		
-		glTexCoord3d(verts[2][0], verts[2][1], verts[2][2] + (float)i/details);
-		glVertex3d(verts[2][0], verts[2][1], verts[2][2] + (float)i/details);
-		
-		glTexCoord3d(verts[3][0], verts[3][1], verts[3][2] + (float)i/details);
-		glVertex3d(verts[3][0], verts[3][1], verts[3][2] + (float)i/details);
-		
-		glTexCoord3d(verts[0][0], verts[0][1], verts[0][2] + (float)i/details);
-		glVertex3d(verts[0][0], verts[0][1], verts[0][2] + (float)i/details);	
-	glEnd();
-	}
-	
-	
-	for (int i = 1; i < details/2; i++){
-	glBegin(GL_TRIANGLES);	
-		glTexCoord3d(verts[0][0], verts[0][1], verts[0][2] - (float)i/details);
-		glVertex3d(verts[0][0], verts[0][1], verts[0][2]- (float)i/details);
-		
-		glTexCoord3d(verts[1][0], verts[1][1], verts[1][2] - (float)i/details);
-		glVertex3d(verts[1][0], verts[1][1], verts[1][2] - (float)i/details);
-		
-		glTexCoord3d(verts[2][0], verts[2][1], verts[2][2] - (float)i/details);
-		glVertex3d(verts[2][0], verts[2][1], verts[2][2] - (float)i/details);
-		
-		glTexCoord3d(verts[2][0], verts[2][1], verts[2][2] - (float)i/details);
-		glVertex3d(verts[2][0], verts[2][1], verts[2][2] - (float)i/details);
-		
-		glTexCoord3d(verts[3][0], verts[3][1], verts[3][2] - (float)i/details);
-		glVertex3d(verts[3][0], verts[3][1], verts[3][2] - (float)i/details);
-		
-		glTexCoord3d(verts[0][0], verts[0][1], verts[0][2] - (float)i/details);
-		glVertex3d(verts[0][0], verts[0][1], verts[0][2] - (float)i/details);	
-	glEnd();
-	}
-
-	glDisable(GL_TEXTURE_3D);
-    glDisable( GL_BLEND );
-    glBindTexture(GL_TEXTURE_3D,0);
-
-}
-
-*/
