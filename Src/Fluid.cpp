@@ -118,7 +118,7 @@ void Fluid::Afficher_Face_Camera(Vecteur3D& positionCamera, Vecteur3D& direction
     Mise_A_Jour();
 	renduFumeeGPUFaceCamera(positionCamera, directionCamera);
     renduFlammeGPUFaceCamera(positionCamera, directionCamera);
-	//renduFlammeETFumeeGPUFaceCamera(positionCamera, directionCamera);
+	renduFlammeETFumeeGPUFaceCamera(positionCamera, directionCamera);
 }    
     
 void Fluid::Afficher(){
@@ -250,20 +250,20 @@ void Fluid::renduFlammeETFumeeGPUFaceCamera(Vecteur3D& positionCamera, Vecteur3D
 	_fire_id_multitex = glGetUniformLocation ( _multitex_program, "fire");
    //	glUniform1i(_fire_id_multitex, _id_texture_flamme);
 	
-	glClear(GL_COLOR_BUFFER_BIT);
+
 	
 	glUseProgram(_multitex_program);
 	glUniform1i(_fire_id_multitex, _id_texture_flamme);
 	glUniform1i(_fumee_id_multitex, _id_texture_fumee);
 
 	glBegin(GL_QUADS);
-		glTexCoord2d(0,0);						// Begin Drawing Quads
+								// Begin Drawing Quads
 		glVertex2f(0,0);
-		glTexCoord2d(0,1);				// First Vertex		(   0,   0 )
+		//glTexCoord2d(0,1);				// First Vertex		(   0,   0 )
 		glVertex2f(0,1);
-		glTexCoord2d(1,1);				// Second Vertex	(   0, 480 )
+		//glTexCoord2d(1,1);				// Second Vertex	(   0, 480 )
 		glVertex2f(1,1);				// Third Vertex		( 640, 480 )
-		glTexCoord2d(1, 0);
+		//glTexCoord2d(1, 0);
 		glVertex2f(1,0);				// Fourth Vertex	( 640,   0 )
 	glEnd();
 
