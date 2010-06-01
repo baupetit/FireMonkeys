@@ -24,7 +24,7 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
     // Frame buffer
     buffer_feu_1 = new Framebuffer();
     buffer_feu_2 = new Framebuffer();
-    buffer_feu_courant = 1;
+    buffer_courant = 1;
     
     	
 	
@@ -114,7 +114,8 @@ void Solver_GPU::setTemperature( int i, int j, int k, float temp ){
 void Solver_GPU::setVelocity( int i, int j , int k , float u, float v, float w ){
 }
 
-void addSource ( int N, float *x , float *s , float dt ){
+void addSource ( int w, int h, int d, Framebuffer& forign, Framebuffer& fdest, float dt ){
+
 }
 
 void addSourceCorrection ( int N, float *x , float *f, float *T, float *s , float sub, float fireToSmoke, float dt ){
@@ -133,7 +134,37 @@ void setBoundariesB0 ( int N, float *x ) {
 void linearSolve ( int N, int b, float * x, float * x0, float a, float c ){
 }
 
-void diffuse ( int N, int b, float * x, float * x0, float diff, float dt ){
+void Solver_GPU::diffuse ( Shader& calcul_shader, 
+                           string nom_texture, 
+                           Framebuffer originBuffer,
+                           Framebuffer destBuffer,
+                           float diff, 
+                           float dt ){
+                           /*
+    GLuint	location = glGetUniformLocation ( calcul_shader.getProgramId(), nom_texture.c_str());
+    glUniform1i(location,originBuffer.get_id_texture());
+        
+    // Positionnement des buffers 
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, destBuffer.get_id_buffer());
+  
+    // Calcul
+    int layer_courant = 0;
+    while ( _grille_depth - layer_courant > 8){        
+        // On attache les layers
+        originBuffer.attacher_layers_de_la_texture(layer_courant,8);
+        destBuffer.attacher_layers_de_la_texture(layer_courant,8);
+        
+        // Calcul
+        calcul_shader.Bind_Program();
+        dessinerCarre();
+        calcul_shader.Unbind_Program();
+        
+        
+        // update
+        layer_courant+=8;                
+        
+    } 
+    */
 }
 
 void diffuseFireAndSmoke ( int N, int b1, int b2, int b3,
@@ -168,36 +199,19 @@ void vorticity_confinement( int N, float *u, float *v, float *w,
 
 void Solver_GPU::densitiesStep ( float diff, float dt )
 {	
-    ////////////////////////////////////////////////////////////////////////////
-    // Traitement du feu
-    ////////////////////////////////////////////////////////////////////////////
- 
-    // liaison de la texture du buffer avec le shader associé
-    GLuint	location = glGetUniformLocation ( shader_feu->getProgramId(), "feu");
-    glUniform1i(location,getBufferFeuCourant().get_id_buffer());
-        
-    // Positionnement des buffers 
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, getBufferFeuDestination().get_id_buffer());
-  
-    // Calcul
-    buffer_feu_layer_courant = 0;
-    while ( _grille_depth - buffer_feu_layer_courant > 8){        
-        // On attache les layers
-        getBufferFeuCourant().attacher_layers_de_la_texture(buffer_feu_layer_courant,8);
-        getBufferFeuDestination().attacher_layers_de_la_texture(buffer_feu_layer_courant,8);
-        
-        // Calcul
-        shader_feu -> Bind_Program();
-        dessinerCarre();
-        shader_feu -> Unbind_Program();
-        
-        
-        // update
-        buffer_feu_layer_courant+=8;        
-        
-        
-    } 
-    //attacher_layers_de_la_texture(buffer_feu_layer_courant,_grille_depth - buffer_feu_layer_courant);
+    
+    // feu
+    cout << "shader feu " << shader_feu << endl;
+    
+    cout << "plip \n";
+    diffuse (  *shader_feu, 
+               (string)"feu", 
+               getBufferFeuCourant(), 
+               getBufferFeuDestination(),
+               diff, 
+               dt );
+    cout << "plop \n";
+    swapBufferCourant(); 
     
 }
 
@@ -226,14 +240,8 @@ void Solver_GPU::velocitiesStepWithTemp ( float visc, float buoy, float vc_eps, 
 
 
 
-
-
-
-
-
-
     Framebuffer& Solver_GPU::getBufferFeuDestination() const {
-        if (buffer_feu_courant == 2)
+        if (buffer_courant == 2)
             return *buffer_feu_1;
         else
             return *buffer_feu_2;
@@ -242,18 +250,18 @@ void Solver_GPU::velocitiesStepWithTemp ( float visc, float buoy, float vc_eps, 
 
 
     Framebuffer& Solver_GPU::getBufferFeuCourant() const {
-        if (buffer_feu_courant == 1)
+        if (buffer_courant == 1)
             return *buffer_feu_1;
         else
             return *buffer_feu_2;
     }
     
     
-    void Solver_GPU::swapBufferFeuCourant(){
-        if (buffer_feu_courant == 1)
-            buffer_feu_courant = 2;
+    void Solver_GPU::swapBufferCourant(){
+        if (buffer_courant == 1)
+            buffer_courant = 2;
         else
-            buffer_feu_courant = 1;
+            buffer_courant = 1;
     }
     
     void Solver_GPU::dessinerCarre(){

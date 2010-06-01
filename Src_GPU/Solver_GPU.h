@@ -33,8 +33,7 @@ private :
     /** Gestionnaire de buffer */
     Framebuffer *buffer_feu_1;
     Framebuffer *buffer_feu_2;
-    int buffer_feu_courant;
-    int buffer_feu_layer_courant;
+    int buffer_courant;
     
     /** Tailles*/
     int _grille_width;
@@ -133,8 +132,17 @@ public :
 
     Framebuffer& getBufferFeuCourant () const ;
     Framebuffer& getBufferFeuDestination() const ;
-    void swapBufferFeuCourant();
+    void swapBufferCourant();
     void dessinerCarre();
+    
+    
+    
+    void diffuse ( Shader& calcul_shader, 
+               string nom_texture, 
+               Framebuffer originBuffer,
+               Framebuffer destBuffer,
+               float diff, 
+               float dt );
     
 };
 

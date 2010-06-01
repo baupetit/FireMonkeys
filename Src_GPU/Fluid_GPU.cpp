@@ -72,9 +72,14 @@ void Fluid_GPU::initialiserFluid(){
 
 
 void Fluid_GPU::resolutionFluid(){
+    
+    s->densitiesStep(0.0, 0.1);
 }
 
 void Fluid_GPU::Afficher(){
+    // MAJ
+    resolutionFluid();
+    // Affichage
     afficherFlamme();
 }
 
