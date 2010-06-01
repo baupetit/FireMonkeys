@@ -37,5 +37,9 @@ public:
     /** Déchager le shader */
     void Unbind_Program();
     
+    /** Renvoie d'id du program */
+    GLuint getProgramId() const{
+        return program;
+    }    
 };
 #endif

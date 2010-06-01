@@ -20,21 +20,18 @@
 
 #include "Vecteur.h"
 #include "BasicEntite.h"
-#include "Shader.h" 
-#include "Framebuffer.h"
+#include "Solver_GPU.h"
 
 class Fluid_GPU : public BasicEntite{
 
 private:
+    /** Solver associé */
+    Solver_GPU *s;
 
-    /** Identificateur du shader qui calcule l'advection */
-    Shader *advection;
-    
-    /** Gestionnaire de buffer */
-    Framebuffer *buffer;
-    
     /** Taille de la grille ( initialisée à TAILLE_GRILLE ) */
-    int taille_grille;
+    int _grille_width;
+    int _grille_height;
+    int _grille_depth;
 
 public:
     /** Constructeur */

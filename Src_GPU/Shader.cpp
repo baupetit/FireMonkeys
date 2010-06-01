@@ -4,6 +4,7 @@
 
 Shader::Shader(string fichier_vert_shader, string fichier_frag_shader){
 
+
     cout << "Chargement du Shader program : ";
     cout << fichier_vert_shader;
     cout << " , ";
@@ -12,6 +13,7 @@ Shader::Shader(string fichier_vert_shader, string fichier_frag_shader){
     
     // Chargement du programme
     program = LoadProgram(fichier_vert_shader.c_str(), fichier_frag_shader.c_str());
+    cout << "Nouveau shader, id : " << program << endl;
     
     cout << "Shader program chargé" << endl;
     

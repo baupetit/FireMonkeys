@@ -42,7 +42,7 @@ public:
                          const int depth);
     
     /** Renvoie l'id de la texture */
-    GLuint get_texture_id(){
+    GLuint get_texture_id() const {
         return texture_id;
     }
 };
