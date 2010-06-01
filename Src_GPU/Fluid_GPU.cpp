@@ -274,6 +274,7 @@ void Fluid_GPU::dessinerPlansDansTexture3DFaceALaCamera(GLuint id_texture,
 
 void Fluid_GPU::dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans){
     
+    glDisable(GL_LIGHTING);
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     glEnable( GL_BLEND );
     glAlphaFunc(GL_GREATER,0.0f);
@@ -286,7 +287,7 @@ void Fluid_GPU::dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans){
 
 	glBegin(GL_TRIANGLES);	
 	
-	for (int i = 0; i <= nb_plans; i++){
+	for (int i = 0; i < nb_plans; i++){
 		glTexCoord3d(verts[0][0], verts[0][1], verts[0][2] + (float)i/nb_plans);
 		glVertex3d(verts[0][0], verts[0][1], verts[0][2]+ (float)i/nb_plans);
 		

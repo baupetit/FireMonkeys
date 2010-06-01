@@ -34,13 +34,13 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
     for (int k = 0; k < _grille_width; k++){
         for (int j = 0; j < _grille_height; j++){
             for (int i = 0; i < _grille_depth; i++){    
-                *ptr = 0.0f;
-                ptr++;
-                *ptr = 0.0f;
-                ptr++;
-                *ptr = 0.0f;
+                *ptr = 1.0f;
                 ptr++;
                 *ptr = 1.0f;
+                ptr++;
+                *ptr = 0.0f;
+                ptr++;
+                *ptr = 0.5f;
                 ptr++;
             }
         }
@@ -48,16 +48,17 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
     
     
     // Quelques valeurs initiales
-    for (int k = 0; k < 1; k++){
+    ptr = texture;
+    for (int k = 0; k < _grille_width/4; k++){
         for (int j = 0; j < _grille_height; j++){
             for (int i = 0; i < _grille_depth ; i++){   
                 *ptr = 1.0f;
                 ptr++;
                 *ptr = 0.0f;
                 ptr++;
-                *ptr = 0.0f;
-                ptr++;
                 *ptr = 1.0f;
+                ptr++;
+                *ptr = 0.5f;
                 ptr++;
             }
         }
@@ -65,6 +66,7 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
     
     // Association du tableau avec le buffer
     buffer_feu_1->initialiser_texture_buf(texture, _grille_width, _grille_height, _grille_depth);      
+    buffer_feu_2->initialiser_texture_buf(texture, _grille_width, _grille_height, _grille_depth);      
     
     
     

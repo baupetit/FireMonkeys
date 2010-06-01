@@ -180,7 +180,6 @@ void Framebuffer::initialiser_texture_buf(const float *tab,
     _grille_height = grille_height;
     _grille_depth  = grille_depth;
     
-    cout << "plou" << endl;   
+    
     _texture_associee->charger_matrice(tab, grille_width, grille_height, grille_depth);
-    cout << "plou" << endl;
 }
