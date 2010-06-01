@@ -86,7 +86,7 @@ void Viewer::start(){
 void Viewer::_initCamera(){
 	cout << "Initialisation de la camera " << endl;
 	_cameraAngle = M_PI*0.75f;
-	_distToOrigin = 5.0f;
+	_distToOrigin = 20.0f;
 	_cameraHeight = 0.5f;
 }
 
@@ -99,7 +99,7 @@ void Viewer::_initDepth(){
 
 void Viewer::_initRendering(){
 	cout << "Initialisation du rendu " << endl;
-	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
+	glClearColor(0.5f, 0.5f, 0.5f, 0.8f);
 	glShadeModel(GL_SMOOTH);
 	glPolygonMode(GL_FRONT, GL_FILL);
 	glLineWidth(1.0f);
@@ -123,7 +123,7 @@ void Viewer::_initLighting(){
 	
 void Viewer::_displayFunc(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	glClearColor( 1.0,1.0,1.0,0.0);
+	glClearColor( 0.5,0.5,0.5,0.8);
 	_instance->rendu();
 	glFlush();
 	glutSwapBuffers();
