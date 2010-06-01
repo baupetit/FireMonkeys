@@ -5,6 +5,8 @@
 #include <cstdlib>
 
 
+#include "loadprogram.h"
+
 #include <cmath>
 #ifndef M_PI
 	#define M_PI 3.14159265358979323846f
@@ -24,48 +26,99 @@ static inline float getTempVal( int i, int j, int T ){
 
 Fluid::Fluid()
 {
-        tailleGrille = 25;
-        
+        tailleGrille = 40;
         s = new Solver(tailleGrille);
-
+	
 	
 	tempIndex = new TempToRGB(256,50);
 	
-
+/*
 	for( int i = 7 ; i < tailleGrille-6 ; ++i ){
 		for( int j = 7 ; j < tailleGrille-6 ; ++j ){
 			s->setDensity( i ,5, j, 10.0f );        
 			s->setTemperature( i ,5, j, (getTempVal(i,j,tailleGrille))/5);        
 		}
 	}
+*/
 
-	//s->setDensity( 3*tailleGrille /4 ,5, 3*tailleGrille/4, 1 );        
-	//s->setTemperature( 3*tailleGrille /4 ,5, 3*tailleGrille/4, 50 );        
+	int mid = tailleGrille/2;
+	s->setDensity( mid ,5, mid, 100.0f );   
+	s->setDensity( mid ,6, mid, 100.0f );   
+	s->setDensity( mid ,4, mid, 100.0f );   
+	s->setDensity( mid+1 ,5, mid, 100.0f );   
+	s->setDensity( mid-1 ,5, mid, 100.0f );   
+	s->setDensity( mid ,5, mid+1, 100.0f );   
+	s->setDensity( mid ,5, mid-1, 100.0f );   
+	s->setTemperature( mid ,5, mid, 10*60*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid ,6, mid, 10*42*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid ,6, mid, 10*25*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid+1 ,5, mid, 10*24*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid-1 ,5, mid, 10*38*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid ,5, mid+1, 10*12*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid ,5, mid-1, 10*55*((random()+1)/(float)RAND_MAX)*4/1);   
 
-        initialiserRenduGPU();
-        
-        
-        position.x = 0;
-        position.y = 0.5;
-        position.z = 0;
-        
-        echelle.x = 10;
-        echelle.y = 10;
-        echelle.z = 10;
+	
+
+	for( int i = 7 ; i < tailleGrille-6 ; ++i ){
+		for( int j = 7 ; j < tailleGrille-6 ; ++j ){
+			s->setVelocity(3,i,j, 0.20,0.0,0.0);
+		}
+	}      
+
+    initialiserRenduGPU();
+    _multitex_program = LoadProgram("./Shaders/multitex.vert","./Shaders/multitex.frag");
+    cout << "Fluid_Multitex : Shader chargé  " << _multitex_program << endl;
+    
+	glGenTextures(1,&_id_texture_fumee);
+    glBindTexture(GL_TEXTURE_3D, _id_texture_fumee);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_REPEAT);
+    glTexImage3D(GL_TEXTURE_3D,0,GL_RGB,
+                 tailleGrille,tailleGrille,tailleGrille,
+                 0, GL_RGB, GL_FLOAT, NULL);
+	cout << "Texture fumee cree:  " << _id_texture_fumee << endl;	
+
+
+	glGenTextures(1,&_id_texture_flamme);
+    glBindTexture(GL_TEXTURE_3D, _id_texture_flamme);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_REPEAT);
+    glTexImage3D(GL_TEXTURE_3D,0,GL_RGB,
+                 tailleGrille,tailleGrille,tailleGrille,
+                 0, GL_RGB, GL_FLOAT, NULL);
+	cout << "Texture flamme cree: " << _id_texture_flamme << endl;	
+
+
+    position.x = 0;
+    position.y = 0.5;
+    position.z = 0;
+    
+    echelle.x = 10;
+    echelle.y = 10;
+    echelle.z = 10;
 }
 
 Fluid::~Fluid(){
 	delete s;
-	delete matriceRGBA;
+	delete matriceRGBA_fire;
+	delete matriceRGBA_smoke;
 }
+
 
 
 
 void Fluid::Afficher_Face_Camera(Vecteur3D& positionCamera, Vecteur3D& directionCamera ){
 
     Mise_A_Jour();
+	renduFumeeGPUFaceCamera(positionCamera, directionCamera);
     renduFlammeGPUFaceCamera(positionCamera, directionCamera);
-    renduFumeeGPUFaceCamera(positionCamera, directionCamera);
+	renduFlammeETFumeeGPUFaceCamera(positionCamera, directionCamera);
 }    
     
 void Fluid::Afficher(){
@@ -146,7 +199,7 @@ void Fluid::Afficher(){
 	
 void Fluid::renduFumeeGPU(){
     majMatriceFumeeEnMatriceRGBA();
-    matriceRGBACarreeToTexture3D(matriceRGBA, tailleGrille + 2 , _id_texture_fumee);
+    matriceRGBACarreeToTexture3D(matriceRGBA_smoke, tailleGrille + 2 , _id_texture_fumee);
     dessinerPlansDansTexture3D(_id_texture_fumee, 10);
 }
 
@@ -154,7 +207,7 @@ void Fluid::renduFumeeGPU(){
 
 void Fluid::renduFlammeGPU(){
     majMatriceFlammeEnMatriceRGBA();
-    matriceRGBACarreeToTexture3D(matriceRGBA, tailleGrille + 2 , _id_texture_flamme);
+    matriceRGBACarreeToTexture3D(matriceRGBA_fire, tailleGrille + 2 , _id_texture_flamme);
     dessinerPlansDansTexture3D(_id_texture_flamme, 30);
 }
 
@@ -162,101 +215,130 @@ void Fluid::renduFlammeGPU(){
 	
 void Fluid::renduFumeeGPUFaceCamera(Vecteur3D& positionCamera, Vecteur3D& directionCamera ){
     majMatriceFumeeEnMatriceRGBA();
-    matriceRGBACarreeToTexture3D(matriceRGBA, tailleGrille + 2 , _id_texture_fumee);
-    dessinerPlansDansTexture3DFaceALaCamera(_id_texture_fumee, 50, positionCamera, directionCamera);
+    matriceRGBACarreeToTexture3D(matriceRGBA_smoke, tailleGrille + 2 , _id_texture_fumee);
+    dessinerPlansDansTexture3DFaceALaCamera(_id_texture_fumee, 70, positionCamera, directionCamera);
 }
 
 
 
 void Fluid::renduFlammeGPUFaceCamera(Vecteur3D& positionCamera, Vecteur3D& directionCamera ){
     majMatriceFlammeEnMatriceRGBA();
-    matriceRGBACarreeToTexture3D(matriceRGBA, tailleGrille + 2 , _id_texture_flamme);
-    dessinerPlansDansTexture3DFaceALaCamera(_id_texture_flamme, 50, positionCamera, directionCamera);
+    matriceRGBACarreeToTexture3D(matriceRGBA_fire, tailleGrille + 2 , _id_texture_flamme);
+    dessinerPlansDansTexture3DFaceALaCamera(_id_texture_flamme,70, positionCamera, directionCamera);
 }
 
+void Fluid::renduFlammeETFumeeGPUFaceCamera(Vecteur3D& positionCamera, Vecteur3D& directionCamera ){
+    majMatriceFlammeEnMatriceRGBA();
+	majMatriceFumeeEnMatriceRGBA();
+    //matriceRGBACarreeToTexture3D(matriceRGBA_fire, tailleGrille + 2 , _id_texture_flamme);
+	//matriceRGBACarreeToTexture3D(matriceRGBA_smoke, tailleGrille + 2 , _id_texture_fumee);
+	glBindTexture(GL_TEXTURE_3D, _id_texture_flamme);
+	glTexImage3D(GL_TEXTURE_3D,0,GL_RGB,
+                 tailleGrille,tailleGrille,tailleGrille,
+                 0, GL_RGB, GL_FLOAT, matriceRGBA_fire);
+
+
+	glBindTexture(GL_TEXTURE_3D, _id_texture_fumee);	
+	glTexImage3D(GL_TEXTURE_3D,0,GL_RGB,
+                 tailleGrille,tailleGrille,tailleGrille,
+                 0, GL_RGB, GL_FLOAT, matriceRGBA_smoke);
+  
+	//passage des parametres des textures en uniforme
+	
+	_fumee_id_multitex = glGetUniformLocation ( _multitex_program, "fumee");
+   //	glUniform1i(_fumee_id_multitex, _id_texture_fumee);
+	_fire_id_multitex = glGetUniformLocation ( _multitex_program, "fire");
+   //	glUniform1i(_fire_id_multitex, _id_texture_flamme);
+	
+
+	
+	glUseProgram(_multitex_program);
+	glUniform1i(_fire_id_multitex, _id_texture_flamme);
+	glUniform1i(_fumee_id_multitex, _id_texture_fumee);
+
+	glBegin(GL_QUADS);
+								// Begin Drawing Quads
+		glVertex2f(0,0);
+		//glTexCoord2d(0,1);				// First Vertex		(   0,   0 )
+		glVertex2f(0,1);
+		//glTexCoord2d(1,1);				// Second Vertex	(   0, 480 )
+		glVertex2f(1,1);				// Third Vertex		( 640, 480 )
+		//glTexCoord2d(1, 0);
+		glVertex2f(1,0);				// Fourth Vertex	( 640,   0 )
+	glEnd();
+
+
+
+    glUseProgram(0);
+ 
+	
+
+}
 
 void Fluid::majMatriceFlammeEnMatriceRGBA(){
 
     // Creation de la texture
-    float *pointeurMatriceRGBA = matriceRGBA;
+    Vecteur4D *pointeurMatriceRGBA = matriceRGBA_fire;
     const float *pointeurMatriceACopier = s->getDensities();
-    const float *pointeurMatriceACopier2 = s->getSmokes();
+    //const float *pointeurMatriceACopier2 = s->getSmokes();
     const float *pointeurMatriceACopier3 = s->getTemperatures();
     float R,G,B;
+	float seuil = 0.001;
+	
     for (int i = 0; i < (tailleGrille+2)*(tailleGrille+2)*(tailleGrille+2); i ++){
+		
+		
 	    tempIndex->getRGB( (1+(*pointeurMatriceACopier3))*1555 , &R, &G, &B );
 	    // R 
-	    *pointeurMatriceRGBA = B;
-	    pointeurMatriceRGBA++;
+    	(*pointeurMatriceRGBA).x = B;
+	    //pointeurMatriceRGBA++;
 	    // G
-	    *pointeurMatriceRGBA = G;
-	    pointeurMatriceRGBA++;
+	    (*pointeurMatriceRGBA).y = G;
+	    //pointeurMatriceRGBA++;
 	    // B
-	    *pointeurMatriceRGBA = R;
-	    pointeurMatriceRGBA++;
+	   	(*pointeurMatriceRGBA).z = R;
+		//pointeurMatriceRGBA++;
 	    // A
-		if ( (*pointeurMatriceACopier* 4- *pointeurMatriceACopier3*3)*20 < 0 ){
-		*pointeurMatriceRGBA = 0; 
-		} else if ((*pointeurMatriceACopier* 4- *pointeurMatriceACopier3*3)*20 > 1 ){
-			*pointeurMatriceRGBA = 1; 
-		} else {
-		
-	   		*pointeurMatriceRGBA = (*pointeurMatriceACopier* 4 - *pointeurMatriceACopier3*3)*20;
+
+		if (*pointeurMatriceACopier < seuil) {
+			(*pointeurMatriceRGBA).w = 0;
 		}
-		//cout << "densité : " << *pointeurMatriceACopier << " temp= " << *pointeurMatriceACopier3 << endl;
-		//cout << "A : " << *pointeurMatriceRGBA << endl;
+		else {
+			//cout << "densité : " << *pointeurMatriceACopier  << "  température : " << *pointeurMatriceACopier3 << endl;
+			(*pointeurMatriceRGBA).w = 1/(*pointeurMatriceACopier3*8);
+			//cout << "A= " << *pointeurMatriceRGBA << endl;
+		}
+
 	    pointeurMatriceRGBA++;
 	    // MAJ
 	    pointeurMatriceACopier++;
 	    pointeurMatriceACopier3++;
     }    
+	
     
-    ///////////////////////////////////////////////
-    // A SUPPRIMER
-    ///////////////////////////////////////////////
-    /*
-    
-    pointeurMatriceRGBA = matriceRGBA;
-    for (int i = (tailleGrille+2)*(tailleGrille+2)*5; i < (tailleGrille+2)*(tailleGrille+2)*(tailleGrille-5); i ++){
-	    // R
-	    *pointeurMatriceRGBA = 1.0;//B;
-	    pointeurMatriceRGBA++;
-	    // G
-	    *pointeurMatriceRGBA = 1.0;//G;
-	    pointeurMatriceRGBA++;
-	    // B
-	    *pointeurMatriceRGBA = 0.0;//R;
-	    pointeurMatriceRGBA++;
-	    // A
-	    *pointeurMatriceRGBA = 1.0;// *pointeurMatriceACopier ;// * 4 - *pointeurMatriceACopier3*2;
-	    pointeurMatriceRGBA++;
-    } 
-    
-    */ 
-    ///////////////////////////////////////////////
 }
 
 	
 void Fluid::majMatriceFumeeEnMatriceRGBA(){
 
     // Creation de la texture
-    float *pointeurMatriceRGBA = matriceRGBA;
-    const float *pointeurMatriceACopier  = s->getDensities();
+    Vecteur4D *pointeurMatriceRGBA = matriceRGBA_smoke;
+    //const float *pointeurMatriceACopier  = s->getDensities();
     const float *pointeurMatriceACopier2 = s->getSmokes();
-    const float *pointeurMatriceACopier3 = s->getTemperatures();
-    float R,G,B;
+    //const float *pointeurMatriceACopier3 = s->getTemperatures();
+    //float R,G,B;
     for (int i = 0; i < (tailleGrille+2)*(tailleGrille+2)*(tailleGrille+2); i ++){
 	    // R
-	    *pointeurMatriceRGBA = 0.1;
-	    pointeurMatriceRGBA++;
+	    (*pointeurMatriceRGBA).x = 0.1;
+	    //pointeurMatriceRGBA++;
 	    // G
-	    *pointeurMatriceRGBA = 0.1;
-	    pointeurMatriceRGBA++; 
+	    (*pointeurMatriceRGBA).y = 0.1;
+	    //pointeurMatriceRGBA++; 
 	    // B
-	    *pointeurMatriceRGBA = 0.1;
-	    pointeurMatriceRGBA++;
+	    (*pointeurMatriceRGBA).z = 0.1;
+	    //pointeurMatriceRGBA++;
 	    // A
-	    *pointeurMatriceRGBA = *pointeurMatriceACopier2 *4;
+	    (*pointeurMatriceRGBA).w = *pointeurMatriceACopier2  /3;
 	    pointeurMatriceRGBA++;
 	    // MAJ
 	    pointeurMatriceACopier2++;
@@ -265,7 +347,7 @@ void Fluid::majMatriceFumeeEnMatriceRGBA(){
 
 	
 
-void Fluid::matriceRGBACarreeToTexture3D(const float *matrice, int cote, GLuint id_texture){
+void Fluid::matriceRGBACarreeToTexture3D(const Vecteur4D *matrice, int cote, GLuint id_texture){
 
     // Chargement en mémoire
     glBindTexture(GL_TEXTURE_3D, id_texture);
@@ -275,7 +357,7 @@ void Fluid::matriceRGBACarreeToTexture3D(const float *matrice, int cote, GLuint 
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP);
     
-    
+   
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     
@@ -284,16 +366,17 @@ void Fluid::matriceRGBACarreeToTexture3D(const float *matrice, int cote, GLuint 
     
     glTexImage3D(GL_TEXTURE_3D,0,GL_RGBA,cote,cote,cote,
                  0, GL_BGRA, GL_FLOAT, matrice);
-                 
+
 }
 
 
 
 
 void Fluid::initialiserRenduGPU(){
-    glGenTextures(1,&_id_texture_flamme);
-    glGenTextures(1,&_id_texture_fumee);
-    matriceRGBA = new float[4*(tailleGrille+2)*(tailleGrille+2)*(tailleGrille+2)];
+    //glGenTextures(1,&_id_texture_flamme);
+    //glGenTextures(1,&_id_texture_fumee);
+    matriceRGBA_smoke = new Vecteur4D[(tailleGrille+2)*(tailleGrille+2)*(tailleGrille+2)];
+	matriceRGBA_fire  = new Vecteur4D[(tailleGrille+2)*(tailleGrille+2)*(tailleGrille+2)];
 }
 
 
@@ -346,11 +429,12 @@ void Fluid::dessinerPlansDansTexture3DFaceALaCamera(GLuint id_texture, int nb_pl
     Boitev2.rotationAutourAxeX(angleOyz);
     Boitev3.rotationAutourAxeX(angleOyz);
     // Rotation autour de Y pour garder le cube face à la camera     
+/*
     Boitev0.rotationAutourAxeY(angleOxz);
     Boitev1.rotationAutourAxeY(angleOxz);
     Boitev2.rotationAutourAxeY(angleOxz);
     Boitev3.rotationAutourAxeY(angleOxz);
-    
+ */   
     
     // Coordonnées de textures  
     
@@ -370,11 +454,12 @@ void Fluid::dessinerPlansDansTexture3DFaceALaCamera(GLuint id_texture, int nb_pl
     Tex2.rotationAutourAxeX(angleOyz);
     Tex3.rotationAutourAxeX(angleOyz);
     // Rotation 2
+	/*
     Tex0.rotationAutourAxeY(angleOxz);
     Tex1.rotationAutourAxeY(angleOxz);
     Tex2.rotationAutourAxeY(angleOxz);
     Tex3.rotationAutourAxeY(angleOxz);
-    
+    */
     Tex0 += centre; 
     Tex1 += centre; 
     Tex2 += centre; 
@@ -388,16 +473,16 @@ void Fluid::dessinerPlansDansTexture3DFaceALaCamera(GLuint id_texture, int nb_pl
     Boitev2.normaliser();
     Boitev3.normaliser();
     profondeur.normaliser();
-    
+   
     // Activation de la texture
-    glDisable(GL_LIGHTING);
+    glDisable(GL_LIGHTING); glDisable(GL_DEPTH_TEST);
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     glEnable( GL_BLEND );
     glAlphaFunc(GL_GREATER,0.0f);
     glEnable(GL_ALPHA_TEST);    
     glEnable(GL_TEXTURE_3D);
     glActiveTexture(id_texture);
-    
+   
     // Vecteur de coordonnées
     Vecteur3D coord;
     Vecteur3D decalageTex;
@@ -472,10 +557,12 @@ void Fluid::dessinerPlansDansTexture3DFaceALaCamera(GLuint id_texture, int nb_pl
     glEnd();
     
     // Desactivation des elements
+	
     glDisable(GL_TEXTURE_3D);
     glDisable(GL_ALPHA_TEST);    
     glDisable( GL_BLEND );    
     glEnable(GL_LIGHTING);
+	glEnable(GL_DEPTH_TEST);
 	
 }
 
@@ -561,7 +648,7 @@ void Fluid::dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans){
 
 void Fluid::Mise_A_Jour(){
 	s->velocitiesStepWithTemp(0.0, 0.5, 2.0,0.1);
-	s->densitiesStepWithTemp(0.00001,0.001,0.0001, 1, 0.1 , 0.4, 0.01, 0.1);
+	s->densitiesStepWithTemp(0.001,0.00001,0.01, 2, 1  , 0.4, 2, 0.1);
 
 }
 

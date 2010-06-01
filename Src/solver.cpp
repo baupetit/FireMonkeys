@@ -118,10 +118,12 @@ void addSourceCorrection ( int N, float *x , float *f, float *T, float *s , floa
 {
 	int i;
 	for ( i=0 ; i<SIZE ; i++ ){
+		/*
 		if( T[i] < sub ) {
 			f[i] = fireToSmoke*x[i];
 			x[i] = 0;
 		}
+		*/
 		x[i] += dt*s[i];
 	}
 	
@@ -133,7 +135,7 @@ void addBuoyancy( int N, float *T, float *v, float buoy, float dt)
 	int i;
 
 	for (i=0; i<SIZE; i++)
-		v[i] += T[i]*buoy*dt;
+		v[i] += (T[i]-0.0)*buoy*dt;
 }
 
 void setBoundaries ( int N, int b, float *x )
@@ -302,11 +304,12 @@ void advect_cool ( int N, int b,
 		   float * d, float * d0, float *f, float *f0, 
 		   float *T, float *T0,
 		   float * u, float * v, float *w, 
-		   float cool, float consume, float dt )
+		   float cool, float consume, float taux_conversion_fire_to_smoke,
+		   float dt )
 {
 	int i, j, k, i0, j0, k0, i1, j1, k1;
 	float x, y, z, s0, t0, r0, s1, t1, r1, dt0;
-	float rhs, lhs, c0 ;
+	float rhs, lhs, c0 ,diff_fire2smoke;
 
 	dt0 = dt*N;
 	c0 = 1.0f - cool*dt;
@@ -327,15 +330,17 @@ void advect_cool ( int N, int b,
 				       t1*(r0*d0[IX(i1,j1,k0)] + r1*d0[IX(i1,j1,k1)]));
 
 				
-				rhs = (s0*rhs + s1*lhs) - consume ;
+				rhs = (s0*rhs + s1*lhs) - consume / (10*T[IX(i,j,k)]) ;
 				d[IX(i,j,k)] = ( rhs < 0 ) ? 0 : rhs ;
+				diff_fire2smoke = d[IX(i,j,k)] - d0[IX(i,j,k)];
+				
 				
 				rhs = (t0*(r0*f0[IX(i0,j0,k0)] + r1*f0[IX(i0,j0,k1)]) + 
 				       t1*(r0*f0[IX(i0,j1,k0)] + r1*f0[IX(i0,j1,k1)]));
 				lhs = (t0*(r0*f0[IX(i1,j0,k0)] + r1*f0[IX(i1,j0,k1)]) + 
 				       t1*(r0*f0[IX(i1,j1,k0)] + r1*f0[IX(i1,j1,k1)]));
 
-				f[IX(i,j,k)] = (s0*rhs + s1*lhs );
+				f[IX(i,j,k)] = (diff_fire2smoke < 0 && j>(N+1)/2 ) ? (s0*rhs + s1*lhs ) - diff_fire2smoke/taux_conversion_fire_to_smoke : (s0*rhs + s1*lhs );
 
 				
 				rhs = (t0*(r0*T0[IX(i0,j0,k0)] + r1*T0[IX(i0,j0,k1)]) + 
@@ -450,8 +455,9 @@ void Solver::densitiesStepWithTemp ( float diffFire,
 				     float fireToSmoke, 
 				     float dt )
 {	
-	addSourceCorrection ( _N, _d, _f, _T, _srcd, sub, fireToSmoke, dt );
-	//addSource ( _N, _d, _srcd, dt );
+	//addSourceCorrection ( _N, _d, _f, _T, _srcd, sub, fireToSmoke, dt );
+		
+	addSource ( _N, _d, _srcd, dt );
 	addSource ( _N, _T, _srcT, dt );
 	//SWAP ( _d0, _d ); diffuse ( _N, 0, _d, _d0, diffFire, dt );
 	//SWAP ( _f0, _f ); diffuse ( _N, 0, _f, _f0, diffSmoke, dt );
@@ -464,7 +470,7 @@ void Solver::densitiesStepWithTemp ( float diffFire,
 			    diffFire, diffSmoke, diffTemp, 
 			    dt );
 	SWAP ( _d0, _d ); SWAP ( _f0, _f ); SWAP ( _T0, _T ); 
-	advect_cool ( _N, 0, _d, _d0, _f, _f0, _T, _T0, _u, _v, _w, cool, consume ,dt );
+	advect_cool ( _N, 0, _d, _d0, _f, _f0, _T, _T0, _u, _v, _w, cool, consume , fireToSmoke ,dt );
 }
 
 

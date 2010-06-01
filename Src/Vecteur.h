@@ -70,5 +70,14 @@ public:
     friend float norme(Vecteur3D& v);
 };
 
+class Vecteur4D : public Vecteur3D {
+public:
+	float w;
+
+	Vecteur4D() : w(0){}
+    Vecteur4D(float xx, float yy, float zz, float ww) : Vecteur3D(xx,yy,zz), w(ww) {}
+    Vecteur4D(const Vecteur4D& vec) : Vecteur3D(vec.x,vec.y,vec.z), w(vec.w){}
+	
+};
 
 #endif

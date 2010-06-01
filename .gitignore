@@ -1,0 +1,28 @@
+# dossiers
+
+# fichier de sauvegarde Emacs
+*~
+
+#
+*.swp
+*.core
+*.o
+
+# Fichiers générés par gcov
+*.gcov
+*.gcno
+*.gcda
+
+# on veut pas des objets
+*.o
+
+# pour les utilisateurs de mac
+._*
+.DS_Store
+
+# pour latex
+*.dvi
+*.aux
+*.toc
+*.log
+
