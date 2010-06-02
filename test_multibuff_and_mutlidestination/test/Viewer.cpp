@@ -235,34 +235,16 @@ void Viewer::_visibilityFunc(int visible){}
 
 void Viewer::init(){
 
-
-    // combien de buffers
-    GLint maxbuffers;
-    glGetIntegerv(GL_MAX_COLOR_ATTACHMENTS, &maxbuffers);
-    cout << "Max buffer simultanés : " << (int)maxbuffers << endl;
-
-    
-
-
-
     // initialisation de la texture o`u sera enregistré le buffer
     glGenTextures(1,&texture);
     glBindTexture(GL_TEXTURE_3D,texture);
-    glTexImage3D(GL_TEXTURE_3D,0,GL_RGBA,128,128,16,
+    glTexImage3D(GL_TEXTURE_3D,0,GL_RGBA,128,128,8,
                  0, GL_RGBA, GL_FLOAT, NULL);
                  
       
     // initialisation du buffer             
     glGenFramebuffers(1,&framebuffer);
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer);
-    
-    
-    // render
-    /*
-    glGenRenderbuffers(1,&renderbuffer);
-    glBindRenderbuffer(GL_RENDERBUFFER,renderbuffer);
-    glRenderbufferStorage(GL_RENDERBUFFER,GL_DEPTH_COMPONENT24, 128,128);
-    */
     
     
     
@@ -277,14 +259,6 @@ void Viewer::init(){
     glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT7,  GL_TEXTURE_3D, texture, 0, 7);
     
     
-    // render
-    
-    /*
-    glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderbuffer);    
-    glEnable(GL_DEPTH_TEST);
-    */
-    
-    
     
     // initialisation de la texture de départ
     float *tex2 = new float[128*128*128*4];
@@ -292,11 +266,11 @@ void Viewer::init(){
     for(int i = 0; i < 128; i ++){
         for(int j = 0; j < 128; j ++){
             for(int k = 0; k < 128; k ++){
-            *ptr = i/(float)127;
+            *ptr = i/(float)16;
             ptr++;
-            *ptr = j/(float)127;
+            *ptr = 0.0;//j/(float)127;
             ptr++;
-            *ptr = k/(float)127;
+            *ptr = 0.0;//k/(float)127;
             ptr++;
             *ptr = 1.0;
             ptr++;
@@ -330,33 +304,30 @@ void Viewer::init(){
 void Viewer::rendu(){
 
 
-   
-    GLenum buffers[] = { GL_COLOR_ATTACHMENT0, 
-                         GL_COLOR_ATTACHMENT1, 
-                         GL_COLOR_ATTACHMENT2, 
-                         GL_COLOR_ATTACHMENT3, 
-                         GL_COLOR_ATTACHMENT4, 
-                         GL_COLOR_ATTACHMENT5, 
-                         GL_COLOR_ATTACHMENT6, 
-                         GL_COLOR_ATTACHMENT7 };
-                         
-    glDrawBuffers(8, buffers);
-    
-
-
-
     ////////////////////////////////////////////////////////////////////////////
     
     //// Affichage de la texture 3D dans le buffer
     //// et enregistrement dans la texture qui a été liée
     
+    //glDisable(GL_DEPTH_TEST);
     
-    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer);
 
+
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer);
+    
+    
+    GLenum mrt[] = { GL_COLOR_ATTACHMENT0,
+                     GL_COLOR_ATTACHMENT1,
+                     GL_COLOR_ATTACHMENT2,
+                     GL_COLOR_ATTACHMENT3,
+                     GL_COLOR_ATTACHMENT4,
+                     GL_COLOR_ATTACHMENT5,
+                     GL_COLOR_ATTACHMENT6,
+                     GL_COLOR_ATTACHMENT7 };
+    glDrawBuffers(8, mrt);
     
     glViewport(0,0,128,128);
     glClearColor(1.0,0.0,1.0,1.0);
-    //glClear(GL_COLOR_BUFFER_BIT);//|GL_DEPTH_BUFFER_BIT);
     
     // affiche un carré devant la camera
     // en lui appliquant le shader
@@ -370,7 +341,7 @@ void Viewer::rendu(){
     
     
     
-
+    
     
     ////////////////////////////////////////////////////////////////////////////
     
@@ -390,15 +361,13 @@ void Viewer::rendu(){
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER,
-                                GL_NEAREST);
+                                GL_LINEAR);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER,
-                                GL_NEAREST);
+                                GL_LINEAR);
 
     glEnable(GL_TEXTURE_3D);
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-          
-          
-    // FIRST            
+                
     glBindTexture(GL_TEXTURE_3D,texture);
                 
     
@@ -408,57 +377,61 @@ void Viewer::rendu(){
     
     glBegin(GL_QUADS);
     
-        for (int i = 0; i < 10; i ++){
-            glTexCoord3f(0.0,0.0,i*0.1);
-            glVertex3f(0.0,0.0,-i*1.0);
+        glTexCoord3f(0.0,0.0,0.0);
+        glVertex3f(0.0,0.0,0.0);
         
-            glTexCoord3f(0.0,1.0,i*0.1);
-            glVertex3f(0.0,1.0,-i*1.0);
+        glTexCoord3f(0.0,1.0,0.0);
+        glVertex3f(0.0,1.0,0.0);
         
-            glTexCoord3f(1.0,1.0,i*0.1);
-            glVertex3f(1.0,1.0,-i*1.0);
+        glTexCoord3f(1.0,1.0,0.0);
+        glVertex3f(1.0,1.0,0.0);
         
-            glTexCoord3f(1.0,0.0,i*0.1);
-            glVertex3f(1.0,0.0,-i*1.0);
-        }
+        glTexCoord3f(1.0,0.0,0.0);
+        glVertex3f(1.0,0.0,0.0);
         
+        
+    
+        glTexCoord3f(0.0,0.0, 0.3);
+        glVertex3f(0.0,0.0, - 0.9);
+        
+        glTexCoord3f(0.0,1.0, 0.3);
+        glVertex3f(0.0,1.0, - 0.9);
+        
+        glTexCoord3f(1.0,1.0, 0.3);
+        glVertex3f(1.0,1.0, - 0.9);
+        
+        glTexCoord3f(1.0,0.0, 0.3);
+        glVertex3f(1.0,0.0, - 0.9);
+      
+        
+    
+        glTexCoord3f(0.0,0.0, 0.7);
+        glVertex3f(0.0,0.0, - 1.9);
+        
+        glTexCoord3f(0.0,1.0, 0.7);
+        glVertex3f(0.0,1.0, - 1.9);
+        
+        glTexCoord3f(1.0,1.0, 0.7);
+        glVertex3f(1.0,1.0, - 1.9);
+        
+        glTexCoord3f(1.0,0.0, 0.7);
+        glVertex3f(1.0,0.0, - 1.9);
+      
+        
+    
+        glTexCoord3f(0.0,0.0, 1.0);
+        glVertex3f(0.0,0.0, - 3.0);
+        
+        glTexCoord3f(0.0,1.0, 1.0);
+        glVertex3f(0.0,1.0, - 3.0);
+        
+        glTexCoord3f(1.0,1.0, 1.0);
+        glVertex3f(1.0,1.0, - 3.0);
+        
+        glTexCoord3f(1.0,0.0, 1.0);
+        glVertex3f(1.0,0.0, - 3.0);
         
     glEnd();
-    
-    /*
-    
-    glBindTexture(GL_TEXTURE_3D,0);
-    
-    
-    // SECOND
-    */
-                  
-    glBindTexture(GL_TEXTURE_3D,texture2);
-                
-    
-    // Affichage de plusieurs plans 
-    
-    glBegin(GL_QUADS);
-    
-        for (int i = 0; i < 10; i ++){
-            glTexCoord3f(0.0,0.0,i*0.1);
-            glVertex3f(5.0,3.0,-i*1.0);
-        
-            glTexCoord3f(0.0,1.0,i*0.1);
-            glVertex3f(5.0,4.0,-i*1.0);
-        
-            glTexCoord3f(1.0,1.0,i*0.1);
-            glVertex3f(6.0,4.0,-i*1.0);
-        
-            glTexCoord3f(1.0,0.0,i*0.1);
-            glVertex3f(6.0,3.0,-i*1.0);
-        }
-        
-        
-    glEnd();
-
-    
-    
     glPopMatrix();
     glutSwapBuffers();
     
@@ -515,16 +488,12 @@ void Viewer::draw_carre(){
         
         glTexCoord3f(1.0,0.0,0.0);
         glVertex3f(1.0,0.0,0.0);
-        
     glEnd();
     
-    // pop
     glPopMatrix();
-    
     
     // on délie le shader
     shader->Unbind_Program();
-    
 
 }
 
