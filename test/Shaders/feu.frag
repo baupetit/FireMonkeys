@@ -1,29 +1,6 @@
 
 #define DECALAGE 1.0/8.0
 
-/*
-vec3 decalage0 = vec3 ( 0.0, DECALAGE * 0.0, 0.0);
-vec3 decalage1 = vec3 ( 0.0, DECALAGE * 1.0, 0.0);
-vec3 decalage2 = vec3 ( 0.0, DECALAGE * 2.0, 0.0);
-vec3 decalage3 = vec3 ( 0.0, DECALAGE * 3.0, 0.0);
-vec3 decalage4 = vec3 ( 0.0, DECALAGE * 4.0, 0.0);
-vec3 decalage5 = vec3 ( 0.0, DECALAGE * 5.0, 0.0);
-vec3 decalage6 = vec3 ( 0.0, DECALAGE * 6.0, 0.0);
-vec3 decalage7 = vec3 ( 0.0, DECALAGE * 7.0, 0.0);
-*/
-
-
-/*
-vec3 decalage0 = vec3 ( DECALAGE * 0.0, 0.0, 0.0);
-vec3 decalage1 = vec3 ( DECALAGE * 1.0, 0.0, 0.0);
-vec3 decalage2 = vec3 ( DECALAGE * 2.0, 0.0, 0.0);
-vec3 decalage3 = vec3 ( DECALAGE * 3.0, 0.0, 0.0);
-vec3 decalage4 = vec3 ( DECALAGE * 4.0, 0.0, 0.0);
-vec3 decalage5 = vec3 ( DECALAGE * 5.0, 0.0, 0.0);
-vec3 decalage6 = vec3 ( DECALAGE * 6.0, 0.0, 0.0);
-vec3 decalage7 = vec3 ( DECALAGE * 7.0, 0.0, 0.0);
-*/
-
 vec3 decalage0 = vec3 ( 0.0, 0.0, DECALAGE * 0.0);
 vec3 decalage1 = vec3 ( 0.0, 0.0, DECALAGE * 1.0);
 vec3 decalage2 = vec3 ( 0.0, 0.0, DECALAGE * 2.0);
