@@ -69,17 +69,24 @@ private :
 	
 	
 	
-	
-	
-	//////////////TEST
+	///////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////
+	////////////// c'est ici qu'on essaye d'enregistrer notre buffer dans la texture 3D
+
+    /** Initialisation des buffers et textures */
 	void init();
-	GLuint texture; // rendu du buffer
+	
+	GLuint texture; // texture qui sera le rendu du buffer
 	GLuint texture2; // texture de l'objet initial
 	GLuint framebuffer;
 	GLuint renderbuffer;
 	
+	Shader *shader;
 	
-	Shader *shadoudoudoudoudoulolptdrMDRXD;
+	/** 
+	    Dessine un plan devant la camera,
+	    avec la texture associee
+	*/
     void draw_carre();
 	
 
