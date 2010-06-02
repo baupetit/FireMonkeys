@@ -193,28 +193,172 @@ void Viewer::_keyMap(int key, int x, int y){
 
 void Viewer::_visibilityFunc(int visible){}
 
-void Viewer::rendu(){
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//               RENDU        ( c'est ici qu'on essaye de sauver le buffer dans une texture 3D )
+//
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+void Viewer::init(){
+
+
+    // combien de buffers
+    GLint maxbuffers;
+    glGetIntegerv(GL_MAX_COLOR_ATTACHMENTS, &maxbuffers);
+    cout << "Max buffer simultanés : " << (int)maxbuffers << endl;
+
     
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+    // initialisation de la texture o`u sera enregistré le buffer
+    glGenTextures(1,&texture);
+    glBindTexture(GL_TEXTURE_3D,texture);
+    glTexImage3D(GL_TEXTURE_3D,0,GL_RGBA,128,128,8,
+                 0, GL_RGBA, GL_FLOAT, NULL);
+                 
+      
+    // initialisation du buffer             
+    glGenFramebuffers(1,&framebuffer);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer);
+    
+    
+    // render
+    glGenRenderbuffers(1,&renderbuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER,renderbuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER,GL_DEPTH_COMPONENT24, 128,128);
+
+    
+    
+    
+    // On lie les layers de la texture à la sortie du buffer
+    glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,  GL_TEXTURE_3D, texture, 0, 0);  
+    glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT1,  GL_TEXTURE_3D, texture, 0, 1);    
+    glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT2,  GL_TEXTURE_3D, texture, 0, 2);
+    glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT3,  GL_TEXTURE_3D, texture, 0, 3);
+    glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT4,  GL_TEXTURE_3D, texture, 0, 4);
+    glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT5,  GL_TEXTURE_3D, texture, 0, 5);
+    glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT6,  GL_TEXTURE_3D, texture, 0, 6);
+    glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT7,  GL_TEXTURE_3D, texture, 0, 7);
+    
+    
+    // render
+    
+    glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderbuffer);
+    
+    glEnable(GL_DEPTH_TEST);
+    
+    
+    
+    // initialisation de la texture de départ
+    float *tex2 = new float[128*128*128*4];
+    float *ptr = tex2;
+    for(int i = 0; i < 128; i ++){
+        for(int j = 0; j < 128; j ++){
+            for(int k = 0; k < 128; k ++){
+            *ptr = i/(float)127;
+            ptr++;
+            *ptr = j/(float)127;
+            ptr++;
+            *ptr = 0.0;//k/(float)128;
+            ptr++;
+            *ptr = 1.0;
+            ptr++;
+            }
+        }
+    }
+    
+    // creation de la texture initiale
+    glGenTextures(1,&texture2); 
+    glBindTexture(GL_TEXTURE_3D,texture2);     
+    glTexImage3D(GL_TEXTURE_3D,0,GL_RGBA,128,128,128,
+                 0, GL_RGBA, GL_FLOAT, tex2);
+                 
+    
+    // initialisation du shader
+    shader = new Shader("./Shaders/feu.vert","./Shaders/feu.frag");
+
+    // on lie la texture du shader avec la texture initiale
+    GLuint	location = glGetUniformLocation ( shader->getProgramId(), "feu");
+    glUniform1i(location,texture2);
+
+    
+}
+
+
+
+
+
+
+
+void Viewer::rendu(){
+
+
+    GLenum buffers[] = { GL_COLOR_ATTACHMENT0, 
+                         GL_COLOR_ATTACHMENT1, 
+                         GL_COLOR_ATTACHMENT2, 
+                         GL_COLOR_ATTACHMENT3, 
+                         GL_COLOR_ATTACHMENT4, 
+                         GL_COLOR_ATTACHMENT5, 
+                         GL_COLOR_ATTACHMENT6, 
+                         GL_COLOR_ATTACHMENT7 };
+    glDrawBuffers(8, buffers);
+
+
+
+    ////////////////////////////////////////////////////////////////////////////
+    
+    //// Affichage de la texture 3D dans le buffer
+    //// et enregistrement dans la texture qui a été liée
+    
     glDisable(GL_DEPTH_TEST);
     
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer);
+
+    
     glViewport(0,0,128,128);
     glClearColor(1.0,0.0,1.0,1.0);
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
     
-    /*
-    int layers = 16;
-    for (int i = 0; i < layers; i++) {
-        glFramebufferTexture3D(GL_FRAMEBUFFER, GL_TEXTURE_3D, GL_COLOR_ATTACHMENT0+i, texture, 0, i);
-        glClear(GL_COLOR_BUFFER_BIT);// | GL_DEPTH_BUFFER_BIT);
-        draw_carre();
-    }            
-    
-    */
+    // affiche un carré devant la camera
+    // en lui appliquant le shader
     draw_carre();
     
-    
+    // sauvegarde dans la texture 3D
     glGenerateMipmap(GL_TEXTURE_3D);
     
     
@@ -222,41 +366,40 @@ void Viewer::rendu(){
     
     
     
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    
+
+    
+    ////////////////////////////////////////////////////////////////////////////
+    
+    //// Affichage de l'image enregistrée dans le buffer 0
     
     glEnable(GL_DEPTH_TEST);
-    
     
     glViewport(0,0,800,600);
     glClearColor(0.0,0.0,1.0,1.0);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
     
-    glColor4f(1.0,1.0,0.0,0.5);
+    //glColor4f(1.0,1.0,0.0,0.5);
     
     
-                glEnableClientState(GL_TEXTURE_3D);
-                
-                
-                glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-                glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-                glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP);
-                glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER,
+    glEnableClientState(GL_TEXTURE_3D);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER,
                                 GL_NEAREST);
-                glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER,
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER,
                                 GL_NEAREST);
 
-                glEnable(GL_TEXTURE_3D);
-                glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+    glEnable(GL_TEXTURE_3D);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
                 
-                glBindTexture(GL_TEXTURE_3D,texture);
+    glBindTexture(GL_TEXTURE_3D,texture);
                 
     
+    // Affichage de plusieurs plans 
     glPushMatrix();
     glMatrixMode (GL_MODELVIEW);
     
-    //glTranslatef(1.0, 1.0,1.0);
-    //glScalef(0.2, 0.2,0.2);
     glBegin(GL_QUADS);
     
         glTexCoord3f(0.0,0.0,0.0);
@@ -270,10 +413,6 @@ void Viewer::rendu(){
         
         glTexCoord3f(1.0,0.0,0.0);
         glVertex3f(1.0,0.0,0.0);
-        
-        
-        
-        
         
         
     
@@ -290,13 +429,6 @@ void Viewer::rendu(){
         glVertex3f(1.0,0.0, - 0.9);
       
         
-        
-        
-        
-        
-        
-        
-        
     
         glTexCoord3f(0.0,0.0, 0.7);
         glVertex3f(0.0,0.0, - 1.9);
@@ -311,39 +443,19 @@ void Viewer::rendu(){
         glVertex3f(1.0,0.0, - 1.9);
       
         
-        
-        
     
-        glTexCoord3f(0.0,0.0, 1.0);
+        glTexCoord3f(0.0,0.0, 0.9);
         glVertex3f(0.0,0.0, - 3.0);
         
-        glTexCoord3f(0.0,1.0, 1.0);
+        glTexCoord3f(0.0,1.0, 0.9);
         glVertex3f(0.0,1.0, - 3.0);
         
-        glTexCoord3f(1.0,1.0, 1.0);
+        glTexCoord3f(1.0,1.0, 0.9);
         glVertex3f(1.0,1.0, - 3.0);
         
-        glTexCoord3f(1.0,0.0, 1.0);
+        glTexCoord3f(1.0,0.0, 0.9);
         glVertex3f(1.0,0.0, - 3.0);
-      
         
-        
-        
-        
-        
-        /*
-        glTexCoord3f(0.0,0.0,0.0);
-        glVertex3f(32.0,32.0,0.0);
-        
-        glTexCoord3f(0.0,1.0,0.0);
-        glVertex3f(32.0,0.0,-2.0);
-        
-        glTexCoord3f(1.0,1.0,0.0);
-        glVertex3f(64.0,64.0,-2.0);
-        
-        glTexCoord3f(1.0,0.0,0.0);
-        glVertex3f(64.0,32.0,0.0);
-        */
     glEnd();
     glPopMatrix();
     glutSwapBuffers();
@@ -352,107 +464,11 @@ void Viewer::rendu(){
             
 }
 
-void Viewer::init(){
-
-
-    glGenTextures(1,&texture);
-    glBindTexture(GL_TEXTURE_3D,texture);
-    glTexImage3D(GL_TEXTURE_3D,0,GL_RGBA,128,128,16,
-                 0, GL_RGBA, GL_FLOAT, NULL);
-                 
-                 
-                        
-                 
-   /*              
-    glGenRenderbuffers(1,&renderbuffer);
-    glBindRenderbuffer(GL_RENDERBUFFER,renderbuffer);
-    glRenderbufferStorage(GL_RENDERBUFFER,GL_DEPTH_COMPONENT24, 128,128);
-                 
-   */              
-      
-      
-                 
-    glGenFramebuffers(1,&framebuffer);
-    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer);
-    
-    
-    
-    glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,  GL_TEXTURE_3D, texture, 0, 0);  
-    glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT1,  GL_TEXTURE_3D, texture, 0, 1);    
-    glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT2,  GL_TEXTURE_3D, texture, 0, 2);
-    glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT3,  GL_TEXTURE_3D, texture, 0, 3);
-    glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT4,  GL_TEXTURE_3D, texture, 0, 4);
-    glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT5,  GL_TEXTURE_3D, texture, 0, 5);
-    glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT6,  GL_TEXTURE_3D, texture, 0, 6);
-    glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT7,  GL_TEXTURE_3D, texture, 0, 7);
-    glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT8,  GL_TEXTURE_3D, texture, 0, 8);    
-    glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT9,  GL_TEXTURE_3D, texture, 0, 9);
-    
-    
-    glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT10, GL_TEXTURE_3D, texture, 0, 10);
-    glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT11, GL_TEXTURE_3D, texture, 0, 11);
-    glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT12, GL_TEXTURE_3D, texture, 0, 12);
-    glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT13, GL_TEXTURE_3D, texture, 0, 13);
-    glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT14, GL_TEXTURE_3D, texture, 0, 14);
-    glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT15, GL_TEXTURE_3D, texture, 0, 15); 
-                                                                                   
-    
-    /*
-    glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderbuffer);
-    glEnable(GL_DEPTH_TEST);
-    */
-    
-    
-    
-    
-    float *tex2 = new float[128*128*128*4];
-    float *ptr = tex2;
-    for(int i = 0; i < 128; i ++){
-        for(int j = 0; j < 128; j ++){
-            for(int k = 0; k < 128; k ++){
-            *ptr = i/(float)127;
-            ptr++;
-            *ptr = 1.0;//j/(float)128;
-            ptr++;
-            *ptr = 0.0;//k/(float)128;
-            ptr++;
-            *ptr = 1.0;
-            ptr++;
-            }
-        }
-    }
-
-    glGenTextures(1,&texture2);
-    glBindTexture(GL_TEXTURE_3D,texture2);     
-    glTexImage3D(GL_TEXTURE_3D,0,GL_RGBA,128,128,128,
-                 0, GL_RGBA, GL_FLOAT, tex2);
-                 
-    
-    
-    shadoudoudoudoudoulolptdrMDRXD = new Shader("./Shaders/feu.vert","./Shaders/feu.frag");
-
-    GLuint	location = glGetUniformLocation ( shadoudoudoudoudoulolptdrMDRXD->getProgramId(), "feu");
-    glUniform1i(location,texture2);
-
-    
-}
-
-
-
-
-
 
 
 
 
 void Viewer::draw_carre(){
-//   glDisable(GL_DEPTH_TEST);
-    
-//    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer);
-//    glViewport(0,0,128,128);
-//    glClearColor(1.0,0.0,1.0,1.0);
-//    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-    
     
     glPushMatrix();
     //glMatrixMode (GL_MODELVIEW);
@@ -461,24 +477,29 @@ void Viewer::draw_carre(){
     glColor4f(1.0,0.0,0.0,1.0);
         
     
-                glEnableClientState(GL_TEXTURE_3D);
+    glEnableClientState(GL_TEXTURE_3D);
                 
                 
-                glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-                glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-                glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP);
-                glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER,
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER,
                                 GL_LINEAR);
-                glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER,
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER,
                                 GL_LINEAR);
 
-                glEnable(GL_TEXTURE_3D);
-                glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+    glEnable(GL_TEXTURE_3D);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+
+
+    // on lie la texture initiale                
+    glBindTexture(GL_TEXTURE_3D,texture2);
+    
+    
+    // on lie le shader            
+    shader->Bind_Program();
                 
-                glBindTexture(GL_TEXTURE_3D,texture2);
-                
-                shadoudoudoudoudoulolptdrMDRXD->Bind_Program();
-                
+    // affichage            
     glBegin(GL_QUADS);        
     
         glTexCoord3f(0.0,0.0,0.0);
@@ -492,13 +513,27 @@ void Viewer::draw_carre(){
         
         glTexCoord3f(1.0,0.0,0.0);
         glVertex3f(1.0,0.0,0.0);
+        
+        
+        
+    
+        glTexCoord3f(0.0,0.0,0.2);
+        glVertex3f(0.0,0.0,0.0);
+        
+        glTexCoord3f(0.0,1.0,0.2);
+        glVertex3f(0.0,1.0,0.0);
+        
+        glTexCoord3f(1.0,1.0,0.2);
+        glVertex3f(1.0,1.0,0.0);
+        
+        glTexCoord3f(1.0,0.0,0.2);
+        glVertex3f(1.0,0.0,0.0);
     glEnd();
     
     glPopMatrix();
     
-                shadoudoudoudoudoulolptdrMDRXD->Unbind_Program();
-    
-    glGenerateMipmap(GL_TEXTURE_3D);
+    // on délie le shader
+    shader->Unbind_Program();
 
 }
 
