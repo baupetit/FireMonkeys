@@ -49,7 +49,7 @@ void Fluid_GPU::Afficher_Face_Camera(Vecteur3D& positionCamera, Vecteur3D& orien
 
 void Fluid_GPU::afficherFlamme(){
 	// Feu
-	dessinerPlansDansTexture3D(s->getDensities(),128);
+	dessinerPlansDansTexture3D(s->getDensities(),120);
 }
 
 void Fluid_GPU::afficherFumee(){

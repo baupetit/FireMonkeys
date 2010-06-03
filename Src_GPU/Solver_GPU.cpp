@@ -12,11 +12,17 @@
 #include <cstdlib>
 #include <ctime>
 
+#include <unistd.h>
+
 
 Solver_GPU::Solver_GPU( int width, int height, int depth ) 
 	: _grille_width(width), _grille_height(height), _grille_depth(depth) {
+
 	
 	cout << "Nouveau Solver_GPU" << endl;
+	
+	// init
+	SolverParam::initSolverParam();
 
 	// Shader lineaire
 	shader_linear_solve = new Shader("./Shaders/vertex_shader_qui_ne_fait_rien.vert",
@@ -29,8 +35,9 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
 	buffer = new Framebuffer(width, height, depth);
     
 	// Grilles
-	_grille_feu_1 = new Texture3D();
-	_grille_feu_2 = new Texture3D();
+	_grille_temp = new Texture3D();
+	_grille_feu_courante = new Texture3D();
+	_grille_feu_dest = new Texture3D();
     
 	srand ( time(NULL) );
 
@@ -39,6 +46,7 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
 	float coeff2 = rand()/(float)RAND_MAX;
     
     
+    /*
 	// Creation du champs de vitesse vide
 	float *texture = new float[_grille_width*_grille_height*_grille_depth*4];
 	float *ptr = texture;
@@ -56,7 +64,7 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
 			}
 		}
 	} 
-	/*
+	
 	float *texture = new float[_grille_width*_grille_height*_grille_depth*4];
 	float *ptr = texture;
 	for (int k = 0; k < _grille_width; k++){
@@ -74,10 +82,27 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
 		}
 	} 
 	*/
+	
+	float *texture = new float[_grille_width*_grille_height*_grille_depth*4];
+	float *ptr = texture;
+	for (int k = 0; k < _grille_width; k++){
+		for (int j = 0; j < _grille_height; j++){
+			for (int i = 0; i < _grille_depth; i++){    
+				*ptr = i/(float)_grille_depth * coeff1;
+				ptr++;
+				*ptr = 0.0;//j/(float)_grille_height * coeff2;
+				ptr++;
+				*ptr = 0.0;//k/(float)_grille_width;
+				ptr++;
+				*ptr = 1.0f;
+				ptr++;
+			}
+		}
+	} 
         
 	// INITIALISATION GRILLES
-	_grille_feu_1->charger_matrice(texture, _grille_width, _grille_height, _grille_depth);    
-	_grille_feu_2->charger_matrice(NULL,    _grille_width, _grille_height, _grille_depth);    
+	_grille_feu_courante->charger_matrice(texture, _grille_width, _grille_height, _grille_depth);    
+	_grille_feu_dest->charger_matrice(texture, _grille_width, _grille_height, _grille_depth);    
 	
 	
 }
@@ -85,22 +110,21 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
 Solver_GPU::~Solver_GPU(){
 	delete buffer;
 	delete shader_linear_solve;    
-	delete _grille_feu_1;
-	delete _grille_feu_2;
+	delete _grille_feu_courante;
+	delete _grille_feu_dest;
+	delete _grille_temp;
 }
 
 const GLuint Solver_GPU::getDensities() const {
-	if (pingpong == PING)
-		return _grille_feu_1->get_texture_id();
-	else
-		return _grille_feu_2->get_texture_id();
+	return _grille_feu_courante->get_texture_id();
 }
 
 const GLuint Solver_GPU::getDestDensities() const {
-	if (pingpong == PONG)
-		return _grille_feu_1->get_texture_id();
-	else
-		return _grille_feu_2->get_texture_id();
+	return _grille_feu_dest->get_texture_id();
+}
+
+const GLuint Solver_GPU::getTemp() const {
+	return _grille_temp->get_texture_id();
 }
 
 
@@ -152,22 +176,43 @@ void Solver_GPU::linearSolve ( int b, float a1, float a2, float a3 ){
     float c2 = 1 + 6 * a2;
     float c3 = 1 + 6 * a3;
     
+    
+            
     shader_linear_solve->Bind_Program();          
+
     shader_linear_solve->lierFloat("taille_width",  _grille_width);
     shader_linear_solve->lierFloat("taille_height", _grille_height);
     shader_linear_solve->lierFloat("taille_depth",  _grille_depth);
+
+    shader_linear_solve->lierTexture("texture_entree", _grille_feu_courante->get_texture_id(),0);
+    shader_linear_solve->lierTexture("texture_sortie", _grille_feu_dest->get_texture_id(),1);
+
     
     Vecteur3D a = Vecteur3D(a1,a2,a3);
     Vecteur3D c = Vecteur3D(c1,c2,c3);
+    
     shader_linear_solve->lierVecteur("a", a);
     shader_linear_solve->lierVecteur("c", c);
         
     for ( int i = 0; i < 20; i++){
-
+  
+        //shader_linear_solve->lierTexture("texture_sortie", getDestDensities());
+    	buffer->traiterDessinDansBuffer(getTemp());
+    	
+        swapGrilles(_grille_feu_dest, _grille_temp);
+        shader_linear_solve->lierTexture("texture_sortie", _grille_feu_dest->get_texture_id(),1);
+        //
+        
+        //swapGrillesCourantes();
+        //sleep(2);
+        
+        /*
         shader_linear_solve->lierTexture("texture_entree", getDensities());
         //shader_linear_solve->lierTexture("texture_sortie", getDestDensities());
     	buffer->traiterDessinDansBuffer(getDestDensities());
-        //swapGrillesCourantes();
+    	
+        //sleep(2);
+    	*/
     
     }    
     
@@ -179,7 +224,7 @@ void Solver_GPU::diffuse ( float diff,
                            float dt ){
     
     
-    float beattleJuce = dt*diff*1/(SolverParam::getEchantillonage()*SolverParam::getEchantillonage());
+    float beattleJuce = dt*diff*(SolverParam::getEchantillonage()*SolverParam::getEchantillonage());
     linearSolve(0, beattleJuce, beattleJuce, beattleJuce);
     
 }
@@ -221,9 +266,8 @@ void Solver_GPU::densitiesStep ( float dt )
 	diffuse ( SolverParam::getDiffusionParamFire(),
 		      dt );
     
-    
-	//swapGrillesCourantes(); 
-    
+   
+    swapGrilles(_grille_feu_dest, _grille_feu_courante);
     
 }
 
@@ -239,10 +283,10 @@ void Solver_GPU::velocitiesStepWithTemp ( float dt )
 {
 }
     
-void Solver_GPU::swapGrillesCourantes(){
-	if (pingpong == PING)
-		pingpong = PONG;
-	else
-		pingpong = PING;
+void Solver_GPU::swapGrilles(Texture3D* t1, Texture3D* t2){
+    Texture3D* tmp;
+    tmp = t1;
+    t1 = t2;
+    t2 = tmp;
 }
  

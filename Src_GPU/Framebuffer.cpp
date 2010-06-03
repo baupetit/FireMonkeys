@@ -118,7 +118,7 @@ void Framebuffer::traiterDessinDansBuffer(GLuint cible_id){
         
     prepareDrawIntoBufferAttachment((int)maxbuffers);
  
-    /*       
+    
     while ( _grille_depth - pos > (int)maxbuffers ){
         
         attacher_layers_de_la_texture(cible_id, pos, (int)maxbuffers);
@@ -132,10 +132,10 @@ void Framebuffer::traiterDessinDansBuffer(GLuint cible_id){
     detacher_texture();
     attacher_layers_de_la_texture(cible_id, pos, _grille_depth - pos);
     prepareDrawIntoBufferAttachment(_grille_depth - pos); 
-    */
+    /*
     attacher_layers_de_la_texture(cible_id, pos, 8);
     prepareDrawIntoBufferAttachment(8); 
-    
+    */
     dessinerCarre(pos/float(_grille_depth));
          
     // unbind !   

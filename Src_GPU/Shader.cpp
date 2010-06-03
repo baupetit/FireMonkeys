@@ -1,6 +1,6 @@
 #include "Shader.h"
 #include "loadprogram.h"
-
+#include "Texture3D.h"
 
 Shader::Shader(string fichier_vert_shader, string fichier_frag_shader){
 
@@ -33,9 +33,11 @@ void Shader::Unbind_Program(){
 
 
 
-void Shader::lierTexture(string nom_texture, GLuint texture_id){
+void Shader::lierTexture(string nom_texture, GLuint texture_id, GLuint level){
     GLuint	location = glGetUniformLocation ( program, nom_texture.c_str());
-    glUniform1i(location,texture_id);
+    glUniform1i(location, level);
+    glActiveTexture(level);
+    Texture3D::bindTexture(texture_id);
 }
 
 
