@@ -185,7 +185,6 @@ void Solver_GPU::linearSolve ( int b, float a1, float a2, float a3 ){
     shader_linear_solve->lierFloat("taille_depth",  _grille_depth);
 
     shader_linear_solve->lierTexture("texture_entree", _grille_feu_courante->get_texture_id(),0);
-    shader_linear_solve->lierTexture("texture_sortie", _grille_feu_dest->get_texture_id(),1);
 
     
     Vecteur3D a = Vecteur3D(a1,a2,a3);
@@ -196,11 +195,12 @@ void Solver_GPU::linearSolve ( int b, float a1, float a2, float a3 ){
         
     for ( int i = 0; i < 20; i++){
   
+        shader_linear_solve->lierTexture("texture_sortie", _grille_feu_dest->get_texture_id(),1);
+        
         //shader_linear_solve->lierTexture("texture_sortie", getDestDensities());
-    	buffer->traiterDessinDansBuffer(getTemp());
+    	buffer->traiterDessinDansBuffer(_grille_feu_dest->get_texture_id());
     	
         swapGrilles(_grille_feu_dest, _grille_temp);
-        shader_linear_solve->lierTexture("texture_sortie", _grille_feu_dest->get_texture_id(),1);
         //
         
         //swapGrillesCourantes();
