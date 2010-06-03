@@ -18,12 +18,16 @@ protected :
 	static float viscosityParam            ;
 	static float buoyancyParam             ;
 	static float vorticityConfinementParam ;
+
+
+    static float echantillonage;
 	
 	/**
 	 * Protected constructor : we do not want anyone to
 	 * instanciate any of these
 	 */
-	//SolverParam(){}
+	SolverParam(){}
+	
 public :
 	/** getters */
 	static float getDiffusionParamFire()         ;
@@ -36,6 +40,7 @@ public :
 	static float getViscosityParam()             ;
 	static float getBuoyancyParam()              ;
 	static float getVorticityConfinementParam()  ;
+	static float getEchantillonage()  ;
 	
 
 	/** setters */
@@ -49,8 +54,10 @@ public :
 	static void setViscosityParam( float param )            ;
 	static void setBuoyancyParam( float param )             ;
 	static void setVorticityConfinementParam( float param ) ;
+	static void setEchantillonage( float param)             ;
 
 	static void printParams() ;
+    static void initSolverParam() ;
 };
 
 #endif
