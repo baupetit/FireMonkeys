@@ -18,9 +18,10 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
 	
 	cout << "Nouveau Solver_GPU" << endl;
 
-	// Shader d'advection du feu
-	shader_advect_feu = new Shader("./Shaders/feu.vert","./Shaders/feu.frag");
-    
+	// Shader lineaire
+	shader_linear_solve = new Shader("./Shaders/vertex_shader_qui_ne_fait_rien.vert",
+	                                 "./Shaders/linear_solve.frag");
+        
 	// PINGPONG
 	pingpong = 1;
     
@@ -44,6 +45,23 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
 	for (int k = 0; k < _grille_width; k++){
 		for (int j = 0; j < _grille_height; j++){
 			for (int i = 0; i < _grille_depth; i++){    
+				*ptr = 0.0;
+				ptr++;
+				*ptr = 0.0;
+				ptr++;
+				*ptr = 0.0;
+				ptr++;
+				*ptr = 1.0f;
+				ptr++;
+			}
+		}
+	} 
+	/*
+	float *texture = new float[_grille_width*_grille_height*_grille_depth*4];
+	float *ptr = texture;
+	for (int k = 0; k < _grille_width; k++){
+		for (int j = 0; j < _grille_height; j++){
+			for (int i = 0; i < _grille_depth; i++){    
 				*ptr = i/(float)_grille_depth * coeff1;
 				ptr++;
 				*ptr = j/(float)_grille_height * coeff2;
@@ -55,16 +73,18 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
 			}
 		}
 	} 
+	*/
         
 	// INITIALISATION GRILLES
 	_grille_feu_1->charger_matrice(texture, _grille_width, _grille_height, _grille_depth);    
 	_grille_feu_2->charger_matrice(NULL,    _grille_width, _grille_height, _grille_depth);    
-    
+	
+	
 }
 
 Solver_GPU::~Solver_GPU(){
 	delete buffer;
-	delete shader_advect_feu;    
+	delete shader_linear_solve;    
 	delete _grille_feu_1;
 	delete _grille_feu_2;
 }
@@ -127,29 +147,40 @@ void setBoundaries ( int N, int b, float *x ) {
 void setBoundariesB0 ( int N, float *x ) {
 }
 
-void linearSolve ( int N, int b, float * x, float * x0, float a, float c ){
+void Solver_GPU::linearSolve ( int b, float a1, float a2, float a3 ){
+    float c1 = 1 + 6 * a1;
+    float c2 = 1 + 6 * a2;
+    float c3 = 1 + 6 * a3;
+    
+    shader_linear_solve->Bind_Program();          
+    shader_linear_solve->lierFloat("taille_width",  _grille_width);
+    shader_linear_solve->lierFloat("taille_height", _grille_height);
+    shader_linear_solve->lierFloat("taille_depth",  _grille_depth);
+    
+    Vecteur3D a = Vecteur3D(a1,a2,a3);
+    Vecteur3D c = Vecteur3D(c1,c2,c3);
+    shader_linear_solve->lierVecteur("a", a);
+    shader_linear_solve->lierVecteur("c", c);
+        
+    for ( int i = 0; i < 20; i++){
+
+        shader_linear_solve->lierTexture("texture_entree", getDensities());
+        //shader_linear_solve->lierTexture("texture_sortie", getDestDensities());
+    	buffer->traiterDessinDansBuffer(getDestDensities());
+        //swapGrillesCourantes();
+    
+    }    
+    
+    shader_linear_solve->Unbind_Program();          
+    
 }
 
-void Solver_GPU::diffuse ( Shader& calcul_shader, 
-                           string nom_texture, 
-                           float diff, 
+void Solver_GPU::diffuse ( float diff, 
                            float dt ){
     
     
-    
-	calcul_shader.lierTexture("feu", getDestDensities());
-    
-	// on lie le shader            
-	calcul_shader.Bind_Program();
-    
-    
-    
-	// traiter le calcul
-	buffer->traiterDessinDansBuffer(getDensities(), getDestDensities());
-    
-	// on delie le shader            
-	calcul_shader.Unbind_Program();
-    
+    float beattleJuce = dt*diff*1/(SolverParam::getEchantillonage()*SolverParam::getEchantillonage());
+    linearSolve(0, beattleJuce, beattleJuce, beattleJuce);
     
 }
 
@@ -187,13 +218,11 @@ void Solver_GPU::densitiesStep ( float dt )
 {	
     
     
-	diffuse (  *shader_advect_feu, 
-		   string("feu"), 
-		   SolverParam::getDiffusionParamFire(),// diffusion
-		   dt );
+	diffuse ( SolverParam::getDiffusionParamFire(),
+		      dt );
     
     
-	swapGrillesCourantes(); 
+	//swapGrillesCourantes(); 
     
     
 }

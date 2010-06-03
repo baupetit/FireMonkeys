@@ -1,0 +1,32 @@
+This a small demo that calculates a 128x128 cloth simulation
+entierely in the GPU.
+Requires (at least) the following extensions:
+
+    GLX_NV_float_buffer
+    GL_ATI_texture_float
+    GL_ARB_vertex_buffer_object
+    GL_NV_pixel_buffer_object
+and of course support for GLSLang.
+
+To compile just run "make", (it should work on really most linux distros),
+and then run ./gpu_cloth
+I am also providing a dynamic linux executable (that may not work).
+
+I only tested it on a geforce 6, if you realize to make it work
+on another card let me know.
+It still uses pbuffers (and not fbo) because nvidia linux programmers
+are too lazy to provide fbo enabled linux drivers (yet).
+I also only tesed it on linux, but the source code should compile
+on windows as well, if you realize to make it work let me know and
+send me the windows exe, so that i can put it on the website.
+Of course patches and suggestions are welcome (send me comments
+at <monge@sns.it>)
+
+I would lke to give special thanks to:
+Alexander Zaprjagaev "Frustum", because I borrowed a lot of source
+    code from his GPL project at <frustum.org>, even if i am sorry
+    that he decided to stop writing opensource programs :-(
+Emil Persson "Humus", who wrote a couple of cool cloth demos (in CPU)
+    that gave me the idea for this demo.
+
+Maurizio Monge

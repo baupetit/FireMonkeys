@@ -32,7 +32,7 @@ class Solver_GPU {
 
 private :
 	/** Shader de resolution de feu */
-	Shader *shader_advect_feu;
+	Shader *shader_linear_solve;
     
 	/** Dans quel cas sommmes nous */
 	int pingpong;
@@ -137,10 +137,15 @@ public :
 	void dessinerCarre();
     
 	/** Phase de diffusion */
-	void diffuse ( Shader& calcul_shader, 
-		       string nom_texture, 
-		       float diff, 
-		       float dt );
+	void diffuse ( float diff, 
+		           float dt );
+
+
+
+
+
+    void linearSolve ( int b, float a1, float a2, float a3 );
+
     
 };
 

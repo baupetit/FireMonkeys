@@ -92,8 +92,7 @@ void Framebuffer::prepareDrawIntoBufferAttachment(int nb_attachements){
 
 
    
-void Framebuffer::traiterDessinDansBuffer(GLuint source_id,
-                                          GLuint cible_id){
+void Framebuffer::traiterDessinDansBuffer(GLuint cible_id){
   
     // attribs
     glPushAttrib(GL_VIEWPORT_BIT | GL_COLOR_BUFFER_BIT);
@@ -118,23 +117,26 @@ void Framebuffer::traiterDessinDansBuffer(GLuint source_id,
     
         
     prepareDrawIntoBufferAttachment((int)maxbuffers);
-        
+ 
+    /*       
     while ( _grille_depth - pos > (int)maxbuffers ){
         
         attacher_layers_de_la_texture(cible_id, pos, (int)maxbuffers);
             
         // dessin    
-        dessinerCarre(source_id, pos/float(_grille_depth));
+        dessinerCarre(pos/float(_grille_depth));
         
         pos += 8;
        } 
-       
-    
+      
     detacher_texture();
     attacher_layers_de_la_texture(cible_id, pos, _grille_depth - pos);
-    prepareDrawIntoBufferAttachment(_grille_depth - pos);
+    prepareDrawIntoBufferAttachment(_grille_depth - pos); 
+    */
+    attacher_layers_de_la_texture(cible_id, pos, 8);
+    prepareDrawIntoBufferAttachment(8); 
     
-    dessinerCarre(source_id, pos/float(_grille_depth));
+    dessinerCarre(pos/float(_grille_depth));
          
     // unbind !   
     unbind_Buffer();
@@ -148,7 +150,7 @@ void Framebuffer::traiterDessinDansBuffer(GLuint source_id,
 
 
 
-void Framebuffer::dessinerCarre(int id_texture, float decalage){
+void Framebuffer::dessinerCarre(float decalage){
  
     // pos du dessin
     glMatrixMode(GL_MODELVIEW);
@@ -159,10 +161,7 @@ void Framebuffer::dessinerCarre(int id_texture, float decalage){
     glPushMatrix();
     glLoadIdentity();
     glOrtho(0,1,0,1,0,1);
-    
-    // texture
-    Texture3D::bindTexture(id_texture);
-    
+        
                
     // affichage            
     glBegin(GL_QUADS);        

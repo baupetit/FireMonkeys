@@ -13,6 +13,7 @@ float SolverParam::fireToSmokeParam          = 0.0;
 float SolverParam::viscosityParam            = 0.0;
 float SolverParam::buoyancyParam             = 0.0;
 float SolverParam::vorticityConfinementParam = 0.0;
+float SolverParam::echantillonage = 0.0;
 
 float SolverParam::getDiffusionParamFire()         { return SolverParam::diffusionParamFire; }
 float SolverParam::getDiffusionParamSmoke()        { return SolverParam::diffusionParamSmoke; }
@@ -24,6 +25,7 @@ float SolverParam::getFireToSmokeParam()           { return SolverParam::fireToS
 float SolverParam::getViscosityParam()             { return SolverParam::viscosityParam; }
 float SolverParam::getBuoyancyParam()              { return SolverParam::buoyancyParam; }
 float SolverParam::getVorticityConfinementParam()  { return SolverParam::vorticityConfinementParam; }
+float SolverParam::getEchantillonage()             { return SolverParam::echantillonage; }
 
 void SolverParam::setDiffusionParamFire( float param )         { SolverParam::diffusionParamFire = param ; }
 void SolverParam::setDiffusionParamSmoke( float param )        { SolverParam::diffusionParamSmoke = param ; }
@@ -35,6 +37,7 @@ void SolverParam::setFireToSmokeParam( float param )           { SolverParam::fi
 void SolverParam::setViscosityParam( float param )             { SolverParam::viscosityParam = param ; }
 void SolverParam::setBuoyancyParam( float param )              { SolverParam::buoyancyParam = param ; }
 void SolverParam::setVorticityConfinementParam( float param )  { SolverParam::vorticityConfinementParam = param ; }
+void SolverParam::setEchantillonage( float param)              { SolverParam::echantillonage = param ; }
 
 void SolverParam::printParams() {
 	cout << "Solver params are :" << endl ;
@@ -50,3 +53,20 @@ void SolverParam::printParams() {
 	cout << "    VorticityConfinementParam : " << vorticityConfinementParam << endl ;
 	cout << endl << endl ;
 }
+
+
+
+void SolverParam::initSolverParam() {
+	SolverParam::diffusionParamFire        = 0.001;
+	SolverParam::diffusionParamSmoke       = 0.00001;
+	SolverParam::diffusionParamTemperature = 0.01;
+	SolverParam::coolingParam              = 1.5;
+	SolverParam::consumingParam            = 1.0;
+	SolverParam::tempMaxParam              = 0.4;
+	SolverParam::fireToSmokeParam          = 180.0;
+	SolverParam::viscosityParam            = 0.0;
+	SolverParam::buoyancyParam             = 0.5;
+	SolverParam::vorticityConfinementParam = 2.0;
+	SolverParam::echantillonage            = 1/128;
+}
+

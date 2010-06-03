@@ -43,7 +43,7 @@ private:
     
 public:
     /** Constructeur par défaut */
-    Framebuffer(int jambi, int jambo, int jamboo);
+    Framebuffer(int width, int height, int depth);
     
     /** Destructeur */
     ~Framebuffer();
@@ -51,8 +51,7 @@ public:
     /** Retourne l'id du buffer*/
     GLuint get_id_buffer() const;
     
-    void traiterDessinDansBuffer(GLuint source_id,
-                                 GLuint cible_id);
+    void traiterDessinDansBuffer(GLuint cible_id);
     
 private:    
 
@@ -65,7 +64,7 @@ private:
     /** Decharge le buffer courant */
     void unbind_Buffer();
     
-    void dessinerCarre(int id_texture, float decalage);
+    void dessinerCarre(float decalage);
     
     
     /** Attache au buffer les layers de la texture associée */

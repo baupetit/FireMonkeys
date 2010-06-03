@@ -14,6 +14,8 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 
+#include "Vecteur.h"
+
 
 #include <iostream>
 using namespace std;
@@ -39,6 +41,12 @@ public:
     
     /** Lier texture */
     void lierTexture(string nom_texture, GLuint texture_id);
+    
+    /** Lier vecteur */
+    void lierVecteur(string nom_vecteur, Vecteur3D& vect);
+    
+    /** Lier flottant */
+    void lierFloat(string nom_vecteur, float flouttounet);
     
     /** Renvoie d'id du program */
     GLuint getProgramId() const{

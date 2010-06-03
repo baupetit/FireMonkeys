@@ -22,7 +22,7 @@ static inline float getTempVal( int i, int j, int T ){
 
 Fluid::Fluid()
 {
-        tailleGrille = 20;
+        tailleGrille = 30;
         s = new Solver(tailleGrille);
 	tempIndex = new TempToRGB(256,50);
 
