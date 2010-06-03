@@ -1,8 +1,11 @@
+
 uniform sampler3D Texture0;
 uniform sampler3D Texture1;
 
-void main()
+
+void main(void)
 {  
+
 	vec4 texel0, texel1, color;
 	
 	texel0 = vec4( texture3D( Texture0,gl_TexCoord[0].stp));
