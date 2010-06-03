@@ -54,7 +54,7 @@ void Fluid_GPU::Afficher_Face_Camera(Vecteur3D& positionCamera, Vecteur3D& orien
 
 void Fluid_GPU::afficherFlamme(){
     // Feu
-    dessinerPlansDansTexture3D(s->getDensities(),10);
+    dessinerPlansDansTexture3D(s->getDensities(),128);
 }
 
 
@@ -243,6 +243,8 @@ void Fluid_GPU::dessinerPlansDansTexture3DFaceALaCamera(GLuint id_texture,
 void Fluid_GPU::dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans){
     
     glPushMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    
     
     Texture3D::bindTexture(2);
 

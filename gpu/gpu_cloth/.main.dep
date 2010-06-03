@@ -1,2 +1,0 @@
-main.o: main.cpp glapp.h mathlib.h pbuffer.h buffer.h texture.h shader.h \
- font.h

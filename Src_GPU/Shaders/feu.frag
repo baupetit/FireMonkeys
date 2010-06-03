@@ -25,7 +25,21 @@ void main (){
     
     vec3 coord = gl_TexCoord[0].stp;
     
-        
+    
+    vec4 couleur = vec4( texture3D( feu, coord));
+    couleur.x = couleur.x + 0.003;
+    couleur.y = couleur.y + 0.003;
+    couleur.z = couleur.z + 0.003;
+	gl_FragData[0] = couleur;
+	gl_FragData[1] = couleur;
+	gl_FragData[2] = couleur;
+	gl_FragData[3] = couleur;
+	gl_FragData[4] = couleur;
+	gl_FragData[5] = couleur;
+	gl_FragData[6] = couleur;
+	gl_FragData[7] = couleur;
+    
+    /*
 	gl_FragData[0] = vec4( texture3D( feu, coord + decalage0));
 	gl_FragData[1] = vec4( texture3D( feu, coord + decalage1));
 	gl_FragData[2] = vec4( texture3D( feu, coord + decalage2));
@@ -34,7 +48,10 @@ void main (){
 	gl_FragData[5] = vec4( texture3D( feu, coord + decalage5));
 	gl_FragData[6] = vec4( texture3D( feu, coord + decalage6));
 	gl_FragData[7] = vec4( texture3D( feu, coord + decalage7));
+    */
 	
+	//gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0);
+	//gl_FragColor = vec4( texture3D( feu, coord));
 
 
     
