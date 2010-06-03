@@ -37,9 +37,6 @@ private :
     // Instance
     static Viewer *_instance;
 
-	// window
-	int h, w;
-
     // Camera
 	float _cameraAngle;
 	float _distToOrigin;
@@ -72,25 +69,18 @@ private :
 	
 	
 	
-	///////////////////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////
-	////////////// c'est ici qu'on essaye d'enregistrer notre buffer dans la texture 3D
-
-    /** Initialisation des buffers et textures */
-	void init();
 	
-	GLuint texture; // texture qui sera le rendu du buffer
+	
+	//////////////TEST
+	void init();
+	GLuint texture; // rendu du buffer
 	GLuint texture2; // texture de l'objet initial
 	GLuint framebuffer;
 	GLuint renderbuffer;
 	
-	Shader *shader;
 	
-	/** 
-	    Dessine un plan devant la camera,
-	    avec la texture associee
-	*/
-    void draw_carre();
+	Shader *shadoudoudoudoudoulolptdrMDRXD;
+
 	
 
 };

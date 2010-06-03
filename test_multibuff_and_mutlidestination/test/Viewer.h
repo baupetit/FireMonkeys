@@ -37,9 +37,6 @@ private :
     // Instance
     static Viewer *_instance;
 
-	// window
-	int h, w;
-
     // Camera
 	float _cameraAngle;
 	float _distToOrigin;
@@ -82,7 +79,6 @@ private :
 	GLuint texture; // texture qui sera le rendu du buffer
 	GLuint texture2; // texture de l'objet initial
 	GLuint framebuffer;
-	GLuint renderbuffer;
 	
 	Shader *shader;
 	

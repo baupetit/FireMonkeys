@@ -13,9 +13,6 @@
 *.gcno
 *.gcda
 
-# on veut pas des objets
-*.o
-
 # pour les utilisateurs de mac
 ._*
 .DS_Store

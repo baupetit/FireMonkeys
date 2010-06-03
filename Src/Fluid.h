@@ -14,6 +14,7 @@
 #include "solver.h"
 #include "BasicEntite.h"
 #include "tempToRGB.h"
+#include "Shader.h"
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include <GL/gl.h>
@@ -41,12 +42,9 @@ private :
 	float gen_dens;
 	/** matrice RGBA pour charger la texture 3D */
 	Vecteur4D *matriceRGBA_fire;
-    Vecteur4D *matriceRGBA_smoke;
+	Vecteur4D *matriceRGBA_smoke;
 	/**ID du programme shader pour la multitexture*/
-	GLuint _multitex_program;
-	/**ID des locations pour les textures passees en uniform*/
-	GLuint _fumee_id_multitex;
-	GLuint _fire_id_multitex;
+	Shader *renderer;
 public :
 	Fluid();
 	~Fluid();
@@ -65,8 +63,9 @@ private:
 	void renduFlammeGPUFaceCamera(Vecteur3D& positionCamera, 
 	                              Vecteur3D& directionCamera );
 	/** Affiche la flamme et la fumee face a la camera*/
-	void renduFlammeETFumeeGPUFaceCamera(Vecteur3D& positionCamera,
-												Vecteur3D& directionCamera );
+	void renduFlammeETFumeeGPUFaceCamera( int nb_plans,
+					      Vecteur3D& positionCamera,
+					      Vecteur3D& directionCamera );
 	/** Permet de charger le tableau de la fumée dans la matrice RGBA */
 	void majMatriceFumeeEnMatriceRGBA();
 	/** Permet de charger le tableau de la flamme dans la matrice RGBA */
