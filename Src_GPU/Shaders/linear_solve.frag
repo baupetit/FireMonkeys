@@ -42,33 +42,6 @@ vec3 linearsolve(vec3 coordonnee){
         return result;
         
     }else{
-    /*
-        
-        result = vec3( texture3D ( texture_entree, coordonnee ) .rgb )
-                 + a * ( ( texture3D ( texture_entree, coordonnee + voisinN) .rgb )
-                       + ( texture3D ( texture_entree, coordonnee + voisinE) .rgb )
-                       + ( texture3D ( texture_entree, coordonnee + voisinS) .rgb )
-                       + ( texture3D ( texture_entree, coordonnee + voisinO) .rgb )
-                       + ( texture3D ( texture_entree, coordonnee + voisinAV) .rgb )
-                       + ( texture3D ( texture_entree, coordonnee + voisinAR) .rgb )
-                       );
-                       
-                       
-        result = vec3( texture3D ( texture_entree, coordonnee ) .rgb )
-                 + a * ( ( texture3D ( texture_sortie, coordonnee + voisinN) .rgb )
-                       + ( texture3D ( texture_sortie, coordonnee + voisinE) .rgb )
-                       + ( texture3D ( texture_sortie, coordonnee + voisinS) .rgb )
-                       + ( texture3D ( texture_sortie, coordonnee + voisinO) .rgb )
-                       + ( texture3D ( texture_sortie, coordonnee + voisinAV) .rgb )
-                       + ( texture3D ( texture_sortie, coordonnee + voisinAR) .rgb )
-                       );  
-*/                       
-                       
-                       
-        result = vec3( texture3D ( texture_entree, coordonnee ) .rgb );
-        result.r = result.r + 0.0021;
-
-
 
 
         
