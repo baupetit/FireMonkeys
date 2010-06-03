@@ -18,7 +18,6 @@ using namespace std;
 FluidViewer::FluidViewer()
         :Viewer("Solver Viewer", 800, 600)
 {
-
        _fluid = new Fluid();
 }
 
@@ -61,8 +60,8 @@ void FluidViewer::rendu(){
 	////////////////////////////////////////////////////////////////////////////
 	//// OBJETS
 	glPushMatrix();
-    glMatrixMode (GL_MODELVIEW);
-    Vecteur3D positionCamera;
+	glMatrixMode (GL_MODELVIEW);
+	Vecteur3D positionCamera;
 	positionCamera.x = _distToOrigin*cos(_cameraAngle);
 	positionCamera.y = _cameraHeight;
 	positionCamera.z = _distToOrigin*sin(_cameraAngle);
@@ -70,27 +69,17 @@ void FluidViewer::rendu(){
 	directionCamera.x = -positionCamera.x;
 	directionCamera.y = 0;
 	directionCamera.z = -positionCamera.z;
-	_fluid->Afficher_Entite_Face_Camera(positionCamera, directionCamera);
-   	//_fluid->Afficher_Entite();
+	_fluid->Afficher_Entite_Face_Camera(positionCamera, directionCamera,dt);
 	glPopMatrix();
 	
-    
 	////////////////////////////////////////////////////////////////////////////
 	//// TIME
 	// 
-    
 	frame += 1;
 	if( elapsed > 1. ){
 		cout << " FPS : " << frame << endl;
 		elapsed -= 1.;
 		frame = 0 ;
-	    /*
-		if( toto < 10 ){
-			s->setDensity( N/2 , 5 , N/2 , 0.5 );
-			s->setVelocity( N/2,1,N/2,0,100,0);
-			toto +=1;
-		}	
-	    */		
 	}
 }
 
