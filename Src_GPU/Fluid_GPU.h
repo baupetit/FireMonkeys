@@ -16,7 +16,7 @@
 
 
 /** Taille de la grille **/
-#define TAILLE_GRILLE 10
+#define TAILLE_GRILLE 128
 
 #include "Vecteur.h"
 #include "BasicEntite.h"

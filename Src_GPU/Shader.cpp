@@ -28,5 +28,12 @@ void Shader::Bind_Program(){
 }
     
 void Shader::Unbind_Program(){	
-	glUseProgram(0);
+    glUseProgram(0);
+}
+
+
+
+void Shader::lierTexture(string nom_texture, GLuint texture_id){
+    GLuint	location = glGetUniformLocation ( program, nom_texture.c_str());
+    glUniform1i(location,texture_id);
 }

@@ -22,6 +22,12 @@ private:
     /** Id de la texture */
     GLuint texture_id;
     
+    /** Params */
+    int _width;
+    int _height;
+    int _depth;
+    
+    
 public:
     /** Constructeur par défaut*/
     Texture3D();
@@ -43,6 +49,15 @@ public:
     
     /** Renvoie l'id de la texture */
     GLuint get_texture_id() const;
+    
+    
+    /** Bind la texture avec les bons paramètres*/
+    void bindTexture();
+    
+    /** Unbind la texture*/
+    static void unbindTexture();
+    
+    static void bindTexture(GLuint texture_id);
 };
 
 #endif

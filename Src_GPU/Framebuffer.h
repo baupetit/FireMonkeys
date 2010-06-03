@@ -15,15 +15,16 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 
-#include "Texture3D.h"    
+
+
+#include "Shader.h"
+#include "Texture3D.h"
+
     
 class Framebuffer{
 private:
     /** Identifiant du buffer */
     GLuint _buffer_id;
-    
-    /** Texture associée au buffer*/
-    Texture3D *_texture_associee;
         
     /** Largeur de la grille */
     int _grille_width;
@@ -35,36 +36,44 @@ private:
     int _grille_depth;
     
     
+    
+    
+    
+    
+    
 public:
     /** Constructeur par défaut */
-    Framebuffer();
+    Framebuffer(int jambi, int jambo, int jamboo);
     
     /** Destructeur */
     ~Framebuffer();
+                
+    /** Retourne l'id du buffer*/
+    GLuint get_id_buffer() const;
+    
+    void traiterDessinDansBuffer(Shader& shader,
+                                 GLuint source_id,
+                                 GLuint cible_id);
+    
+private:    
+
+    /** Prepare le dessin dans les GL_COLOR_ATTACHMENTi associés */
+    void prepareDrawIntoBufferAttachment(int nb_attachements);
     
     /** Charge le buffer courant */
     void bind_Buffer();
     
-    /** Attache au buffer les layers de la texture associée */
-    void attacher_layers_de_la_texture(int numero_layer, int nb_layer);
-    
-    /** Detache du buffer la texture associée */
-    void detacher_texture();
-    
     /** Decharge le buffer courant */
     void unbind_Buffer();
     
-    /** Retourne la texture associee*/
-    GLuint get_id_texture() const;
+    void dessinerCarre(int id_texture, float decalage);
     
-    /** Retourne l'id du buffer*/
-    GLuint get_id_buffer() const;
     
-    /** Initialise la texture associee avec le tableau donné */
-    void initialiser_texture_buf(const float *tab, 
-                                 const int grille_width, 
-                                 const int grille_height, 
-                                 const int grille_depth);                                 
+    /** Attache au buffer les layers de la texture associée */
+    void attacher_layers_de_la_texture(GLuint texture_id, int numero_layer, int nb_layer);
+    
+    /** Detache du buffer la texture associée */
+    void detacher_texture();
     
 };
 #endif
