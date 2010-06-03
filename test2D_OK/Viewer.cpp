@@ -65,7 +65,7 @@ void Viewer::_initGlut(const string & title, int width, int height,
 	glutPassiveMotionFunc(_passiveMotionFunc);
 	glutReshapeFunc(_reshapeFunc);
 	glutVisibilityFunc(_visibilityFunc);
-	glutIdleFunc(_displayFunc);
+	//glutIdleFunc(_displayFunc);
 	
 	// Affichage de la version et des extensions
 	cout << "GL Version: " << glGetString(GL_VERSION) << endl;

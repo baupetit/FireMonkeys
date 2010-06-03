@@ -1,18 +1,18 @@
-
-
-uniform sampler3D fire;
-uniform sampler3D fumee;
-//-------------------
-
+uniform sampler3D Texture0;
+uniform sampler3D Texture1;
 
 void main()
 {  
-   vec4 texel0, texel1, resultColor;
-   //-------------------
-   texel0 = vec4( texture3D( fire,gl_TexCoord[0].stp));
-   texel1 = vec4( texture3D( fumee,gl_TexCoord[0].stp));
-   //-------------------
-   resultColor = mix(texel0, texel1, texel0.a);
-   gl_FragColor = vec4(texel0);//resultColor;
+	vec4 texel0, texel1, color;
+	
+	texel0 = vec4( texture3D( Texture0,gl_TexCoord[0].stp));
+	texel1 = vec4( texture3D( Texture1,gl_TexCoord[0].stp));
+	
+	if( texel0.a > texel1.a )
+		color = texel0;
+	else 
+		color = texel1;
+	
+	gl_FragColor = color; 
 }
 

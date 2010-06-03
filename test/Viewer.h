@@ -37,6 +37,9 @@ private :
     // Instance
     static Viewer *_instance;
 
+	// window
+	int h, w;
+
     // Camera
 	float _cameraAngle;
 	float _distToOrigin;

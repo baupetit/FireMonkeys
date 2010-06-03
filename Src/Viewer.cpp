@@ -99,7 +99,7 @@ void Viewer::_initDepth(){
 
 void Viewer::_initRendering(){
 	cout << "Initialisation du rendu " << endl;
-	glClearColor(0.5f, 0.5f, 0.5f, 0.8f);
+	glClearColor(1.f, 1.f, 1.f, 1.f);
 	glShadeModel(GL_SMOOTH);
 	glPolygonMode(GL_FRONT, GL_FILL);
 	glLineWidth(1.0f);
@@ -123,7 +123,6 @@ void Viewer::_initLighting(){
 	
 void Viewer::_displayFunc(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	glClearColor( 0.5,0.5,0.5,0.8);
 	_instance->rendu();
 	glFlush();
 	glutSwapBuffers();
