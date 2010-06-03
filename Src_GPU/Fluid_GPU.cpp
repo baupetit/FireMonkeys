@@ -15,8 +15,7 @@ Fluid_GPU::Fluid_GPU(){
     
 	s = NULL;
     
-	position.x = 1.0;
-	position.z = -1.0;
+	position.x = -1.5;
 }
 
 Fluid_GPU::~Fluid_GPU(){
@@ -31,7 +30,7 @@ void Fluid_GPU::initialiserFluid(){
 }
 
 void Fluid_GPU::resolutionFluid(){
-	s->densitiesStep(0.1);
+	s->densitiesStep(0.001);
 }
 
 void Fluid_GPU::Afficher(){
@@ -176,7 +175,7 @@ void Fluid_GPU::dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans){
 	glPushMatrix();
 	glMatrixMode(GL_MODELVIEW);
     
-	Texture3D::bindTexture(2);
+	Texture3D::bindTexture(3);
 
 	GLfloat verts[4][3] = { { 0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {1.0, 1.0, 0.0}, {1.0, 0.0, 0.0}};
 

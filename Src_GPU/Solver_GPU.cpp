@@ -103,6 +103,7 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
 	*/
 	
         
+        /*
         
 	float *texture = new float[_grille_width*_grille_height*_grille_depth*4];
 	float *ptr = texture;
@@ -124,8 +125,8 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
 	ptr = texture;
 	for (int k = 0; k < _grille_width; k++){
 		for (int j = 0; j < _grille_height; j++){
-			for (int i = 0; i < _grille_depth/2; i++){    
-				*ptr = 0.4;
+			for (int i = 0; i < _grille_depth / 30; i++){    
+				*ptr = 0.1;
 				ptr++;
 				*ptr = 0.4;
 				ptr++;
@@ -136,6 +137,32 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
 			}
 		}
 	} 
+	
+	
+	
+	*/
+	
+	
+	
+	float *texture = new float[_grille_width*_grille_height*_grille_depth*4];
+	float *ptr = texture;
+	for (int k = 0; k < _grille_width; k++){
+		for (int j = 0; j < _grille_height; j++){
+			for (int i = 0; i < _grille_depth; i++){    
+				*ptr = i/(float)_grille_depth * coeff1;
+				ptr++;
+				*ptr = j/(float)_grille_height * coeff2;
+				ptr++;
+				*ptr = k/(float)_grille_width;
+				ptr++;
+				*ptr = 1.0f;
+				ptr++;
+			}
+		}
+	} 
+	
+	
+	
 	
 	
 	// INITIALISATION GRILLES
