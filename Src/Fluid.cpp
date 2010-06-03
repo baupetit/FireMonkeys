@@ -22,18 +22,18 @@ static inline float getTempVal( int i, int j, int T ){
 
 Fluid::Fluid()
 {
-        tailleGrille = 25;
+        tailleGrille = 40;
         s = new Solver(tailleGrille);
 	tempIndex = new TempToRGB(256,50);
 	
-	/*
+	
 	  for( int i = 7 ; i < tailleGrille-6 ; ++i ){
 	  for( int j = 7 ; j < tailleGrille-6 ; ++j ){
 	  s->setDensity( i ,5, j, 10.0f );        
 	  s->setTemperature( i ,5, j, (getTempVal(i,j,tailleGrille))/5);        
 	  }
 	  }
-	*/
+	/*
 
 	int mid = tailleGrille/2;
 	s->setDensity( mid ,5, mid, 100.0f );   
@@ -50,7 +50,7 @@ Fluid::Fluid()
 	s->setTemperature( mid-1 ,5, mid, 10*38*((random()+1)/(float)RAND_MAX)*4/1);   
 	s->setTemperature( mid ,5, mid+1, 10*12*((random()+1)/(float)RAND_MAX)*4/1);   
 	s->setTemperature( mid ,5, mid-1, 10*55*((random()+1)/(float)RAND_MAX)*4/1);   
-
+*/
 	for( int i = 7 ; i < tailleGrille-6 ; ++i ){
 		for( int j = 7 ; j < tailleGrille-6 ; ++j ){
 			s->setVelocity(3,i,j, 0.20,0.0,0.0);
@@ -272,7 +272,7 @@ void Fluid::majMatriceFlammeEnMatriceRGBA(){
 		if (*pointeurMatriceACopier < seuil) 
 			(*pointeurMatriceRGBA).w = 0;
 		else  	
-			(*pointeurMatriceRGBA).w = 1/(*pointeurMatriceACopier3);
+			(*pointeurMatriceRGBA).w = 1/(*pointeurMatriceACopier3 * 13);
 		// MAJ
 		pointeurMatriceRGBA++;
 		pointeurMatriceACopier++;
@@ -496,7 +496,7 @@ void Fluid::dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans){
 
 void Fluid::Mise_A_Jour(){
 	s->velocitiesStepWithTemp(0.0, 0.5, 2.0,0.1);
-	s->densitiesStepWithTemp(0.001,0.00001,0.01, 2, 1  , 0.4, 2, 0.1);
+	s->densitiesStepWithTemp(0.001,0.00001,0.01, 1, 1  , 0.4, 5, 0.1);
 }
 
 
