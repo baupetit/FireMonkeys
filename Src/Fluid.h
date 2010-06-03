@@ -76,13 +76,13 @@ private:
 	void dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans);
 	                                
 	/** Dessine des plans dans la texture3D face a la camera*/
-	void dessinerPlansDansTexture3DFaceALaCamera(GLuint id_texture, int nb_plans,
+	void dessinerPlansDansTexture3DFaceALaCamera(int nb_plans,
 	                     Vecteur3D& positionCamera, Vecteur3D& directionCamera);
 	
 public :
-	void Afficher();
-	void Afficher_Face_Camera(Vecteur3D& positionCamera, Vecteur3D& directionCamera );
-	void Mise_A_Jour();
+	void Afficher( float dt );
+	void Afficher_Face_Camera(Vecteur3D& positionCamera, Vecteur3D& directionCamera,float dt);
+	void Mise_A_Jour( float dt );
 };
 
 

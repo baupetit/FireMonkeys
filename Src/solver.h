@@ -30,36 +30,26 @@ public :
 	 * @brief : move densities over a dt timestep with a certain
 	 * diffusion factor
 	 */
-	void densitiesStep( float diff , float dt );
+	void densitiesStep( float dt );
 
 	/**
 	 * @brief : compute velocities evolution over a dt timestep
 	 * using visc as the viscosity of the fluid
 	 */
-	void velocitiesStep( float visc , float dt );
+	void velocitiesStep( float dt );
 
 
 	/**
 	 * @brief : move densities over a dt timestep with a certain
 	 * diffusion factor with Temperature
 	 */
-	void densitiesStepWithTemp ( float diffFire,
-				     float diffSmoke,
-				     float diffTemp,
-				     float cool, 
-					 float consume,
-				     float sub, 
-				     float fireTosmoke, 
-				     float dt );
+	void densitiesStepWithTemp ( float dt );
 
 	/**
 	 * @brief : compute velocities evolution over a dt timestep
 	 * using visc as the viscosity of the fluid with Temperature
 	 */
-	void velocitiesStepWithTemp( float visc , 
-				     float buoy, 
-				     float vc_eps, 
-				     float dt );
+	void velocitiesStepWithTemp( float dt );
 
 
 	/**
