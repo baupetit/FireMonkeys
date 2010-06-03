@@ -7,6 +7,9 @@
 
 #include <cmath>
 
+#include <cstdlib>
+#include <ctime>
+
 
 Solver_GPU::Solver_GPU( int width, int height, int depth ) 
             : _grille_width(width), _grille_height(height), _grille_depth(depth) {
@@ -26,15 +29,22 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
     _grille_feu_1 = new Texture3D();
     _grille_feu_2 = new Texture3D();
     
+    srand ( time(NULL) );
+
+    
+    float coeff1 = rand()/(float)RAND_MAX;
+    float coeff2 = rand()/(float)RAND_MAX;
+    
+    
     // Creation du champs de vitesse vide
     float *texture = new float[_grille_width*_grille_height*_grille_depth*4];
     float *ptr = texture;
     for (int k = 0; k < _grille_width; k++){
         for (int j = 0; j < _grille_height; j++){
             for (int i = 0; i < _grille_depth; i++){    
-                *ptr = 1.0;//i/(float)_grille_depth;
+                *ptr = i/(float)_grille_depth * coeff1;
                 ptr++;
-                *ptr = j/(float)_grille_height;
+                *ptr = j/(float)_grille_height * coeff2;
                 ptr++;
                 *ptr = k/(float)_grille_width;
                 ptr++;
@@ -43,26 +53,6 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
             }
         }
     } 
-    
-
-    /*    
-    // Quelques valeurs initiales
-    ptr = texture;
-    for (int k = 0; k < _grille_width/4; k++){
-        for (int j = 0; j < _grille_height; j++){
-            for (int i = 0; i < _grille_depth ; i++){   
-                *ptr = 1.0f;
-                ptr++;
-                *ptr = 0.0f;
-                ptr++;
-                *ptr = 1.0f;
-                ptr++;
-                *ptr = 0.5f;
-                ptr++;
-            }
-        }
-    }
-    */
         
     // INITIALISATION GRILLES
     _grille_feu_1->charger_matrice(texture, _grille_width, _grille_height, _grille_depth);    
@@ -147,8 +137,20 @@ void Solver_GPU::diffuse ( Shader& calcul_shader,
                            float diff, 
                            float dt ){
     
+    
+    
+    calcul_shader.lierTexture("feu", getDestDensities());
+    
+    // on lie le shader            
+    calcul_shader.Bind_Program();
+    
+    
+    
     // traiter le calcul
-    buffer->traiterDessinDansBuffer(calcul_shader, getDensities(), getDestDensities());
+    buffer->traiterDessinDansBuffer(getDensities(), getDestDensities());
+    
+    // on delie le shader            
+    calcul_shader.Unbind_Program();
     
     
 }
@@ -193,7 +195,7 @@ void Solver_GPU::densitiesStep ( float diff, float dt )
                dt );
     
     
-    //swapGrillesCourantes(); 
+    swapGrillesCourantes(); 
     
     
 }

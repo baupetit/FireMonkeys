@@ -51,8 +51,7 @@ public:
     /** Retourne l'id du buffer*/
     GLuint get_id_buffer() const;
     
-    void traiterDessinDansBuffer(Shader& shader,
-                                 GLuint source_id,
+    void traiterDessinDansBuffer(GLuint source_id,
                                  GLuint cible_id);
     
 private:    
