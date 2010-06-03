@@ -87,8 +87,10 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
 	float *ptr = texture;
 	for (int k = 0; k < _grille_width; k++){
 		for (int j = 0; j < _grille_height; j++){
-			for (int i = 0; i < _grille_depth; i++){    
-				*ptr = i/(float)_grille_depth * coeff1;
+			for (int i = 0; i < _grille_depth; i++){
+				if(i<4){    
+				*ptr = 1.0f;//i/(float)_grille_depth * coeff1;
+				} else {*ptr = 0.0f;}
 				ptr++;
 				*ptr = 0.0;//j/(float)_grille_height * coeff2;
 				ptr++;
@@ -200,7 +202,7 @@ void Solver_GPU::linearSolve ( int b, float a1, float a2, float a3 ){
         //shader_linear_solve->lierTexture("texture_sortie", getDestDensities());
     	buffer->traiterDessinDansBuffer(_grille_feu_dest->get_texture_id());
     	
-        swapGrilles(_grille_feu_dest, _grille_temp);
+        swapGrilles(&_grille_feu_dest, &_grille_temp);
         //
         
         //swapGrillesCourantes();
@@ -267,7 +269,7 @@ void Solver_GPU::densitiesStep ( float dt )
 		      dt );
     
    
-    swapGrilles(_grille_feu_dest, _grille_feu_courante);
+    swapGrilles(&_grille_feu_dest, &_grille_feu_courante);
     
 }
 
@@ -283,10 +285,10 @@ void Solver_GPU::velocitiesStepWithTemp ( float dt )
 {
 }
     
-void Solver_GPU::swapGrilles(Texture3D* t1, Texture3D* t2){
+void Solver_GPU::swapGrilles(Texture3D** t1, Texture3D** t2){
     Texture3D* tmp;
-    tmp = t1;
-    t1 = t2;
-    t2 = tmp;
+    tmp = *t1;
+    *t1 = *t2;
+    *t2 = tmp;
 }
  

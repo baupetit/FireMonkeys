@@ -145,7 +145,7 @@ public :
 
     void linearSolve ( int b, float a1, float a2, float a3 );
 
-    void swapGrilles(Texture3D* t1, Texture3D* t2);
+    void swapGrilles(Texture3D** t1, Texture3D** t2);
     
 };
 
