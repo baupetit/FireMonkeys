@@ -22,9 +22,20 @@ static inline float getTempVal( int i, int j, int T ){
 
 Fluid::Fluid()
 {
-        tailleGrille = 30;
+        tailleGrille = 40;
         s = new Solver(tailleGrille);
 	tempIndex = new TempToRGB(256,50);
+
+	
+	/*
+	  for( int i = 7 ; i < tailleGrille-6 ; ++i ){
+	  for( int j = 7 ; j < tailleGrille-6 ; ++j ){
+	  s->setDensity( i ,5, j, 10.0f );        
+	  s->setTemperature( i ,5, j, (getTempVal(i,j,tailleGrille))/5);        
+	  }
+	  }
+	*/
+
 
 	int mid = tailleGrille/2;
 	s->setDensity( mid ,5, mid, 100.0f );   
@@ -41,6 +52,7 @@ Fluid::Fluid()
 	s->setTemperature( mid-1 ,5, mid, 10*38*((random()+1)/(float)RAND_MAX)*4/1);   
 	s->setTemperature( mid ,5, mid+1, 10*12*((random()+1)/(float)RAND_MAX)*4/1);   
 	s->setTemperature( mid ,5, mid-1, 10*55*((random()+1)/(float)RAND_MAX)*4/1);   
+
 	
 	/*
 	for( int i = 7 ; i < tailleGrille-6 ; ++i ){

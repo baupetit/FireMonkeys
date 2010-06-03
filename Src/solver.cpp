@@ -336,6 +336,7 @@ void advect_cool ( int N, int b,
 				lhs = (t0*(r0*f0[IX(i1,j0,k0)] + r1*f0[IX(i1,j0,k1)]) + 
 				       t1*(r0*f0[IX(i1,j1,k0)] + r1*f0[IX(i1,j1,k1)]));
 
+
 				f[IX(i,j,k)] = (diff_fire2smoke < 0 ) ? (s0*rhs + s1*lhs ) - diff_fire2smoke/taux_conversion_fire_to_smoke : (s0*rhs + s1*lhs );
 
 				
