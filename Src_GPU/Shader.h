@@ -40,7 +40,7 @@ public:
     void Unbind_Program();
     
     /** Lier texture */
-    void lierTexture(string nom_texture, GLuint texture_id);
+    void lierTexture(string nom_texture, GLuint texture_id, GLuint level);
     
     /** Lier vecteur */
     void lierVecteur(string nom_vecteur, Vecteur3D& vect);

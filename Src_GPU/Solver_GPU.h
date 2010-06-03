@@ -46,8 +46,9 @@ private :
 	int _grille_depth;
     
 	/** Matrices */
-	Texture3D *_grille_feu_1;
-	Texture3D *_grille_feu_2;
+	Texture3D *_grille_temp;
+	Texture3D *_grille_feu_courante;
+	Texture3D *_grille_feu_dest;
     
 public :
 	/**
@@ -91,6 +92,7 @@ public :
 	 */
 	const GLuint getDensities() const ;
 	const GLuint getDestDensities() const ;
+    const GLuint getTemp() const ;
 	
 	
 
@@ -130,9 +132,6 @@ public :
 
 
     
-	/** Interverti le buffer courant et le buffer destination*/
-	void swapGrillesCourantes();
-    
 	/** Dessine un carre */
 	void dessinerCarre();
     
@@ -146,6 +145,7 @@ public :
 
     void linearSolve ( int b, float a1, float a2, float a3 );
 
+    void swapGrilles(Texture3D* t1, Texture3D* t2);
     
 };
 
