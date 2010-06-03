@@ -62,12 +62,28 @@ vec3 linearsolve(vec3 coordonnee){
                        + ( texture3D ( texture_sortie, coordonnee + voisinAV) .rgb )
                        + ( texture3D ( texture_sortie, coordonnee + voisinAR) .rgb )
                        );  
-                        
-      */
-		result = vec3( texture3D ( texture_entree,coordonnee ).rgb );
-		result.x = result.x + 0.01;
-	
+*/                       
+                       
+                       
+        result = vec3( texture3D ( texture_entree, coordonnee ) .rgb );
+        result.r = result.r + 0.0021;
+
+
+
+
         
+        
+                       
+        result = vec3( texture3D ( texture_entree, coordonnee ) .rgb )
+                 + a * ( ( texture3D ( texture_sortie, coordonnee + voisinN) .rgb )
+                       + ( texture3D ( texture_sortie, coordonnee + voisinE) .rgb )
+                       + ( texture3D ( texture_sortie, coordonnee + voisinS) .rgb )
+                       + ( texture3D ( texture_sortie, coordonnee + voisinO) .rgb )
+                       + ( texture3D ( texture_sortie, coordonnee + voisinAV) .rgb )
+                       + ( texture3D ( texture_sortie, coordonnee + voisinAR) .rgb )
+                       );  
+        result = result / c ;               
+                       
         return result;
     }
 }
