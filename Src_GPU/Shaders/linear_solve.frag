@@ -14,7 +14,7 @@ uniform vec3      c;
 #define DY  1.0/taille_height
 #define DZ  1.0/taille_depth
 
-#define DECALAGE 1.0/40
+#define DECALAGE 1.0/taille_depth
 
 vec3    voisinN        =vec3(0.0, DY, 0.0);
 vec3    voisinE        =vec3(-DX, 0.0, 0.0);
@@ -76,7 +76,6 @@ vec3 linearsolve(vec3 coordonnee){
         result.r = result.r + 0.0021;
         
         
-        */
         
 
         
@@ -108,6 +107,7 @@ vec3 linearsolve(vec3 coordonnee){
 
         
         
+        */
                        
         result = vec3( texture3D ( texture_entree, coordonnee ) .rgb )
                  + a * ( ( texture3D ( texture_sortie, coordonnee + voisinN) .rgb )
@@ -119,6 +119,19 @@ vec3 linearsolve(vec3 coordonnee){
                        );  
         result = result / c ;               
                        
+                       
+                       
+        result = vec3( texture3D ( texture_entree, coordonnee ) .rgb );
+        result.r = result.r + 0.0021;
+        result.g = result.g + 0.0021;
+        result.b = result.b + 0.0021;
+        
+        
+        
+        result = vec3(1.0, 0.0, 1.0); 
+
+        
+        
         return result;
     }
 }

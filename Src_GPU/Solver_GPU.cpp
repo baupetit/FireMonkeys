@@ -109,11 +109,27 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
 	for (int k = 0; k < _grille_width; k++){
 		for (int j = 0; j < _grille_height; j++){
 			for (int i = 0; i < _grille_depth; i++){    
-				*ptr = i/(float)_grille_depth * coeff1;
+				*ptr = 0.0;
 				ptr++;
-				*ptr = j/(float)_grille_height * coeff2;
+				*ptr = 0.0;
 				ptr++;
-				*ptr = k/(float)_grille_width;
+				*ptr = 0.0;
+				ptr++;
+				*ptr = 1.0f;
+				ptr++;
+			}
+		}
+	} 
+        
+	ptr = texture;
+	for (int k = 0; k < _grille_width; k++){
+		for (int j = 0; j < _grille_height; j++){
+			for (int i = 0; i < _grille_depth/2; i++){    
+				*ptr = 0.4;
+				ptr++;
+				*ptr = 0.4;
+				ptr++;
+				*ptr = 0.4;
 				ptr++;
 				*ptr = 1.0f;
 				ptr++;

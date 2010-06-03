@@ -129,7 +129,7 @@ void Framebuffer::traiterDessinDansBuffer(GLuint cible_id){
         pos += 8;
        } 
       
-    detacher_texture();
+    //detacher_texture();
     attacher_layers_de_la_texture(cible_id, pos, _grille_depth - pos);
     prepareDrawIntoBufferAttachment(_grille_depth - pos); 
     /*
