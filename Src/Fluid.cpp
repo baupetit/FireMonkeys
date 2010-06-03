@@ -234,37 +234,41 @@ void Fluid::renduFlammeETFumeeGPUFaceCamera(Vecteur3D& positionCamera, Vecteur3D
 	//matriceRGBACarreeToTexture3D(matriceRGBA_smoke, tailleGrille + 2 , _id_texture_fumee);
 	glBindTexture(GL_TEXTURE_3D, _id_texture_flamme);
 	glTexImage3D(GL_TEXTURE_3D,0,GL_RGB,
-                 tailleGrille,tailleGrille,tailleGrille,
+                 tailleGrille+2,tailleGrille+2,tailleGrille+2,
                  0, GL_RGB, GL_FLOAT, matriceRGBA_fire);
 
-
+	/*
 	glBindTexture(GL_TEXTURE_3D, _id_texture_fumee);	
 	glTexImage3D(GL_TEXTURE_3D,0,GL_RGB,
                  tailleGrille,tailleGrille,tailleGrille,
                  0, GL_RGB, GL_FLOAT, matriceRGBA_smoke);
-  
+  	*/
 	//passage des parametres des textures en uniforme
 	
-	_fumee_id_multitex = glGetUniformLocation ( _multitex_program, "fumee");
+	//_fumee_id_multitex = glGetUniformLocation ( _multitex_program, "fumee");
    //	glUniform1i(_fumee_id_multitex, _id_texture_fumee);
-	_fire_id_multitex = glGetUniformLocation ( _multitex_program, "fire");
+	
    //	glUniform1i(_fire_id_multitex, _id_texture_flamme);
 	
 
 	
 	glUseProgram(_multitex_program);
+	_fire_id_multitex = glGetUniformLocation ( _multitex_program, "fire");	
+	glActiveTexture(_id_texture_flamme);
+	glBindTexture(GL_TEXTURE_2D, _id_texture_flamme);
+	
 	glUniform1i(_fire_id_multitex, _id_texture_flamme);
-	glUniform1i(_fumee_id_multitex, _id_texture_fumee);
+	//glUniform1i(_fumee_id_multitex, _id_texture_fumee);
 
 	glBegin(GL_QUADS);
 								// Begin Drawing Quads
-		glVertex2f(0,0);
-		//glTexCoord2d(0,1);				// First Vertex		(   0,   0 )
-		glVertex2f(0,1);
-		//glTexCoord2d(1,1);				// Second Vertex	(   0, 480 )
-		glVertex2f(1,1);				// Third Vertex		( 640, 480 )
+		glVertex3f(0,0,-0.05);
+		//glTexCoord2d(0,1);				
+		glVertex3f(0,1,-0.05);
+		//glTexCoord2d(1,1);			
+		glVertex3f(1,1,-0.05);				
 		//glTexCoord2d(1, 0);
-		glVertex2f(1,0);				// Fourth Vertex	( 640,   0 )
+		glVertex3f(1,0,-0.05);				
 	glEnd();
 
 
