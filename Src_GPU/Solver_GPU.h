@@ -31,23 +31,23 @@
 class Solver_GPU {
 
 private :
-    /** Shader de resolution de feu */
-    Shader *shader_advect_feu;
+	/** Shader de resolution de feu */
+	Shader *shader_advect_feu;
     
-    /** Dans quel cas sommmes nous */
-    int pingpong;
+	/** Dans quel cas sommmes nous */
+	int pingpong;
     
-    /** Buffer */
-    Framebuffer *buffer;
+	/** Buffer */
+	Framebuffer *buffer;
     
-    /** Tailles*/
-    int _grille_width;
-    int _grille_height;
-    int _grille_depth;
+	/** Tailles*/
+	int _grille_width;
+	int _grille_height;
+	int _grille_depth;
     
-    /** Matrices */
-    Texture3D *_grille_feu_1;
-    Texture3D *_grille_feu_2;
+	/** Matrices */
+	Texture3D *_grille_feu_1;
+	Texture3D *_grille_feu_2;
     
 public :
 	/**
@@ -64,36 +64,26 @@ public :
 	 * @brief : move densities over a dt timestep with a certain
 	 * diffusion factor
 	 */
-	void densitiesStep( float diff , float dt );
+	void densitiesStep( float dt );
 
 	/**
 	 * @brief : compute velocities evolution over a dt timestep
 	 * using visc as the viscosity of the fluid
 	 */
-	void velocitiesStep( float visc , float dt );
+	void velocitiesStep( float dt );
 
 
 	/**
 	 * @brief : move densities over a dt timestep with a certain
 	 * diffusion factor with Temperature
 	 */
-	void densitiesStepWithTemp ( float diffFire,
-				     float diffSmoke,
-				     float diffTemp,
-				     float cool, 
-					 float consume,
-				     float sub, 
-				     float fireTosmoke, 
-				     float dt );
+	void densitiesStepWithTemp ( float dt );
 
 	/**
 	 * @brief : compute velocities evolution over a dt timestep
 	 * using visc as the viscosity of the fluid with Temperature
 	 */
-	void velocitiesStepWithTemp( float visc , 
-				     float buoy, 
-				     float vc_eps, 
-				     float dt );
+	void velocitiesStepWithTemp( float dt );
 
 
 	/**
@@ -140,17 +130,17 @@ public :
 
 
     
-    /** Interverti le buffer courant et le buffer destination*/
-    void swapGrillesCourantes();
+	/** Interverti le buffer courant et le buffer destination*/
+	void swapGrillesCourantes();
     
-    /** Dessine un carre */
-    void dessinerCarre();
+	/** Dessine un carre */
+	void dessinerCarre();
     
-    /** Phase de diffusion */
-    void diffuse ( Shader& calcul_shader, 
-                   string nom_texture, 
-                   float diff, 
-                   float dt );
+	/** Phase de diffusion */
+	void diffuse ( Shader& calcul_shader, 
+		       string nom_texture, 
+		       float diff, 
+		       float dt );
     
 };
 
