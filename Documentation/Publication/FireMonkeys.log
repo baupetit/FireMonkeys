@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=latex 2010.5.21)  3 JUN 2010 15:40
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.5.26)  3 JUN 2010 19:30
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -257,10 +257,11 @@ Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
 (/etc/texmf/tex/latex/config/graphics.cfg
 File: graphics.cfg 2009/08/28 v1.8 graphics configuration of TeX Live
 )
-Package graphics Info: Driver file: dvips.def on input line 91.
+Package graphics Info: Driver file: pdftex.def on input line 91.
 
-(/usr/share/texmf-texlive/tex/latex/graphics/dvips.def
-File: dvips.def 1999/02/16 v3.0i Driver-dependant file (DPC,SPQR)
+(/usr/share/texmf-texlive/tex/latex/pdftex-def/pdftex.def
+File: pdftex.def 2009/08/25 v0.04m Graphics/color for pdfTeX
+\Gread@gobject=\count87
 ))
 \Gin@req@height=\dimen103
 \Gin@req@width=\dimen104
@@ -283,7 +284,7 @@ Language: frenchb 2009/03/16 v2.3d French support from the babel system
 
 (/usr/share/texmf-texlive/tex/generic/babel/babel.def
 File: babel.def 2008/07/06 v3.8l Babel common definitions
-\babel@savecnt=\count87
+\babel@savecnt=\count88
 \U@D=\dimen105
 )
 
@@ -297,8 +298,8 @@ Package babel Info: Making ; an active character on input line 121.
 Package babel Info: Making ! an active character on input line 122.
 Package babel Info: Making ? an active character on input line 123.
 \FB@Mht=\dimen106
-\std@mcc=\count88
-\dec@mcc=\count89
+\std@mcc=\count89
+\dec@mcc=\count90
 \parindentFFN=\dimen107
 *************************************
 * Local config file frenchb.cfg used
@@ -319,6 +320,20 @@ LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 23.
 LaTeX Font Info:    ... okay on input line 23.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 23.
 LaTeX Font Info:    ... okay on input line 23.
+
+(/usr/share/texmf-texlive/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count91
+\scratchdimen=\dimen108
+\scratchbox=\box26
+\nofMPsegments=\count92
+\nofMParguments=\count93
+\everyMPshowfont=\toks17
+\MPscratchCnt=\count94
+\MPscratchDim=\dimen109
+\MPnumerator=\count95
+\everyMPtoPDFconversion=\toks18
+)
 LaTeX Info: Redefining \degres on input line 23.
 LaTeX Info: Redefining \dots on input line 23.
 LaTeX Info: Redefining \up on input line 23.
@@ -328,12 +343,29 @@ Package frenchb.ldf Warning: OT1 encoding should not be used for French.
 (frenchb.ldf)                Add \usepackage[T1]{fontenc} to the preamble
 (frenchb.ldf)                of your document, on input line 23.
 
-File: logo.ps Graphic file (type eps)
-<logo.ps>
-File: feu.ps Graphic file (type eps)
- <feu.ps> [1
 
-] (./FireMonkeys.toc
+! LaTeX Error: Unknown graphics extension: .ps.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.34 	\includegraphics[scale=0.8]{logo.ps}
+                                          
+? 
+
+! LaTeX Error: Unknown graphics extension: .ps.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.43 	\includegraphics[scale=0.3]{feu.ps}
+                                         \\
+? 
+[1
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./FireMonkeys.toc
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 3.
 LaTeX Font Info:    External font `cmex10' loaded for size
@@ -449,166 +481,233 @@ Underfull \hbox (badness 10000) in paragraph at lines 480--484
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 487--489
+Underfull \hbox (badness 10000) in paragraph at lines 487--490
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 491--493
+Underfull \hbox (badness 10000) in paragraph at lines 492--496
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 494--495
+Underfull \hbox (badness 10000) in paragraph at lines 497--499
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 498--499
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 500--503
+Underfull \hbox (badness 10000) in paragraph at lines 500--505
 
  []
 
 [13]
-Underfull \hbox (badness 10000) in paragraph at lines 504--507
+Underfull \hbox (badness 10000) in paragraph at lines 505--510
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 511--514
+Underfull \hbox (badness 10000) in paragraph at lines 510--514
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 515--517
+Underfull \hbox (badness 10000) in paragraph at lines 515--519
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 518--522
+Underfull \hbox (badness 10000) in paragraph at lines 520--522
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 531--533
+Underfull \hbox (badness 10000) in paragraph at lines 524--527
 
  []
 
 
-Overfull \hbox (46.42935pt too wide) detected at line 537
+Underfull \hbox (badness 10000) in paragraph at lines 527--533
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 545--547
+
+ []
+
+
+Overfull \hbox (71.42938pt too wide) detected at line 551
 []\OML/cmm/m/it/10 p \OT1/cmr/m/n/10 = [] + [] + []
  []
 
+
+Overfull \hbox (24.04317pt too wide) detected at line 566
+\OML/cmm/m/it/10 u[] \OT1/cmr/m/n/10 = []
+ []
+
 [14]
-Underfull \hbox (badness 10000) in paragraph at lines 552--554
+Underfull \hbox (badness 10000) in paragraph at lines 568--572
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 555--557
+Underfull \hbox (badness 10000) in paragraph at lines 573--583
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 559--560
+Underfull \hbox (badness 10000) in paragraph at lines 586--588
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 562--564
+Underfull \hbox (badness 10000) in paragraph at lines 590--594
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 566--568
+Underfull \hbox (badness 10000) in paragraph at lines 596--598
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 569--570
+Underfull \hbox (badness 10000) in paragraph at lines 599--603
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 572--573
+Underfull \hbox (badness 10000) in paragraph at lines 605--608
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 577--578
+Underfull \hbox (badness 10000) in paragraph at lines 614--617
 
  []
 
 [15]
-Overfull \hbox (1.24844pt too wide) in paragraph at lines 595--600
+Underfull \hbox (badness 10000) in paragraph at lines 633--635
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 636--638
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 639--641
+
+ []
+
+
+Overfull \hbox (1.24844pt too wide) in paragraph at lines 647--655
 \OT1/cmr/m/n/10 D'autres out-ils de pro-gram-ma-tion ex-is-tent ( comme OpenCL 
 ) mais nous n'^^Setions
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 595--600
+Underfull \hbox (badness 10000) in paragraph at lines 647--655
 
  []
 
 
-Overfull \hbox (1.2056pt too wide) in paragraph at lines 604--604
+Overfull \hbox (1.2056pt too wide) in paragraph at lines 660--660
 []\OT1/cmr/bx/n/12 Transformation du probl^^Reme pour une r^^Sesolution GPU 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 607--609
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 611--619
+Underfull \hbox (badness 10000) in paragraph at lines 663--665
 
  []
 
 [16]
-Underfull \hbox (badness 10000) in paragraph at lines 626--633
+Underfull \hbox (badness 10000) in paragraph at lines 667--669
 
  []
 
 
-Overfull \hbox (4.52577pt too wide) in paragraph at lines 634--640
-[]\OT1/cmr/bx/n/10 Principe du ren-der to tex-ture 3D \OT1/cmr/m/n/10 Nous avon
-s un \OT1/cmr/bx/n/10 Frame-Buffer\OT1/cmr/m/n/10 . Lorsqu'il
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 634--640
+Underfull \hbox (badness 10000) in paragraph at lines 670--674
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 641--648
+Underfull \hbox (badness 10000) in paragraph at lines 675--678
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 649--650
+Underfull \hbox (badness 10000) in paragraph at lines 685--691
 
  []
 
 
-Overfull \hbox (1.90935pt too wide) in paragraph at lines 651--653
+Underfull \hbox (badness 10000) in paragraph at lines 692--694
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 695--699
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 700--703
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 704--707
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 708--710
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 710--711
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 711--714
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 715--717
+
+ []
+
+[17]
+Overfull \hbox (1.90935pt too wide) in paragraph at lines 718--722
 []\OT1/cmr/bx/n/10 Remarque im-por-tante :  \OT1/cmr/m/n/10 Sur le pa-pier cett
 e as-tuce est tr^^Res compr^^Sehensible.
  []
 
-[17] [18] (./FireMonkeys.aux) ) 
+[18] (./FireMonkeys.aux) ) 
 Here is how much of TeX's memory you used:
- 1534 strings out of 495062
- 18944 string characters out of 1182644
- 82319 words of memory out of 3000000
- 4727 multiletter control sequences out of 15000+50000
+ 1900 strings out of 495061
+ 23833 string characters out of 1182621
+ 87014 words of memory out of 3000000
+ 5086 multiletter control sequences out of 15000+50000
  5158 words of font info for 19 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
  25i,5n,24p,661b,227s stack positions out of 5000i,500n,10000p,200000b,50000s
+</usr/share/texmf-texlive/fonts/type1/public/amsfonts
+/cm/cmbx10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmbx12.
+pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/s
+hare/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texmf-t
+exlive/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-texlive/fonts
+/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-texlive/fonts/type1/publi
+c/amsfonts/cm/cmr5.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm
+/cmr7.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy10.pfb><
+/usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
+Output written on FireMonkeys.pdf (18 pages, 172767 bytes).
+PDF statistics:
+ 100 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 500000)
+ 1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
-Output written on FireMonkeys.dvi (18 pages, 59724 bytes).

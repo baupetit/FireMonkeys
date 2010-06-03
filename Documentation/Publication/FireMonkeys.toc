@@ -41,11 +41,10 @@
 \contentsline {section}{\numberline {6}Mod\IeC {\`e}le de flamme et de fum\IeC {\'e}e GPU}{16}
 \contentsline {subsection}{\numberline {6.1}Transformation du probl\IeC {\`e}me pour une r\IeC {\'e}solution GPU}{16}
 \contentsline {subsubsection}{\numberline {6.1.1}Matrice 3 dimensions == Texture 3D}{16}
-\contentsline {subsubsection}{\numberline {6.1.2}Operation sur le point (i,j,k) de la texture == FragmentShader}{16}
+\contentsline {subsubsection}{\numberline {6.1.2}Operation sur le point (i,j,k) de la texture == FragmentShader}{17}
 \contentsline {subsubsection}{\numberline {6.1.3}Iteration == Framebuffer ( render to texture 3D ) }{17}
-\contentsline {subsection}{\numberline {6.2}Am\IeC {\'e}lioration}{17}
-\contentsline {subsection}{\numberline {6.3}M\IeC {\'e}thode de rendu}{18}
-\contentsline {subsection}{\numberline {6.4}R\IeC {\'e}sultats}{18}
+\contentsline {subsection}{\numberline {6.2}Am\IeC {\'e}lioration}{18}
+\contentsline {subsection}{\numberline {6.3}R\IeC {\'e}sultats}{18}
 \contentsline {section}{\numberline {7}Propagation sur l'objet}{18}
 \contentsline {section}{\numberline {8}Destruction de l'objet}{18}
 \contentsline {section}{\numberline {9}Propagation dans l'environnement}{18}
