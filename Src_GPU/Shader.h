@@ -37,6 +37,9 @@ public:
     /** Déchager le shader */
     void Unbind_Program();
     
+    /** Lier texture */
+    void lierTexture(string nom_texture, GLuint texture_id);
+    
     /** Renvoie d'id du program */
     GLuint getProgramId() const{
         return program;

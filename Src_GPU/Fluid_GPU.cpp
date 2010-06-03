@@ -10,8 +10,13 @@ Fluid_GPU::Fluid_GPU(){
     _grille_width  = TAILLE_GRILLE;
     _grille_height = TAILLE_GRILLE;
     _grille_depth  = TAILLE_GRILLE;
+    //_grille_depth  = 8;
+    _grille_depth  = TAILLE_GRILLE;
     
     s = NULL;
+    
+    position.x = 1.0;
+    position.z = -1.0;
 }
 
 Fluid_GPU::~Fluid_GPU(){
@@ -20,52 +25,10 @@ Fluid_GPU::~Fluid_GPU(){
 void Fluid_GPU::initialiserFluid(){
     cout << "Nouveau FluideGPU" << endl;
     
-        
     // Solver
     delete s;
     s = new Solver_GPU(_grille_width, _grille_height, _grille_depth);
 
-        
-    /*
-
-	//FBO#1 pour la texture speedfield1
-	glGenFramebuffers(1, &_FBO_speed_1);
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _FBO_speed_1);
-	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-							GL_TEXTURE_3D, _speedField_1, 0 , 0);
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-
-	//FBO#2 pour la texture speedfield1
-	glGenFramebuffers(1, &_FBO_speed_2);
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _FBO_speed_2);
-	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-							GL_TEXTURE_3D, _speedField_2, 0 , 0);
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-    
-
-	// Attach the texture and depth buffer to the framebuffer
-
-	glBindFramebuffer( GL_DRAW_FRAMEBUFFER, _FBO_speed_1 );
-	glFramebufferRenderbuffer( GL_DRAW_FRAMEBUFFER,
-	   GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _renderbuffer_1 );
-	glBindFramebuffer( GL_DRAW_FRAMEBUFFER, 0 );
-
-	glBindFramebuffer( GL_DRAW_FRAMEBUFFER, _FBO_speed_2 );
-	glFramebufferRenderbuffer( GL_DRAW_FRAMEBUFFER,
-	   GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _renderbuffer_2 );
-	glBindFramebuffer( GL_DRAW_FRAMEBUFFER, 0 );
-
-	glEnable( GL_DEPTH_TEST );
-
-
-    // On lie les variables uniforme du shader
-    //  _speedFieldLocation_Prec = glGetUniformLocation ( _speed_program, "TextureSpeedField_Prec");
-    //    glUniform1i(_speedFieldLocation_Prec,_speedField_1);
-    //    _speedFieldLocation_Cour = glGetUniformLocation ( _speed_program, "TextureSpeedField_Cour");
-    //    glUniform1i(_speedFieldLocation_Cour,_speedField_2);
-    
-    */
-    
 }
 
 
@@ -79,6 +42,9 @@ void Fluid_GPU::resolutionFluid(){
 void Fluid_GPU::Afficher(){
     // MAJ
     resolutionFluid();
+    
+    
+
     // Affichage
     afficherFlamme();
 }
@@ -88,15 +54,12 @@ void Fluid_GPU::Afficher_Face_Camera(Vecteur3D& positionCamera, Vecteur3D& orien
 
 void Fluid_GPU::afficherFlamme(){
     // Feu
-    dessinerPlansDansTexture3D(s->getDensities(),5);
+    dessinerPlansDansTexture3D(s->getDensities(),10);
 }
 
 
 void Fluid_GPU::afficherFumee(){
 }
-
-
-
 
 
 
@@ -279,14 +242,9 @@ void Fluid_GPU::dessinerPlansDansTexture3DFaceALaCamera(GLuint id_texture,
 
 void Fluid_GPU::dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans){
     
-    glDisable(GL_LIGHTING);
-    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-    glEnable( GL_BLEND );
-    glAlphaFunc(GL_GREATER,0.0f);
-    glEnable(GL_ALPHA_TEST);
+    glPushMatrix();
     
-	glEnable(GL_TEXTURE_3D);
-    glActiveTexture(id_texture);
+    Texture3D::bindTexture(2);
 
     GLfloat verts[4][3] = { { 0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {1.0, 1.0, 0.0}, {1.0, 0.0, 0.0}};
 
@@ -313,10 +271,56 @@ void Fluid_GPU::dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans){
 	}
 	
 	glEnd();
+
+
+
+
+
+
+
+
+
+    
+    Texture3D::bindTexture(1);
+
+
+	glBegin(GL_TRIANGLES);	
+	
+	for (int i = 0; i < nb_plans; i++){
+		glTexCoord3d(verts[0][0], verts[0][1], verts[0][2] + (float)i/nb_plans);
+		glVertex3d(3+verts[0][0], verts[0][1], verts[0][2]+ (float)i/nb_plans);
 		
-	glDisable(GL_TEXTURE_3D);
-    glDisable( GL_BLEND );    
-    glEnable(GL_LIGHTING);
+		glTexCoord3d(verts[1][0], verts[1][1], verts[1][2] + (float)i/nb_plans);
+		glVertex3d(3+verts[1][0], verts[1][1], verts[1][2] + (float)i/nb_plans);
+		
+		glTexCoord3d(verts[2][0], verts[2][1], verts[2][2] + (float)i/nb_plans);
+		glVertex3d(3+verts[2][0], verts[2][1], verts[2][2] + (float)i/nb_plans);
+		
+		glTexCoord3d(verts[2][0], verts[2][1], verts[2][2] + (float)i/nb_plans);
+		glVertex3d(3+verts[2][0], verts[2][1], verts[2][2] + (float)i/nb_plans);
+		
+		glTexCoord3d(verts[3][0], verts[3][1], verts[3][2] + (float)i/nb_plans);
+		glVertex3d(3+verts[3][0], verts[3][1], verts[3][2] + (float)i/nb_plans);
+		
+		glTexCoord3d(verts[0][0], verts[0][1], verts[0][2] + (float)i/nb_plans);
+		glVertex3d(3+verts[0][0], verts[0][1], verts[0][2] + (float)i/nb_plans);	
+	}
+	
+	glEnd();
+
+
+
+
+
+
+
+
+
+
+
+
+		
+	Texture3D::unbindTexture();
     
     glPopMatrix();	
 }

@@ -7,213 +7,218 @@
 using namespace std;
 
 
-Framebuffer::Framebuffer(){
-    
-    // Creation du frame buffer 1
+Framebuffer::Framebuffer(int wwidth, int hheight, int ddepth){
 	glGenFramebuffers(1, &_buffer_id);
 	cout << "Nouveau Framebuffer, id : " << _buffer_id << endl;
-	
-	// Texture associee  
-	_texture_associee = new Texture3D();
-	
-	/*
-	int render;
-	glGenRenderbuffers(1,  &render);
-	glBinRenderbuffer(GL_RENDERBUFFER, &render);
-	glRenderbufferStorage(GL_RENDERBUFFER,GL_DEPTH_COMPONENT24, _grille_width, _grille_height);
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, &_buffer_id);
-	glFramebuffer
-	
-	
-	glGenFramebuffersEXT(1, &_buffer_id);
-	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, _buffer_id);
-	GLuint depthbuffer;
-    glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, depthbuffer);
-    glGenRenderbuffersEXT(1, &depthbuffer);
-    glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, _grille_width, _grille_height);
-    glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, depthbuffer);
-    
-    */
-
+	_grille_width  = wwidth;
+	_grille_height = hheight;
+	_grille_depth  = ddepth;
 }
     
 Framebuffer::~Framebuffer(){
-    cout << " Destructeur Framebuffer " << endl;
-    delete _texture_associee;
 }
- 
  
     
 void Framebuffer::bind_Buffer(){
 	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, _buffer_id);
-	glPushAttrib(GL_VIEWPORT_BIT);
-	glViewport(0,0,_grille_width, _grille_height);
 }
 
-void Framebuffer::attacher_layers_de_la_texture(int numero_layer, int nb_layer){
-    if (nb_layer > 8){
-	    cout << " Erreur : Impossible d'associer autant de layers en même temps.\n";
-	    cout << "          " << GL_MAX_COLOR_ATTACHMENTS << " layers max. ";
-        return;
-    }
 
-    GLuint idtexture = get_id_texture();
+void Framebuffer::attacher_layers_de_la_texture(GLuint texture_id, int numero_layer, int nb_layer){
+ 
+    for(int i = 0; i < nb_layer; i ++){
+    	/*
+    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, 
+    	                       GL_COLOR_ATTACHMENT0 + i, 
+    	                       GL_TEXTURE_3D, 
+    	                       texture_id, 
+    	                       0 , 
+    	                       numero_layer + i);    
+    	*/
+    	/*
+    	glFramebufferTextureLayer(GL_DRAW_FRAMEBUFFER,
+    	                          GL_COLOR_ATTACHMENT0_EXT + i, 
+    	                          texture_id, 
+    	                          0, 
+    	                          numero_layer + i);                       
+    	*/                          
+        glFramebufferTexture3DEXT( GL_FRAMEBUFFER_EXT, 
+                               GL_COLOR_ATTACHMENT0_EXT + i,
+                               GL_TEXTURE_3D, 
+                               texture_id, 
+                               0, 
+                               numero_layer+i );
+    	cout << "attache du layer : " << numero_layer + i << endl;
+	}
     
-    /* RED BOOK p 535 :
-    void glFramebufferTexture3D(GLenum target, GLenum attachment,
-                GLenum texturetarget, GLuint texture, GLint level,
-                GLint layer);
-    */
-    
-    if(nb_layer==1){
-        // j'attache les nb_layers au framebuffer
-    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-							GL_TEXTURE_3D, idtexture, 0 , numero_layer);    
-	}
-    if(nb_layer==2){
-        // j'attache les nb_layers au framebuffer
-    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-							GL_TEXTURE_3D, idtexture, 0 , numero_layer);
-    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT1,
-							GL_TEXTURE_3D, idtexture, 0 , numero_layer+1);            
-	}
-    if(nb_layer==3){
-        // j'attache les nb_layers au framebuffer
-    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-							GL_TEXTURE_3D, idtexture, 0 , numero_layer);
-    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT1,
-							GL_TEXTURE_3D, idtexture, 0 , numero_layer+1);    
-    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT2,
-							GL_TEXTURE_3D, idtexture, 0 , numero_layer+2);    
-	}
-    if(nb_layer==4){
-        // j'attache les nb_layers au framebuffer
-    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-							GL_TEXTURE_3D, idtexture, 0 , numero_layer);
-    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT1,
-							GL_TEXTURE_3D, idtexture, 0 , numero_layer+1);    
-    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT2,
-							GL_TEXTURE_3D, idtexture, 0 , numero_layer+2);    
-    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT3,
-							GL_TEXTURE_3D, idtexture, 0 , numero_layer+3);    
-	}
-    if(nb_layer==5){
-        // j'attache les nb_layers au framebuffer
-    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-							GL_TEXTURE_3D, idtexture, 0 , numero_layer);
-    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT1,
-							GL_TEXTURE_3D, idtexture, 0 , numero_layer+1);    
-    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT2,
-							GL_TEXTURE_3D, idtexture, 0 , numero_layer+2);    
-    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT3,
-							GL_TEXTURE_3D, idtexture, 0 , numero_layer+3);    
-    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT4,
-							GL_TEXTURE_3D, idtexture, 0 , numero_layer+4);    
-	}
-    if(nb_layer==6){
-        // j'attache les nb_layers au framebuffer
-    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-							GL_TEXTURE_3D, idtexture, 0 , numero_layer);
-    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT1,
-							GL_TEXTURE_3D, idtexture, 0 , numero_layer+1);    
-    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT2,
-							GL_TEXTURE_3D, idtexture, 0 , numero_layer+2);    
-    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT3,
-							GL_TEXTURE_3D, idtexture, 0 , numero_layer+3);    
-    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT4,
-							GL_TEXTURE_3D, idtexture, 0 , numero_layer+4);    
-    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT5,
-							GL_TEXTURE_3D, idtexture, 0 , numero_layer+5);    
-	}
-    if(nb_layer==7){
-        // j'attache les nb_layers au framebuffer
-    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-							GL_TEXTURE_3D, idtexture, 0 , numero_layer);
-    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT1,
-							GL_TEXTURE_3D, idtexture, 0 , numero_layer+1);    
-    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT2,
-							GL_TEXTURE_3D, idtexture, 0 , numero_layer+2);    
-    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT3,
-							GL_TEXTURE_3D, idtexture, 0 , numero_layer+3);    
-    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT4,
-							GL_TEXTURE_3D, idtexture, 0 , numero_layer+4);    
-    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT5,
-							GL_TEXTURE_3D, idtexture, 0 , numero_layer+5);    
-    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT6,
-							GL_TEXTURE_3D, idtexture, 0 , numero_layer+6);    
-	}
-    if(nb_layer==8){
-        // j'attache les nb_layers au framebuffer
-    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-							GL_TEXTURE_3D, idtexture, 0 , numero_layer);
-    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT1,
-							GL_TEXTURE_3D, idtexture, 0 , numero_layer+1);    
-    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT2,
-							GL_TEXTURE_3D, idtexture, 0 , numero_layer+2);    
-    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT3,
-							GL_TEXTURE_3D, idtexture, 0 , numero_layer+3);    
-    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT4,
-							GL_TEXTURE_3D, idtexture, 0 , numero_layer+4);    
-    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT5,
-							GL_TEXTURE_3D, idtexture, 0 , numero_layer+5);    
-    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT6,
-							GL_TEXTURE_3D, idtexture, 0 , numero_layer+6);    
-    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT7,
-							GL_TEXTURE_3D, idtexture, 0 , numero_layer+7);        
-	}
-	
-	
-	
-	
-    GLenum status = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
-    if (GL_FRAMEBUFFER_COMPLETE_EXT != status){
-        cout << "Erreur : lors de la liaison de la texture et du framebuffer" << endl;
-    }
-
-
 }
 
 void Framebuffer::detacher_texture(){
-    // attacher à 0 == détacher les textures
-	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-							GL_TEXTURE_3D, 0, 0 , 0);    
-	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT1,
-							GL_TEXTURE_3D, 0, 0 , 0);    
-	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT2,
-							GL_TEXTURE_3D, 0, 0 , 0);    
-	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT3,
-							GL_TEXTURE_3D, 0, 0 , 0);    
-	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT4,
-							GL_TEXTURE_3D, 0, 0 , 0);    
-	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT5,
-							GL_TEXTURE_3D, 0, 0 , 0);    
-	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT6,
-							GL_TEXTURE_3D, 0, 0 , 0);    
-	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT7,
-							GL_TEXTURE_3D, 0, 0 , 0);    
+    GLint maxbuffers;
+    glGetIntegerv(GL_MAX_COLOR_ATTACHMENTS, &maxbuffers);
+
+    for(int i = 0; i < (int)maxbuffers; i ++){
+    
+    	glFramebufferTexture3D(GL_DRAW_FRAMEBUFFER, 
+    	                       GL_COLOR_ATTACHMENT0_EXT + i, 
+    	                       GL_TEXTURE_3D, 
+    	                       0, 
+    	                       0 , 
+    	                       0);    
+    	                       
+    
+	}
 }
     
 void Framebuffer::unbind_Buffer(){
-    glPopAttrib();
 	glBindFramebufferEXT(GL_DRAW_FRAMEBUFFER_EXT, 0);
 }
-    
-GLuint Framebuffer::get_id_texture() const{
-    return _texture_associee->get_texture_id();
-}
+ 
 
 GLuint Framebuffer::get_id_buffer() const{
     return _buffer_id;
 }
+ 
+ 
+ 
+void Framebuffer::prepareDrawIntoBufferAttachment(int nb_attachements){
+
     
-void Framebuffer::initialiser_texture_buf(const float *tab,
-                                          const int grille_width, 
-                                          const int grille_height, 
-                                          const int grille_depth){
-    _grille_width  = grille_width;
-    _grille_height = grille_height;
-    _grille_depth  = grille_depth;
+    GLenum mrt[] = { GL_COLOR_ATTACHMENT0_EXT,
+                     GL_COLOR_ATTACHMENT1_EXT,
+                     GL_COLOR_ATTACHMENT2_EXT,
+                     GL_COLOR_ATTACHMENT3_EXT,
+                     GL_COLOR_ATTACHMENT4_EXT,
+                     GL_COLOR_ATTACHMENT5_EXT,
+                     GL_COLOR_ATTACHMENT6_EXT,
+                     GL_COLOR_ATTACHMENT7_EXT,
+                     GL_COLOR_ATTACHMENT8_EXT,
+                     GL_COLOR_ATTACHMENT9_EXT,
+                     GL_COLOR_ATTACHMENT10_EXT,
+                     GL_COLOR_ATTACHMENT12_EXT,
+                     GL_COLOR_ATTACHMENT13_EXT,
+                     GL_COLOR_ATTACHMENT14_EXT,
+                     GL_COLOR_ATTACHMENT15_EXT };
+                     
+    glDrawBuffers(nb_attachements, mrt);    
+}
+
+
+
+
+   
+void Framebuffer::traiterDessinDansBuffer(Shader& shader,
+                                          GLuint source_id,
+                                          GLuint cible_id){
+  
+    // attribs
+    glPushAttrib(GL_VIEWPORT_BIT | GL_COLOR_BUFFER_BIT);
+
+    
+    // depth
+    glDisable(GL_DEPTH_TEST);
+    
+    // bind !
+    bind_Buffer();
+        
+    // viewport    
+    glViewport(0,0,_grille_width,_grille_height);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+    // traite le calcul    
+    GLint maxbuffers;
+    glGetIntegerv(GL_MAX_COLOR_ATTACHMENTS, &maxbuffers);
+        
+    int pos = 0;
     
     
-    _texture_associee->charger_matrice(tab, grille_width, grille_height, grille_depth);
+    
+    
+    while ( _grille_depth - pos > (int)maxbuffers ){
+        /*
+        attacher_layers_de_la_texture(cible_id, pos, (int)maxbuffers);
+        prepareDrawIntoBufferAttachment((int)maxbuffers);
+        
+        // on lie le shader            
+        shader.Bind_Program();
+            
+        // dessin    
+        dessinerCarre(source_id);
+        
+        // on lie le shader            
+        shader.Unbind_Program();
+        
+        // sauvegarde dans la texture
+        //glGenerateMipmap(GL_TEXTURE_3D);
+        */
+        pos += 8;
+       } 
+    cout << "_grille_depth - pos " << _grille_depth - pos << endl;
+    //detacher_texture();
+    prepareDrawIntoBufferAttachment(8);
+    attacher_layers_de_la_texture(2, 0, 8);
+    
+    cout << "depth : " << _grille_depth << endl;
+    
+    /*
+    attacher_layers_de_la_texture(cible_id, pos, 8);
+    prepareDrawIntoBufferAttachment(8);
+    */
+    
+    // on lie le shader            
+    shader.Bind_Program();
+    // dessin
+    dessinerCarre(source_id, 0.0);
+    // on lie le shader            
+    shader.Unbind_Program();
+        
+    // detache les textures
+    // detacher_texture();
+    
+    
+    // unbind !   
+    unbind_Buffer();
+    
+    // etat depth
+    glEnable(GL_DEPTH_TEST);
+    
+    // pop
+    glPopAttrib();
+}
+
+
+
+void Framebuffer::dessinerCarre(int id_texture, float decalage){
+ 
+    
+ 
+    // pos du dessin
+    glPushMatrix();
+    glLoadIdentity();
+    glOrtho(0,1,0,1,0,1);
+    
+    // texture
+    Texture3D::bindTexture(id_texture);
+    
+               
+    // affichage            
+    glBegin(GL_QUADS);        
+    
+        glTexCoord3f(0.0,0.0,0.0 + decalage);
+        glVertex3f(0.0,0.0,0.0);
+        
+        glTexCoord3f(0.0,1.0,0.0 + decalage);
+        glVertex3f(0.0,1.0,0.0 );
+        
+        glTexCoord3f(1.0,1.0,0.0 + decalage);
+        glVertex3f(1.0,1.0,0.0);
+        
+        glTexCoord3f(1.0,0.0,0.0 + decalage);
+        glVertex3f(1.0,0.0,0.0);
+        
+    glEnd();    
+    
+    // pos
+    glPopMatrix();
+   
 }

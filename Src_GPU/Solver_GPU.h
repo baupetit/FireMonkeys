@@ -16,29 +16,38 @@
 #include "Shader.h" 
 #include "Framebuffer.h"
 #include "Vecteur.h"
+#include "Texture3D.h"
 
 
 #define LARGEUR    20
 #define HAUTEUR    20
 #define PROFONDEUR 20
 
+#define PING 1
+#define PONG 2
+
 #define ID(i,j,k) ((i)+(LARGEUR)*(j)+((LARGEUR)*(HAUTEUR))*(k))
 
 class Solver_GPU {
 
 private :
-
-    Shader *shader_feu;
+    /** Shader de resolution de feu */
+    Shader *shader_advect_feu;
     
-    /** Gestionnaire de buffer */
-    Framebuffer *buffer_feu_1;
-    Framebuffer *buffer_feu_2;
-    int buffer_courant;
+    /** Dans quel cas sommmes nous */
+    int pingpong;
+    
+    /** Buffer */
+    Framebuffer *buffer;
     
     /** Tailles*/
     int _grille_width;
     int _grille_height;
     int _grille_depth;
+    
+    /** Matrices */
+    Texture3D *_grille_feu_1;
+    Texture3D *_grille_feu_2;
     
 public :
 	/**
@@ -91,6 +100,9 @@ public :
 	 * @brief : return the fire density matrix
 	 */
 	const GLuint getDensities() const ;
+	const GLuint getDestDensities() const ;
+	
+	
 
 	/**
 	 * @brief : return the smoke density matrix
@@ -127,22 +139,18 @@ public :
 
 
 
-
-
-
-    Framebuffer& getBufferFeuCourant () const ;
-    Framebuffer& getBufferFeuDestination() const ;
-    void swapBufferCourant();
-    void dessinerCarre(int layer_initial, int nb_layers);
     
+    /** Interverti le buffer courant et le buffer destination*/
+    void swapGrillesCourantes();
     
+    /** Dessine un carre */
+    void dessinerCarre();
     
+    /** Phase de diffusion */
     void diffuse ( Shader& calcul_shader, 
-               string nom_texture, 
-               Framebuffer& originBuffer,
-               Framebuffer& destBuffer,
-               float diff, 
-               float dt );
+                   string nom_texture, 
+                   float diff, 
+                   float dt );
     
 };
 
