@@ -463,7 +463,7 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
 
 %----------------------------------------------------------------------------------------------------------------------------------------
 %%%%%%%%%%%%%%%%%
-\section{Modèle de flamme}
+\section{Modèle de flamme et de fumée}
 %%%%%%%%%%%%%%%%%
 Comme décris dans l'aperçu, nous nous sommes focalisé sur un modèle
 ``réaliste'' qui peut être exploité en temps réel. Pour cela nous
@@ -493,7 +493,7 @@ des équations de Navier-Stokes pour la dynamique des fluides indéformables:\\
 
 Ou $u$ représente le champ de vitesse du milieu et $x$ la valeur transporté par ce champ (densité par exemple)\\
 
-\\
+
 
 Cette équation est constitué de 3 termes principaux (4 en théorie mais on a pas introduit l'effet de la pression ambiante) :\\
 
@@ -506,22 +506,16 @@ Cette équation est constitué de 3 termes principaux (4 en théorie mais on a p
 modéliser la capacité d'un fluide à se mouvoir dans l'espace qui l'entoure. Plus $\nu$ est élevé et moins le fluide pourra se mouvoir dans le milieu.\\
 
 -Un terme représentant les forces extérieures : $\vec{f}$ \\
-	Ce terme sert a modifier le comportement de la valeur $x$ dans le champ de vitesse lorsqu'une force extérieure rentre en jeu
-(du vent par exemple).
+	Ce terme sert a modifier le comportement de la valeur $x$ dans le champ de vitesse lorsqu'une force extérieure rentre en jeu (du vent par exemple).
 
-\\
-\\
- 
-	Pour construire notre modele de feu, nous allons considerer 2 variables : $\vec{u}$ le champ de vitesse et $\rho$ la densité 
-du fluide. Notre feu sera alors un champ de densité en mouvement dans un champ de vitesse.\\
+Pour construire notre modele de feu, nous allons considerer 2 variables : $\vec{u}$ le champ de vitesse et $\rho$ la densité du fluide. Notre feu sera alors un champ de densité en mouvement dans un champ de vitesse.\\
 	La résolution se fera par étapes : l'ajout des forces externes, la diffusion du fluide et l'impacte de l'advection.
 \\
-\\
 
-	1°)Les forces:\\
+	1)Les forces:\\
 L'ajout des forces externes dans le cas de la densité consiste en fait a ajouter une souce de densité la ou on le souhaite.\\
 
-	2°)La diffusion:\\
+	2)La diffusion:\\
 Cela consiste à échanger la densité d'une case de notre grille de l'espace avec ses 6 voisins (haut, bas, gauche, droite, devant, derriere). Ce qu'il se passe en fait c'est que la case va perdre de la densité en la cédant à ses voisins mais va aussi en gagner car ses voisins aussi sont soumis a cela et lui transfére aussi du fluide.\\
 \\
 Résolution:
@@ -546,7 +540,6 @@ Qui dans le cas où $\delta x = \delta y =\delta z$ nous donne:
    {\nabla^2}p = \frac{p_{i+1,j,k} + p_{i-1,j,k} + p_{i,j+1,k} + p_{i,j-1,k} + p_{i,j,k+1} + p_{i,j,k-1} - 6p_{i,j,k} }{({\delta x})^2} 
 \end{equation}
 
-\\
 Grace a cela on trouve facilement la formule pour la résolution:
 \begin{equation}
    u_{i,j,k}^{k+1} = \frac{u_{i+1,j,k}^{k} + 
@@ -559,13 +552,13 @@ Grace a cela on trouve facilement la formule pour la résolution:
 \end{equation}
 La résolution linéaire de cette équation combinée à une relaxation de Gauss-Seidel nous permet de considerer une méthode stable, même pour des taux de diffusion ($ \frac{\nu \delta t}{({\delta x})^2}$) grand.\\
 
-	3°)L'advection:\\
+	3)L'advection:\\
 L'advection est le procédé par lequel le champ de vitesse du fluide transporte la matière d'un endroit a un autre. Le plus simple est de voir la densité de matiere comme une quantité de particules et qu'il faut voir a chaque pas de temps. Et ce que l'on fait c'est que l'on considére les centres de nos cellules comme étant des particules, et plutot que de regarder ou vont se rendre ces particules, on regarde d'ou elle proviendrait si on faisait un pas de temps en arriere. On interpole ainsi les densités depuis leur position d'avant avec celles de leurs plus proches voisins.\\
 
-\subsection{Nos améliorations :}\\
+\subsection{Nos améliorations :}
 Nous avons rajouté des éléments en plus dans notre code nous permettant de gérer plusieurs phénoménes pour notre feu:\\
  
-\subsubsection{La Température :}\\
+\subsubsection{La Température :}
 La température est un facteur important pour le feu car la température va générer une force qui va modifier le champ de vitesse (l'air chaud qui monte) et donc cela va avoir un impact sur le mouvement de notre flamme.\\
 Cette force a pour forme:\\
 \begin{equation}
@@ -575,21 +568,102 @@ Cette force a pour forme:\\
 
 Nous avons donc un paramétre de température en plus de la densité qui est géré par les mêmes équations, mais a cela nous avons rajouté un coefficient de refroidissement qui fait baisser la température lorsque l'on s'éloigne de la source.\\
 
-\subsubsection{Vorticity confinement :}\\
+\subsubsection{Vorticity confinement :}
 Le fait d'utiliser une méthode de relaxation pour rendre le système stable a pour conséquence de provoquer une dissipation d'énergie dans notre calcul et donc une perte de donnée. \\
 
 Le moyen de palier à ce problème est d'utiliser la technique de Fedkiw : "vorticity confinement" qui redonne au fluid l'energie perdue par le calcul du laplacien.
 
-\subsubsection{Génération de fumée :}\\
+\subsubsection{Génération de fumée :}
 Le feu dans notre modèle produit de la fumée, nous avons donc géré un deuxieme fluide évoluant dans le même champ de vitesse avec des paramétres qui lui sont propres.\\
 
-Nous avons donc introduit un paramétre de consommation de la matiere qui a chaque pas de temps va diminuer la densité de fluide "feu". En paralléle nous produisons de la densité "fumée" la où on consume le feu , modulé avec un paramétre de convertion (ex: 10 particules de feu forment 3 particules de fumée).
+Nous avons donc introduit un paramétre de \textbf{consommation de la matiere} qui a chaque pas de temps va diminuer la densité de fluide "feu". En paralléle nous produisons de la densité "fumée" la où on consume le feu , modulé avec un paramétre de convertion (ex: 10 particules de feu forment 3 particules de fumée).
+
+
+\subsection{Méthode de rendu}
+\subsubsection{Affichage volumique}
+\subsubsection{Rendu de la flamme}
+\subsubsection{Rendu de la fumée}
+
+
+\subsection{Résultats}
+
+Taille de la grille : 20 x 20 \\
+FPS : 25\\
+
+Taille de la grille : 30 x 30 \\
+FPS : 8\\
+
+Taille de la grille : 30 x 30 \\
+FPS : 4\\
 
 %----------------------------------------------------------------------------------------------------------------------------------------
 %%%%%%%%%%%%%%%%%
-\section{Modèle de fumée}
+\section{Modèle de flamme et de fumée GPU}
 %%%%%%%%%%%%%%%%%
+Nous utilisons le langage \textbf{GLSL} ( Open\textbf{GL S}hading \textbf{L}anguage. 
+Ce langage de shader est utilisé en général pour le rendu de scène 3D. Le shader utilisé est un \textbf{fragment shader}.
+Il est (très grossièrement) destiné à changer la couleur d'affichage d'un objet.\\
+D'autres outils de programmation existent ( comme OpenCL ) mais nous n'étions pas tous compatibles avec cette technologie.
+Nous avons donc choisi le GLSL qui est suporté par un bien plus grand nombre de carte graphiques.\\
 
+Nous avons donc du mettre en place des outils permettant de résoudre notre système de fluide
+avec des outils qui sont à priori pas destinés à ce genre de problèmes.
+
+\subsection{Transformation du problème pour une résolution GPU}
+
+\subsubsection{Matrice 3 dimensions == Texture 3D}
+Notre matrice 3 dimensions dans lequel nous traitons le modèle de fluide peut se 
+rapprocher d'une \textbf{Texture 3D} d'OpenGL. \\
+
+\subsubsection{Operation sur le point (i,j,k) de la texture == FragmentShader}
+Un shader c'est un programme. Un fragment shader est un programme qui s'applique
+sur la couleur d'un pixel d'un objet.\\
+Le principe de fonctionnement d'un shader est simple. On active le shader, on
+dessine, on désactive le shader. Tout ce qui est dessiné pendant qu'il est actif
+subit toutes les modifications effectuées par le shader.\\
+Ainsi lorsqu'on fait une triple boucle pour parcourir l'ensemble des elements du
+tableau, il suffit d'appliquer un shader sur notre texture3D et toutes les couleurs 
+de celle-ci seront modifiées.\\
+
+La première difficulté est de pouvoir traiter l'ensemble de la Texture 3D avec le
+shader. On peut le faire en dessinant plusieurs fois un plan et en 
+changeant ses coordonnées de texture.
+
+
+\subsubsection{Iteration == Framebuffer ( render to texture 3D ) }
+Un \textbf{shader} ne s'applique qu'au moment du dessin.
+C'est à dire qu'on active le shader, on dessine, on désactive le shader. Tout
+ce qui est dessiné lorsqu'il est actif subit ses modifications. Mais du coup,
+la texture 3D initiale n'est jamais modifiée. Or lorsqu'on fait une itération
+dans le calcul il est essentiel de conserver le résultat dans une texture 3D.\\
+Avec une méthode de \textbf{render to texture} il est possible d'enregistrer ce
+qui s'affiche à l'écran dans une texture.\\
+
+\textbf{Principe du render to texture 3D}
+Nous avons un \textbf{FrameBuffer}. Lorsqu'il est actif, le dessin ne s'affiche pas
+ sur l'écran, mais est conservé en mémoire. Nous pouvons rediriger la sortie
+ du framebuffer vers une texture. \\
+ Il nous faut donc deux textures : la texture courante, et la texture dans lequel
+ on enregistrera les résultat du traitement par le shader.\\
+ 
+ Si notre texture 3D fait 128 x 128 x 128, nous allons dessiner dans une fenetre
+ de 128x128 chaque tranche de la texture. \\
+ Lors du traitement de la tranche i, nous:\\
+    - activons le shader ( qui applique le calcul de résolution) (en fait on l'active une seule fois au début)\\
+    - redirigeons la sortie du framebuffer vers la tranche i de la texture de sortie,\\
+    - dessinons un plan ( dont les coordonnées de texture correspondent à la tranche i) 
+    et dont la texture est la texture d'entree\\
+    
+ Ainsi en sortie de l'itération nous avons dans la seconde texture le résultat du shader appliqué à la premiere texture.\\
+ 
+ \textbf{Remarque importante : } Sur le papier cette astuce est très compréhensible. La mettre en place n'est pas si facile
+ puisqu' un simple paramètre mal configuré entraine un résultat faux, et trouver la cause n'est pas évident...
+ 
+\subsection{Amélioration}
+    Un framebuffer est capable de dessiner dans plusieurs tranches de la texture en même temps (en général 8). Par défaut il dessinera la même chose dans les 8 tranches. Nous avons donc créé un shader qui dessine dans les 8 tranches de sortie les 8 tranches de l'entrée correspondantes. Ainsi nous évitons les allez et retour entre le CPU et le GPU ce qui permet un gain en performances.
+
+
+\subsection{Résultats}
 
 
 
