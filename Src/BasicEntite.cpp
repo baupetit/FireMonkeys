@@ -3,7 +3,7 @@
 #include <GL/glut.h>
 #include <GL/gl.h>
 
-void BasicEntite::Afficher_Entite(){   
+void BasicEntite::Afficher_Entite( float dt ){   
  
     glPushMatrix();
     glMatrixMode (GL_MODELVIEW);
@@ -15,13 +15,13 @@ void BasicEntite::Afficher_Entite(){
     
     glScalef(echelle.x, echelle.y, echelle.z);
 
-    Afficher();    
+    Afficher(dt);    
     
     glPopMatrix();
 }
 
 
-void BasicEntite::Afficher_Entite_Face_Camera(Vecteur3D& positionCamera,Vecteur3D& directionCamera ){
+void BasicEntite::Afficher_Entite_Face_Camera(Vecteur3D& positionCamera,Vecteur3D& directionCamera, float dt ){
  
     glPushMatrix();
     glMatrixMode (GL_MODELVIEW);
@@ -33,7 +33,7 @@ void BasicEntite::Afficher_Entite_Face_Camera(Vecteur3D& positionCamera,Vecteur3
     
     glScalef(echelle.x, echelle.y, echelle.z);
 
-    Afficher_Face_Camera(positionCamera, directionCamera);    
+    Afficher_Face_Camera(positionCamera, directionCamera, dt);    
     
     glPopMatrix();
 }  

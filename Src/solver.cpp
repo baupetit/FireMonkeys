@@ -4,7 +4,7 @@
 #endif
 
 #include "solver.h"
-
+#include "SolverParam.h"
 #include <cmath>
 
 inline void SWAP( float* &a , float* &b){
@@ -42,6 +42,8 @@ Solver::Solver( int N ) : _N(N) {
 		_w[i]=0.0f;_w0[i]=0.0f;_srcd[i]=0.0f;_srcT[i]=0.0f;
 		_srcu[i]=0.0f;_srcv[i]=0.0f;_srcw[i]=0.0f;
 	}
+
+	SolverParam::initSolverParam() ;
 }
 
 Solver::~Solver(){
@@ -118,12 +120,6 @@ void addSourceCorrection ( int N, float *x , float *f, float *T, float *s , floa
 {
 	int i;
 	for ( i=0 ; i<SIZE ; i++ ){
-		/*
-		if( T[i] < sub ) {
-			f[i] = fireToSmoke*x[i];
-			x[i] = 0;
-		}
-		*/
 		x[i] += dt*s[i];
 	}
 	
@@ -135,7 +131,7 @@ void addBuoyancy( int N, float *T, float *v, float buoy, float dt)
 	int i;
 
 	for (i=0; i<SIZE; i++)
-		v[i] += (T[i]-0.0)*buoy*dt;
+		v[i] += T[i]*buoy*dt;
 }
 
 void setBoundaries ( int N, int b, float *x )
@@ -439,42 +435,40 @@ void vorticity_confinement( int N, float *u, float *v, float *w,
 	}
 }
 
-void Solver::densitiesStep ( float diff, float dt )
+void Solver::densitiesStep ( float dt )
 {	
 	addSource ( _N, _d, _srcd, dt );
-	SWAP ( _d0, _d ); diffuse ( _N, 0, _d, _d0, diff, dt );
+	SWAP ( _d0, _d ); diffuse ( _N, 0, _d, _d0, SolverParam::getDiffusionParamFire() , dt );
 	SWAP ( _d0, _d ); advect ( _N, 0, _d, _d0, _u, _v, _w, dt );
 }
 
-void Solver::densitiesStepWithTemp ( float diffFire,
-				     float diffSmoke,
-				     float diffTemp,
-				     float cool, 
-					 float consume,
-				     float sub, 
-				     float fireToSmoke, 
-				     float dt )
+void Solver::densitiesStepWithTemp ( float dt )
 {	
-	//addSourceCorrection ( _N, _d, _f, _T, _srcd, sub, fireToSmoke, dt );
-		
 	addSource ( _N, _d, _srcd, dt );
 	addSource ( _N, _T, _srcT, dt );
-	//SWAP ( _d0, _d ); diffuse ( _N, 0, _d, _d0, diffFire, dt );
-	//SWAP ( _f0, _f ); diffuse ( _N, 0, _f, _f0, diffSmoke, dt );
-	//SWAP ( _T0, _T ); diffuse ( _N, 0, _T, _T0, diffTemp, dt );
 	SWAP ( _d0, _d );SWAP ( _f0, _f );SWAP ( _T0, _T );
 	diffuseFireAndSmoke(_N, 0, 0, 0,
 			    _d, _d0, 
 			    _f, _f0, 
 			    _T, _T0, 
-			    diffFire, diffSmoke, diffTemp, 
+			    SolverParam::getDiffusionParamFire(), 
+			    SolverParam::getDiffusionParamSmoke(), 
+			    SolverParam::getDiffusionParamTemperature(), 
 			    dt );
 	SWAP ( _d0, _d ); SWAP ( _f0, _f ); SWAP ( _T0, _T ); 
-	advect_cool ( _N, 0, _d, _d0, _f, _f0, _T, _T0, _u, _v, _w, cool, consume , fireToSmoke ,dt );
+	advect_cool ( _N, 0, 
+		      _d, _d0, 
+		      _f, _f0, 
+		      _T, _T0, 
+		      _u, _v, _w, 
+		      SolverParam::getCoolingParam(), 
+		      SolverParam::getConsumingParam(),
+		      SolverParam::getFireToSmokeParam(), 
+		      dt );
 }
 
 
-void Solver::velocitiesStep ( float visc, float dt )
+void Solver::velocitiesStep ( float dt )
 {
 	// Adding sources
 	addSource ( _N, _u, _srcu, dt ); 
@@ -482,9 +476,9 @@ void Solver::velocitiesStep ( float visc, float dt )
 	addSource ( _N, _w, _srcw, dt );
 
 	// speed diffusig due to viscosity
-	SWAP ( _u0, _u ); diffuse ( _N, 1, _u, _u0, visc, dt );
-	SWAP ( _v0, _v ); diffuse ( _N, 2, _v, _v0, visc, dt );
-	SWAP ( _w0, _w ); diffuse ( _N, 3, _w, _w0, visc, dt );
+	SWAP ( _u0, _u ); diffuse ( _N, 1, _u, _u0, SolverParam::getViscosityParam(), dt );
+	SWAP ( _v0, _v ); diffuse ( _N, 2, _v, _v0, SolverParam::getViscosityParam(), dt );
+	SWAP ( _w0, _w ); diffuse ( _N, 3, _w, _w0, SolverParam::getViscosityParam(), dt );
 	project ( _N, _u, _v, _w, _u0, _v0 );
 	
 	// speed advection
@@ -496,22 +490,22 @@ void Solver::velocitiesStep ( float visc, float dt )
 }
 
 
-void Solver::velocitiesStepWithTemp ( float visc, float buoy, float vc_eps, float dt )
+void Solver::velocitiesStepWithTemp ( float dt )
 {
 	// Adding sources
 	addSource ( _N, _u, _srcu, dt ); 
 	addSource ( _N, _v, _srcv, dt ); 
 	addSource ( _N, _w, _srcw, dt );
-	addBuoyancy( _N, _T, _v, buoy, dt);
+	addBuoyancy( _N, _T, _v, SolverParam::getBuoyancyParam(), dt);
 	vorticity_confinement( _N, _u, _v, _w, 
 			       _u0, _v0, _w0, _T0, 
-			       vc_eps, dt);
+			       SolverParam::getVorticityConfinementParam(), dt);
 
 
 	// speed diffusig due to viscosity
-	SWAP ( _u0, _u ); diffuse ( _N, 1, _u, _u0, visc, dt );
-	SWAP ( _v0, _v ); diffuse ( _N, 2, _v, _v0, visc, dt );
-	SWAP ( _w0, _w ); diffuse ( _N, 3, _w, _w0, visc, dt );
+	SWAP ( _u0, _u ); diffuse ( _N, 1, _u, _u0, SolverParam::getViscosityParam(), dt );
+	SWAP ( _v0, _v ); diffuse ( _N, 2, _v, _v0, SolverParam::getViscosityParam(), dt );
+	SWAP ( _w0, _w ); diffuse ( _N, 3, _w, _w0, SolverParam::getViscosityParam(), dt );
 	project ( _N, _u, _v, _w, _u0, _v0 );
 	
 	// speed advection
