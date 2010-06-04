@@ -105,7 +105,47 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
 	/*
 	
         
+        /*
         
+	float *texture = new float[_grille_width*_grille_height*_grille_depth*4];
+	float *ptr = texture;
+	for (int k = 0; k < _grille_width; k++){
+		for (int j = 0; j < _grille_height; j++){
+			for (int i = 0; i < _grille_depth; i++){    
+				*ptr = 0.0;
+				ptr++;
+				*ptr = 0.0;
+				ptr++;
+				*ptr = 0.0;
+				ptr++;
+				*ptr = 1.0f;
+				ptr++;
+			}
+		}
+	} 
+        
+	ptr = texture;
+	for (int k = 0; k < _grille_width; k++){
+		for (int j = 0; j < _grille_height; j++){
+			for (int i = 0; i < _grille_depth / 30; i++){    
+				*ptr = 0.1;
+				ptr++;
+				*ptr = 0.4;
+				ptr++;
+				*ptr = 0.4;
+				ptr++;
+				*ptr = 1.0f;
+				ptr++;
+			}
+		}
+	} 
+	
+	
+	
+	*/
+	
+	
+	
 	float *texture = new float[_grille_width*_grille_height*_grille_depth*4];
 	float *ptr = texture;
 	for (int k = 0; k < _grille_width; k++){
@@ -123,7 +163,11 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
 		}
 	} 
 	
-	*/
+
+	
+	
+	
+	
 	// INITIALISATION GRILLES
 	_grille_feu_courante->charger_matrice(texture, _grille_width, _grille_height, _grille_depth);    
 	_grille_feu_dest->charger_matrice(texture, _grille_width, _grille_height, _grille_depth);    

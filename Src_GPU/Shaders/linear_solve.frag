@@ -14,7 +14,7 @@ uniform vec3      c;
 #define DY  1.0/taille_height
 #define DZ  1.0/taille_depth
 
-#define DECALAGE 1.0/40
+#define DECALAGE 1.0/taille_depth
 
 vec3    voisinN        =vec3(0.0, DY, 0.0);
 vec3    voisinE        =vec3(-DX, 0.0, 0.0);
@@ -37,16 +37,16 @@ vec3 linearsolve(vec3 coordonnee){
         && coordonnee.z <= DZ  
         && coordonnee.z >= 1-DZ  ) {
         
-        result = vec3( texture3D ( texture_entree, coordonnee ) .rgb );
-        //result = vec3(1.0, 0.0, 1.0); 
+        //result = vec3( texture3D ( texture_entree, coordonnee ) .rgb );
+        result = vec3(1.0, 0.0, 1.0); 
         return result;
         
     }else{
 
-
         
         
-                       
+        
+        /*
         result = vec3( texture3D ( texture_entree, coordonnee ) .rgb )
                  + a * ( ( texture3D ( texture_sortie, coordonnee + voisinN) .rgb )
                        + ( texture3D ( texture_sortie, coordonnee + voisinE) .rgb )
@@ -54,9 +54,32 @@ vec3 linearsolve(vec3 coordonnee){
                        + ( texture3D ( texture_sortie, coordonnee + voisinO) .rgb )
                        + ( texture3D ( texture_sortie, coordonnee + voisinAV) .rgb )
                        + ( texture3D ( texture_sortie, coordonnee + voisinAR) .rgb )
-                       );  
-        result = result / c ;               
+                       );
                        
+                       
+        result = vec3( texture3D ( texture_entree, coordonnee ) .rgb );
+        result.r = result.r + 0.0021;
+        //result.g = result.g + 0.0021;
+        //result.b = result.b + 0.0021;
+        
+        
+        */
+        
+                       
+       
+        /*               
+        result = vec3( texture3D ( texture_entree, coordonnee ) .rgb )
+                 + 1.0 * ( ( texture3D ( texture_sortie, coordonnee + voisinN) .rgb )
+                       + ( texture3D ( texture_sortie, coordonnee + voisinE) .rgb )
+                       + ( texture3D ( texture_sortie, coordonnee + voisinS) .rgb )
+                       + ( texture3D ( texture_sortie, coordonnee + voisinO) .rgb )
+                       + ( texture3D ( texture_sortie, coordonnee + voisinAV) .rgb )
+                       + ( texture3D ( texture_sortie, coordonnee + voisinAR) .rgb )
+                       );
+                       */
+        result = vec3( texture3D ( texture_entree, coordonnee ) .rgb );
+        result = result / c ;               
+        
         return result;
     }
 }
@@ -78,8 +101,9 @@ vec3 decalage7 = vec3 ( 0.0, 0.0, DECALAGE * 7.0);
 
 void main (){
     
+
     vec3 coord = gl_TexCoord[0].stp;
-    
+        
 	gl_FragData[0] = vec4( linearsolve (coord + decalage0), 1.0);
 	gl_FragData[1] = vec4( linearsolve (coord + decalage1), 1.0);
 	gl_FragData[2] = vec4( linearsolve (coord + decalage2), 1.0);

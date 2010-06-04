@@ -22,7 +22,7 @@ static inline float getTempVal( int i, int j, int T ){
 
 Fluid::Fluid()
 {
-        tailleGrille = 25;
+        tailleGrille = 35;
         s = new Solver(tailleGrille);
 	tempIndex = new TempToRGB(256,50);
 
@@ -52,15 +52,15 @@ Fluid::Fluid()
 	s->setTemperature( mid-1 ,5, mid, 10*38*((random()+1)/(float)RAND_MAX)*4/1);   
 	s->setTemperature( mid ,5, mid+1, 10*12*((random()+1)/(float)RAND_MAX)*4/1);   
 	s->setTemperature( mid ,5, mid-1, 10*55*((random()+1)/(float)RAND_MAX)*4/1);   
-
 	
-	/*
+	
+	
 	for( int i = 7 ; i < tailleGrille-6 ; ++i ){
 		for( int j = 7 ; j < tailleGrille-6 ; ++j ){
-			s->setVelocity(3,i,j, 0.20,0.0,0.0);
+			s->setVelocity(3,i,j, 30,0.0,0.0);
 		}
 	}      
-	*/
+	
 	
 	initialiserRenduGPU();
 	position.x = 0;
