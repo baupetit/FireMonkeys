@@ -108,6 +108,7 @@ void Framebuffer::traiterDessinDansBuffer(GLuint cible_id){
         
     // viewport    
     glViewport(0,0,_grille_width,_grille_height);
+    
 	glClear(GL_COLOR_BUFFER_BIT);
 
     // traite le calcul    

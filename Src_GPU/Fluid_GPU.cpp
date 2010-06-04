@@ -15,7 +15,6 @@ Fluid_GPU::Fluid_GPU(){
     
 	s = NULL;
     
-	position.x = -1.5;
 }
 
 Fluid_GPU::~Fluid_GPU(){
@@ -48,7 +47,7 @@ void Fluid_GPU::Afficher_Face_Camera(Vecteur3D& positionCamera, Vecteur3D& orien
 
 void Fluid_GPU::afficherFlamme(){
 	// Feu
-	dessinerPlansDansTexture3D(s->getDensities(),10);
+	dessinerPlansDansTexture3D(s->getDensities(),5);
 }
 
 void Fluid_GPU::afficherFumee(){
@@ -174,12 +173,29 @@ void Fluid_GPU::dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans){
     
 	glPushMatrix();
 	glMatrixMode(GL_MODELVIEW);
-    
-	Texture3D::bindTexture(3);
-
+ 
+ 
+ 
 	GLfloat verts[4][3] = { { 0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {1.0, 1.0, 0.0}, {1.0, 0.0, 0.0}};
+	
+ 
+        GLuint id0 = s->getDensities();
+        GLuint id1 = s->getDestDensities();
+        
+        glEnable(GL_TEXTURE_3D);
+        glActiveTexture(GL_TEXTURE0);
+        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_BORDER);
+        glBindTexture(GL_TEXTURE_3D,1);   
+        
+        
 
-	glBegin(GL_TRIANGLES);	
+
+	glBegin(GL_QUADS);	
 	
 	for (int i = 0; i < nb_plans; i++){
 		glTexCoord3d(verts[0][0], verts[0][1], verts[0][2] + (float)i/nb_plans);
@@ -191,47 +207,73 @@ void Fluid_GPU::dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans){
 		glTexCoord3d(verts[2][0], verts[2][1], verts[2][2] + (float)i/nb_plans);
 		glVertex3d(verts[2][0], verts[2][1], verts[2][2] + (float)i/nb_plans);
 		
-		glTexCoord3d(verts[2][0], verts[2][1], verts[2][2] + (float)i/nb_plans);
-		glVertex3d(verts[2][0], verts[2][1], verts[2][2] + (float)i/nb_plans);
-		
 		glTexCoord3d(verts[3][0], verts[3][1], verts[3][2] + (float)i/nb_plans);
 		glVertex3d(verts[3][0], verts[3][1], verts[3][2] + (float)i/nb_plans);
 		
-		glTexCoord3d(verts[0][0], verts[0][1], verts[0][2] + (float)i/nb_plans);
-		glVertex3d(verts[0][0], verts[0][1], verts[0][2] + (float)i/nb_plans);	
 	}
 	
 	glEnd();
 
 
-	Texture3D::bindTexture(1);
-
-
-	glBegin(GL_TRIANGLES);	
+        glActiveTexture(GL_TEXTURE0);
+        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_BORDER);
+        glBindTexture(GL_TEXTURE_3D,2);   
+        
+	glBegin(GL_QUADS);	
 	
 	for (int i = 0; i < nb_plans; i++){
 		glTexCoord3d(verts[0][0], verts[0][1], verts[0][2] + (float)i/nb_plans);
-		glVertex3d(3+verts[0][0], verts[0][1], verts[0][2]+ (float)i/nb_plans);
+		glVertex3d(verts[0][0] + 3, verts[0][1], verts[0][2]+ (float)i/nb_plans);
 		
 		glTexCoord3d(verts[1][0], verts[1][1], verts[1][2] + (float)i/nb_plans);
-		glVertex3d(3+verts[1][0], verts[1][1], verts[1][2] + (float)i/nb_plans);
+		glVertex3d(verts[1][0]+ 3, verts[1][1], verts[1][2] + (float)i/nb_plans);
 		
 		glTexCoord3d(verts[2][0], verts[2][1], verts[2][2] + (float)i/nb_plans);
-		glVertex3d(3+verts[2][0], verts[2][1], verts[2][2] + (float)i/nb_plans);
-		
-		glTexCoord3d(verts[2][0], verts[2][1], verts[2][2] + (float)i/nb_plans);
-		glVertex3d(3+verts[2][0], verts[2][1], verts[2][2] + (float)i/nb_plans);
+		glVertex3d(verts[2][0]+ 3, verts[2][1], verts[2][2] + (float)i/nb_plans);
 		
 		glTexCoord3d(verts[3][0], verts[3][1], verts[3][2] + (float)i/nb_plans);
-		glVertex3d(3+verts[3][0], verts[3][1], verts[3][2] + (float)i/nb_plans);
+		glVertex3d(verts[3][0]+ 3, verts[3][1], verts[3][2] + (float)i/nb_plans);
 		
-		glTexCoord3d(verts[0][0], verts[0][1], verts[0][2] + (float)i/nb_plans);
-		glVertex3d(3+verts[0][0], verts[0][1], verts[0][2] + (float)i/nb_plans);	
 	}
 	
 	glEnd();
-
-	Texture3D::unbindTexture();
-    
+   
+        glActiveTexture(GL_TEXTURE0);
+        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_BORDER);
+        glBindTexture(GL_TEXTURE_3D,3);   
+        
+	glBegin(GL_QUADS);	
+	
+	for (int i = 0; i < nb_plans; i++){
+		glTexCoord3d(verts[0][0], verts[0][1], verts[0][2] + (float)i/nb_plans);
+		glVertex3d(verts[0][0]- 3, verts[0][1], verts[0][2]+ (float)i/nb_plans);
+		
+		glTexCoord3d(verts[1][0], verts[1][1], verts[1][2] + (float)i/nb_plans);
+		glVertex3d(verts[1][0]- 3, verts[1][1], verts[1][2] + (float)i/nb_plans);
+		
+		glTexCoord3d(verts[2][0], verts[2][1], verts[2][2] + (float)i/nb_plans);
+		glVertex3d(verts[2][0]- 3, verts[2][1], verts[2][2] + (float)i/nb_plans);
+		
+		glTexCoord3d(verts[3][0], verts[3][1], verts[3][2] + (float)i/nb_plans);
+		glVertex3d(verts[3][0]- 3, verts[3][1], verts[3][2] + (float)i/nb_plans);
+		
+	}
+	
+	glEnd();
+ 
+ 
+ 
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);  
 	glPopMatrix();	
 }

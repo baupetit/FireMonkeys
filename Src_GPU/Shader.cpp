@@ -34,10 +34,17 @@ void Shader::Unbind_Program(){
 
 
 void Shader::lierTexture(string nom_texture, GLuint texture_id, GLuint level){
+    cout << "Bind : texture " << (int)texture_id << "  , level : " << (int) level << endl;
     GLuint	location = glGetUniformLocation ( program, nom_texture.c_str());
+    
+    cout << "Location : " << (int) location << " Level : " << level << " Active : " << (int)GL_TEXTURE0+level << endl;
+    
+    glActiveTexture(GL_TEXTURE0 + level);
+    glEnable(GL_TEXTURE_3D);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+    glBindTexture(GL_TEXTURE_3D, texture_id);
+    
     glUniform1i(location, level);
-    glActiveTexture(level);
-    Texture3D::bindTexture(texture_id);
 }
 
 
@@ -51,3 +58,5 @@ void Shader::lierFloat(string nom_float, float flouttounet){
     GLuint	location = glGetUniformLocation ( program, nom_float.c_str());
     glUniform1f(location, flouttounet);
 }
+
+
