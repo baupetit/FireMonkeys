@@ -31,14 +31,13 @@ vec3 linearsolve(vec3 coordonnee){
     vec3 result;
     
     if (   (coordonnee.s <= DX) 
-        && (coordonnee.s >= 1-DX)  
-        && coordonnee.t <= DY  
-        && coordonnee.t >= 1-DY  
-        && coordonnee.p <= DZ  
-        && coordonnee.p >= 1-DZ  ) {
+        || (coordonnee.s >= 1-DX)  
+        || coordonnee.t <= DY  
+        || coordonnee.t >= 1-DY  
+        || coordonnee.p <= DZ  
+        || coordonnee.p >= 1-DZ  ) {
         
-        //result = vec3( texture3D ( texture_entree, coordonnee ) .rgb );
-        result = vec3(1.0, 0.0, 1.0); 
+        result = vec3( texture3D ( texture_entree, coordonnee ) .rgb );
         return result;
         
     }else{
@@ -56,7 +55,7 @@ vec3 linearsolve(vec3 coordonnee){
                        );
                        
                        
-        result = vec3( texture3D ( texture_entree, coordonnee ) .rgb );
+        result = vec3( texture3D ( texture_entree, coordonnee + voisinAR) .rgb );
         result.r = result.r + 0.0021;
         //result.g = result.g + 0.0021;
         //result.b = result.b + 0.0021;
@@ -65,8 +64,7 @@ vec3 linearsolve(vec3 coordonnee){
         */
         
                        
-        
-        /*               
+        /*
         result = vec3( texture3D ( texture_entree, coordonnee ) .rgb )
                  + 1.0 * ( ( texture3D ( texture_sortie, coordonnee + voisinN) .rgb )
                        + ( texture3D ( texture_sortie, coordonnee + voisinE) .rgb )
@@ -75,9 +73,24 @@ vec3 linearsolve(vec3 coordonnee){
                        + ( texture3D ( texture_sortie, coordonnee + voisinAV) .rgb )
                        + ( texture3D ( texture_sortie, coordonnee + voisinAR) .rgb )
                        );
-                       */
-        result = vec3( texture3D ( texture_entree, coordonnee ) .rgb );
         result = result / c ;               
+        */
+        
+        //result = vec3( texture3D ( texture_entree, coordonnee + voisinAR) .rgb );
+        
+        
+        result =  texture3D ( texture_entree, coordonnee + voisinN)  .rgb;   
+        result += texture3D ( texture_entree, coordonnee + voisinS)  .rgb;                       
+        result += texture3D ( texture_entree, coordonnee + voisinE)  .rgb;                       
+        result += texture3D ( texture_entree, coordonnee + voisinO)  .rgb;                       
+        result += texture3D ( texture_entree, coordonnee + voisinAV) .rgb;                       
+        result += texture3D ( texture_entree, coordonnee + voisinAR) .rgb;   
+        
+        result = a * result;
+        
+        result +=  texture3D ( texture_entree, coordonnee).rgb;   
+                            
+        //result = result / c ;
         
         return result;
     }

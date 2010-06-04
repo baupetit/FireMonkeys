@@ -30,7 +30,7 @@ void Fluid_GPU::initialiserFluid(){
 }
 
 void Fluid_GPU::resolutionFluid(){
-	s->densitiesStep(0.001);
+	s->densitiesStep(0.1);
 }
 
 void Fluid_GPU::Afficher(){
@@ -48,7 +48,7 @@ void Fluid_GPU::Afficher_Face_Camera(Vecteur3D& positionCamera, Vecteur3D& orien
 
 void Fluid_GPU::afficherFlamme(){
 	// Feu
-	dessinerPlansDansTexture3D(s->getDensities(),120);
+	dessinerPlansDansTexture3D(s->getDensities(),10);
 }
 
 void Fluid_GPU::afficherFumee(){

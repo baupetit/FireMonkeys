@@ -100,6 +100,8 @@ void Framebuffer::traiterDessinDansBuffer(GLuint cible_id){
     
     // depth
     glDisable(GL_DEPTH_TEST);
+    //glEnable(GL_BLEND);
+    //glBlendFunc(GL_ONE,GL_ONE);
     
     // bind !
     bind_Buffer();
@@ -143,6 +145,7 @@ void Framebuffer::traiterDessinDansBuffer(GLuint cible_id){
     
     // etat depth
     glEnable(GL_DEPTH_TEST);
+    //glDisable(GL_BLEND);
     
     // pop
     glPopAttrib();

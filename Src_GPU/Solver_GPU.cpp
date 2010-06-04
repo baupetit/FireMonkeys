@@ -238,9 +238,6 @@ void setBoundariesB0 ( int N, float *x ) {
 }
 
 void Solver_GPU::linearSolve ( int b, float a1, float a2, float a3 ){
-    float c1 = 1 + 6 * a1;
-    float c2 = 1 + 6 * a2;
-    float c3 = 1 + 6 * a3;
     
     
             
@@ -254,24 +251,28 @@ void Solver_GPU::linearSolve ( int b, float a1, float a2, float a3 ){
 
     
     Vecteur3D a = Vecteur3D(a1,a2,a3);
-    Vecteur3D c = Vecteur3D(c1,c2,c3);
+
+    a = a * 100000000;    
     
+    a.afficher();
+    
+    Vecteur3D c = Vecteur3D(1.0, 1.0, 1.0) + 6 * a;
+    
+    c.afficher();
     
     shader_linear_solve->lierVecteur("a", a);
     shader_linear_solve->lierVecteur("c", c);
+
+
       
       
-    for ( int i = 0; i < 20; i++){
+    for ( int i = 0; i < 2; i++){
         /*    
         cout << " Boucle i : " << i ;
         cout << " Source : " << (int) _grille_feu_courante->get_texture_id() ;
         cout << " Cible : " << (int) _grille_feu_dest->get_texture_id()  << endl;
         */
         
-        /*
-        shader_linear_solve->lierTexture("texture_sortie", _grille_feu_dest->get_texture_id(),1);
-        buffer->traiterDessinDansBuffer(_grille_feu_dest->get_texture_id());
-        */
         
         shader_linear_solve->lierTexture("texture_sortie", _grille_feu_dest->get_texture_id(),1);
         
