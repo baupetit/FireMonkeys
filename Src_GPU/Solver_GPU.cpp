@@ -88,7 +88,7 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
 	for (int k = 0; k < _grille_width; k++){
 		for (int j = 0; j < _grille_height; j++){
 			for (int i = 0; i < _grille_depth; i++){
-				if(i<4){    
+				if(i<10){    
 				*ptr = 1.0f;//i/(float)_grille_depth * coeff1;
 				} else {*ptr = 0.0f;}
 				ptr++;
@@ -102,7 +102,7 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
 		}
 	} 
 	
-	/*
+	
 	
         
         /*
@@ -145,7 +145,7 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
 	*/
 	
 	
-	
+	/*
 	float *texture = new float[_grille_width*_grille_height*_grille_depth*4];
 	float *ptr = texture;
 	for (int k = 0; k < _grille_width; k++){
@@ -162,7 +162,7 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
 			}
 		}
 	} 
-	
+	*/
 
 	
 	
@@ -272,10 +272,10 @@ void Solver_GPU::linearSolve ( int b, float a1, float a2, float a3 ){
         */
         
 
-        /*
+        
         shader_linear_solve->lierTexture("texture_sortie", _grille_feu_dest->get_texture_id(),1);
         buffer->traiterDessinDansBuffer(_grille_feu_dest->get_texture_id());
-        */
+       
 
         
         shader_linear_solve->lierTexture("texture_sortie", _grille_feu_dest->get_texture_id(),1);
