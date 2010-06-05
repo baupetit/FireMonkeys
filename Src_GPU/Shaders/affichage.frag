@@ -31,7 +31,6 @@ void main(void)
 		else
 		    color = color_chaleur;
 	}
-	//gl_FragColor = color_flamme;
-	gl_FragColor = vec4(flamme_fumee_chaleur.x * 15.0, 0.0, 0.0, flamme_fumee_chaleur.x * 50.0 );
+	gl_FragColor = vec4(flamme_fumee_chaleur.x * 150.0, 0.0, 0.0, flamme_fumee_chaleur.x * 150.0);
 }
 

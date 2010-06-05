@@ -24,7 +24,9 @@ class Solver_GPU {
 
 private :
 	/** Shader de resolution de feu */
+	Shader *shader_add_sources;
 	Shader *shader_linear_solve;
+	Shader *shader_advect_cool;
     
 	/** Dans quel cas sommmes nous */
 	int pingpong;
@@ -38,7 +40,7 @@ private :
 	int _grille_depth;
     
 	/** Matrices */
-	Texture3D *_grille_temp;
+	Texture3D *_grille_sources;
 	Texture3D *_grille_feu_courante;
 	Texture3D *_grille_feu_dest;
     
@@ -84,7 +86,7 @@ public :
 	 */
 	const GLuint getDensities() const ;
 	const GLuint getDestDensities() const ;
-    const GLuint getTemp() const ;
+    const GLuint getSources() const ;
 	
 	
 
@@ -138,6 +140,8 @@ public :
     void linearSolve ( int b, float a1, float a2, float a3 );
 
     void swapGrilles(Texture3D** t1, Texture3D** t2);
+    
+    void addSource(float dt);
     
 };
 
