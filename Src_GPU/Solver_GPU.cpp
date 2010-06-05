@@ -15,6 +15,9 @@
 #include <unistd.h>
 
 
+#define PRECISION_RESOLUTION 20
+
+
 Solver_GPU::Solver_GPU( int width, int height, int depth ) 
 	: _grille_width(width), _grille_height(height), _grille_depth(depth) {
 
@@ -27,12 +30,10 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
 
 	shader_linear_solve = new Shader("./Shaders/vertex_shader_qui_ne_fait_rien.vert",
 	                                 "./Shaders/linear_solve.frag");
-
-	
-    /*
+    
 	shader_advect_cool = new Shader("./Shaders/vertex_shader_qui_ne_fait_rien.vert",
 	                                 "./Shaders/advect_cool.frag");
-    */
+    
 	    
 	// Frame buffer
 	buffer = new Framebuffer(width, height, depth);
@@ -41,6 +42,8 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
 	_grille_sources = new Texture3D();
 	_grille_feu_courante = new Texture3D();
 	_grille_feu_dest = new Texture3D();
+	_grille_vitesse_courante = new Texture3D();
+	_grille_vitesse_dest = new Texture3D();
     
     
 	srand ( time(NULL) );    
@@ -144,6 +147,11 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
 		
 	_grille_sources->charger_matrice(texture, _grille_width, _grille_height, _grille_depth);    
 	
+	_grille_vitesse_courante->charger_matrice(texture, _grille_width, _grille_height, _grille_depth);    
+	
+	_grille_vitesse_dest->charger_matrice(texture, _grille_width, _grille_height, _grille_depth);    
+	
+	
 	// liberation
 	delete(texture);
 	
@@ -158,6 +166,26 @@ Solver_GPU::~Solver_GPU(){
 	delete _grille_sources;
 }
 
+
+
+// SWAP
+void Solver_GPU::swapGrilles(Texture3D** t1, Texture3D** t2){
+    Texture3D* tmp;
+    tmp = *t1;
+    *t1 = *t2;
+    *t2 = tmp;
+}
+ 
+ 
+ 
+ 
+ 
+ 
+
+// ACCESSEURS
+
+
+
 const GLuint Solver_GPU::getDensities() const {
 	return _grille_feu_courante->get_texture_id();
 }
@@ -171,40 +199,17 @@ const GLuint Solver_GPU::getSources() const {
 }
 
 
-const GLuint Solver_GPU::getSmokes() const {
-	return 0;
-}
-
-const GLuint Solver_GPU::getTemperatures() const {
-	return 0;
-}
 
 
-int Solver_GPU::getWidth() const{
-	return _grille_width ;
-}
-int Solver_GPU::getHeight() const{
-	return _grille_height ;
-}
-int Solver_GPU::getDepth() const{
-	return _grille_depth ;
-}
 
-void Solver_GPU::setDensity( int i , int j , int k , float dens ){
-}
-
-void Solver_GPU::setTemperature( int i, int j, int k, float temp ){
-}
-
-void Solver_GPU::setVelocity( int i, int j , int k , float u, float v, float w ){
-}
+// DENSITI STEP
 
 void Solver_GPU::addSource ( float dt ){
     // ajouter dt * source à sortie
 
-    shader_add_sources->Bind_Program();          
+    shader_advect_cool->Bind_Program();          
 
-    shader_add_sources->lierFloat("dt", dt);
+    shader_advect_cool->lierFloat("dt", dt);
         
     _grille_feu_courante->bindTexture(GL_TEXTURE0);
     _grille_sources->bindTexture(GL_TEXTURE1);
@@ -214,37 +219,27 @@ void Solver_GPU::addSource ( float dt ){
             	
     glActiveTexture(GL_TEXTURE0);
         
-    buffer->traiterDessinDansBuffer1ALAFOIS(*_grille_feu_dest);
+    buffer->traiterDessinDansBuffer1ALAFOIS(*_grille_feu_courante);
         
-    swapGrilles(&_grille_feu_dest, &_grille_feu_courante);
+    //swapGrilles(&_grille_feu_dest, &_grille_feu_courante);
         
     shader_add_sources->Unbind_Program();          
 	
     
-    
 }
 
-void addSourceCorrection ( int N, float *x , float *f, float *T, float *s , float sub, float fireToSmoke, float dt ){
-}
 
-void addBuoyancy( int N, float *T, float *v, float buoy, float dt){
-}
+void Solver_GPU::linearSolve ( int b, float dt ){
 
-void setBoundaries ( int N, int b, float *x ) {
-}
+    float arf = dt*_grille_width*_grille_width;
 
-void setBoundariesB0 ( int N, float *x ) {
-}
+	float a1= arf * SolverParam::getDiffusionParamFire();
+	float a2= arf * SolverParam::getDiffusionParamSmoke();
+	float a3= arf * SolverParam::getDiffusionParamTemperature();
 
-void Solver_GPU::linearSolve ( int b, float a1, float a2, float a3 ){
-
-    
     Vecteur3D a = Vecteur3D(a1,a2,a3);
-    //a = Vecteur3D( 0.04, 0.039, 0.69);
     Vecteur3D c = Vecteur3D(1.0, 1.0, 1.0) + 6 * a;
     
-    //a.afficher();
-
     shader_linear_solve->Bind_Program();          
 
     shader_linear_solve->lierFloat("taille_width",  _grille_width);
@@ -254,7 +249,7 @@ void Solver_GPU::linearSolve ( int b, float a1, float a2, float a3 ){
     shader_linear_solve->lierVecteur("c", c);
 
 
-    for ( int i = 0; i < 20; i++){
+    for ( int i = 0; i < PRECISION_RESOLUTION; i++){
     
         
         _grille_feu_courante->bindTexture(GL_TEXTURE0);
@@ -275,35 +270,49 @@ void Solver_GPU::linearSolve ( int b, float a1, float a2, float a3 ){
     
 }
 
-void Solver_GPU::diffuse ( float diff, 
-                           float dt ){
-
-    
-    
-    float beattleJuce = dt*diff*_grille_width*_grille_width;
-    linearSolve(0, beattleJuce, beattleJuce, beattleJuce);
-    
-    
+void Solver_GPU::diffuse ( float dt ){
+    linearSolve(0, dt);
 }
 
-void diffuseFireAndSmoke ( int N, int b1, int b2, int b3,
-			   float * x, float * x0, 
-			   float * f, float * f0, 
-			   float * t, float * t0, 
-			   float diffFire, float diffSmoke, float diffTemp, 
-			   float dt ){
-}
 
-void advect ( int N, int b, float * d, float * d0, float * u, float * v, float *w, float dt ){
-} 
 
-void advect_cool ( int N, int b, 
-		   float * d, float * d0, float *f, float *f0, 
-		   float *T, float *T0,
-		   float * u, float * v, float *w, 
-		   float cool, float consume, float dt )
+
+
+void advect_cool ( int b, 
+		           float * d, float * d0, float *f, float *f0, 
+		           float *T, float *T0,
+		           float * u, float * v, float *w, 
+		           float cool, float consume, float dt )
 {
+
+
+
+    shader_add_sources->Bind_Program();          
+
+    shader_add_sources->lierFloat("dt", dt);
+        
+    _grille_feu_courante->bindTexture(GL_TEXTURE0);
+    _grille_sources->bindTexture(GL_TEXTURE1);
+        
+    shader_add_sources->lierLevel("texture_densite", 0);
+    shader_add_sources->lierLevel("texture_sources", 1);
+            	
+    glActiveTexture(GL_TEXTURE0);
+        
+    buffer->traiterDessinDansBuffer1ALAFOIS(*_grille_feu_courante);
+        
+    //swapGrilles(&_grille_feu_dest, &_grille_feu_courante);
+        
+    shader_add_sources->Unbind_Program();          
+	
+
+
+
+
+
+
 }
+
 
 
 void project ( int N, float * u, float * v, float *w, float * p, float * div )
@@ -316,13 +325,13 @@ void vorticity_confinement( int N, float *u, float *v, float *w,
 {
 }
 
-void Solver_GPU::densitiesStep ( float dt )
+void Solver_GPU::densitiesStepWithTemp ( float dt )
 {	
     
     // Sources ( temp et dens )
     addSource(dt);
     // diffuse le feu, la fumee, la temperature    
-	diffuse ( SolverParam::getDiffusionParamFire(), dt );
+	diffuse ( dt );
 	// advect
 	//
     
@@ -330,22 +339,29 @@ void Solver_GPU::densitiesStep ( float dt )
     
 }
 
-void Solver_GPU::densitiesStepWithTemp ( float dt )
-{	
-}
 
-void Solver_GPU::velocitiesStep ( float dt )
-{
-}
 
 void Solver_GPU::velocitiesStepWithTemp ( float dt )
 {
 }
-    
-void Solver_GPU::swapGrilles(Texture3D** t1, Texture3D** t2){
-    Texture3D* tmp;
-    tmp = *t1;
-    *t1 = *t2;
-    *t2 = tmp;
-}
+
+
  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+void addSourceCorrection ( int N, float *x , float *f, float *T, float *s , float sub, float fireToSmoke, float dt ){
+}
+
+void addBuoyancy( int N, float *T, float *v, float buoy, float dt){
+}
+
+void setBoundaries ( int N, int b, float *x ) {
+}
+
+void setBoundariesB0 ( int N, float *x ) {
+}

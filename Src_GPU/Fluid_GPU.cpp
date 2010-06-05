@@ -41,7 +41,7 @@ void Fluid_GPU::initialiserFluid(){
 }
 
 void Fluid_GPU::resolutionFluid(){
-	s->densitiesStep(0.1);
+	s->densitiesStepWithTemp(0.1);
 }
 
 void Fluid_GPU::Afficher(){

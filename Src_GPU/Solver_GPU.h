@@ -43,8 +43,12 @@ private :
 	Texture3D *_grille_sources;
 	Texture3D *_grille_feu_courante;
 	Texture3D *_grille_feu_dest;
+	Texture3D *_grille_vitesse_courante;
+	Texture3D *_grille_vitesse_dest;
     
 public :
+    // CONSTRUCTEURS 
+
 	/**
 	 * @brief : constructor
 	 */
@@ -55,93 +59,49 @@ public :
 	 */
 	~Solver_GPU();
 
-	/**
-	 * @brief : move densities over a dt timestep with a certain
-	 * diffusion factor
-	 */
-	void densitiesStep( float dt );
-
-	/**
-	 * @brief : compute velocities evolution over a dt timestep
-	 * using visc as the viscosity of the fluid
-	 */
-	void velocitiesStep( float dt );
 
 
-	/**
-	 * @brief : move densities over a dt timestep with a certain
-	 * diffusion factor with Temperature
-	 */
+    //// ACCESSEURS    
+    
+    /** Retourne l'id de la texture de densite */
+	const GLuint getDensities() const ;
+	
+    /** Retourne l'id de la texture de destination du calcul de densite */
+	const GLuint getDestDensities() const ;
+	
+    /** Retourne l'id de la texture de sources */
+    const GLuint getSources() const ;
+
+
+
+    //// DENSITIES STEP
+    
+	/** Effectue l'etape de densité */
 	void densitiesStepWithTemp ( float dt );
 
-	/**
-	 * @brief : compute velocities evolution over a dt timestep
-	 * using visc as the viscosity of the fluid with Temperature
-	 */
+    /** Ajout des sources de fumee / feu / chaleur */
+    void addSource(float dt);
+
+	/** Phase de diffusion */
+	void diffuse ( float dt );
+
+    /** Resolution lineaire */
+    void linearSolve ( int b, float dt);
+
+    /** Echange deux textures */
+    void swapGrilles(Texture3D** t1, Texture3D** t2);
+    
+
+    //// VELOCITIES STEP
+    
+	/** Effectue l'etape des vitesses */
 	void velocitiesStepWithTemp( float dt );
 
 
-	/**
-	 * @brief : return the fire density matrix
-	 */
-	const GLuint getDensities() const ;
-	const GLuint getDestDensities() const ;
-    const GLuint getSources() const ;
-	
-	
-
-	/**
-	 * @brief : return the smoke density matrix
-	 */
-	const GLuint getSmokes() const ;
-
-	/**
-	 * @brief : return the density matrix
-	 */
-	const GLuint getTemperatures() const ;
-
-	/**
-	 * @brief : return the grid size
-	 */
-	int getWidth() const ;
-	int getHeight() const ;
-	int getDepth() const ;
-
-
-	/**
-	 * @brief : set density in the given cell
-	 */ 
-	void setDensity( int i , int j , int k , float dens );
-
-	/**
-	 * @brief : set temperature at the given cell
-	 */
-	void setTemperature( int i, int j, int k, float temp );
-
-	/**
-	 * @brief : set the velocity in the given cell
-	 */
-	void setVelocity( int i, int j , int k , float u, float v, float w );
-
-
-
-    
-	/** Dessine un carre */
-	void dessinerCarre();
-    
-	/** Phase de diffusion */
-	void diffuse ( float diff, 
-		           float dt );
 
 
 
 
-
-    void linearSolve ( int b, float a1, float a2, float a3 );
-
-    void swapGrilles(Texture3D** t1, Texture3D** t2);
-    
-    void addSource(float dt);
     
 };
 
