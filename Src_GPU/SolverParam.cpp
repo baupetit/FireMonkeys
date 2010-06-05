@@ -67,6 +67,6 @@ void SolverParam::initSolverParam() {
 	SolverParam::viscosityParam            = 0.0;
 	SolverParam::buoyancyParam             = 0.5;
 	SolverParam::vorticityConfinementParam = 2.0;
-	SolverParam::echantillonage            = 0.001;
+	SolverParam::echantillonage            = 128.0;
 }
 

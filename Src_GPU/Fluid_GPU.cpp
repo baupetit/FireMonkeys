@@ -7,15 +7,21 @@ using namespace std;
 
 Fluid_GPU::Fluid_GPU(){
 	// Taille de la grille
+	/*
 	_grille_width  = TAILLE_GRILLE;
 	_grille_height = TAILLE_GRILLE;
 	_grille_depth  = TAILLE_GRILLE;
-	//_grille_depth  = 8;
-	_grille_depth  = TAILLE_GRILLE;
+	*/
+	_grille_width  = 30;
+	_grille_height = 30;
+	_grille_depth  = 30;
     
 	s = NULL;
+    shader_affichage = NULL;
     
-	position.x = -1.5;
+    echelle.x = 1.0;
+    echelle.y = 2.0;
+    echelle.z = 1.0;
 }
 
 Fluid_GPU::~Fluid_GPU(){
@@ -27,10 +33,15 @@ void Fluid_GPU::initialiserFluid(){
 	// Solver
 	delete s;
 	s = new Solver_GPU(_grille_width, _grille_height, _grille_depth);
+	
+	// Shader
+	delete shader_affichage;
+	shader_affichage = new Shader("./Shaders/vertex_shader_qui_ne_fait_rien.vert",
+	                                 "./Shaders/affichage.frag");
 }
 
 void Fluid_GPU::resolutionFluid(){
-	s->densitiesStep(0.001);
+	s->densitiesStep(0.1);
 }
 
 void Fluid_GPU::Afficher(){
@@ -48,7 +59,7 @@ void Fluid_GPU::Afficher_Face_Camera(Vecteur3D& positionCamera, Vecteur3D& orien
 
 void Fluid_GPU::afficherFlamme(){
 	// Feu
-	dessinerPlansDansTexture3D(s->getDensities(),120);
+	dessinerPlansDansTexture3D(s->getDensities(),50);
 }
 
 void Fluid_GPU::afficherFumee(){
@@ -174,12 +185,27 @@ void Fluid_GPU::dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans){
     
 	glPushMatrix();
 	glMatrixMode(GL_MODELVIEW);
-    
-	Texture3D::bindTexture(3);
-
+ 
+ 
+	glDisable(GL_LIGHTING);
+	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+	glEnable( GL_BLEND );
+	glAlphaFunc(GL_GREATER,0.0f);
+	glEnable(GL_ALPHA_TEST);
+	
 	GLfloat verts[4][3] = { { 0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {1.0, 1.0, 0.0}, {1.0, 0.0, 0.0}};
 
-	glBegin(GL_TRIANGLES);	
+    GLuint id0 = s->getDensities();
+    //GLuint id1 = s->getDestDensities();
+        
+    Texture3D::bindTexture(id0,0);
+    Texture3D::setFilter(GL_LINEAR);
+
+    shader_affichage->lierLevel("texture_entree", 0);
+    shader_affichage -> Bind_Program();
+
+
+	glBegin(GL_QUADS);	
 	
 	for (int i = 0; i < nb_plans; i++){
 		glTexCoord3d(verts[0][0], verts[0][1], verts[0][2] + (float)i/nb_plans);
@@ -191,47 +217,20 @@ void Fluid_GPU::dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans){
 		glTexCoord3d(verts[2][0], verts[2][1], verts[2][2] + (float)i/nb_plans);
 		glVertex3d(verts[2][0], verts[2][1], verts[2][2] + (float)i/nb_plans);
 		
-		glTexCoord3d(verts[2][0], verts[2][1], verts[2][2] + (float)i/nb_plans);
-		glVertex3d(verts[2][0], verts[2][1], verts[2][2] + (float)i/nb_plans);
-		
 		glTexCoord3d(verts[3][0], verts[3][1], verts[3][2] + (float)i/nb_plans);
 		glVertex3d(verts[3][0], verts[3][1], verts[3][2] + (float)i/nb_plans);
 		
-		glTexCoord3d(verts[0][0], verts[0][1], verts[0][2] + (float)i/nb_plans);
-		glVertex3d(verts[0][0], verts[0][1], verts[0][2] + (float)i/nb_plans);	
 	}
 	
 	glEnd();
-
-
-	Texture3D::bindTexture(1);
-
-
-	glBegin(GL_TRIANGLES);	
 	
-	for (int i = 0; i < nb_plans; i++){
-		glTexCoord3d(verts[0][0], verts[0][1], verts[0][2] + (float)i/nb_plans);
-		glVertex3d(3+verts[0][0], verts[0][1], verts[0][2]+ (float)i/nb_plans);
-		
-		glTexCoord3d(verts[1][0], verts[1][1], verts[1][2] + (float)i/nb_plans);
-		glVertex3d(3+verts[1][0], verts[1][1], verts[1][2] + (float)i/nb_plans);
-		
-		glTexCoord3d(verts[2][0], verts[2][1], verts[2][2] + (float)i/nb_plans);
-		glVertex3d(3+verts[2][0], verts[2][1], verts[2][2] + (float)i/nb_plans);
-		
-		glTexCoord3d(verts[2][0], verts[2][1], verts[2][2] + (float)i/nb_plans);
-		glVertex3d(3+verts[2][0], verts[2][1], verts[2][2] + (float)i/nb_plans);
-		
-		glTexCoord3d(verts[3][0], verts[3][1], verts[3][2] + (float)i/nb_plans);
-		glVertex3d(3+verts[3][0], verts[3][1], verts[3][2] + (float)i/nb_plans);
-		
-		glTexCoord3d(verts[0][0], verts[0][1], verts[0][2] + (float)i/nb_plans);
-		glVertex3d(3+verts[0][0], verts[0][1], verts[0][2] + (float)i/nb_plans);	
-	}
-	
-	glEnd();
+    shader_affichage -> Unbind_Program();
 
-	Texture3D::unbindTexture();
+	
+    Texture3D::setFilter(GL_NEAREST);
     
+    glEnable(GL_LIGHTING);
+    glDisable(GL_ALPHA_TEST);
+    glDisable(GL_BLEND);
 	glPopMatrix();	
 }

@@ -19,14 +19,6 @@
 #include "Texture3D.h"
 
 
-#define LARGEUR    20
-#define HAUTEUR    20
-#define PROFONDEUR 20
-
-#define PING 1
-#define PONG 2
-
-#define ID(i,j,k) ((i)+(LARGEUR)*(j)+((LARGEUR)*(HAUTEUR))*(k))
 
 class Solver_GPU {
 

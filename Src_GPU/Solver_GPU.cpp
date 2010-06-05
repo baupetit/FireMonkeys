@@ -18,121 +18,40 @@
 Solver_GPU::Solver_GPU( int width, int height, int depth ) 
 	: _grille_width(width), _grille_height(height), _grille_depth(depth) {
 
-	
-	cout << "Nouveau Solver_GPU" << endl;
-	
-	// init
+	// init des params
 	SolverParam::initSolverParam();
 
-	// Shader lineaire
+	// Shader resolution lineaire
 	shader_linear_solve = new Shader("./Shaders/vertex_shader_qui_ne_fait_rien.vert",
 	                                 "./Shaders/linear_solve.frag");
-
     
 	// Frame buffer
 	buffer = new Framebuffer(width, height, depth);
     
-	// Grilles
+	// Grilles ( textures )
 	_grille_temp = new Texture3D();
 	_grille_feu_courante = new Texture3D();
 	_grille_feu_dest = new Texture3D();
     
-	srand ( time(NULL) );
-
     
+	srand ( time(NULL) );    
 	float coeff1 = rand()/(float)RAND_MAX;
 	float coeff2 = rand()/(float)RAND_MAX;
+	float coeff3 = rand()/(float)RAND_MAX;
     
-    
-    /*
-	// Creation du champs de vitesse vide
+    /* Init des textures */
 	float *texture = new float[_grille_width*_grille_height*_grille_depth*4];
-	float *ptr = texture;
-	for (int k = 0; k < _grille_width; k++){
-		for (int j = 0; j < _grille_height; j++){
-			for (int i = 0; i < _grille_depth; i++){    
-				*ptr = 0.0;
-				ptr++;
-				*ptr = 0.0;
-				ptr++;
-				*ptr = 0.0;
-				ptr++;
-				*ptr = 1.0f;
-				ptr++;
-			}
-		}
-	} 
-	
-	float *texture = new float[_grille_width*_grille_height*_grille_depth*4];
-	float *ptr = texture;
-	for (int k = 0; k < _grille_width; k++){
-		for (int j = 0; j < _grille_height; j++){
-			for (int i = 0; i < _grille_depth; i++){    
-				*ptr = i/(float)_grille_depth * coeff1;
-				ptr++;
-				*ptr = j/(float)_grille_height * coeff2;
-				ptr++;
-				*ptr = k/(float)_grille_width;
-				ptr++;
-				*ptr = 1.0f;
-				ptr++;
-			}
-		}
-	} 
-	
-	
-	
-	*/
-	float *texture = new float[_grille_width*_grille_height*_grille_depth*4];
-	float *ptr = texture;
-	for (int k = 0; k < _grille_width; k++){
-		for (int j = 0; j < _grille_height; j++){
-			for (int i = 0; i < _grille_depth; i++){
-				if(i<10){    
-				*ptr = 1.0f;//i/(float)_grille_depth * coeff1;
-				} else {*ptr = 0.0f;}
-				ptr++;
-				*ptr = 0.0;//j/(float)_grille_height * coeff2;
-				ptr++;
-				*ptr = 0.0;//k/(float)_grille_width;
-				ptr++;
-				*ptr = 1.0f;
-				ptr++;
-			}
-		}
-	} 
-	
-	
-	
-        
-        /*
-        
-	float *texture = new float[_grille_width*_grille_height*_grille_depth*4];
-	float *ptr = texture;
-	for (int k = 0; k < _grille_width; k++){
-		for (int j = 0; j < _grille_height; j++){
-			for (int i = 0; i < _grille_depth; i++){    
-				*ptr = 0.0;
-				ptr++;
-				*ptr = 0.0;
-				ptr++;
-				*ptr = 0.0;
-				ptr++;
-				*ptr = 1.0f;
-				ptr++;
-			}
-		}
-	} 
-        
+	float *ptr;
+	// init de la texture feu courante
 	ptr = texture;
 	for (int k = 0; k < _grille_width; k++){
 		for (int j = 0; j < _grille_height; j++){
-			for (int i = 0; i < _grille_depth / 30; i++){    
-				*ptr = 0.1;
+			for (int i = 0; i < _grille_depth; i++){    
+				*ptr = 0.0;
 				ptr++;
-				*ptr = 0.4;
+				*ptr = 0.0;
 				ptr++;
-				*ptr = 0.4;
+				*ptr = 0.0;
 				ptr++;
 				*ptr = 1.0f;
 				ptr++;
@@ -142,36 +61,53 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
 	
 	
 	
-	*/
-	
-	
-	/*
-	float *texture = new float[_grille_width*_grille_height*_grille_depth*4];
-	float *ptr = texture;
+
+	ptr = texture;
 	for (int k = 0; k < _grille_width; k++){
 		for (int j = 0; j < _grille_height; j++){
 			for (int i = 0; i < _grille_depth; i++){    
-				*ptr = i/(float)_grille_depth * coeff1;
-				ptr++;
-				*ptr = j/(float)_grille_height * coeff2;
-				ptr++;
-				*ptr = k/(float)_grille_width;
-				ptr++;
-				*ptr = 1.0f;
-				ptr++;
+			    
+			    if (    i <= _grille_depth/3 
+			        ||  i >= 2*_grille_depth/3    
+			        ||  j <= _grille_height/3 
+			        ||  j >= 2*_grille_height/3 
+			        ||  k <= _grille_width/3 
+			        ||  k >= 2*_grille_width/3 
+			        ){
+			            ptr++;
+				        ptr++;
+				        ptr++;
+				        ptr++;
+			        }
+			        else{
+			            coeff1 = rand()/(float)RAND_MAX;
+				        *ptr = i/(float)_grille_depth * coeff1;
+				        ptr++;
+				        *ptr = 0.0;//j/(float)_grille_height * coeff2;
+				        ptr++;
+				        *ptr = 0.0;//k/(float)_grille_width * coeff3;
+				        ptr++;
+				        *ptr = 1.0f;
+				        ptr++;
+				}
 			}
 		}
 	} 
-	*/
+	
+	
+	_grille_feu_courante->charger_matrice(texture, _grille_width, _grille_height, _grille_depth);
+	
+
+	// init de la texture dest
 
 	
+	_grille_feu_dest->charger_matrice(texture, _grille_width, _grille_height, _grille_depth);
+        
 	
+	_grille_temp->charger_matrice(texture, _grille_width, _grille_height, _grille_depth);    
 	
-	
-	// INITIALISATION GRILLES
-	_grille_feu_courante->charger_matrice(texture, _grille_width, _grille_height, _grille_depth);    
-	_grille_feu_dest->charger_matrice(texture, _grille_width, _grille_height, _grille_depth);    
-	_grille_temp->charger_matrice(NULL, _grille_width, _grille_height, _grille_depth);    
+	// liberation
+	delete(texture);
 	
 	
 }
@@ -241,51 +177,40 @@ void setBoundariesB0 ( int N, float *x ) {
 }
 
 void Solver_GPU::linearSolve ( int b, float a1, float a2, float a3 ){
-    float c1 = 1 + 6 * a1;
-    float c2 = 1 + 6 * a2;
-    float c3 = 1 + 6 * a3;
+
     
+    Vecteur3D a = Vecteur3D(a1,a2,a3);
+    //a = Vecteur3D( 0.04, 0.039, 0.69);
+    Vecteur3D c = Vecteur3D(1.0, 1.0, 1.0) + 6 * a;
     
-            
+    //a.afficher();
+
     shader_linear_solve->Bind_Program();          
 
     shader_linear_solve->lierFloat("taille_width",  _grille_width);
     shader_linear_solve->lierFloat("taille_height", _grille_height);
     shader_linear_solve->lierFloat("taille_depth",  _grille_depth);
-
-    shader_linear_solve->lierTexture("texture_entree", _grille_feu_courante->get_texture_id(),0);
-
-    
-    Vecteur3D a = Vecteur3D(a1,a2,a3);
-    Vecteur3D c = Vecteur3D(c1,c2,c3);
-    
-    
     shader_linear_solve->lierVecteur("a", a);
     shader_linear_solve->lierVecteur("c", c);
-      
-      
+
+
     for ( int i = 0; i < 20; i++){
-        /*    
-        cout << " Boucle i : " << i ;
-        cout << " Source : " << (int) _grille_feu_courante->get_texture_id() ;
-        cout << " Cible : " << (int) _grille_feu_dest->get_texture_id()  << endl;
-        */
+    
+        
+        _grille_feu_courante->bindTexture(GL_TEXTURE0);
+        _grille_feu_dest->bindTexture(GL_TEXTURE1);
         
 
+        shader_linear_solve->lierLevel("texture_entree", 0);
+        shader_linear_solve->lierLevel("texture_sortie", 1);
+            	
+    	glActiveTexture(GL_TEXTURE0);
         
-        shader_linear_solve->lierTexture("texture_sortie", _grille_feu_dest->get_texture_id(),1);
-        buffer->traiterDessinDansBuffer(_grille_feu_dest->get_texture_id());
-       
-
+        buffer->traiterDessinDansBuffer1ALAFOIS(*_grille_feu_dest);
         
-        shader_linear_solve->lierTexture("texture_sortie", _grille_feu_dest->get_texture_id(),1);
-        
-    	buffer->traiterDessinDansBuffer(_grille_temp->get_texture_id());
-    	
-        swapGrilles(&_grille_feu_dest, &_grille_temp);
+        swapGrilles(&_grille_feu_dest, &_grille_feu_courante);
     
     }    
-    
     
     shader_linear_solve->Unbind_Program();          
     
@@ -293,9 +218,10 @@ void Solver_GPU::linearSolve ( int b, float a1, float a2, float a3 ){
 
 void Solver_GPU::diffuse ( float diff, 
                            float dt ){
+
     
     
-    float beattleJuce = dt*diff*(SolverParam::getEchantillonage()*SolverParam::getEchantillonage());
+    float beattleJuce = dt*diff*_grille_width*_grille_width;
     linearSolve(0, beattleJuce, beattleJuce, beattleJuce);
     
     

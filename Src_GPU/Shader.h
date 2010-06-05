@@ -38,9 +38,9 @@ public:
     
     /** Déchager le shader */
     void Unbind_Program();
-    
-    /** Lier texture */
-    void lierTexture(string nom_texture, GLuint texture_id, GLuint level);
+        
+    /** Lier texture de texture */
+    void lierLevel(string nom_texture, GLuint level);
     
     /** Lier vecteur */
     void lierVecteur(string nom_vecteur, Vecteur3D& vect);

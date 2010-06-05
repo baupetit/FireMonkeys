@@ -50,14 +50,16 @@ public:
     /** Renvoie l'id de la texture */
     GLuint get_texture_id() const;
     
-    
     /** Bind la texture avec les bons paramètres*/
-    void bindTexture();
+    void bindTexture(GLuint TEXTUREPOSITION = GL_TEXTURE0);
     
     /** Unbind la texture*/
     static void unbindTexture();
     
-    static void bindTexture(GLuint texture_id);
+    
+    static void bindTexture(GLuint texture_id, GLuint TEXTUREPOSITION);
+    
+    static void setFilter(GLuint PARAM);
 };
 
 #endif
