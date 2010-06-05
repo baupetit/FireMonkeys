@@ -121,11 +121,11 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
 			for (int i = 0; i < _grille_depth; i++){    
 				if ( i > j &&  k > _grille_depth /2 && k < 2 * _grille_depth/2)
 				{
-				    *ptr = 0.142;
+				    *ptr = rand()/(float)RAND_MAX;
 				    ptr++;
-				    *ptr = 0.142;
+				    *ptr = rand()/(float)RAND_MAX;
 				    ptr++;
-				    *ptr = 0.142;
+				    *ptr = rand()/(float)RAND_MAX;
 				    ptr++;
 				    *ptr = 1.0f;
 				    ptr++;
@@ -146,6 +146,25 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
 	} 
 		
 	_grille_sources->charger_matrice(texture, _grille_width, _grille_height, _grille_depth);    
+	
+	
+	
+	ptr = texture;
+	for (int k = 0; k < _grille_width; k++){
+		for (int j = 0; j < _grille_height; j++){
+			for (int i = 0; i < _grille_depth; i++){    
+				*ptr = 0.1 * rand()/(float)RAND_MAX;
+				ptr++;
+				*ptr = 0.4 ;
+				ptr++;
+				*ptr = 0.1 * rand()/(float)RAND_MAX;
+				ptr++;
+				*ptr = 1.0f;
+				ptr++;
+			}
+		}
+	} 
+	
 	
 	_grille_vitesse_courante->charger_matrice(texture, _grille_width, _grille_height, _grille_depth);    
 	
@@ -205,11 +224,11 @@ const GLuint Solver_GPU::getSources() const {
 // DENSITI STEP
 
 void Solver_GPU::addSource ( float dt ){
-    // ajouter dt * source à sortie
 
-    shader_advect_cool->Bind_Program();          
 
-    shader_advect_cool->lierFloat("dt", dt);
+    shader_add_sources->Bind_Program();          
+
+    shader_add_sources->lierFloat("dt", dt);
         
     _grille_feu_courante->bindTexture(GL_TEXTURE0);
     _grille_sources->bindTexture(GL_TEXTURE1);
@@ -225,6 +244,7 @@ void Solver_GPU::addSource ( float dt ){
         
     shader_add_sources->Unbind_Program();          
 	
+		
     
 }
 
@@ -278,38 +298,40 @@ void Solver_GPU::diffuse ( float dt ){
 
 
 
-void advect_cool ( int b, 
-		           float * d, float * d0, float *f, float *f0, 
-		           float *T, float *T0,
-		           float * u, float * v, float *w, 
-		           float cool, float consume, float dt )
+void Solver_GPU::advect_cool ( float dt )
 {
 
 
+    Vecteur3D dt0 = Vecteur3D(_grille_width, _grille_height, _grille_depth);
+    dt0 = dt0 * dt;
+    float consume = SolverParam::getConsumingParam();
+    float firetosmoke = SolverParam::getFireToSmokeParam();
+    float c0 = 1.0f - SolverParam::getCoolingParam() * dt;
 
-    shader_add_sources->Bind_Program();          
+    shader_advect_cool->Bind_Program();          
 
-    shader_add_sources->lierFloat("dt", dt);
-        
+    shader_advect_cool -> lierFloat("dt", dt);
+    shader_linear_solve-> lierVecteur("dt0", dt0);
+    shader_advect_cool -> lierFloat("taille_width",  _grille_width);
+    shader_advect_cool -> lierFloat("taille_height", _grille_height);
+    shader_advect_cool -> lierFloat("taille_depth",  _grille_depth);
+    shader_advect_cool -> lierFloat("consume", consume);
+    shader_advect_cool -> lierFloat("c0", c0);
+    shader_advect_cool -> lierFloat("fireToSmoke", firetosmoke);
+    
     _grille_feu_courante->bindTexture(GL_TEXTURE0);
-    _grille_sources->bindTexture(GL_TEXTURE1);
+    _grille_vitesse_courante->bindTexture(GL_TEXTURE1);
         
-    shader_add_sources->lierLevel("texture_densite", 0);
-    shader_add_sources->lierLevel("texture_sources", 1);
+    shader_advect_cool->lierLevel("densite_entree", 0);
+    shader_advect_cool->lierLevel("vitesse_entree", 1);
             	
     glActiveTexture(GL_TEXTURE0);
         
-    buffer->traiterDessinDansBuffer1ALAFOIS(*_grille_feu_courante);
+    buffer->traiterDessinDansBuffer1ALAFOIS(*_grille_feu_dest);
         
-    //swapGrilles(&_grille_feu_dest, &_grille_feu_courante);
+    swapGrilles(&_grille_feu_dest, &_grille_feu_courante);
         
-    shader_add_sources->Unbind_Program();          
-	
-
-
-
-
-
+    shader_advect_cool->Unbind_Program();          
 
 }
 
@@ -329,11 +351,11 @@ void Solver_GPU::densitiesStepWithTemp ( float dt )
 {	
     
     // Sources ( temp et dens )
-    addSource(dt);
+    addSource( dt );
     // diffuse le feu, la fumee, la temperature    
 	diffuse ( dt );
 	// advect
-	//
+	advect_cool( dt );
     
    
     

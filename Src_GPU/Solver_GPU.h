@@ -82,11 +82,15 @@ public :
     /** Ajout des sources de fumee / feu / chaleur */
     void addSource(float dt);
 
-	/** Phase de diffusion */
-	void diffuse ( float dt );
-
     /** Resolution lineaire */
     void linearSolve ( int b, float dt);
+    
+	/** Phase de diffusion */
+	void diffuse ( float dt );
+	
+	/** Phase d'advection (avec refroidissement ) */
+    void advect_cool ( float dt );
+
 
     /** Echange deux textures */
     void swapGrilles(Texture3D** t1, Texture3D** t2);
