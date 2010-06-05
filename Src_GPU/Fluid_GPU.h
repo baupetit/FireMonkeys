@@ -16,11 +16,12 @@
 
 
 /** Taille de la grille **/
-#define TAILLE_GRILLE 40
+#define TAILLE_GRILLE 80
 
 #include "Vecteur.h"
 #include "BasicEntite.h"
 #include "Solver_GPU.h"
+#include "Shader.h"
 
 class Fluid_GPU : public BasicEntite{
 
@@ -32,6 +33,9 @@ private:
     int _grille_width;
     int _grille_height;
     int _grille_depth;
+    
+    /** Shader d'affichage */
+    Shader *shader_affichage;
 
 public:
     /** Constructeur */

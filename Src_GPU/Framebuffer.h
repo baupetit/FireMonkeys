@@ -52,6 +52,9 @@ public:
     GLuint get_id_buffer() const;
     
     void traiterDessinDansBuffer(GLuint cible_id);
+    void traiterDessinDansBuffer(Texture3D& texture);
+    void traiterDessinDansBuffer1ALAFOIS(GLuint cible_id);
+    void traiterDessinDansBuffer1ALAFOIS(Texture3D& texture);
     
 private:    
 

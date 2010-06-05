@@ -58,21 +58,27 @@ GLuint Texture3D::get_texture_id() const {
 }
 
 
-void Texture3D::bindTexture(){
-    glActiveTexture(GL_TEXTURE0);
+void Texture3D::bindTexture(GLuint POSITION){
     glEnable(GL_TEXTURE_3D);
+    glActiveTexture(POSITION);
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-    glBindTexture(GL_TEXTURE_3D,texture_id);                
- 
+    glBindTexture(GL_TEXTURE_3D,texture_id); 
 }
 
-void Texture3D::bindTexture(GLuint texture_id){
-    glActiveTexture(GL_TEXTURE0);
+void Texture3D::bindTexture(GLuint texture_id, GLuint POSITION){
     glEnable(GL_TEXTURE_3D);
+    glActiveTexture(POSITION);
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
     glBindTexture(GL_TEXTURE_3D,texture_id);                    
 }
 
 void Texture3D::unbindTexture(){
     glBindTexture(GL_TEXTURE_3D,0);
+}
+
+
+
+void Texture3D::setFilter(GLuint PARAM){
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, PARAM);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, PARAM);  
 }

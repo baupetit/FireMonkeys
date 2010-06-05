@@ -175,79 +175,39 @@ void setBoundariesB0 ( int N, float *x ) {
 }
 
 void Solver_GPU::linearSolve ( int b, float a1, float a2, float a3 ){
+
     
+    Vecteur3D a = Vecteur3D(a1,a2,a3);
+    //a = Vecteur3D( 0.04, 0.039, 0.69);
+    Vecteur3D c = Vecteur3D(1.0, 1.0, 1.0) + 6 * a;
     
-            
+    //a.afficher();
+
     shader_linear_solve->Bind_Program();          
 
     shader_linear_solve->lierFloat("taille_width",  _grille_width);
     shader_linear_solve->lierFloat("taille_height", _grille_height);
     shader_linear_solve->lierFloat("taille_depth",  _grille_depth);
-
-    //shader_linear_solve->lierTexture("texture_entree", _grille_feu_courante->get_texture_id(),0);
-
-    
-    Vecteur3D a = Vecteur3D(a1,a2,a3);
-    a = Vecteur3D( 0.04, 0.039, 0.69);
-
-    //a = a * 100000000;    
-    
-    Vecteur3D c = Vecteur3D(1.0, 1.0, 1.0) + 6 * a;
-    
-    
-    
-    
-    
     shader_linear_solve->lierVecteur("a", a);
     shader_linear_solve->lierVecteur("c", c);
 
 
     for ( int i = 0; i < 20; i++){
+    
         
-        cout << " ================ "   << endl;
+        _grille_feu_courante->bindTexture(GL_TEXTURE0);
+        _grille_feu_dest->bindTexture(GL_TEXTURE1);
         
-        cout << " Boucle i : " << i  << endl;
-        cout << " Source : " << (int) _grille_feu_courante->get_texture_id() << endl;
-        cout << " Cible : " << (int) _grille_feu_dest->get_texture_id()  << endl;
-        cout << " Temp : " << (int) _grille_temp->get_texture_id()  << endl;
-        
-        
-        GLuint id0 = _grille_feu_courante->get_texture_id();
-        GLuint id1 = _grille_feu_dest->get_texture_id();
-        GLuint id2 = _grille_temp->get_texture_id();
-        
-        glEnable(GL_TEXTURE_3D);
-        glActiveTexture(GL_TEXTURE0);
-        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-        glBindTexture(GL_TEXTURE_3D,id0);   
-        
-        glActiveTexture(GL_TEXTURE1);
-        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-        glBindTexture(GL_TEXTURE_3D,id1);   
-        
-        
-        glActiveTexture(GL_TEXTURE2);
-        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-        glBindTexture(GL_TEXTURE_3D,id2);   
-        
-        
-        GLuint	location;
-        location = glGetUniformLocation ( shader_linear_solve->getProgramId(), "texture_entree");
-        glUniform1i(location, 0);
-        
-        location = glGetUniformLocation ( shader_linear_solve->getProgramId(), "texture_sortie");
-        glUniform1i(location, 1);
-        
-    	
-    	
+        shader_linear_solve->lierLevel("texture_entree", 0);
+        shader_linear_solve->lierLevel("texture_sortie", 1);
+            	
     	glActiveTexture(GL_TEXTURE0);
         
-        buffer->traiterDessinDansBuffer(id1);
+        buffer->traiterDessinDansBuffer1ALAFOIS(*_grille_feu_dest);
         
         swapGrilles(&_grille_feu_dest, &_grille_feu_courante);
     
     }    
-    
     
     shader_linear_solve->Unbind_Program();          
     
@@ -255,13 +215,11 @@ void Solver_GPU::linearSolve ( int b, float a1, float a2, float a3 ){
 
 void Solver_GPU::diffuse ( float diff, 
                            float dt ){
+
     
     
-    
-    float beattleJuce = dt*diff*(1/SolverParam::getEchantillonage()*1/SolverParam::getEchantillonage());
+    float beattleJuce = dt*diff*_grille_width*_grille_width;
     linearSolve(0, beattleJuce, beattleJuce, beattleJuce);
-    
-    
     
     
     swapGrilles(&_grille_feu_dest, &_grille_feu_courante);

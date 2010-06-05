@@ -98,6 +98,7 @@ void main (){
     
 
 	gl_FragData[0] = vec4( linearsolve (coord + decalage0), 1.0);
+/*
 	gl_FragData[1] = vec4( linearsolve (coord + decalage1), 1.0);
 	gl_FragData[2] = vec4( linearsolve (coord + decalage2), 1.0);
 	gl_FragData[3] = vec4( linearsolve (coord + decalage3), 1.0);
@@ -105,6 +106,6 @@ void main (){
 	gl_FragData[5] = vec4( linearsolve (coord + decalage5), 1.0);
 	gl_FragData[6] = vec4( linearsolve (coord + decalage6), 1.0);
 	gl_FragData[7] = vec4( linearsolve (coord + decalage7), 1.0);
-
+*/
 }
 

@@ -5,6 +5,10 @@
 	#define M_PI 3.14159265358979323846f
 #endif
 
+#include <unistd.h>
+
+#include "temp.h"
+
 
 ViewerGPU::ViewerGPU(const string & title, int width, int height,
 	           int initPositionX, int initPositionY) 
@@ -31,6 +35,27 @@ void ViewerGPU::initScene(){
 
 void ViewerGPU::rendu(){
 
+
+	////////////////////////////////////////////////////////////////////////////
+	//// TIME
+	static struct timespec old = get_real_time();
+	static long frame  = 0 ;
+	static float elapsed = 0 ;
+
+	struct timespec cur = get_real_time();
+	old = sub_timespec( &cur , &old );
+	float dt = timespec_to_double( &old );
+	old = cur ; 
+	elapsed += dt ;
+
+
+	frame += 1;
+	if( elapsed > 1. ){
+		cout << " FPS : " << frame << endl;
+		elapsed -= 1.;
+		frame = 0 ;
+	}
+	
 
 	////////////////////////////////////////////////////////////////////////////
 	//// OBJETS
