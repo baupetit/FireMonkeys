@@ -52,3 +52,8 @@ void Shader::lierFloat(string nom_float, float flouttounet){
 }
 
 
+
+void Shader::lierFloatArray(string nom_float, int taille, float* array){
+    GLuint	location = glGetUniformLocation ( program, nom_float.c_str());
+    glUniform3fv(location, taille, array);
+}

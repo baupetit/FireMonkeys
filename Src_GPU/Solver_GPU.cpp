@@ -93,7 +93,7 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
 				     k < _grille_width /2  &&  k> _grille_height/3 && 
 				     j < _grille_height/3 )
 				{
-				    *ptr = 0.001;//rand()/(float)RAND_MAX;
+				    *ptr = 0.01;//0.001;//rand()/(float)RAND_MAX;
 				    ptr++;
 				    *ptr = 0.0000;//rand()/(float)RAND_MAX;
 				    ptr++;

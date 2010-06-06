@@ -22,6 +22,9 @@ Fluid_GPU::Fluid_GPU(){
     echelle.x = 1.0;
     echelle.y = 1.0;
     echelle.z = 1.0;
+    
+    
+
 }
 
 Fluid_GPU::~Fluid_GPU(){
@@ -38,6 +41,7 @@ void Fluid_GPU::initialiserFluid(){
 	delete shader_affichage;
 	shader_affichage = new Shader("./Shaders/vertex_shader_qui_ne_fait_rien.vert",
 	                                 "./Shaders/affichage.frag");
+	                                 
 }
 
 void Fluid_GPU::resolutionFluid(){
@@ -206,6 +210,7 @@ void Fluid_GPU::dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans){
     
     shader_affichage -> Bind_Program();
     shader_affichage->lierLevel("texture_entree", 0);
+
 
 
 	glBegin(GL_QUADS);	
