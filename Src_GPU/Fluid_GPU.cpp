@@ -12,9 +12,9 @@ Fluid_GPU::Fluid_GPU(){
 	_grille_height = TAILLE_GRILLE;
 	_grille_depth  = TAILLE_GRILLE;
 	*/
-	_grille_width  = 50;
-	_grille_height = 50;
-	_grille_depth  = 50;
+	_grille_width  = 120;
+	_grille_height = 120;
+	_grille_depth  = 120;
     
 	s = NULL;
     shader_affichage = NULL;
@@ -41,7 +41,8 @@ void Fluid_GPU::initialiserFluid(){
 }
 
 void Fluid_GPU::resolutionFluid(){
-	s->densitiesStepWithTemp(0.1);
+	s->densitiesStepWithTemp(0.012);
+	s->velocitiesStepWithTemp(0.012);
 }
 
 void Fluid_GPU::Afficher(){
@@ -59,7 +60,7 @@ void Fluid_GPU::Afficher_Face_Camera(Vecteur3D& positionCamera, Vecteur3D& orien
 
 void Fluid_GPU::afficherFlamme(){
 	// Feu
-	dessinerPlansDansTexture3D(s->getDensities(),10);
+	dessinerPlansDansTexture3D(s->getDensities(),50);
 }
 
 void Fluid_GPU::afficherFumee(){
@@ -196,6 +197,7 @@ void Fluid_GPU::dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans){
 	GLfloat verts[4][3] = { { 0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {1.0, 1.0, 0.0}, {1.0, 0.0, 0.0}};
 
     GLuint id0 = s->getDensities();
+    //GLuint id0 = s->getSpeed();
     //GLuint id1 = s->getDestDensities();
         
     Texture3D::bindTexture(id0,0);

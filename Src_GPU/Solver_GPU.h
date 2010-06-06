@@ -27,6 +27,7 @@ private :
 	Shader *shader_add_sources;
 	Shader *shader_linear_solve;
 	Shader *shader_advect_cool;
+	Shader *shader_advect_speed;
     
 	/** Dans quel cas sommmes nous */
 	int pingpong;
@@ -40,9 +41,10 @@ private :
 	int _grille_depth;
     
 	/** Matrices */
-	Texture3D *_grille_sources;
+	Texture3D *_grille_feu_sources;
 	Texture3D *_grille_feu_courante;
 	Texture3D *_grille_feu_dest;
+	Texture3D *_grille_vitesse_sources;
 	Texture3D *_grille_vitesse_courante;
 	Texture3D *_grille_vitesse_dest;
     
@@ -72,6 +74,8 @@ public :
     /** Retourne l'id de la texture de sources */
     const GLuint getSources() const ;
 
+    /** Retounr d'id de la texture de vitesse */
+	const GLuint getSpeed() const ;
 
 
     //// DENSITIES STEP
@@ -80,16 +84,19 @@ public :
 	void densitiesStepWithTemp ( float dt );
 
     /** Ajout des sources de fumee / feu / chaleur */
-    void addSource(float dt);
+    void addSource(float dt, Texture3D& textureCible, Texture3D& textureSource );
 
     /** Resolution lineaire */
     void linearSolve ( int b, float dt);
+    void linearSolve_speed ( int b, float dt);
     
 	/** Phase de diffusion */
-	void diffuse ( float dt );
+	void diffuse ( float dt);
+	void diffuse_speed ( float dt);
 	
 	/** Phase d'advection (avec refroidissement ) */
     void advect_cool ( float dt );
+    void advect_speed ( float dt );
 
 
     /** Echange deux textures */

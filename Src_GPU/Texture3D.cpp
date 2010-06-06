@@ -15,9 +15,11 @@ Texture3D::Texture3D(){
     glEnableClientState(GL_TEXTURE_3D);
     glEnable(GL_TEXTURE_3D);
 
-    glBindTexture(GL_TEXTURE_3D,texture_id);                
+    glBindTexture(GL_TEXTURE_3D,texture_id);
+    
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_BORDER);
@@ -42,7 +44,7 @@ void Texture3D::charger_matrice(const float *matrice,
     bindTexture();
     
     // load
-    glTexImage3D(GL_TEXTURE_3D,0,GL_RGBA,width,height,depth,
+    glTexImage3D(GL_TEXTURE_3D,0,GL_RGBA32F,width,height,depth,
                  0, GL_RGBA, GL_FLOAT, matrice);
     
     

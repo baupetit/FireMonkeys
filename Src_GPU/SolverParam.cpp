@@ -61,7 +61,7 @@ void SolverParam::initSolverParam() {
 	SolverParam::diffusionParamSmoke       = 0.00001;
 	SolverParam::diffusionParamTemperature = 0.01;
 	SolverParam::coolingParam              = 1.5;
-	SolverParam::consumingParam            = 1.0;
+	SolverParam::consumingParam            = 0.001;
 	SolverParam::tempMaxParam              = 0.4;
 	SolverParam::fireToSmokeParam          = 180.0;
 	SolverParam::viscosityParam            = 0.0;
