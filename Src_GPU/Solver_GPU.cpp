@@ -15,7 +15,7 @@
 #include <unistd.h>
 
 
-#define PRECISION_RESOLUTION 2
+#define PRECISION_RESOLUTION 10
 
 
 Solver_GPU::Solver_GPU( int width, int height, int depth ) 
@@ -36,6 +36,9 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
     
 	shader_advect_speed = new Shader("./Shaders/vertex_shader_qui_ne_fait_rien.vert",
 	                                 "./Shaders/advect_speed.frag");
+	    
+	shader_buoy = new Shader("./Shaders/vertex_shader_qui_ne_fait_rien.vert",
+	                                 "./Shaders/buoy.frag");
 	    
 	// Frame buffer
 	buffer = new Framebuffer(width, height, depth);
@@ -90,11 +93,11 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
 				     k < _grille_width /2  &&  k> _grille_height/3 && 
 				     j < _grille_height/3 )
 				{
-				    *ptr = 0.0001;//rand()/(float)RAND_MAX;
+				    *ptr = 0.001;//rand()/(float)RAND_MAX;
 				    ptr++;
 				    *ptr = 0.0000;//rand()/(float)RAND_MAX;
 				    ptr++;
-				    *ptr = 0.1;//rand()/(float)RAND_MAX;
+				    *ptr = 0.001;//rand()/(float)RAND_MAX;
 				    ptr++;
 				    *ptr = 1.0f;
 				    ptr++;
@@ -125,11 +128,11 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
 				     k < _grille_width /2  &&  k> _grille_height/3 && 
 				     j < _grille_height/3 )
 				{
-				    *ptr = ( rand()/(float)RAND_MAX - 0.5 );
+				    *ptr = 2.0 * ( rand()/(float)RAND_MAX - 0.5 );
 				    ptr++;
-				    *ptr = rand()/(float)RAND_MAX;
+				    *ptr = 2.0 * rand()/(float)RAND_MAX;
 				    ptr++;
-				    *ptr = ( rand()/(float)RAND_MAX - 0.5 );
+				    *ptr = 2.0 * ( rand()/(float)RAND_MAX - 0.5 );
 				    ptr++;
 				    *ptr = 1.0f;
 				    ptr++;
@@ -437,6 +440,30 @@ void Solver_GPU::advect_cool ( float dt )
 }
 
 
+void Solver_GPU::addBuoyancy(float dt){
+    
+    float buoy = SolverParam::getBuoyancyParam();
+
+    shader_buoy->Bind_Program();          
+
+    shader_buoy -> lierFloat("dt", dt);
+    shader_buoy -> lierFloat("buoy", buoy);
+    
+    _grille_feu_courante->bindTexture(GL_TEXTURE0);
+    _grille_vitesse_courante->bindTexture(GL_TEXTURE1);
+        
+    shader_buoy->lierLevel("texture_densite", 0);
+    shader_buoy->lierLevel("texture_vitesse", 1);
+            	
+    glActiveTexture(GL_TEXTURE0);
+        
+    buffer->traiterDessinDansBuffer1ALAFOIS(*_grille_vitesse_dest);
+        
+    swapGrilles(&_grille_vitesse_dest, &_grille_vitesse_courante);
+        
+    shader_buoy->Unbind_Program();          
+}
+
 
 void project ( int N, float * u, float * v, float *w, float * p, float * div )
 {
@@ -464,15 +491,17 @@ void Solver_GPU::densitiesStepWithTemp ( float dt )
 void Solver_GPU::velocitiesStepWithTemp ( float dt )
 {
     // Sources
-    addSource( dt, *_grille_vitesse_courante, *_grille_vitesse_sources );
+    addSource ( dt, *_grille_vitesse_courante, *_grille_vitesse_sources );
     // Buoyancy
+    addBuoyancy ( dt );
+    // Vorticity confinement
     //
     // Diffuse
-	diffuse_speed ( dt);
+	diffuse_speed ( dt );
 	// Project
 	//
 	// Advect
-	advect_speed ( dt);
+	advect_speed ( dt );
 	// Project
 	//
 
@@ -490,8 +519,6 @@ void Solver_GPU::velocitiesStepWithTemp ( float dt )
 void addSourceCorrection ( int N, float *x , float *f, float *T, float *s , float sub, float fireToSmoke, float dt ){
 }
 
-void addBuoyancy( int N, float *T, float *v, float buoy, float dt){
-}
 
 void setBoundaries ( int N, int b, float *x ) {
 }

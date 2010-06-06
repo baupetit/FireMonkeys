@@ -28,6 +28,7 @@ private :
 	Shader *shader_linear_solve;
 	Shader *shader_advect_cool;
 	Shader *shader_advect_speed;
+	Shader *shader_buoy;
     
 	/** Dans quel cas sommmes nous */
 	int pingpong;
@@ -85,6 +86,7 @@ public :
 
     /** Ajout des sources de fumee / feu / chaleur */
     void addSource(float dt, Texture3D& textureCible, Texture3D& textureSource );
+    void addBuoyancy(float dt);
 
     /** Resolution lineaire */
     void linearSolve ( int b, float dt);

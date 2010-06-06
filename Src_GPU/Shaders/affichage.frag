@@ -4,6 +4,7 @@ uniform sampler3D texture_entree;
 uniform sampler3D texture_bruit;
 
 
+
 void main(void)
 {  
 
@@ -11,31 +12,32 @@ void main(void)
 	
 	flamme_fumee_chaleur = vec4(texture3D( texture_entree,gl_TexCoord[0].stp));
 	
-	color_flamme  = vec4(flamme_fumee_chaleur.x, 0.0, 0.0, flamme_fumee_chaleur.x);
-	color_fumee   = vec4(flamme_fumee_chaleur.y, flamme_fumee_chaleur.y, flamme_fumee_chaleur.y, flamme_fumee_chaleur.y);
-	color_chaleur = vec4(flamme_fumee_chaleur.z, flamme_fumee_chaleur.z, flamme_fumee_chaleur.z, flamme_fumee_chaleur.z / 3.0);
+	color_flamme  = vec4(flamme_fumee_chaleur.x * 10000.0,
+	                     0.0, 
+	                     0.0, 
+	                     flamme_fumee_chaleur.x * 5000.0);
+	                     
+	color_fumee   = vec4(0.2, 
+	                     0.2, 
+	                     0.2, 
+	                     flamme_fumee_chaleur.y * 1.0);
+	                     
+	color_chaleur = vec4(0.9, 
+	                     0.8,//flamme_fumee_chaleur.z, 
+	                     0.9,//flamme_fumee_chaleur.z, 
+	                     flamme_fumee_chaleur.z * 10.0);
 	
 	
 	
-	if( color_flamme.a > color_fumee.a )
+	if( color_flamme.a > (color_fumee.a * 1.0) )
 	{
-	    if ( color_fumee.a > color_chaleur.a )
-		    color = color_flamme;
-		else
-		    color = color_chaleur;
+	    color = color_flamme;
 	}	
 	else 
 	{
-	    if ( color_flamme.a > color_chaleur.a )
-		    color = color_fumee;
-		else
-		    color = color_chaleur;
+	    color = color_fumee;
 	}
-	vec4 result = vec4( flamme_fumee_chaleur.x * 10000000.0,
-	                    0.0, 
-	                    0.0, 
-	                    flamme_fumee_chaleur.x * 10000000.0);
-	
-	gl_FragColor = result;
+
+	gl_FragColor = color_flamme;
 }
 
