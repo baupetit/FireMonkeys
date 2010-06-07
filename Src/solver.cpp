@@ -231,7 +231,7 @@ void diffuseFireAndSmoke ( int N, int b1, int b2, int b3,
 	float c3=1+6*a3;
 	
 	
-	
+	/*
 	cout << "  =================================== " << endl;
 	cout << " a1 : " << a1 << endl;
 	cout << " a2 : " << a2 << endl;
@@ -239,7 +239,7 @@ void diffuseFireAndSmoke ( int N, int b1, int b2, int b3,
 	cout << " c1 : " << c1 << endl;
 	cout << " c2 : " << c2 << endl;
 	cout << " c3 : " << c3 << endl;
-	
+	*/
 	
 	//linearSolve ( N, b, x, x0, a, 1+6*a );
 	int i, j, k, l, ijk;
