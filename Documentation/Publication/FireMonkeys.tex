@@ -482,7 +482,7 @@ Pour faire cela nous avons besoin de quatre informations en permanance
 appliquant ensuite le modèle développé par \textbf{Jos Stam} dans
 \textbf{Stable Fluid} nous pouvons faire évoluer le système.\\
 
-%% TODO : détailler plus
+
 \subsection{Plus de détails :}
 Le modéle de fluide qui semble être bien adapté à la représentation du
 feu est basé sur le principe des équations de Navier-Stokes pour la
@@ -556,13 +556,13 @@ diffusion du fluide et l'impacte de l'advection.\\
   
   Grace a cela on trouve facilement la formule pour la résolution:
   \begin{equation}
-    u_{i,j,k}^{k+1} = \frac{u_{i+1,j,k}^{k} + 
-      u_{i-1,j,k}^{k} + 
-      u_{i,j+1,k}^{k} +
-      u_{i,j-1,k}^{k} + 
-      u_{i,j,k+1}^{k} + 
-      u_{i,j,k-1}^{k} + 
-      \frac{({\delta x})^2}{\nu \delta t} u_{i,j,k}^{k}}{ 6 + \frac{({\delta x})^2}{\nu \delta t}} 
+    u_{i,j,k}^{l+1} = \frac{u_{i+1,j,k}^{l} + 
+      u_{i-1,j,k}^{l} + 
+      u_{i,j+1,k}^{l} +
+      u_{i,j-1,k}^{l} + 
+      u_{i,j,k+1}^{l} + 
+      u_{i,j,k-1}^{l} + 
+      \frac{({\delta x})^2}{\nu \delta t} u_{i,j,k}^{l}}{ 6 + \frac{({\delta x})^2}{\nu \delta t}} 
   \end{equation}
   
   La résolution linéaire de cette équation combinée à une relaxation de
@@ -624,9 +624,70 @@ particules de feu forment 3 particules de fumée).
 
 \subsection{Méthode de rendu}
 \subsubsection{Affichage volumique}
+
+Dans notre cas nous avons à faire à des textures volumiques donc nous nous sommes confrontés très tôt au probléme de l'affichage. Nous avons donc opté pour la solution suivante:\\
+
+Afficher N plans de coupe de notre texture. Chaque plan étant orthogonal a la direction de la caméra. Pour cela nous avons du implementer toutes les actions qui nous permettaient de nous déplacer dans l'espace autour d'un point et donc de faire pivoter nos plans de coupe en meme temps que la caméra. Ceci nous permet alors de visionner notre texture volumique depuis n'importe quel poit de l'espace.\\
+\begin{center}
+\includegraphics[scale=0.3]{plan_en_coupe.ps}
+\end{center}
+
+
 \subsubsection{Rendu de la flamme}
+
+Une flamme ne saurait être jolie si l'on ne prend pas en compte la variation lumineuse en fonction de la température. Pour cela nous avons considéré notre flamme corps un modéle de corps noir, c'est à dire une entité qui rayonne à des longueurs d'ondes différentes en fonction de la température, cela en utilisant la formule de Planck pour le corps noir:\\
+
+\begin{equation}
+	L_{\lambda} = \frac{2hc^{2}\lambda^{-5}}{exp(\frac{hc}{k\lambda T})-1}
+\end{equation}
+Où h est la constante de planck, c la vitesse de la lumiere, et k la constante de Boltzmann.\\
+
+On obtient donc une relation entre la température de notre flamme et sa luminance, ce qui nous permet d'avoir un rendu fonction de la température. De plus nous avons ajusté la transparence de la flamme en réglant l'$\alpha$ en tenant compte de la densité de gas qui brule et de la température de la flamme (les flammes bleus sont plus transparentes que les rouges et jaunes).\\
+
+
 \subsubsection{Rendu de la fumée}
 
+	Pour le rendu de la fummée, il s'agit simplement d'un niveau de gris avec une transparence $\alpha$ fonction de la densité de fumée en un point.\\
+
+\subsubsection{Multitexturing}
+
+	Le second probléme d'affichage qui se posa à nous fut le moment ou nous devions afficher la flamme ET la fumée. Le fait d'afficher sous forme de plan posa des probleme au niveau de la précision du Z-Buffer d'OpenGL qui ne savait plus quelle texture était devant l'autre et cela provoquait un effet de clignotement indésirable.\\
+
+La solution que nous avons retenue pour palier a ce problème était de réaliser un fragment shader au niveau du GPU pour faire un affichage Multitexture prenant en compte l'alpha des 2 texture.\\
+
+Le principe en lui même est assez simple:\\
+Pour chaque pixel de notre texture\\
+      si $\alpha_{texture1}>\alpha_{texture2}$ alors \\
+            affichage texture1;\\
+      sinon \\
+            affichage texture2;\\
+fin\\
+
+
+\subsubsection{amélioration de rendu : Bruit de Perlin 4D}
+
+Dans la réalité il y a toujours un "vent ambiant" autour d'une flamme, ce qui à pour conséquence de multiples effets de mouvements au niveau de sa surface. Pour simuler cet effet nous ajoutons \textbf{lors du rendu par le fragment shader} un bruit de perlin 4D (dont une dimension temporelle pour conserver la cohérence du mouvement).\\
+Le fait d'ajouter ce bruit lors du rendu dans le shader ne modifie pas la position spatiale des densités, des températures et de la fumée et ne perturbe donc pas les calculs de l'équation de dynamique des fluides.\\ 
+
+Les rendus obtenus étant plutôt convaincant :\\
+
+Sans bruit de Perlin:\\
+\begin{center}
+\includegraphics[scale=0.3]{SansPerlin.ps}
+\end{center}
+
+
+Avec Bruit de Perlin:\\
+
+\includegraphics[scale=0.3]{Perlin1.ps}
+\includegraphics[scale=0.3]{Perlin2.ps}
+
+
+
+L'expression mathématique du bruit de Perlin est la suivante :\\
+$P_n(x) = \sum_{i=0}^{n-1} p^i bruitPerlin(2^i.x)$.\\
+C'est une série (absolument) convergente, majorée par la série géométrique :\\
+$\sum_{i=0}^{n-1} p^i = \frac{1 - p^n}{1 - p}$.\\
 
 \subsection{Résultats}
 
