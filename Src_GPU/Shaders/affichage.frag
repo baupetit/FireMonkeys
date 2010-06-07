@@ -133,10 +133,10 @@ void main(void)
 	
 	flamme_fumee_chaleur = vec4(texture3D( texture_entree,gl_TexCoord[0].stp));
 	
-	color_flamme  = vec4(flamme_fumee_chaleur.x * 10000.0,
-	                     0.0, 
-	                     0.0, 
-	                     flamme_fumee_chaleur.x * 10000.0);
+	color_flamme  = vec4(flamme_fumee_chaleur.y * 1000000.0,
+	                     flamme_fumee_chaleur.y * 1000000.0, 
+	                     flamme_fumee_chaleur.y * 1000000.0,
+	                     (flamme_fumee_chaleur.y - 0.5) * 1000000);
 
 	
     /*

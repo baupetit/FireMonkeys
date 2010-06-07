@@ -1,6 +1,5 @@
 
 
-uniform sampler3D densite_entree;
 uniform sampler3D vitesse_entree;
 
 
@@ -19,7 +18,10 @@ vec3 unite = vec3 ( 1.0 / taille_width, 1.0 / taille_height, 1.0 / taille_depth)
 void main (){
     vec3 coord = gl_TexCoord[0].stp;
     
-    vec3 old_pos = coord - ( texture3D( vitesse_entree, coord).rgb ) *  dt0;
+    //vec3 old_pos = coord - vec3(0.0,0.01,0.0);
+    
+    vec3 old_pos = coord - 0.0010 * ( texture3D( vitesse_entree, coord).rgb ) *  dt0;
+    
     
     if (old_pos.x < 0.5 / taille_width)
         old_pos.x = 0.5 / taille_width;
@@ -58,26 +60,28 @@ void main (){
     // Calcul de l'advection de la flamme, de la fumee, de la chaleur
     
     vec3 calcul = s0.x * ( s0.y *  ( 
-                                    s0.z * texture3D(densite_entree, vec3(old_int.x, old_int.y, old_int.z)).rgb
-                                    + s1.z * texture3D(densite_entree, vec3(old_int.x, old_int.y, old_a_cote.z)).rgb
+                                    s0.z * texture3D(vitesse_entree, vec3(old_int.x, old_int.y, old_int.z)).rgb
+                                    + s1.z * texture3D(vitesse_entree, vec3(old_int.x, old_int.y, old_a_cote.z)).rgb
                                     )
                            + s1.y * ( 
-                                    s0.z * texture3D(densite_entree, vec3(old_int.x, old_a_cote.y, old_int.z)).rgb
-                                    + s1.z * texture3D(densite_entree, vec3(old_int.x, old_a_cote.y, old_a_cote.z)).rgb
+                                    s0.z * texture3D(vitesse_entree, vec3(old_int.x, old_a_cote.y, old_int.z)).rgb
+                                    + s1.z * texture3D(vitesse_entree, vec3(old_int.x, old_a_cote.y, old_a_cote.z)).rgb
                                     )
                           )
                   +s1.x * ( s0.y *  ( 
-                                    s0.z * texture3D(densite_entree, vec3(old_a_cote.x, old_int.y, old_int.z)).rgb
-                                    + s1.z * texture3D(densite_entree, vec3(old_a_cote.x, old_int.y, old_a_cote.z)).rgb
+                                    s0.z * texture3D(vitesse_entree, vec3(old_a_cote.x, old_int.y, old_int.z)).rgb
+                                    + s1.z * texture3D(vitesse_entree, vec3(old_a_cote.x, old_int.y, old_a_cote.z)).rgb
                                     )
                            + s1.y * ( 
-                                    s0.z * texture3D(densite_entree, vec3(old_a_cote.x, old_a_cote.y, old_int.z)).rgb
-                                    + s1.z * texture3D(densite_entree, vec3(old_a_cote.x, old_a_cote.y, old_a_cote.z)).rgb
+                                    s0.z * texture3D(vitesse_entree, vec3(old_a_cote.x, old_a_cote.y, old_int.z)).rgb
+                                    + s1.z * texture3D(vitesse_entree, vec3(old_a_cote.x, old_a_cote.y, old_a_cote.z)).rgb
                                     )
                           ) ;
       
-                          
+
+    
     // ecriture du resultat    
+    //vec3 calcul = vec3(texture3D(vitesse_entree, old_pos).rgb);
     gl_FragData[0] = vec4( calcul, 1.0);
 }
 

@@ -29,6 +29,9 @@ private :
 	Shader *shader_advect_cool;
 	Shader *shader_advect_speed;
 	Shader *shader_buoy;
+	Shader *shader_div;
+	Shader *shader_linear_solve_pression;
+	Shader *shader_velocity_correction;
     
 	/** Dans quel cas sommmes nous */
 	int pingpong;
@@ -48,6 +51,8 @@ private :
 	Texture3D *_grille_vitesse_sources;
 	Texture3D *_grille_vitesse_courante;
 	Texture3D *_grille_vitesse_dest;
+	Texture3D *_grille_pression_courante;
+	Texture3D *_grille_pression_dest;
     
 public :
     // CONSTRUCTEURS 
@@ -78,6 +83,8 @@ public :
     /** Retounr d'id de la texture de vitesse */
 	const GLuint getSpeed() const ;
 
+    /** Retounr d'id de la texture de pression */
+	const GLuint getPression() const ;
 
     //// DENSITIES STEP
     
@@ -89,8 +96,9 @@ public :
     void addBuoyancy(float dt);
 
     /** Resolution lineaire */
-    void linearSolve ( int b, float dt);
+    void linearSolve ( int b, float dt, Vecteur3D& a, Texture3D* source, Texture3D* dest);
     void linearSolve_speed ( int b, float dt);
+    void linearSolvePression ( int b, float dt);
     
 	/** Phase de diffusion */
 	void diffuse ( float dt);
@@ -110,9 +118,9 @@ public :
 	/** Effectue l'etape des vitesses */
 	void velocitiesStepWithTemp( float dt );
 
+    void project();
 
-
-
+    void velocityCorrection();
 
 
     

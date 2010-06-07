@@ -36,16 +36,10 @@ vec3 linearsolve(vec3 coordonnee){
         || coordonnee.t >= 1-DY  
         || coordonnee.p <= DZ  
         || coordonnee.p >= 1-DZ  ) {
-        
-        //result = vec3( texture3D ( texture_sortie, coordonnee ) .rgb );
-        //result = vec3( texture3D ( texture_entree, coordonnee ) .rgb );
-
         result = vec3 (0.0, 0.0, 0.0);        
         
     }else{
-        
-        
-        
+
         result = vec3( texture3D ( texture_entree, coordonnee ) .rgb )
                  + a * ( ( texture3D ( texture_sortie, coordonnee + voisinN) .rgb )
                        + ( texture3D ( texture_sortie, coordonnee + voisinE) .rgb )
@@ -55,19 +49,9 @@ vec3 linearsolve(vec3 coordonnee){
                        + ( texture3D ( texture_sortie, coordonnee + voisinAR) .rgb )
                        );
         result = result / c ;  
-        
-        /*
-        
-        result = vec3( texture3D ( texture_entree, coordonnee ) .rgb );
-        result = result * 0.001;
-        */
     }
     return result;
 }
-
-
-
-
 
 
 vec3 decalage0 = vec3 ( 0.0, 0.0, DECALAGE * 0.0);
@@ -98,7 +82,7 @@ void main (){
     
 
 	gl_FragData[0] = vec4( linearsolve (coord + decalage0), 1.0);
-/*
+	/*
 	gl_FragData[1] = vec4( linearsolve (coord + decalage1), 1.0);
 	gl_FragData[2] = vec4( linearsolve (coord + decalage2), 1.0);
 	gl_FragData[3] = vec4( linearsolve (coord + decalage3), 1.0);
@@ -106,6 +90,7 @@ void main (){
 	gl_FragData[5] = vec4( linearsolve (coord + decalage5), 1.0);
 	gl_FragData[6] = vec4( linearsolve (coord + decalage6), 1.0);
 	gl_FragData[7] = vec4( linearsolve (coord + decalage7), 1.0);
-*/
+	*/
+
 }
 

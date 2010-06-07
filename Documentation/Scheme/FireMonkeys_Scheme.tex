@@ -88,7 +88,9 @@ La modélisation du feu est un domaine interessant car il fait le lien entre de 
 \subsubsection{Arnaud}
     J'ai choisi ce sujet car c'est le domaine qui m'intéresse le plus. Je compte débuter ma carrière professionelle dans ce domaine ou dans un domaine s'en rapprochant énormement. De plus ce projet est un défis technique car nous allons devoir rapidement assimilé de nombreuses connaissances et les mettres en application. Par exemple, nous allons résoudre un système de fluide avec le langage GLSL, que nous ne connaissons pas encore au début du projet. Enfin ce projet peut consituer un aperçu du monde de la recherche en graphique 3D.\\
 \subsubsection{Benjamin}
+        Ce sujet m'a d'abord interressé car il demande de nombreuses capacités différentes. De plus on peut voir ce projet comme une introduction à la recherche, en effet dans ce projet nous aurons besoin de rechercher où en est l'état de l'art et ensuite de faire notre propre solution. Enfin le fait de proposer notre propre projet veux aussi dire qu'il nous interraisse beacoup plus ce qui est une bonne source de motivation.\\
 \subsubsection{Julien}
+     J'ai choisi ce sujet car je suis passionné par la graphique 3D et compte bien travailler dans le domaine plus tard. De plus le fait de proposer un projet de modélsation 3D peut etre un avantage pour les futur entretiens d'embauche et allant effectuer mon stage de 2ème année dans un entreprise travaillant dans le domaine et se servant de la programmation shader cela peut me fournir une premiere approche et ainsi combler quelques lacunes.\\
 
 
 \subsection{Forces et faiblesses de l'équipe}
@@ -96,6 +98,7 @@ La modélisation du feu est un domaine interessant car il fait le lien entre de 
 Une bonne entente des membres du groupe.\\
 Julien et Arnaud ont travaillé ensemble sur des TP de nombreuses fois.\\
 Benjamin et Arnaud pratiquent le jujitsu ensemble.\\
+Nous avons la disponibilité d'une salle pour nous 3 pour travailler sereinement.\\
 
 \subsubsection{Faiblesses}
 Personne ne connait (au début du projet) la programmation en Shader.\\
@@ -160,21 +163,83 @@ de chacun :\\
 \section{Planning prévisionnel}
 %%%%%%%%%%%%%%%%%
 
-	\includegraphics[scale=0.8]{../Planning/GANTT.ps}
-	
-	\includegraphics[scale=0.8]{../Planning/Planning.ps}
+        \includegraphics[scale=0.8]{../Planning/GANTT.ps}
+        
+        \includegraphics[scale=0.8]{../Planning/Planning.ps}
 
 
 %----------------------------------------------------------------------------------------------------------------------------------------
 %%%%%%%%%%%%%%%%%
 \section{Répartition du travail}
 %%%%%%%%%%%%%%%%%
+Au niveau de la quantité de travail, celle ci a été très bien répartie. Nous
+adaptions les tâches au fur et à mesure de manière à ce que tout le monde travaille
+autant. \\
+Nous avons réparti du travail sur tous les domaines, de manière à ce que tout le monde
+touche à toutes les parties du projet. De même, le chef de projet a tenu à ce que 
+tout le monde écrive la documentation et les comptes rendu.\\
 
+Néanmoins, nous avons tous travaillé dans une partie plus qu'une autre.
+Benjamin a plus travaillé sur le CPU, Julien sur les rendus, et Arnaud sur l'implémentation GPU.
+Ceci a été fait de manière à ce que la spécialisation permette une meilleur efficatité, mais cela ne nous
+a pas empéché de nous regrouper sur plusieurs points qui nécessitaient plus de matière grise.
 
 %----------------------------------------------------------------------------------------------------------------------------------------
 %%%%%%%%%%%%%%%%%
 \section{Déroulement du projet}
 %%%%%%%%%%%%%%%%%
+\subsection{Planning du 7 Juin 2010}
+
+    Nous avons revu notre planning le 7 juin de manière à être bien préparé pour le rendu.
+    En effet nous n'aurons pas le temps de tout faire et avons du choisir sur quoi nous
+    focaliser et refédinir les objectifs minimum à atteindre pour le jour de la soutenance.
+
+        \includegraphics[scale=0.8]{../Planning/GANTT2.ps}
+        
+        \includegraphics[scale=0.8]{../Planning/Planning2.ps}
+
+
+
+
+\subsection{Planning effectif}
+
+
+
+
+        
+\subsection{Détails du déroulement}
+\subsubsection{Phase de recherche bibliographiques}
+Cette phase a été réalisée dans les temps. Nous avons trouvé une grande quantité de documents
+se rapprochant de notre sujet, nous avons pu avoir un aperçu de l'état du domaine rapidement et mieux nous orienter.
+
+\subsubsection{Implémentation CPU du modèle de fluide}
+Cette phase a été réalisée relativement vite. Ce qui a pris le plus de temps c'était de choisir des paramètres
+permettant de trouver une flamme et de la fumée cohérente.
+
+\subsubsection{Implémentation CPU du rendu}
+Le rendu a pris plus de temps que prévu puisque nous avons été confrontés à des problèmes d'OpenGL nous obligeant à revoir 
+notre méthode d'affichage. De plus, nous avons été confrontés à des problèmes liés à l'éffectation des textures. 
+
+
+\subsubsection{Implémentation GPU du modèle de fluide}
+Cette partie a été la plus difficile à réaliser. Lors de l'implémentation du modèle en GLSL, nous avons été
+confronté à un bien plus grand nombre de problèmes que prévu. \\
+Citons par exemple la précision des calculs, les arrondis sauvages, le débuggage difficile, des problèmes d'échelles ( les valeurs doivent être transformées à l'enregistrement pour être situées entre 0 et 1 ) ...\\
+Le plus difficile a surtout été la mise en place du système de calcul, car la documentation à ce sujet est quasi inexistante. Ainsi nous avons passé une semaine entière juste à mettre en place les outils de calculs, avant même de pouvoir commencer à transposer le modèle CPU en modèle GPU. Nous n'avions pas du tout prévu cette difficulté et c'est la cause principale du retard qui a été pris dans l'implémentation du modèle GPU. Nous devions au départ réaliser le CPU et le GPU simultanéement,
+mais à cause de ce problème le CPU s'est détaché et à pris de l'avance sur le GPU.
+
+
+
+\subsubsection{Implémentation CPU du modèle d'objet}
+
+
+\subsubsection{Implémentation GPU du modèle d'objet}
+
+
+\subsubsection{Mise en place de la démo}
+
+
+\subsubsection{Préparation de la soutenance}
 
 %----------------------------------------------------------------------------------------------------------------------------------------
 %%%%%%%%%%%%%%%%%
@@ -301,6 +366,47 @@ avec notre tutrice nous avons prévus des réunions pour convenir d'un
 ordre du jour. De même a la fin de ces rencontres nous fairons un
 bilan de l'entretient.
 
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%
+\subsection{Suivis du  4 Juin 2010}
+%%%%%%%%%%%%%%%%%
+\subsubsection{Présents}
+\textbf{Tuteur} : Marie Paule Cani\\
+\textbf{Élèves} : Benjamin, Julien, Arnaud \\
+
+\subsubsection{Sujets abordés}
+
+\textbf{Explication de la flamme et de la fumée} :  \\
+    Nous avons détaillé les changements apportés au modèle de flamme et de la fumée.
+    Nous avons aussi expliqué la nouvelle méthode de rendu.\\
+    
+\textbf{Explication du principe du calcul en GLSL, et des problèmes rencontrés} :  \\
+    Nous avons expliqué le principe du calcul avec le GLSL. Nous avons fait part à notre tutrice des 
+    difficultés liées à ce langage. En effet nous avons travaillé énormement sur
+    la version GLSL de notre modèle, mais de nombreuses difficultées sont apparues,
+    que ce soit dans le fonctionnement du GLSL ou dans l'adaptation du modèle CPU.\\
+    
+\textbf{Mise au point sur le modèle d'objet} :  \\
+    Nous avons fait le bilan de nos recherches sur les modèles d'objet, et avons essayé
+    de déterminer la meilleur solution au problème. \\
+
+\subsubsection{Prochain rendez vous}
+    Mardi 8 juin à 9h à l'Ensimag.\\
+
+
+
+
+
+
+
+
 %----------------------------------------------------------------------------------------------------------------------------------------
 %%%%%%%%%%%%%%%%%
 \section{Conclusion}
@@ -313,6 +419,22 @@ bilan de l'entretient.
 \section{Annexes}
 %%%%%%%%%%%%%%%%%
 
+\subsection{Glossaire}
+
+\subsubsection{CPU}
+Désigne le processeur. Résoudre le problème "sur CPU" c'est donc le résoudre avec
+de la programmation classique.
+\subsubsection{GPU}
+Désigne le processeur de la carte graphique. Résoudre le problème "sur GPU" c'est donc le résoudre 
+un problème en programmant avec des shaders ( ici le GLSL ). Un shader est un programme qui s'applique à 
+un objet graphique, il n'est pas destiné à priori aux calculs scientifiques. C'est pourquoi
+il faut adapter le calcul pour qu'il soit adapté au calcul sur carte graphique.
+\subsubsection{OpenGL}
+OpenGL est une librairie graphique spécialisée pour les applications en 3D.
+\subsubsection{GLSL}
+C'est un langage de shader. GLSL sygnifie : OpenGL Shading Language.
+\subsubsection{Shader}
+Un shader est un programme s'éxecutant sur une carte graphique.
 
 %----------------------------------------------------------------------------------------------------------------------------------------
 \end{document}
