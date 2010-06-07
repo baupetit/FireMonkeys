@@ -160,7 +160,7 @@ protected :
 
 	inline bool isSolidCell( int i, int j, int k ){
 		int N = _N ;
-		return _filled[IX(i,j,k)];
+		return _filled[IX(i,j,k)] != 0;
 	}
 	
 	inline Vecteur3D getObstacleVelocity( int i, int j, int k ){
@@ -174,7 +174,9 @@ protected :
 	}
 
 	void addSource ( int N, float *x , float *s , float dt );
-	void addSourceCorrection ( int N, float *x , float *f, float *T, float *s , float sub, float fireToSmoke, float dt );
+	void combustion( int N, float *x , float *f, float *T, 
+			 float consumeK, float fireToSmoke,
+			 float dt );
 	void addBuoyancy( int N, float *T, float *v, float buoy, float dt);
 	void setBoundaries ( int N, int b, float *x );
 	void setBoundariesB0 ( int N, float *x );
@@ -188,11 +190,11 @@ protected :
 				   float dt );
 	void advect ( int N, int b, float * d, float * d0, float * u, float * v, float *w, float dt );
 	void advect_cool ( int N, int b, 
-			   float * d, float * d0, float *f, float *f0, 
-			   float *T, float *T0,
+			   float * d, float * d0, 
 			   float * u, float * v, float *w, 
-			   float cool, float consume, float taux_conversion_fire_to_smoke,
 			   float dt );
+	void calcDiv( int N , float *u, float *v, float *w, float *div, float *p );
+	void correctVel( int N, float *u, float * v, float *w, float * p);
 	void project ( int N, float * u, float * v, float *w, float * p, float * div );
 	void vorticity_confinement( int N, float *u, float *v, float *w, 
 				    float *u0, float *v0, float *w0, float *T0, 
