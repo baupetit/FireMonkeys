@@ -142,6 +142,7 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
 	_grille_feu_sources->charger_matrice(texture, _grille_width, _grille_height, _grille_depth);    
 	
 	
+
 	ptr = texture;
 	for (int k = 0; k < _grille_width; k++){
 		for (int j = 0; j < _grille_height; j++){
@@ -175,6 +176,7 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
 	_grille_vitesse_sources->charger_matrice(texture, _grille_width, _grille_height, _grille_depth);    
 	
 	
+
 	
 	ptr = texture;
 	for (int k = 0; k < _grille_width; k++){
@@ -316,6 +318,7 @@ void Solver_GPU::linearSolve ( int b, float dt,
         courante->bindTexture(GL_TEXTURE0);
         dest->bindTexture(GL_TEXTURE1);
         
+
         shader_linear_solve->lierLevel("texture_entree", 0);
         shader_linear_solve->lierLevel("texture_sortie", 1);
             	
@@ -621,6 +624,7 @@ void vorticity_confinement( int N, float *u, float *v, float *w,
 
 void Solver_GPU::densitiesStepWithTemp ( float dt )
 {	
+
     // Sources ( temp et dens )
     addSource( dt, *_grille_feu_courante, *_grille_feu_sources );
     // diffuse le feu, la fumee, la temperature    

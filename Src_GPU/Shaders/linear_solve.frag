@@ -30,6 +30,7 @@ vec3 linearsolve(vec3 coordonnee){
     
     vec3 result;
     
+
     if (   (coordonnee.s <= DX) 
         || (coordonnee.s >= 1-DX)  
         || coordonnee.t <= DY  

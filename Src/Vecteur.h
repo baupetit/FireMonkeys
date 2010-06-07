@@ -45,6 +45,8 @@ public:
     friend Vecteur3D operator- (const Vecteur3D& v1, const Vecteur3D& v2);
     
     friend Vecteur3D operator- (const Vecteur3D& v1);
+	
+	friend Vecteur3D operator- (const Vecteur3D& v1,const float a);
     
     friend Vecteur3D operator+ (const Vecteur3D& v1);
     

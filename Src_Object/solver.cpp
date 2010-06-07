@@ -7,9 +7,6 @@
 #include "SolverParam.h"
 #include <cmath>
 
-#include <iostream>
-using namespace std;
-
 inline void SWAP( float* &a , float* &b){
 	float *tmp = a ;
 	a = b ;
@@ -37,6 +34,8 @@ Solver::Solver( int N ) : _N(N) {
 	_srcv = new float[SIZE];
 	_srcw = new float[SIZE];
 	
+	_filled = new int[SIZE];
+
 	int i;
 	for( i=0; i<SIZE ; i++ ) {
 		_d[i]=0.0f;_d0[i]=0.0f;_f[i]=0.0f;_f0[i]=0.0f;
@@ -44,9 +43,13 @@ Solver::Solver( int N ) : _N(N) {
 		_u[i]=0.0f;_u0[i]=0.0f;_v[i]=0.0f;_v0[i]=0.0f;
 		_w[i]=0.0f;_w0[i]=0.0f;_srcd[i]=0.0f;_srcT[i]=0.0f;
 		_srcu[i]=0.0f;_srcv[i]=0.0f;_srcw[i]=0.0f;
+		_filled[i] = 0;
 	}
 
-	SolverParam::initSolverParam() ;
+	float spaceDiv = SolverParam::getSpaceDiv();
+	AABB = BoundingBox(Vecteur3D( -_N*spaceDiv/2, -_N*spaceDiv/2, -_N*spaceDiv/2 ) ,
+			   Vecteur3D(  _N*spaceDiv/2,  _N*spaceDiv/2,  _N*spaceDiv/2 ) );
+
 }
 
 Solver::~Solver(){
@@ -67,6 +70,7 @@ Solver::~Solver(){
 	delete [] _srcv;
 	delete [] _srcw;
 	delete [] _srcT;
+	delete [] _filled;
 }
 
 const float* Solver::getDensities() const {
@@ -91,7 +95,9 @@ const float* Solver::getVelocityW() const {
 	return _w;
 }
 
-
+const int* Solver::getFilledInfo()const{
+	return _filled;
+}
 int Solver::getSize() const{
 	return _N ;
 }
@@ -113,31 +119,18 @@ void Solver::setVelocity( int i, int j , int k , float u, float v, float w ){
 	_srcw[IX(i,j,k)] = w ;
 }
 
-void addSource ( int N, float *x , float *s , float dt )
+void Solver::addSource ( int N, float *x , float *s , float dt )
 {
-	int i;
-	for ( i=0 ; i<SIZE ; i++ ) x[i] += dt*s[i];
-}
-
-void addSourceCorrection ( int N, float *x , float *f, float *T, float *s , float sub, float fireToSmoke, float dt )
-{
-	int i;
-	for ( i=0 ; i<SIZE ; i++ ){
+	for( int i = 0 ; i < SIZE ; ++i ) 
 		x[i] += dt*s[i];
-	}
-	
 }
 
-
-void addBuoyancy( int N, float *T, float *v, float buoy, float dt)
+void Solver::addBuoyancy( int N, float *T, float *v, float buoy, float dt)
 {
-	int i;
-
-	for (i=0; i<SIZE; i++)
-		v[i] += T[i]*buoy*dt;
+	for( int i = 0; i < SIZE ; i++ ) v[i] += T[i]*buoy*dt;	
 }
 
-void setBoundaries ( int N, int b, float *x )
+void Solver::setBoundaries ( int N, int b, float *x )
 {
 #ifdef _BOUNDARIES_SOLVE_
 	int i,j;
@@ -163,7 +156,7 @@ void setBoundaries ( int N, int b, float *x )
 #endif
 }
 
-void setBoundariesB0 ( int N, float *x )
+void Solver::setBoundariesB0 ( int N, float *x )
 {
 #ifdef _BOUNDARIES_SOLVE_
 	int i,j;
@@ -189,10 +182,9 @@ void setBoundariesB0 ( int N, float *x )
 #endif
 }
 
-void linearSolve ( int N, int b, float * x, float * x0, float a, float c )
+void Solver::linearSolve ( int N, int b, float * x, float * x0, float a, float c )
 {
 	int i, j, k, l;
-
 	for ( l=0 ; l<NB_ITERATION_SOLVE ; l++ ) {
 		for( k=1; k<N+1; ++k ){ 
 			for( j = 1; j<N+1 ; ++j) { 
@@ -210,18 +202,18 @@ void linearSolve ( int N, int b, float * x, float * x0, float a, float c )
 	}
 }
 
-void diffuse ( int N, int b, float * x, float * x0, float diff, float dt )
+void Solver::diffuse ( int N, int b, float * x, float * x0, float diff, float dt )
 {
 	float a=dt*diff*N*N;
 	linearSolve ( N, b, x, x0, a, 1+6*a );
 }
 
-void diffuseFireAndSmoke ( int N, int b1, int b2, int b3,
-			   float * x, float * x0, 
-			   float * f, float * f0, 
-			   float * t, float * t0, 
-			   float diffFire, float diffSmoke, float diffTemp, 
-			   float dt )
+void Solver::diffuseFireAndSmoke ( int N, int b1, int b2, int b3,
+				   float * x, float * x0, 
+				   float * f, float * f0, 
+				   float * t, float * t0, 
+				   float diffFire, float diffSmoke, float diffTemp, 
+				   float dt )
 {
 	float a1=dt*diffFire*N*N;
 	float a2=dt*diffSmoke*N*N;
@@ -229,17 +221,6 @@ void diffuseFireAndSmoke ( int N, int b1, int b2, int b3,
 	float c1=1+6*a1;
 	float c2=1+6*a2;
 	float c3=1+6*a3;
-	
-	
-	/*
-	cout << "  =================================== " << endl;
-	cout << " a1 : " << a1 << endl;
-	cout << " a2 : " << a2 << endl;
-	cout << " a3 : " << a3 << endl;
-	cout << " c1 : " << c1 << endl;
-	cout << " c2 : " << c2 << endl;
-	cout << " c3 : " << c3 << endl;
-	*/
 	
 	//linearSolve ( N, b, x, x0, a, 1+6*a );
 	int i, j, k, l, ijk;
@@ -280,7 +261,7 @@ void diffuseFireAndSmoke ( int N, int b1, int b2, int b3,
 	}
 }
 
-void advect ( int N, int b, float * d, float * d0, float * u, float * v, float *w, float dt )
+void Solver::advect ( int N, int b, float * d, float * d0, float * u, float * v, float *w, float dt )
 {
 	int i, j, k, i0, j0, k0, i1, j1, k1;
 	float x, y, z, s0, t0, r0, s1, t1, r1, dt0;
@@ -310,12 +291,12 @@ void advect ( int N, int b, float * d, float * d0, float * u, float * v, float *
 	setBoundaries ( N, b, d );
 } 
 
-void advect_cool ( int N, int b, 
-		   float * d, float * d0, float *f, float *f0, 
-		   float *T, float *T0,
-		   float * u, float * v, float *w, 
-		   float cool, float consume, float taux_conversion_fire_to_smoke,
-		   float dt )
+void Solver::advect_cool ( int N, int b, 
+			   float * d, float * d0, float *f, float *f0, 
+			   float *T, float *T0,
+			   float * u, float * v, float *w, 
+			   float cool, float consume, float taux_conversion_fire_to_smoke,
+			   float dt )
 {
 	int i, j, k, i0, j0, k0, i1, j1, k1;
 	float x, y, z, s0, t0, r0, s1, t1, r1, dt0;
@@ -367,8 +348,9 @@ void advect_cool ( int N, int b,
 }
 
 
-void project ( int N, float * u, float * v, float *w, float * p, float * div )
+void Solver::project ( int N, float * u, float * v, float *w, float * p, float * div )
 {
+	
 	int i, j, k;
 
 	for( k=1; k<N+1; ++k ){ 
@@ -399,9 +381,9 @@ void project ( int N, float * u, float * v, float *w, float * p, float * div )
 	setBoundaries( N, 3, w);
 }
 
-void vorticity_confinement( int N, float *u, float *v, float *w, 
-			    float *u0, float *v0, float *w0, float *T0, 
-			    float vc_eps, float dt)
+void Solver::vorticity_confinement( int N, float *u, float *v, float *w, 
+				    float *u0, float *v0, float *w0, float *T0, 
+				    float vc_eps, float dt)
 {
 	int i,j,k,ijk;
 	float *curlx = u0, *curly = v0, *curlz=w0, *curl=T0;		// temp buffers
@@ -413,19 +395,19 @@ void vorticity_confinement( int N, float *u, float *v, float *w,
 		for (j=1; j<N+1; j++) {
 			for (i=1; i<N+1; i++) {
 				ijk = IX(i,j,k);
-					// curlx = dw/dy - dv/dz
+				// curlx = dw/dy - dv/dz
 				x = curlx[ijk] = (w[IX(i,j+1,k)] - w[IX(i,j-1,k)]) * 0.5f -
 					(v[IX(i,j,k+1)] - v[IX(i,j,k-1)]) * 0.5f;
 
-					// curly = du/dz - dw/dx
+				// curly = du/dz - dw/dx
 				y = curly[ijk] = (u[IX(i,j,k+1)] - u[IX(i,j,k-1)]) * 0.5f -
 					(w[IX(i+1,j,k)] - w[IX(i-1,j,k)]) * 0.5f;
 
-					// curlz = dv/dx - du/dy
+				// curlz = dv/dx - du/dy
 				z = curlz[ijk] = (v[IX(i+1,j,k)] - v[IX(i-1,j,k)]) * 0.5f -
 					(u[IX(i,j+1,k)] - u[IX(i,j-1,k)]) * 0.5f;
 
-					// curl = |curl|
+				// curl = |curl|
 				curl[ijk] = sqrtf(x*x+y*y+z*z);
 			}
 		}
@@ -461,25 +443,13 @@ void Solver::densitiesStepWithTemp ( float dt )
 {	
 	addSource ( _N, _d, _srcd, dt );
 	addSource ( _N, _T, _srcT, dt );
-	SWAP ( _d0, _d );SWAP ( _f0, _f );SWAP ( _T0, _T );
-	diffuseFireAndSmoke(_N, 0, 0, 0,
-			    _d, _d0, 
-			    _f, _f0, 
-			    _T, _T0, 
-			    SolverParam::getDiffusionParamFire(), 
-			    SolverParam::getDiffusionParamSmoke(), 
-			    SolverParam::getDiffusionParamTemperature(), 
-			    dt );
-	SWAP ( _d0, _d ); SWAP ( _f0, _f ); SWAP ( _T0, _T ); 
-	advect_cool ( _N, 0, 
-		      _d, _d0, 
-		      _f, _f0, 
-		      _T, _T0, 
-		      _u, _v, _w, 
-		      SolverParam::getCoolingParam(), 
-		      SolverParam::getConsumingParam(),
-		      SolverParam::getFireToSmokeParam(), 
-		      dt );
+	SWAP ( _d0, _d ); diffuse ( _N, 0, _d, _d0, SolverParam::getDiffusionParamFire() , dt );
+	SWAP ( _f0, _f ); diffuse ( _N, 0, _f, _f0, SolverParam::getDiffusionParamFire() , dt );
+	SWAP ( _T0, _T ); diffuse ( _N, 0, _T, _T0, SolverParam::getDiffusionParamFire() , dt );
+	
+	SWAP ( _d0, _d ); advect ( _N, 0, _d, _d0, _u, _v, _w, dt );
+	SWAP ( _f0, _f ); advect ( _N, 0, _f, _f0, _u, _v, _w, dt );
+	SWAP ( _T0, _T ); advect ( _N, 0, _T, _T0, _u, _v, _w, dt );
 }
 
 
@@ -531,3 +501,23 @@ void Solver::velocitiesStepWithTemp ( float dt )
 	project ( _N, _u, _v, _w, _u0, _v0 );
 }
 
+void Solver::addObject( Object* p ){
+	int i,j,k ;
+	int N = _N;
+	for (k=0; k<_N+2; k++) {
+		for (j=0; j<_N+2; j++) {
+			for (i=0; i<_N+2; i++) {
+				if( p->isInside( cellToPoint( i,j,k ) ) )
+					_filled[IX(i,j,k)] = 1;
+			}
+		}
+	}
+}
+
+void Solver::clearFilledInfo(){
+	int* ptr = _filled ;
+	int N = _N;
+	for( int i = 0; i < SIZE; ++i, ++ptr)
+		*ptr = 0;
+	
+}
