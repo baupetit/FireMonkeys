@@ -91,6 +91,17 @@ void Framebuffer::prepareDrawIntoBufferAttachment(int nb_attachements){
 
 
 
+void Framebuffer::traiterDessinDansBuffer(Texture3D& texture){
+    GLuint id = texture.get_texture_id();
+    traiterDessinDansBuffer(id);
+}
+
+
+
+void Framebuffer::traiterDessinDansBuffer1ALAFOIS(Texture3D& texture){
+    GLuint id = texture.get_texture_id();
+    traiterDessinDansBuffer1ALAFOIS(id);
+}
    
 void Framebuffer::traiterDessinDansBuffer(GLuint cible_id){
   
@@ -106,6 +117,7 @@ void Framebuffer::traiterDessinDansBuffer(GLuint cible_id){
         
     // viewport    
     glViewport(0,0,_grille_width,_grille_height);
+    
 	glClear(GL_COLOR_BUFFER_BIT);
 
     // traite le calcul    
@@ -129,7 +141,7 @@ void Framebuffer::traiterDessinDansBuffer(GLuint cible_id){
         pos += 8;
        } 
     
-    //detacher_texture();
+    detacher_texture();
          
     attacher_layers_de_la_texture(cible_id, pos, _grille_depth - pos );
     prepareDrawIntoBufferAttachment(_grille_depth - pos ); 
@@ -143,6 +155,7 @@ void Framebuffer::traiterDessinDansBuffer(GLuint cible_id){
     
     // etat depth
     glEnable(GL_DEPTH_TEST);
+    //glDisable(GL_BLEND);
     
     // pop
     glPopAttrib();
@@ -186,4 +199,80 @@ void Framebuffer::dessinerCarre(float decalage){
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+void Framebuffer::traiterDessinDansBuffer1ALAFOIS(GLuint cible_id){
+  
+    // attribs
+    glPushAttrib(GL_VIEWPORT_BIT | GL_COLOR_BUFFER_BIT);
+
+    
+    // depth
+    glDisable(GL_DEPTH_TEST);
+    
+    // bind !
+    bind_Buffer();
+        
+    // viewport    
+    glViewport(0,0,_grille_width,_grille_height);
+    
+	glClear(GL_COLOR_BUFFER_BIT);
+
+    // traite le calcul    
+    GLint maxbuffers;
+    glGetIntegerv(GL_MAX_COLOR_ATTACHMENTS, &maxbuffers);
+        
+    
+    
+        
+    prepareDrawIntoBufferAttachment(1);
+ 
+    
+    for(int i = 0; i < _grille_depth; i ++ )
+    {
+        attacher_layers_de_la_texture(cible_id, i, 1);
+            
+        // dessin    
+        dessinerCarre(i/float(_grille_depth));
+    } 
+    
+    detacher_texture();
+         
+    // unbind !   
+    unbind_Buffer();
+    
+    // etat depth
+    glEnable(GL_DEPTH_TEST);
+    //glDisable(GL_BLEND);
+    
+    // pop
+    glPopAttrib();
 }

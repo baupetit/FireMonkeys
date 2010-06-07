@@ -85,8 +85,8 @@ void Viewer::start(){
 
 void Viewer::_initCamera(){
 	cout << "Initialisation de la camera " << endl;
-	_cameraAngle = M_PI*0.75f;
-	_distToOrigin = 5.0f;
+	_cameraAngle = M_PI*0.3f;
+	_distToOrigin = 2.0f;
 	_cameraHeight = 0.5f;
 }
 
@@ -100,7 +100,7 @@ void Viewer::_initDepth(){
 void Viewer::_initRendering(){
 	cout << "Initialisation du rendu " << endl;
 	
-	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
+	glClearColor(0.0f, 0.0f, 1.0f, 0.0f);
 	
 	glShadeModel(GL_SMOOTH);
 	glPolygonMode(GL_FRONT, GL_FILL);

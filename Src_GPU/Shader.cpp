@@ -33,11 +33,10 @@ void Shader::Unbind_Program(){
 
 
 
-void Shader::lierTexture(string nom_texture, GLuint texture_id, GLuint level){
-    GLuint	location = glGetUniformLocation ( program, nom_texture.c_str());
-    glUniform1i(location, level);
-    glActiveTexture(level);
-    Texture3D::bindTexture(texture_id);
+void Shader::lierLevel(string nom_texture, GLuint level){
+        GLuint	location;
+        location = glGetUniformLocation ( program, nom_texture.c_str());
+        glUniform1i(location, level);
 }
 
 
@@ -50,4 +49,11 @@ void Shader::lierVecteur(string nom_vecteur, Vecteur3D& vect){
 void Shader::lierFloat(string nom_float, float flouttounet){
     GLuint	location = glGetUniformLocation ( program, nom_float.c_str());
     glUniform1f(location, flouttounet);
+}
+
+
+
+void Shader::lierFloatArray(string nom_float, int taille, float* array){
+    GLuint	location = glGetUniformLocation ( program, nom_float.c_str());
+    glUniform3fv(location, taille, array);
 }

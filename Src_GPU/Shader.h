@@ -38,15 +38,18 @@ public:
     
     /** Déchager le shader */
     void Unbind_Program();
-    
-    /** Lier texture */
-    void lierTexture(string nom_texture, GLuint texture_id, GLuint level);
+        
+    /** Lier texture de texture */
+    void lierLevel(string nom_texture, GLuint level);
     
     /** Lier vecteur */
     void lierVecteur(string nom_vecteur, Vecteur3D& vect);
     
     /** Lier flottant */
     void lierFloat(string nom_vecteur, float flouttounet);
+    
+    /** Lier flottant */
+    void lierFloatArray(string nom_vecteur, int taille, float* array);
     
     /** Renvoie d'id du program */
     GLuint getProgramId() const{
