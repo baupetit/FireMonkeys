@@ -88,13 +88,13 @@ void main (){
                           ) ;
       
     
-    
 
+    /*
         
                               
-    // consommation de la flamme 
-    float consomation = 0.0000005; 
-    //float consomation = consume / (1.0 + 50000000000.0 * texture3D ( densite_entree, coord).b );
+    // consommation de la flamme
+    //float consomation = consume / (1.0 + 500000.0 * texture3D ( densite_entree, coord).z );
+    float consomation = 0.0003;
     calcul.x = calcul.x - consomation;
     
     if ( calcul.x > consomation )
@@ -106,6 +106,7 @@ void main (){
     // disssipation de la chaleur
     calcul.z = calcul.z * c0;    
 
+    */
     
     
 //    vec3 calcul = texture3D(densite_entree, old_pos).rgb;

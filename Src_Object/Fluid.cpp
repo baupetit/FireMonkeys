@@ -20,77 +20,48 @@ static inline float getTempVal( int i, int j, int T ){
 	return val * ((random()+1)/(float)RAND_MAX)*4;
 }
 
-Fluid::Fluid()
+Fluid::Fluid(Object *obj)
+	:obj(obj)
 {
-	tps1 = 0;
-	tps2 = 0;
-	tps3 = 0;
-    tailleGrille = 35;
-    s = new Solver(tailleGrille);
-    tempIndex = new TempToRGB(256,50);
-
-
-	//Génération du bruit de perlin.
-	p = new Perlin( 3 , tailleGrille , 7, tailleGrille+2 , tailleGrille+2 , tailleGrille+2 , 0.9f );
-	p->Perlin::init();
-
-	perl = p->genererNoise();
-	//attenuation du bruit en dégradé de haut en bas.
-	
-	for (int k=0; k< (tailleGrille+2); k++){
-		for (int j=0; j< (tailleGrille+2); j++){
-			for (int i=0; i< (tailleGrille+2); i++){
-				perl[i+j*(tailleGrille+2)+k*(tailleGrille+2)*(tailleGrille+2)] = ((float)j/(float)((tailleGrille+2))) * perl[i+j*(tailleGrille+2)+k*(tailleGrille+2)*(tailleGrille+2)] ;
-				
-				cout << "x= " << perl[i+j*(tailleGrille+2)+k*(tailleGrille+2)*(tailleGrille+2)].x << "y= " << perl[i+j*(tailleGrille+2)+k*(tailleGrille+2)*(tailleGrille+2)].y  << "z= " << perl[i+j*(tailleGrille+2)+k*(tailleGrille+2)*(tailleGrille+2)].z << endl;
-			}
-			//cout << endl;
-		}
-	}
-	
-
-	/*
-	  for( int i = 7 ; i < tailleGrille-6 ; ++i ){
-	  for( int j = 7 ; j < tailleGrille-6 ; ++j ){
-	  s->setDensity( i ,5, j, 10.0f );        
-	  s->setTemperature( i ,5, j, (getTempVal(i,j,tailleGrille))/5);        
-	  }
-	  }
-	*/
-
-
+        tailleGrille = 30;
+        s = new Solver(tailleGrille);
+	tempIndex = new TempToRGB(256,50);
+		
+	// la flamme
 	int mid = tailleGrille/2;
-	s->setDensity( mid ,5, mid, 100.0f );   
-	s->setDensity( mid ,6, mid, 100.0f );   
-	s->setDensity( mid ,4, mid, 100.0f );
-	s->setDensity( mid+1 ,5, mid, 100.0f );   
-	s->setDensity( mid-1 ,5, mid, 100.0f );   
-	s->setDensity( mid ,5, mid+1, 100.0f );   
-	s->setDensity( mid ,5, mid-1, 100.0f );   
-	s->setTemperature( mid ,5, mid, 10*60*((random()+1)/(float)RAND_MAX)*4/1);   
-	s->setTemperature( mid ,6, mid, 10*42*((random()+1)/(float)RAND_MAX)*4/1);   
-	s->setTemperature( mid ,6, mid, 10*25*((random()+1)/(float)RAND_MAX)*4/1);   
-	s->setTemperature( mid+1 ,5, mid, 10*24*((random()+1)/(float)RAND_MAX)*4/1);   
-	s->setTemperature( mid-1 ,5, mid, 10*38*((random()+1)/(float)RAND_MAX)*4/1);   
-	s->setTemperature( mid ,5, mid+1, 10*12*((random()+1)/(float)RAND_MAX)*4/1);   
-	s->setTemperature( mid ,5, mid-1, 10*55*((random()+1)/(float)RAND_MAX)*4/1);   
-	
-	/*
-	for( int i = 7 ; i < tailleGrille-6 ; ++i ){
-		for( int j = 7 ; j < tailleGrille-6 ; ++j ){
-			s->setVelocity(3,i,j, 30,0.0,0.0);
-		}
-	}      
-	*/
+	s->setDensity( mid ,5, mid, 10.0f );   
+	s->setDensity( mid ,6, mid, 10.0f );   
+	s->setDensity( mid ,4, mid, 10.0f );
+	s->setDensity( mid+1 ,5, mid, 10.0f );   
+	s->setDensity( mid-1 ,5, mid, 10.0f );   
+	s->setDensity( mid ,5, mid+1, 10.0f );   
+	s->setDensity( mid ,5, mid-1, 10.0f );   
+	s->setTemperature( mid ,5, mid, 60*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid ,6, mid, 42*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid ,6, mid, 25*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid+1 ,5, mid, 24*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid-1 ,5, mid, 38*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid ,5, mid+1, 12*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid ,5, mid-1, 55*((random()+1)/(float)RAND_MAX)*4/1);   
 	
 	initialiserRenduGPU();
+
 	position.x = 0;
-	position.y = 0.5;
+	position.y = 0;
 	position.z = 0;
 	
-	echelle.x = 10;
-	echelle.y = 10;
-	echelle.z = 10;
+	float spaceDiv = SolverParam::getSpaceDiv();
+	AABB = BoundingBox(Vecteur3D( -tailleGrille*spaceDiv/2, -tailleGrille*spaceDiv/2, -tailleGrille*spaceDiv/2 ) ,
+			   Vecteur3D(  tailleGrille*spaceDiv/2,  tailleGrille*spaceDiv/2,  tailleGrille*spaceDiv/2 ) );
+
+	//translate(Vecteur3D( 1, 0, 1 ));
+	obj->translate(Vecteur3D( 0,-01.0,0));
+
+	s->clearFilledInfo();
+	if( intersect( AABB, obj->getAABB() ) ){
+		s->addObject(obj) ;
+	}
+
 }
 
 Fluid::~Fluid(){
@@ -100,10 +71,38 @@ Fluid::~Fluid(){
 }
 
 void Fluid::Afficher_Face_Camera(Vecteur3D& positionCamera, Vecteur3D& directionCamera, float dt ){
-	Mise_A_Jour(dt);
+	Mise_A_Jour(0.1);
+	/*
+
+	glPointSize( 2.0f );
+	glDisable(GL_LIGHTING);
+
+	int N = s->getSize();
+	const int* voxel = s->getFilledInfo();
+
+	glBegin(GL_POINTS);
+	for( int k = 0 ; k < N+2 ; ++k ){
+		for( int j = 0 ; j < N+2 ; ++j ){
+			for( int i = 0 ; i < N+2 ; ++i ){
+				Vecteur3D p = s->cellToPoint( i , j , k );
+				float val = voxel[IX(i,j,k)];
+	  
+				if( val != 0 ){
+					glColor3f( 1,0,0 );
+					glVertex3f( p.x, p.y, p.z );
+				} else 
+					glColor3f( 0,0,1 );
+
+			}
+		}
+	}
+	glEnd();
+	glEnable(GL_LIGHTING);
+	*/
+
 	//renduFumeeGPUFaceCamera(positionCamera, directionCamera);
 	//renduFlammeGPUFaceCamera(positionCamera, directionCamera);
-	renduFlammeETFumeeGPUFaceCamera(200, positionCamera, directionCamera,dt);
+	renduFlammeETFumeeGPUFaceCamera(400, positionCamera, directionCamera);
 }    
     
 void Fluid::Afficher(float dt){
@@ -140,17 +139,12 @@ void Fluid::renduFlammeGPUFaceCamera(Vecteur3D& positionCamera, Vecteur3D& direc
 	dessinerPlansDansTexture3DFaceALaCamera(100, positionCamera, directionCamera);
 }
 
-void Fluid::renduFlammeETFumeeGPUFaceCamera( int nb_plans, Vecteur3D& positionCamera, Vecteur3D& directionCamera ,float t){
-	srand(NULL);
-	tps1 += t;
-	tps2 += t;
-	//tps3 = fmod(tps3 + t*((float) rand()) / RAND_MAX,2*M_PI);
+void Fluid::renduFlammeETFumeeGPUFaceCamera( int nb_plans, Vecteur3D& positionCamera, Vecteur3D& directionCamera ){
 	majMatriceFlammeEnMatriceRGBA();
 	majMatriceFumeeEnMatriceRGBA();
 
 	matriceRGBACarreeToTexture3D(matriceRGBA_smoke, tailleGrille + 2 , _id_texture_fumee);
 	matriceRGBACarreeToTexture3D(matriceRGBA_fire, tailleGrille + 2 , _id_texture_flamme);
-	matricePerlinCarreeToTexture3D(perl, tailleGrille + 2 , _id_texture_perlin);
 
 	glBindTexture(GL_TEXTURE_3D, 0);	
 	
@@ -158,22 +152,12 @@ void Fluid::renduFlammeETFumeeGPUFaceCamera( int nb_plans, Vecteur3D& positionCa
 	glBindTexture(GL_TEXTURE_3D , _id_texture_flamme );
 	glActiveTexture( GL_TEXTURE1 );
 	glBindTexture(GL_TEXTURE_3D , _id_texture_fumee );
-	glActiveTexture( GL_TEXTURE2 );
-	glBindTexture(GL_TEXTURE_3D , _id_texture_perlin );
 
 	renderer->Bind_Program();
 	GLuint location_tex1 = glGetUniformLocation( renderer->getProgramId(), "Texture0" );
 	glUniform1i( location_tex1 , 0 );
-    GLuint location_tex2 = glGetUniformLocation( renderer->getProgramId(), "Texture1" );
+       	GLuint location_tex2 = glGetUniformLocation( renderer->getProgramId(), "Texture1" );
 	glUniform1i( location_tex2 , 1 );
-    GLuint location_texperl = glGetUniformLocation( renderer->getProgramId(), "Textureperlin" );
-	glUniform1i( location_texperl , 2 );
-	GLuint location_temps1 = glGetUniformLocation( renderer->getProgramId(), "temps1" );
-	glUniform1f( location_temps1 , tps1 );
-	GLuint location_temps2 = glGetUniformLocation( renderer->getProgramId(), "temps2" );
-	glUniform1f( location_temps2 , tps2 );
-	GLuint location_temps3 = glGetUniformLocation( renderer->getProgramId(), "temps3" );
-	glUniform1f( location_temps3 , tps3 );
 
 	// Dessin
 	dessinerPlansDansTexture3DFaceALaCamera(nb_plans, positionCamera, directionCamera);
@@ -184,9 +168,6 @@ void Fluid::renduFlammeETFumeeGPUFaceCamera( int nb_plans, Vecteur3D& positionCa
 	glBindTexture(GL_TEXTURE_3D , 0 );
 	glActiveTexture( GL_TEXTURE1 );
 	glBindTexture(GL_TEXTURE_3D , 0 );
-	glActiveTexture( GL_TEXTURE2 );
-	glBindTexture(GL_TEXTURE_3D , 0 );
-	
 }
 
 void Fluid::majMatriceFlammeEnMatriceRGBA(){
@@ -240,19 +221,6 @@ void Fluid::matriceRGBACarreeToTexture3D(const Vecteur4D *matrice, int cote, GLu
     	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 	glTexImage3D(GL_TEXTURE_3D,0,GL_RGBA,cote,cote,cote,
 		     0, GL_RGBA, GL_FLOAT, matrice);
-}
-
-void Fluid::matricePerlinCarreeToTexture3D(const Vecteur3D *matrice, int cote, GLuint id_texture){
-	// Chargement en mémoire
-	glBindTexture(GL_TEXTURE_3D, id_texture);
-	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-	glTexImage3D(GL_TEXTURE_3D,0,GL_RGB,cote,cote,cote,
-		     0, GL_RGB, GL_FLOAT, matrice);
 }
 
 void Fluid::initialiserRenduGPU(){
@@ -345,12 +313,19 @@ void Fluid::dessinerPlansDansTexture3DFaceALaCamera(int nb_plans,
    
 	// Activation de la texture
 	glDisable(GL_LIGHTING); 
-	//glDisable(GL_DEPTH_TEST);
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 	glEnable( GL_BLEND );
 	glAlphaFunc(GL_GREATER,0.0f);
 	glEnable(GL_ALPHA_TEST);    
-	
+
+
+
+	glPushMatrix();
+	glScalef( tailleGrille*SolverParam::getSpaceDiv(),
+		  tailleGrille*SolverParam::getSpaceDiv(),
+		  tailleGrille*SolverParam::getSpaceDiv());
+		  
+
 	// Vecteur de coordonnées
 	Vecteur3D coord;
 	Vecteur3D decalageTex;
@@ -376,21 +351,18 @@ void Fluid::dessinerPlansDansTexture3DFaceALaCamera(int nb_plans,
 		coord = Boitev3 + decalageVert;		glVertex3d(coord.x, coord.y, coord.z);
 	}
 	glEnd();
-    
+		
+	glPopMatrix();
+	
 	// Desactivation des elements
 	glDisable(GL_TEXTURE_3D);
 	glDisable(GL_ALPHA_TEST);    
 	glDisable( GL_BLEND );    
 	glEnable(GL_LIGHTING);
-	//glEnable(GL_DEPTH_TEST);
 }
 
 void Fluid::dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans){
 	glPushMatrix();
-	//glLoadIdentity();    
-	//glOrtho(0, 1, 1, 0, 0, 1);
-	//glTranslatef(position.x, position.y, position.z);
-
 	glDisable(GL_LIGHTING);
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 	glEnable( GL_BLEND );
@@ -402,15 +374,12 @@ void Fluid::dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans){
 
 	GLfloat verts[4][3] = { { 0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {1.0, 1.0, 0.0}, {1.0, 0.0, 0.0}};
 
-	glBegin(GL_TRIANGLES);	
+	glBegin(GL_QUADS);	
 	
 	glTexCoord3d(verts[0][0], verts[0][1], verts[0][2]);	glVertex3d(verts[0][0], verts[0][1], verts[0][2]);
 	glTexCoord3d(verts[1][0], verts[1][1], verts[1][2]);	glVertex3d(verts[1][0], verts[1][1], verts[1][2]);
 	glTexCoord3d(verts[2][0], verts[2][1], verts[2][2]);	glVertex3d(verts[2][0], verts[2][1], verts[2][2]);
-
-	glTexCoord3d(verts[2][0], verts[2][1], verts[2][2]);	glVertex3d(verts[2][0], verts[2][1], verts[2][2]);
 	glTexCoord3d(verts[3][0], verts[3][1], verts[3][2]);	glVertex3d(verts[3][0], verts[3][1], verts[3][2]);
-	glTexCoord3d(verts[0][0], verts[0][1], verts[0][2]);	glVertex3d(verts[0][0], verts[0][1], verts[0][2]);	
 	
 	for (int i = 1; i <= 2 * nb_plans; i++){
 		glTexCoord3d(verts[0][0], verts[0][1], verts[0][2] + (float)i/nb_plans);
@@ -422,14 +391,8 @@ void Fluid::dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans){
 		glTexCoord3d(verts[2][0], verts[2][1], verts[2][2] + (float)i/nb_plans);
 		glVertex3d(verts[2][0], verts[2][1], verts[2][2] + (float)i/nb_plans);
 		
-		glTexCoord3d(verts[2][0], verts[2][1], verts[2][2] + (float)i/nb_plans);
-		glVertex3d(verts[2][0], verts[2][1], verts[2][2] + (float)i/nb_plans);
-		
 		glTexCoord3d(verts[3][0], verts[3][1], verts[3][2] + (float)i/nb_plans);
 		glVertex3d(verts[3][0], verts[3][1], verts[3][2] + (float)i/nb_plans);
-		
-		glTexCoord3d(verts[0][0], verts[0][1], verts[0][2] + (float)i/nb_plans);
-		glVertex3d(verts[0][0], verts[0][1], verts[0][2] + (float)i/nb_plans);	
 	}
 	glEnd();
 	
