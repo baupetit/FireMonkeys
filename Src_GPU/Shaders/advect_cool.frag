@@ -89,15 +89,15 @@ void main (){
       
     
 
-    /*
+    
         
                               
     // consommation de la flamme
-    //float consomation = consume / (1.0 + 500000.0 * texture3D ( densite_entree, coord).z );
-    float consomation = 0.0003;
-    calcul.x = calcul.x - consomation;
+    float consomation = consume / (1.0 + 5000000.0 * texture3D ( densite_entree, coord).z );
+    //float consomation = 0.003;
+    //calcul.x = calcul.x - consomation;
     
-    if ( calcul.x > consomation )
+    if ( calcul.x > 0.0 )
         calcul.y = calcul.y + consomation * fireToSmoke;
     else    
         calcul.y = calcul.y + calcul.x * fireToSmoke;
@@ -106,7 +106,7 @@ void main (){
     // disssipation de la chaleur
     calcul.z = calcul.z * c0;    
 
-    */
+    
     
     
 //    vec3 calcul = texture3D(densite_entree, old_pos).rgb;
