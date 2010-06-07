@@ -72,7 +72,6 @@ Fluid::~Fluid(){
 
 void Fluid::Afficher_Face_Camera(Vecteur3D& positionCamera, Vecteur3D& directionCamera, float dt ){
 	Mise_A_Jour(0.1);
-	/*
 
 	glPointSize( 2.0f );
 	glDisable(GL_LIGHTING);
@@ -98,7 +97,6 @@ void Fluid::Afficher_Face_Camera(Vecteur3D& positionCamera, Vecteur3D& direction
 	}
 	glEnd();
 	glEnable(GL_LIGHTING);
-	*/
 
 	//renduFumeeGPUFaceCamera(positionCamera, directionCamera);
 	//renduFlammeGPUFaceCamera(positionCamera, directionCamera);
