@@ -40,7 +40,7 @@ Fluid::Fluid()
 	int mid = tailleGrille/2;
 	s->setDensity( mid ,5, mid, 100.0f );   
 	s->setDensity( mid ,6, mid, 100.0f );   
-	s->setDensity( mid ,4, mid, 100.0f );   
+	s->setDensity( mid ,4, mid, 100.0f );
 	s->setDensity( mid+1 ,5, mid, 100.0f );   
 	s->setDensity( mid-1 ,5, mid, 100.0f );   
 	s->setDensity( mid ,5, mid+1, 100.0f );   
@@ -53,6 +53,13 @@ Fluid::Fluid()
 	s->setTemperature( mid ,5, mid+1, 10*12*((random()+1)/(float)RAND_MAX)*4/1);   
 	s->setTemperature( mid ,5, mid-1, 10*55*((random()+1)/(float)RAND_MAX)*4/1);   
 
+	s->setVelocity( mid ,15, mid, 0.0, 0.0, 0.0 );   
+	s->setVelocity( mid ,16, mid, 0.0, 10.0, 0.0 );   
+	s->setVelocity( mid ,14, mid, 0.0, -10.0, 0.0  );   
+	s->setVelocity( mid+1 ,15, mid, 10.0, 0.0, 0.0 );   
+	s->setVelocity( mid-1 ,15, mid, -10.0, 0.0, 0.0 );   
+	s->setVelocity( mid ,15, mid+1, 0.0, 0.0, 10.0 );   
+	s->setVelocity( mid ,15, mid-1, 0.0, 0.0, -10.0 );   
 	
 	/*
 	for( int i = 7 ; i < tailleGrille-6 ; ++i ){
@@ -82,7 +89,7 @@ void Fluid::Afficher_Face_Camera(Vecteur3D& positionCamera, Vecteur3D& direction
 	Mise_A_Jour(dt);
 	//renduFumeeGPUFaceCamera(positionCamera, directionCamera);
 	//renduFlammeGPUFaceCamera(positionCamera, directionCamera);
-	renduFlammeETFumeeGPUFaceCamera(100, positionCamera, directionCamera);
+	renduFlammeETFumeeGPUFaceCamera(200, positionCamera, directionCamera);
 }    
     
 void Fluid::Afficher(float dt){
