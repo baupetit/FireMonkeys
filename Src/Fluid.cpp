@@ -186,6 +186,7 @@ void Fluid::renduFlammeETFumeeGPUFaceCamera( int nb_plans, Vecteur3D& positionCa
 	glBindTexture(GL_TEXTURE_3D , 0 );
 	glActiveTexture( GL_TEXTURE2 );
 	glBindTexture(GL_TEXTURE_3D , 0 );
+	
 }
 
 void Fluid::majMatriceFlammeEnMatriceRGBA(){
