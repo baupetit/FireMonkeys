@@ -12,16 +12,20 @@ Fluid_GPU::Fluid_GPU(){
 	_grille_height = TAILLE_GRILLE;
 	_grille_depth  = TAILLE_GRILLE;
 	*/
-	_grille_width  = 100;
-	_grille_height = 100;
-	_grille_depth  = 100;
-    
+
+	_grille_width  = 60;
+	_grille_height = 60;
+	_grille_depth  = 60;
+   
 	s = NULL;
     shader_affichage = NULL;
     
     echelle.x = 1.0;
     echelle.y = 1.0;
     echelle.z = 1.0;
+    
+    
+
 }
 
 Fluid_GPU::~Fluid_GPU(){
@@ -38,10 +42,12 @@ void Fluid_GPU::initialiserFluid(){
 	delete shader_affichage;
 	shader_affichage = new Shader("./Shaders/vertex_shader_qui_ne_fait_rien.vert",
 	                                 "./Shaders/affichage.frag");
+	                                 
 }
 
 void Fluid_GPU::resolutionFluid(){
-	s->densitiesStep(0.1);
+	s->densitiesStepWithTemp(0.012);
+	s->velocitiesStepWithTemp(0.012);
 }
 
 void Fluid_GPU::Afficher(){
@@ -196,13 +202,16 @@ void Fluid_GPU::dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans){
 	GLfloat verts[4][3] = { { 0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {1.0, 1.0, 0.0}, {1.0, 0.0, 0.0}};
 
     GLuint id0 = s->getDensities();
+    //GLuint id0 = s->getSpeed();
     //GLuint id1 = s->getDestDensities();
         
     Texture3D::bindTexture(id0,0);
     Texture3D::setFilter(GL_LINEAR);
 
-    shader_affichage->lierLevel("texture_entree", 0);
+    
     shader_affichage -> Bind_Program();
+    shader_affichage->lierLevel("texture_entree", 0);
+
 
 
 	glBegin(GL_QUADS);	

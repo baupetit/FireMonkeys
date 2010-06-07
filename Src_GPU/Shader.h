@@ -48,6 +48,9 @@ public:
     /** Lier flottant */
     void lierFloat(string nom_vecteur, float flouttounet);
     
+    /** Lier flottant */
+    void lierFloatArray(string nom_vecteur, int taille, float* array);
+    
     /** Renvoie d'id du program */
     GLuint getProgramId() const{
         return program;
