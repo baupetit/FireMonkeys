@@ -22,7 +22,7 @@ protected :
 	Voxel *grille;
 	Vecteur3I grilleSize;
 	
-	virtual generateVoxels() = 0;
+	virtual void generateVoxels() = 0;
 
 	inline Vecteur3I pointToCell( Vecteur3D p ){
 		Vecteur3I res;

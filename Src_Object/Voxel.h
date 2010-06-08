@@ -29,5 +29,12 @@ struct Voxel {
 		 temperature(temperature), repulsion(repulsion), tempThreshold(tempThreshold),
 		 conduction(conduction)
 		{}
+		
+	    
+    Voxel& operator= (Voxel v2){
+        Voxel *res = new Voxel(v2);
+        return *res;
+    }
+        
 };
 #endif
