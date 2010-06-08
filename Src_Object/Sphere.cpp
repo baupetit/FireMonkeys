@@ -62,7 +62,7 @@ void Sphere::Afficher(float dt){
 	*/
 }
 
-void Sphere::generateVoxel() {
+void Sphere::generateVoxels() {
 	int nb_x,nb_y,nb_z ;
 	float x_off, y_off, z_off;
 	float spaceDiv  = SolverParam::getSpaceDiv();
@@ -96,19 +96,21 @@ void Sphere::generateVoxel() {
 		AABB.upperCorner.z += z_off/2.0f; 
 	}
 	
-	voxelSize.x = nb_x ;
-	voxelSize.y = nb_y ;
-	voxelSize.z = nb_z ;
+	grilleSize.x = nb_x ;
+	grilleSize.y = nb_y ;
+	grilleSize.z = nb_z ;
 
 	// calculate the grid
-	voxel = new float[nb_x*nb_y*nb_z];
+	grille = new Voxel[nb_x*nb_y*nb_z];
 	for( int k = 0 ; k < nb_z ; ++k ){
 		for( int j = 0 ; j < nb_y ; ++j ){
 			for( int i = 0 ; i < nb_x ; ++i ){
-				if( isInside( cellToPoint( i , j , k ) ) )
-					grille[_Grille_Ind(i,j,k)] = Voxel();
-				else
-					grille[_Grille_Ind(i,j,k)] = Voxel() ;					
+				if( isInside( cellToPoint( Vecteur3I(i , j , k) ) ) ){
+					grille[_Grille_Ind(i,j,k)] = defVox;
+					setVoisinBound( i,j,k );
+				} else {
+					grille[_Grille_Ind(i,j,k)] = Voxel() ;
+				}
 		        }
 		}
 	}

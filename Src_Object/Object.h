@@ -19,6 +19,7 @@
 
 class Object : public BasicEntite {
 protected :
+	Voxel defVox;
 	Voxel *grille;
 	Vecteur3I grilleSize;
 	
@@ -32,10 +33,27 @@ protected :
 		return res;
 	}
 
+	inline Vecteur3D cellToPoint( Vecteur3I c ){
+		Vecteur3D res = AABB.lowerCorner ;
+		res.x += c.x * SolverParam::getSpaceDiv();
+		res.y += c.y * SolverParam::getSpaceDiv();
+		res.z += c.z * SolverParam::getSpaceDiv();
+		return res ;
+	}
+
+	inline void setVoisinBound( int i, int j, int k ){
+		if( !grille[_Grille_Ind(i-1,j,k)].plein ) grille[_Grille_Ind(i-1,j,k)].frontiere = true ;
+		if( !grille[_Grille_Ind(i+1,j,k)].plein ) grille[_Grille_Ind(i+1,j,k)].frontiere = true ;
+		if( !grille[_Grille_Ind(i,j-1,k)].plein ) grille[_Grille_Ind(i,j-1,k)].frontiere = true ;
+		if( !grille[_Grille_Ind(i,j+1,k)].plein ) grille[_Grille_Ind(i,j+1,k)].frontiere = true ;
+		if( !grille[_Grille_Ind(i,j,k-1)].plein ) grille[_Grille_Ind(i,j,k-1)].frontiere = true ;
+		if( !grille[_Grille_Ind(i,j,k+1)].plein ) grille[_Grille_Ind(i,j,k+1)].frontiere = true ;
+	}
 public:
 	/* constructor */
 	Object();
-	
+	Object(Voxel defVox);
+
 	/* destructor */
 	virtual ~Object();
 	
