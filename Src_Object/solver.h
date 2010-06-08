@@ -18,6 +18,7 @@
 #include "BoundingBox.h"
 #include "Vecteur.h"
 #include "Voxel.h"
+#include <list>
 
 class Solver {
 public :
@@ -160,6 +161,8 @@ protected :
 
 	/* Voxels infos */
 	Voxel *_filled;
+	list<Object *> _objs;
+	list<Object *>::iterator _it_objs;
 
     /** Boite englobante */
 	BoundingBox AABB;

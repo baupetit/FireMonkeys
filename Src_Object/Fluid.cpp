@@ -57,11 +57,6 @@ Fluid::Fluid(Object *obj)
 	//translate(Vecteur3D( 1, 0, 1 ));
 	obj->translate(Vecteur3D( +0.3,+0.5,0));
 
-	s->clearFilledInfo();
-	if( intersect( AABB, obj->getAABB() ) ){
-		s->addObject(obj) ;
-	}
-
 }
 
 Fluid::~Fluid(){

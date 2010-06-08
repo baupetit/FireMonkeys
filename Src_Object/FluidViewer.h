@@ -14,11 +14,13 @@
 #include "Viewer.h"
 #include "Fluid.h"
 #include "Object.h"
+#include <list>
 
 class FluidViewer : public Viewer {
 private :
 	Fluid *_fluid;
-	Object *_obj;
+	list<Object *> _objs;
+	list<Object *>::iterator _it_objs;
 public :
 	FluidViewer();
 	~FluidViewer();

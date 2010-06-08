@@ -581,4 +581,19 @@ void Solver::clearFilledInfo(){
 
 
 void Solver::updateInfo( Object& o){
+    /*
+    
+
+
+
+
+
+
+
+	s->clearFilledInfo();
+	if( intersect( AABB, obj->getAABB() ) ){
+		s->addObject(obj) ;
+	}
+    */
+
 }
