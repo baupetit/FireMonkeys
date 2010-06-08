@@ -18,6 +18,7 @@
 #include "BoundingBox.h"
 #include "Vecteur.h"
 #include "Voxel.h"
+#include <list>
 
 class Solver {
 public :
@@ -84,11 +85,6 @@ public :
 	 * @brief : return the velocityW matrix
 	 */
 	const float* getVelocityW()const;
-
-	/**
-	 * @brief : return filled info matrix
-	 */ 
-	const int* getFilledInfo()const;
 	
 	/**
 	 * @brief : return the grid size
@@ -109,11 +105,6 @@ public :
 	 * @brief : set the velocity in the given cell
 	 */
 	void setVelocity( int i, int j , int k , float u, float v, float w );
-
-	/**
-	 * @brief : add new object.
-	 */
-	void addObject( Object *p );
 	
 	/**
 	 * @brief : clear filled information
@@ -160,6 +151,8 @@ protected :
 
 	/* Voxels infos */
 	Voxel *_filled;
+	list<Object *> _objs;
+	list<Object *>::iterator _it_objs;
 
     /** Boite englobante */
 	BoundingBox AABB;

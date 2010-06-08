@@ -31,10 +31,6 @@ struct Voxel {
 		{}
 		
 	    
-    Voxel& operator= (Voxel v2){
-        Voxel *res = new Voxel(v2);
-        return *res;
-    }
         
 };
 #endif

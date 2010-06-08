@@ -36,7 +36,7 @@ Solver::Solver( int N ) : _N(N) {
 	_srcv = new float[SIZE];
 	_srcw = new float[SIZE];
 	
-	_filled = new int[SIZE];
+	_filled = new Voxel[SIZE];
 
 	int i;
 	for( i=0; i<SIZE ; i++ ) {
@@ -45,7 +45,7 @@ Solver::Solver( int N ) : _N(N) {
 		_u[i]=0.0f;_u0[i]=0.0f;_v[i]=0.0f;_v0[i]=0.0f;
 		_w[i]=0.0f;_w0[i]=0.0f;_srcd[i]=0.0f;_srcT[i]=0.0f;
 		_srcu[i]=0.0f;_srcv[i]=0.0f;_srcw[i]=0.0f;
-		_filled[i] = 0;
+		//_filled[i] = Voxel();
 	}
 
 	float spaceDiv = SolverParam::getSpaceDiv();
@@ -98,9 +98,6 @@ const float* Solver::getVelocityW() const {
 	return _w;
 }
 
-const int* Solver::getFilledInfo()const{
-	return _filled;
-}
 int Solver::getSize() const{
 	return _N ;
 }
@@ -548,25 +545,6 @@ void Solver::velocitiesStepWithTemp ( float dt )
 }
 
 
-void Solver::addObject( Object* p ){
-	int i,j,k ;
-	int N = _N;
-	for (k=0; k<_N+2; k++) {
-		for (j=0; j<_N+2; j++) {
-			for (i=0; i<_N+2; i++) {
-				if( p->isInside( cellToPoint( i,j,k ) ) ){
-					_filled[IX(i,j,k)] = 1;
-					Vecteur3D t = p->repulsionForceAt( cellToPoint( i,j,k ) );
-					cout << "Vitesse : " ; t.afficher(); cout << endl;
-					_srcu[IX(i,j,k)] = t.x ;
-					_srcv[IX(i,j,k)] = t.y ;
-					_srcw[IX(i,j,k)] = t.z ;
-				}
-			}
-		}
-	}
-}
-
 void Solver::clearFilledInfo(){
 	Voxel* ptr = _filled ;
 	int N = _N;
@@ -581,4 +559,19 @@ void Solver::clearFilledInfo(){
 
 
 void Solver::updateInfo( Object& o){
+    /*
+    
+
+
+
+
+
+
+
+	s->clearFilledInfo();
+	if( intersect( AABB, obj->getAABB() ) ){
+		s->addObject(obj) ;
+	}
+    */
+
 }
