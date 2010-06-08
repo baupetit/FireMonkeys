@@ -156,10 +156,10 @@ void main(void)
     
     
     
-	color_flamme  = vec4(     0.9 - flamme_fumee_chaleur.z * 5000.0, 
-	                          0.5 - flamme_fumee_chaleur.z * 5000.0, 
-	                          flamme_fumee_chaleur.z * 5000,
-	                          (1.0 - flamme_fumee_chaleur.z * 5000) * flamme_fumee_chaleur.x*4000);
+	color_flamme  = vec4(     0.9 - flamme_fumee_chaleur.z * 1000.0, 
+	                          0.5 - flamme_fumee_chaleur.z * 1000.0, 
+	                          flamme_fumee_chaleur.z * 800,
+	                          (1.0 - flamme_fumee_chaleur.z * 800) * flamme_fumee_chaleur.x*3000);
 	color = color_flamme;
     
     

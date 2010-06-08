@@ -15,7 +15,7 @@
 #include <unistd.h>
 
 
-#define PRECISION_RESOLUTION 20
+#define PRECISION_RESOLUTION 10
 
 
 Solver_GPU::Solver_GPU( int width, int height, int depth ) 
@@ -509,7 +509,6 @@ void Solver_GPU::advect_cool ( float dt )
     float firetosmoke = SolverParam::getFireToSmokeParam();
     float c0 = 1.0f - SolverParam::getCoolingParam() * dt;
 
-    cout << "couling : " << c0 << endl;
 
     shader_advect_cool->Bind_Program();          
 
@@ -629,7 +628,7 @@ void Solver_GPU::velocitiesStepWithTemp ( float dt )
     // Vorticity confinement
     //
     // Diffuse
-	//diffuse_speed ( dt );
+	diffuse_speed ( dt );
 	// Project
 	project();
 	// Advect

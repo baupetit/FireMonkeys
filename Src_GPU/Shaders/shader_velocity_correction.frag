@@ -26,17 +26,17 @@ void main (){
     vec3 coord = gl_TexCoord[0].stp;
     vec3 vitesse = texture3D( texture_vitesse, coord) . rgb;
     
-    vitesse.x = vitesse.x - 0.0004 * taille_width / 3.0 * 
+    vitesse.x = vitesse.x - 0.0001 * taille_width / 3.0 * 
                             ( texture3D ( texture_pression, coord + voisinO ).g
                               - texture3D ( texture_pression, coord + voisinE ).g 
                             );
                             
-    vitesse.y = vitesse.y - 0.0004 * taille_height / 3.0 * 
+    vitesse.y = vitesse.y - 0.0001 * taille_height / 3.0 * 
                             ( texture3D ( texture_pression, coord + voisinN ).g 
                               - texture3D ( texture_pression, coord + voisinS ).g 
                             );
                             
-    vitesse.z = vitesse.z - 0.0004 * taille_depth / 3.0 * 
+    vitesse.z = vitesse.z - 0.0001 * taille_depth / 3.0 * 
                             ( texture3D ( texture_pression, coord + voisinAV ).g 
                               - texture3D ( texture_pression, coord + voisinAR ).g 
                             );  

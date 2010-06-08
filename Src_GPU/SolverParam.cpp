@@ -60,12 +60,12 @@ void SolverParam::initSolverParam() {
 	SolverParam::diffusionParamFire        = 0.002;
 	SolverParam::diffusionParamSmoke       = 0.1;
 	SolverParam::diffusionParamTemperature = 0.10;
-	SolverParam::coolingParam              = 60.0;//79.001;
-	SolverParam::consumingParam            = 0.015;
+	SolverParam::coolingParam              = 62.0;//79.001;
+	SolverParam::consumingParam            = 0.040;
 	SolverParam::tempMaxParam              = 0.4;
 	SolverParam::fireToSmokeParam          = 1.02;
 	SolverParam::viscosityParam            = 0.0;
-	SolverParam::buoyancyParam             = 50000000.0;
+	SolverParam::buoyancyParam             = 20000000.0;
 	SolverParam::vorticityConfinementParam = 2.0;
 	SolverParam::echantillonage            = 128.0;
 }
