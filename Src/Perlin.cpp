@@ -35,7 +35,6 @@ Perlin::~Perlin() { delete[] _noise; }
 void Perlin::init()
 {
 
-
 	int puissance_max = 1;
 	for (int o=1; o<=_nbOctaves  - 1; o++)
 	{
@@ -58,6 +57,29 @@ void Perlin::init()
 		_noise[i] = Vecteur3D(i1,i2,i3); 
 	}
 
+}
+
+void Perlin::init1D()
+{
+
+	int puissance_max = 1;
+	for (int o=1; o<=_nbOctaves  - 1; o++)
+	{
+		puissance_max *= 2;
+	}
+
+    _noise1D = new Vecteur3D[(int) ceil(100* puissance_max / _pas)];
+
+    srand(time(NULL));
+    
+    for(int i = 0; i <(int) ceil(100* puissance_max / _pas) ; i++){
+		float i1 = ((float) rand()) / RAND_MAX;
+		float i2 = ((float) rand()) / RAND_MAX;
+		float i3 = ((float) rand()) / RAND_MAX;
+				
+		_noise1D[i] = Vecteur3D(i1,i2,i3); 
+	}
+  
 }
 
 //interpolation linéaire
@@ -110,7 +132,7 @@ Vecteur3D Perlin::interpolation_cos3D(Vecteur3D &a , Vecteur3D &b ,
 Vecteur3D Perlin::fonctionBruit1D(float xx)
 {
 	int i1 = (int) (xx / _pas);
-	return interpolation_cos1D(_noise[i1] , _noise[i1+1] , fmod((xx / _pas) , 1));
+	return interpolation_cos1D(_noise1D[i1] , _noise1D[i1+1] , fmod((xx / _pas) , 1));
 }
 
 
@@ -218,5 +240,19 @@ Vecteur3D* Perlin::genererNoise()
 
 }
 
+
+Vecteur3D* Perlin::genererNoise1D()
+{
+	Vecteur3D *res = new Vecteur3D[100];
+
+	for (int i = 0 ; i < 100 ; i++){ 
+
+				res[i] = (bruitDePerlin1D((float) i, _persistance ,_nbOctaves) );
+
+	}
+
+	return res;
+
+}
 
 

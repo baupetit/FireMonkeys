@@ -15,7 +15,7 @@
 #include <unistd.h>
 
 
-#define PRECISION_RESOLUTION 10
+#define PRECISION_RESOLUTION 30
 
 
 Solver_GPU::Solver_GPU( int width, int height, int depth ) 

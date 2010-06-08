@@ -25,11 +25,14 @@ public:
 	~Perlin();
 
 	void init();
+	void init1D();
 	Vecteur3D* genererNoise();
 	Vecteur3D* getNoise();
+	Vecteur3D* genererNoise1D();
 
 private:
 	Vecteur3D* _noise;
+	Vecteur3D* _noise1D;
 	int _dimension;
 	int _pas;
 	int _nbOctaves;
