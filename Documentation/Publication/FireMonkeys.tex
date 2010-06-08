@@ -667,6 +667,11 @@ fin\\
 \subsubsection{amélioration de rendu : Bruit de Perlin 4D}
 
 Dans la réalité il y a toujours un "vent ambiant" autour d'une flamme, ce qui à pour conséquence de multiples effets de mouvements au niveau de sa surface. Pour simuler cet effet nous ajoutons \textbf{lors du rendu par le fragment shader} un bruit de perlin 4D (dont une dimension temporelle pour conserver la cohérence du mouvement).\\
+
+\begin{center}
+\includegraphics[scale=0.3]{Perlin3D.ps}
+\end{center}
+
 Le fait d'ajouter ce bruit lors du rendu dans le shader ne modifie pas la position spatiale des densités, des températures et de la fumée et ne perturbe donc pas les calculs de l'équation de dynamique des fluides.\\ 
 
 Les rendus obtenus étant plutôt convaincant :\\
