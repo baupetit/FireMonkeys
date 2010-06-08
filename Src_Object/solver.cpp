@@ -1,6 +1,6 @@
 #define SIZE ((N+2)*(N+2)*(N+2))
 #ifndef NB_ITERATION_SOLVE
-#define NB_ITERATION_SOLVE 20
+#define NB_ITERATION_SOLVE 10
 #endif
 
 #include "solver.h"
@@ -72,6 +72,7 @@ Solver::~Solver(){
 	delete [] _srcv;
 	delete [] _srcw;
 	delete [] _srcT;
+	
 	delete [] _filled;
 }
 
@@ -127,6 +128,21 @@ void Solver::addSource ( int N, float *x , float *s , float dt )
 		x[i] += dt*s[i];
 }
 
+
+void Solver::addSource3 ( int N, 
+                         float *x1 , float *s1 ,
+                         float *x2 , float *s2 ,
+                         float *x3 , float *s3 ,
+                         float dt )
+{
+	for( int i = 0 ; i < SIZE ; ++i ) 
+	{
+		x1[i] += dt*s1[i];
+		x2[i] += dt*s2[i];
+		x3[i] += dt*s3[i];
+	}	
+}
+
 void Solver::addBuoyancy( int N, float *T, float *v, float buoy, float dt)
 {
 	for( int i = 0; i < SIZE ; i++ ) v[i] += T[i]*buoy*dt;	
@@ -141,6 +157,7 @@ void Solver::combustion( int N , float *d, float *f, float *T,
 			for( i=1 ; i<N+1 ; ++i ){
 				ijk = IX(i,j,k);
 				//T[ijk] += fmax(0, d[ijk] - consume*dt )*consume/fireToSmoke;
+
 				float tmp = d[ijk];
 				d[ijk] = fmax(0, d[ijk] - consume*dt );
 				f[ijk] += (tmp-d[ijk])*fireToSmoke;
@@ -217,14 +234,14 @@ void Solver::linearSolve ( int N, int b, float * x, float * x0, float a, float c
 					vd = x[IX(i,j-1,k)];
 					vf = x[IX(i,j,k+1)];
 					vb = x[IX(i,j,k-1)];
-					
+					/*
 					if( isSolidCell( i-1, j, k ) ){ vl = vc; }
 					if( isSolidCell( i+1, j, k ) ){ vr = vc; }
 					if( isSolidCell( i, j-1, k ) ){ vd = vc; }
 					if( isSolidCell( i, j+1, k ) ){ vu = vc; }
 					if( isSolidCell( i, j, k-1 ) ){ vb = vc; }
 					if( isSolidCell( i, j, k+1 ) ){ vf = vc; }
-					
+					*/
 					x[IX(i,j,k)] = ( vc + a*( vl+vr+vu+vd+vf+vb ))/c;
 				}
 			}
@@ -351,12 +368,12 @@ void Solver::calcDiv( int N , float *u, float *v, float *w, float *div, float *p
 	for( k=1; k<N+1; ++k ){ 
 		for( j = 1; j<N+1 ; ++j) { 
 			for( i=1 ; i<N+1 ; ++i ){
-				fw = w[IX(i,j,k+1)]; if( isSolidCell( i,j,k+1 ) ) fw = 0;
-				bw = w[IX(i,j,k-1)]; if( isSolidCell( i,j,k-1 ) ) bw = 0;
-				le = u[IX(i-1,j,k)]; if( isSolidCell( i-1,j,k ) ) le = 0;
-				ri = u[IX(i+1,j,k)]; if( isSolidCell( i+1,j,k ) ) ri = 0;
-				up = v[IX(i,j+1,k)]; if( isSolidCell( i,j+1,k ) ) up = 0;
-				dw = v[IX(i,j-1,k)]; if( isSolidCell( i,j-1,k ) ) dw = 0;
+				fw = w[IX(i,j,k+1)]; if( isSolidCell( i,j,k+1 ) ) fw = _srcw[IX(i,j,k+1)];
+				bw = w[IX(i,j,k-1)]; if( isSolidCell( i,j,k-1 ) ) bw = _srcw[IX(i,j,k-1)];
+				le = u[IX(i-1,j,k)]; if( isSolidCell( i-1,j,k ) ) le = _srcu[IX(i-1,j,k)];
+				ri = u[IX(i+1,j,k)]; if( isSolidCell( i+1,j,k ) ) ri = _srcu[IX(i+1,j,k)];
+				up = v[IX(i,j+1,k)]; if( isSolidCell( i,j+1,k ) ) up = _srcv[IX(i,j+1,k)];
+				dw = v[IX(i,j-1,k)]; if( isSolidCell( i,j-1,k ) ) dw = _srcv[IX(i,j-1,k)];
 				div[IX(i,j,k)] = -( le-ri + fw-bw + up-dw)/(2*N);
 				p[IX(i,j,k)] = 0;
 			}
@@ -384,8 +401,8 @@ void Solver::correctVel( int N, float *u, float * v, float *w, float * p){
 					pri = p[IX(i+1,j,k)]; if( isSolidCell( i+1, j,k ) ) { cpb = true ; pri = pc; } 
 					pup = p[IX(i,j+1,k)]; if( isSolidCell( i, j+1,k ) ) { cvb = true ; pup = pc; } 
 					pdw = p[IX(i,j-1,k)]; if( isSolidCell( i, j-1,k ) ) { cvb = true ; pdw = pc; } 
-					pbw = p[IX(i,j,k-1)]; if( isSolidCell( i, j-1,k ) ) { chb = true ; pbw = pc; } 
-					pfw = p[IX(i,j,k+1)]; if( isSolidCell( i, j+1,k ) ) { chb = true ; pfw = pc; } 
+					pbw = p[IX(i,j,k-1)]; if( isSolidCell( i, j,k-1 ) ) { chb = true ; pbw = pc; } 
+					pfw = p[IX(i,j,k+1)]; if( isSolidCell( i, j,k+1 ) ) { chb = true ; pfw = pc; } 
 					u[IX(i,j,k)] -= cpb?0:(ple - pri)/2 ; 
 					v[IX(i,j,k)] -= cvb?0:(pup - pdw)/2 ; 
 					w[IX(i,j,k)] -= chb?0:(pfw - pbw)/2 ; 
@@ -503,13 +520,17 @@ void Solver::velocitiesStep ( float dt )
 void Solver::velocitiesStepWithTemp ( float dt )
 {
 	// Adding sources
+   /*
 	addSource ( _N, _u, _srcu, dt ); 
 	addSource ( _N, _v, _srcv, dt ); 
 	addSource ( _N, _w, _srcw, dt );
+	*/
+	addSource3 ( _N, _u, _srcu,_v, _srcv, _w, _srcw, dt ); 
 	addBuoyancy( _N, _T, _v, SolverParam::getBuoyancyParam(), dt);
 	//vorticity_confinement( _N, _u, _v, _w, 
-	//_u0, _v0, _w0, _T0, 
-	//SolverParam::getVorticityConfinementParam(), dt);
+	//                       _u0, _v0, _w0, _T0, 
+	//                       SolverParam::getVorticityConfinementParam(), 
+	//                       dt);
 
 
 	// speed diffusig due to viscosity
@@ -532,8 +553,14 @@ void Solver::addObject( Object* p ){
 	for (k=0; k<_N+2; k++) {
 		for (j=0; j<_N+2; j++) {
 			for (i=0; i<_N+2; i++) {
-				if( p->isInside( cellToPoint( i,j,k ) ) )
+				if( p->isInside( cellToPoint( i,j,k ) ) ){
 					_filled[IX(i,j,k)] = 1;
+					Vecteur3D t = p->repulsionForceAt( cellToPoint( i,j,k ) );
+					cout << "Vitesse : " ; t.afficher(); cout << endl;
+					_srcu[IX(i,j,k)] = t.x ;
+					_srcv[IX(i,j,k)] = t.y ;
+					_srcw[IX(i,j,k)] = t.z ;
+				}
 			}
 		}
 	}
@@ -542,7 +569,10 @@ void Solver::addObject( Object* p ){
 void Solver::clearFilledInfo(){
 	int* ptr = _filled ;
 	int N = _N;
-	for( int i = 0; i < SIZE; ++i, ++ptr)
-		*ptr = 0;
-	
+	for( int i = 0; i < SIZE; ++i, ++ptr){
+		_filled[i] = 0; 
+		_srcu[i] = 0;
+		_srcv[i] = 0;
+		_srcw[i] = 0;
+	}
 }

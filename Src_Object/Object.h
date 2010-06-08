@@ -10,61 +10,44 @@
  *
  *******************************************************************************/
 #include "BasicEntite.h"
+#include "Voxel.h"
+#include "Vecteur.h"
 #include "SolverParam.h"
+#include <cmath>
+
+#define _Grille_Ind(i,j,k) ((i)+((j)*grilleSize.x)+((k)*grilleSize.x*grilleSize.y))
 
 class Object : public BasicEntite {
 protected :
-	/* attributes */
-	/* diffusion of temperature within object */ 
-	float diffusionParamTemp ; 
-	/* density of the object */
-	float density ; 
-	/* gaz emission rate */
-	float gazEmissionRate ;
-	/* pyrolysis threshold */
-	float pyrolysisThreshold;
-	/* presence info */
-	float *voxel;
-	Vecteur3I voxelSize;
+	Voxel *grille;
+	Vecteur3I grilleSize;
 	
-	/* protected methods */
-	virtual void generateVoxel() = 0 ;
+	virtual generateVoxels() = 0;
 
-public :
+	inline Vecteur3I pointToCell( Vecteur3D p ){
+		Vecteur3I res;
+		res.x = lround((p.x-AABB.lowerCorner.x) / SolverParam::getSpaceDiv()) ;
+		res.y = lround((p.y-AABB.lowerCorner.y) / SolverParam::getSpaceDiv()) ;
+		res.z = lround((p.z-AABB.lowerCorner.z) / SolverParam::getSpaceDiv()) ;
+	}
+
+public:
 	/* constructor */
 	Object();
 	
 	/* destructor */
 	virtual ~Object();
 	
-	/* getters and setters */
-	float getDiffusionParamTemp() ;
-	void  setDiffusionParamTemp( float diff ) ;
 
-	float getDensity() ;
-	void  setDensity( float dens ) ;
-	
-	float getGazEmissionRate() ;
-	void  setGazEmissionRate( float emr ) ;
-
-	float getPyrolysisThreshold() ;
-	void  setPyrolysisThreshold( float pt ) ;
-	
-	/* get presence info */
-	float* getPresenceInfo();
-	Vecteur3I getPresenceInfoSize();
-	virtual bool isInside( Vecteur3D p ) = 0 ;
-
-	inline Vecteur3D cellToPoint( int i, int j , int k ){
-		Vecteur3D res = AABB.lowerCorner ;
-		res.x += i*SolverParam::getSpaceDiv() ;
-		res.y += j*SolverParam::getSpaceDiv() ;
-		res.z += k*SolverParam::getSpaceDiv() ;
-		return res ;
+	inline Voxel getInfo( Vecteur3D point ){
+		Vecteur3I coord = pointToCell( point );
+		return grille[_Grille_Ind(coord.x,coord.y,coord.z)] ;
 	}
 
+	void diffuserTemperature( float dt );
+
 	/* herited methods */
-	virtual void Afficher(float dt) = 0;
+	virtual void Afficher( float dt ) = 0;
 	virtual void Afficher_Face_Camera(Vecteur3D& positionCamera,
 					  Vecteur3D& directionCamera,
 					  float dt ) ; 

@@ -1,0 +1,36 @@
+Description : description des interactions entre le models d'object et
+le modèle de fluide
+
+interactions nécaissaires entre les modeles :
+!- echange des informations de présence entre les objets et le fluide
+!- echange des information de temperature ( dans les deux sens )
+!- apport de combustible par les objets
+!- echange des information de vitese entre les objets et le fluide           
+
+class Solver :
+nouveaux attributs:
+	 filled   : Voxel[]
+nouvelles methodes:
+	  updateInfo( Object ) : void     // recupere les info de presence, temperature,
+	  	      	       	 	  // combustible et de vitesse
+
+class object :
+attributs:
+	voxel    : Voxel[]
+	voxelSize : Vec3
+	AABB     : BoundingBox
+methodes:
+	getInfo( point : Vec3 ) : Voxel*
+	diffuserTemperature( dt ) : void // diffuse && genere combustible en surface
+	
+
+struct Voxel :
+attributs :
+	plein              : bool     	       
+	frontiere          : bool
+	combustibleRestant : float
+	temperature        : float
+	repulsion          : Vec3
+	tauxDeConversion   : float
+	temperatureThreshold : float
+	conductionTermite  : float

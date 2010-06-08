@@ -18,12 +18,6 @@ protected :
 	
 	virtual void generateVoxel() ;
 	void         generateDisplayList(int nb_plans, int nb_quarts);
-public :
-	Sphere( float radius, Vecteur4D color, 
-		int nb_plans, int nb_quarts);
-	~Sphere();
-	
-	virtual void Afficher(float dt);
 
 	inline bool isInside( Vecteur3D p ){
 		Vecteur3D dist = position - p;
@@ -33,7 +27,13 @@ public :
 		return false ;
 	}
 
- 
+public :
+	Sphere( float radius, Vecteur4D color, 
+		int nb_plans, int nb_quarts);
+	~Sphere();
+	
+	virtual void Afficher(float dt);
+
 };
 
 #endif

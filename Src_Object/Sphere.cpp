@@ -12,7 +12,6 @@
 #include <vector>
 using namespace std;
 
-#define IJK( i , j , k ) ((i)+((j)*voxelSize.x)+((k)*voxelSize.x*voxelSize.y))
 static bool zero( float f ){
 	if( fabs( f ) < TINY_FLOAT )
 		return true;
@@ -23,18 +22,13 @@ Sphere::Sphere( float radius, Vecteur4D color,
 		int nb_plans, int nb_quarts  )
 	:radius(radius),color(color)
 {
-	diffusionParamTemp = 0 ;
-	density = 0 ;
-	gazEmissionRate = 0;
-	pyrolysisThreshold = FLT_MAX ;
-	
 	// compute AABB
 	float spaceDiv  = SolverParam::getSpaceDiv();
 	AABB = BoundingBox( Vecteur3D(-radius-spaceDiv ,-radius -spaceDiv ,-radius - spaceDiv),
 			    Vecteur3D(radius + spaceDiv ,radius + spaceDiv ,radius + spaceDiv) );
 
 	generateDisplayList( nb_plans, nb_quarts );
-	generateVoxel();
+	generateVoxels();
 }
 
 Sphere::~Sphere(){
@@ -112,9 +106,9 @@ void Sphere::generateVoxel() {
 		for( int j = 0 ; j < nb_y ; ++j ){
 			for( int i = 0 ; i < nb_x ; ++i ){
 				if( isInside( cellToPoint( i , j , k ) ) )
-					voxel[IJK(i,j,k)] = -1 ;
+					grille[_Grille_Ind(i,j,k)] = Voxel();
 				else
-					voxel[IJK(i,j,k)] = 1 ;					
+					grille[_Grille_Ind(i,j,k)] = Voxel() ;					
 		        }
 		}
 	}

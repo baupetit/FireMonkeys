@@ -21,6 +21,13 @@ void        Noeud::setAABB( const BoundingBox& AABB ){
 	this->AABB = AABB ;
 }
 
+Vecteur3D Noeud::getVitesse(){
+	return vitesse;
+}
+void Noeud::setVitesse( const Vecteur3D& v ){
+	vitesse = v;
+}
+
 /* others usefull stuff */
 void        Noeud::translate( const Vecteur3D& tr ){
 	AABB.translate( tr );
