@@ -11,6 +11,8 @@ Object::Object( Voxel defVox )
 	grille = 0;
 }
 
+void Object::diffusertemperature( float dt ){
+}
 
 /* destructor */
 Object::~Object(){
