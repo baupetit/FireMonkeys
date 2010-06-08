@@ -547,6 +547,7 @@ void Solver::velocitiesStepWithTemp ( float dt )
 	project ( _N, _u, _v, _w, _u0, _v0 );
 }
 
+
 void Solver::addObject( Object* p ){
 	int i,j,k ;
 	int N = _N;
@@ -567,12 +568,17 @@ void Solver::addObject( Object* p ){
 }
 
 void Solver::clearFilledInfo(){
-	int* ptr = _filled ;
+	Voxel* ptr = _filled ;
 	int N = _N;
 	for( int i = 0; i < SIZE; ++i, ++ptr){
-		_filled[i] = 0; 
+		_filled[i] = Voxel(); 
 		_srcu[i] = 0;
 		_srcv[i] = 0;
 		_srcw[i] = 0;
 	}
+}
+
+
+
+void Solver::updateInfo( Object& o){
 }
