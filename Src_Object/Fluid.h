@@ -24,6 +24,8 @@
 #include <GL/glut.h>
 #include <GL/gl.h>
 
+#include <list>
+
 class Fluid : public BasicEntite {
 
 private :
@@ -51,10 +53,10 @@ private :
 	Shader *renderer;
 
 	/** Liste d'objet */
-	Object *obj;	
+	list<Object *> obj;	
 
 public :
-	Fluid(Object *obj);
+	Fluid(list<Object *>obj);
 	~Fluid();
 	
 private:

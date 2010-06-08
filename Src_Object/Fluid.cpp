@@ -20,7 +20,7 @@ static inline float getTempVal( int i, int j, int T ){
 	return val * ((random()+1)/(float)RAND_MAX)*4;
 }
 
-Fluid::Fluid(Object *obj)
+Fluid::Fluid(list<Object *> obj)
 	:obj(obj)
 {
         tailleGrille = 40;
@@ -55,7 +55,7 @@ Fluid::Fluid(Object *obj)
 			   Vecteur3D(  tailleGrille*spaceDiv/2,  tailleGrille*spaceDiv/2,  tailleGrille*spaceDiv/2 ) );
 
 	//translate(Vecteur3D( 1, 0, 1 ));
-	obj->translate(Vecteur3D( +0.3,+0.5,0));
+	//obj->translate(Vecteur3D( +0.3,+0.5,0));
 
 }
 
