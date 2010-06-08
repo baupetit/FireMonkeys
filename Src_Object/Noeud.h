@@ -19,6 +19,7 @@ protected :
 	Vecteur3D position;
 	//Vecteur3D echelle; on s'en sert pas
 	Vecteur3D anglesEuler;
+	Vecteur3D vitesse ;
 	
 	BoundingBox AABB;
 public:
@@ -38,6 +39,8 @@ public:
 	BoundingBox getAABB();
 	void        setAABB( const BoundingBox& AABB );
 	
+	Vecteur3D getVitesse();
+	void setVitesse( const Vecteur3D& v );
 
 	/* others usefull stuff */
 	void        translate( const Vecteur3D& tr );

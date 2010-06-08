@@ -23,7 +23,7 @@ static inline float getTempVal( int i, int j, int T ){
 Fluid::Fluid(Object *obj)
 	:obj(obj)
 {
-        tailleGrille = 30;
+        tailleGrille = 40;
         s = new Solver(tailleGrille);
 	tempIndex = new TempToRGB(256,50);
 		
@@ -55,7 +55,7 @@ Fluid::Fluid(Object *obj)
 			   Vecteur3D(  tailleGrille*spaceDiv/2,  tailleGrille*spaceDiv/2,  tailleGrille*spaceDiv/2 ) );
 
 	//translate(Vecteur3D( 1, 0, 1 ));
-	obj->translate(Vecteur3D( 0,-01.0,0));
+	obj->translate(Vecteur3D( +0.3,+0.5,0));
 
 	s->clearFilledInfo();
 	if( intersect( AABB, obj->getAABB() ) ){
@@ -72,7 +72,7 @@ Fluid::~Fluid(){
 
 void Fluid::Afficher_Face_Camera(Vecteur3D& positionCamera, Vecteur3D& directionCamera, float dt ){
 	Mise_A_Jour(0.1);
-
+/*
 	glPointSize( 2.0f );
 	glDisable(GL_LIGHTING);
 
@@ -97,7 +97,7 @@ void Fluid::Afficher_Face_Camera(Vecteur3D& positionCamera, Vecteur3D& direction
 	}
 	glEnd();
 	glEnable(GL_LIGHTING);
-
+*/
 	//renduFumeeGPUFaceCamera(positionCamera, directionCamera);
 	//renduFlammeGPUFaceCamera(positionCamera, directionCamera);
 	renduFlammeETFumeeGPUFaceCamera(400, positionCamera, directionCamera);
