@@ -16,7 +16,7 @@ protected :
 	GLuint drawList ;
 	Vecteur4D color ;
 	
-	virtual void generateVoxel() ;
+	virtual void generateVoxels() ;
 	void         generateDisplayList(int nb_plans, int nb_quarts);
 
 	inline bool isInside( Vecteur3D p ){
