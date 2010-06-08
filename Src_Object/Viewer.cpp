@@ -133,17 +133,17 @@ void Viewer::_keyboardFunc(unsigned char key, int x, int y){
 	switch (key) {
 	case 'a' :
 		cout << "diminution de la diffusion pour la feu " << SolverParam::getDiffusionParamFire() << endl;
-		if (SolverParam::getDiffusionParamFire() - 0.0001 > 0)
+		if (SolverParam::getDiffusionParamFire() - 0.0001 >= 0)
 		SolverParam::setDiffusionParamFire( SolverParam::getDiffusionParamFire() - 0.0001  ) ;
 		break;
 	case 'z' :
 		cout << "diminution de la diffusion pour la fumée " << SolverParam::getDiffusionParamSmoke()  << endl;
-		if (SolverParam::getDiffusionParamSmoke() - 0.000001 > 0)
+		if (SolverParam::getDiffusionParamSmoke() - 0.000001 >= 0)
 		SolverParam::setDiffusionParamSmoke( SolverParam::getDiffusionParamSmoke() - 0.000001  ) ;
 		break;
 	case 'e' :
 		cout << "diminution de la diffusion pour la température " << SolverParam::getDiffusionParamTemperature()  << endl;
-		if (SolverParam::getDiffusionParamTemperature() - 0.0001 > 0)
+		if (SolverParam::getDiffusionParamTemperature() - 0.0001 >= 0)
 		SolverParam::setDiffusionParamTemperature( SolverParam::getDiffusionParamTemperature() - 0.0001  ) ;
 		break;
 	case 'q' :
@@ -160,7 +160,7 @@ void Viewer::_keyboardFunc(unsigned char key, int x, int y){
 		break;
 	case 'r' :
 		cout << "diminution du cool " << SolverParam::getCoolingParam()  << endl;
-		if (SolverParam::getCoolingParam() - 0.01 > 0)
+		if (SolverParam::getCoolingParam() - 0.01 >= 0)
 		SolverParam::setCoolingParam( SolverParam::getCoolingParam() - 0.01  ) ;
 		break;
 	case 'f' :
@@ -169,7 +169,7 @@ void Viewer::_keyboardFunc(unsigned char key, int x, int y){
 		break;
 	case 't' :
 		cout << "diminution de la consommation " << SolverParam::getConsumingParam()  << endl;
-		if (SolverParam::getConsumingParam() - 0.01 > 0)
+		if (SolverParam::getConsumingParam() - 0.01 >= 0)
 		SolverParam::setConsumingParam( SolverParam::getConsumingParam() - 0.01  ) ;
 		break;
 	case 'g' :
@@ -178,16 +178,16 @@ void Viewer::_keyboardFunc(unsigned char key, int x, int y){
 		break;
 	case 'y' :
 		cout << "diminution de la conversion " << SolverParam::getFireToSmokeParam()  << endl;
-		if (SolverParam::getFireToSmokeParam() - 10.0 > 0)
-		SolverParam::setFireToSmokeParam( SolverParam::getFireToSmokeParam() - 10.0  ) ;
+		if (SolverParam::getFireToSmokeParam() - 0.01 >= 0)
+			SolverParam::setFireToSmokeParam( SolverParam::getFireToSmokeParam() - 0.01  ) ;
 		break;
 	case 'h' :
 		cout << "augmentation de la conversion " << SolverParam::getFireToSmokeParam()  << endl;
-		SolverParam::setFireToSmokeParam( SolverParam::getFireToSmokeParam() + 10.0  ) ;
+		SolverParam::setFireToSmokeParam( SolverParam::getFireToSmokeParam() + 0.01  ) ;
 		break;
 	case 'u' :
 		cout << "diminution de la viscosité " << SolverParam::getViscosityParam()  << endl;
-		if (SolverParam::getViscosityParam() - 0.0001 > 0)
+		if (SolverParam::getViscosityParam() - 0.0001 >= 0)
 		SolverParam::setViscosityParam( SolverParam::getViscosityParam() - 0.0001  ) ;
 		break;
 	case 'j' :
@@ -196,7 +196,7 @@ void Viewer::_keyboardFunc(unsigned char key, int x, int y){
 		break;
 	case 'i' :
 		cout << "diminution de la buyoancy " << SolverParam::getBuoyancyParam() << endl;
-		if (SolverParam::getBuoyancyParam() - 0.01 > 0)
+		if (SolverParam::getBuoyancyParam() - 0.01 >= 0)
 		SolverParam::setBuoyancyParam( SolverParam::getBuoyancyParam() - 0.01  ) ;
 		break;
 	case 'k' :
@@ -205,7 +205,7 @@ void Viewer::_keyboardFunc(unsigned char key, int x, int y){
 		break;	
 	case 'o' :
 		cout << "diminution de la vortexité " << SolverParam::getVorticityConfinementParam() << endl;
-		if (SolverParam::getVorticityConfinementParam() - 0.01 > 0)
+		if (SolverParam::getVorticityConfinementParam() - 0.01 >= 0)
 		SolverParam::setVorticityConfinementParam( SolverParam::getVorticityConfinementParam() - 0.01  ) ;
 		break;
 	case 'l' :

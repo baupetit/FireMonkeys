@@ -7,6 +7,8 @@
 #include "SolverParam.h"
 #include <cmath>
 
+//#define MAX(a,b) (((a)>(b))?(a):(b))
+
 inline void SWAP( float* &a , float* &b){
 	float *tmp = a ;
 	a = b ;
@@ -130,6 +132,23 @@ void Solver::addBuoyancy( int N, float *T, float *v, float buoy, float dt)
 	for( int i = 0; i < SIZE ; i++ ) v[i] += T[i]*buoy*dt;	
 }
 
+void Solver::combustion( int N , float *d, float *f, float *T, 
+			 float consume, float fireToSmoke, float dt )
+{
+	int i,j,k,ijk;
+	for( k=1; k<N+1; ++k ){ 
+		for( j = 1; j<N+1 ; ++j) { 
+			for( i=1 ; i<N+1 ; ++i ){
+				ijk = IX(i,j,k);
+				//T[ijk] += fmax(0, d[ijk] - consume*dt )*consume/fireToSmoke;
+				float tmp = d[ijk];
+				d[ijk] = fmax(0, d[ijk] - consume*dt );
+				f[ijk] += (tmp-d[ijk])*fireToSmoke;
+			}
+		}
+	}
+}
+
 void Solver::setBoundaries ( int N, int b, float *x )
 {
 #ifdef _BOUNDARIES_SOLVE_
@@ -185,16 +204,28 @@ void Solver::setBoundariesB0 ( int N, float *x )
 void Solver::linearSolve ( int N, int b, float * x, float * x0, float a, float c )
 {
 	int i, j, k, l;
+	//float cprime = c ;
+	float vu, vd, vl, vr, vf, vb, vc;
 	for ( l=0 ; l<NB_ITERATION_SOLVE ; l++ ) {
 		for( k=1; k<N+1; ++k ){ 
 			for( j = 1; j<N+1 ; ++j) { 
 				for( i=1 ; i<N+1 ; ++i ){
-					x[IX(i,j,k)] = ( x0[IX(i,j,k)] + a*( x[IX(i-1,j,k)] +
-									     x[IX(i+1,j,k)] +
-									     x[IX(i,j-1,k)] +
-									     x[IX(i,j+1,k)] +
-									     x[IX(i,j,k-1)] +
-									     x[IX(i,j,k+1)] ))/c;
+					vc = x0[IX(i,j,k)];
+					vl = x[IX(i-1,j,k)];
+					vr = x[IX(i+1,j,k)];
+					vu = x[IX(i,j+1,k)];
+					vd = x[IX(i,j-1,k)];
+					vf = x[IX(i,j,k+1)];
+					vb = x[IX(i,j,k-1)];
+					
+					if( isSolidCell( i-1, j, k ) ){ vl = vc; }
+					if( isSolidCell( i+1, j, k ) ){ vr = vc; }
+					if( isSolidCell( i, j-1, k ) ){ vd = vc; }
+					if( isSolidCell( i, j+1, k ) ){ vu = vc; }
+					if( isSolidCell( i, j, k-1 ) ){ vb = vc; }
+					if( isSolidCell( i, j, k+1 ) ){ vf = vc; }
+					
+					x[IX(i,j,k)] = ( vc + a*( vl+vr+vu+vd+vf+vb ))/c;
 				}
 			}
 		}
@@ -215,50 +246,7 @@ void Solver::diffuseFireAndSmoke ( int N, int b1, int b2, int b3,
 				   float diffFire, float diffSmoke, float diffTemp, 
 				   float dt )
 {
-	float a1=dt*diffFire*N*N;
-	float a2=dt*diffSmoke*N*N;
-	float a3=dt*diffTemp*N*N;
-	float c1=1+6*a1;
-	float c2=1+6*a2;
-	float c3=1+6*a3;
-	
-	//linearSolve ( N, b, x, x0, a, 1+6*a );
-	int i, j, k, l, ijk;
-	
-	for ( l=0 ; l<NB_ITERATION_SOLVE ; l++ ) {
-		for( k=1; k<N+1; ++k ){ 
-			for( j = 1; j<N+1 ; ++j) { 
-				for( i=1 ; i<N+1 ; ++i ){
-					ijk = IX(i,j,k);
-					// Fire
-					x[ijk] = ( x0[ijk] + a1*( x[IX(i-1,j,k)] +
-								  x[IX(i+1,j,k)] +
-								  x[IX(i,j-1,k)] +
-								  x[IX(i,j+1,k)] +
-								  x[IX(i,j,k-1)] +
-								  x[IX(i,j,k+1)] ))/c1;
-					// Smoke
-					f[ijk] = ( f0[ijk] + a2*( f[IX(i-1,j,k)] +
-								  f[IX(i+1,j,k)] +
-								  f[IX(i,j-1,k)] +
-								  f[IX(i,j+1,k)] +
-								  f[IX(i,j,k-1)] +
-								  f[IX(i,j,k+1)] ))/c2;
-					// Temp
-					t[ijk] = ( t0[ijk] + a3*( t[IX(i-1,j,k)] +
-								  t[IX(i+1,j,k)] +
-								  t[IX(i,j-1,k)] +
-								  t[IX(i,j+1,k)] +
-								  t[IX(i,j,k-1)] +
-								  t[IX(i,j,k+1)] ))/c3;
-					
-				}
-			}
-		}
-		setBoundariesB0 ( N, x );
-		setBoundariesB0 ( N, f );
-		setBoundariesB0 ( N, t );
-	}
+	/* RIEN OBSOLETE */
 }
 
 void Solver::advect ( int N, int b, float * d, float * d0, float * u, float * v, float *w, float dt )
@@ -267,24 +255,40 @@ void Solver::advect ( int N, int b, float * d, float * d0, float * u, float * v,
 	float x, y, z, s0, t0, r0, s1, t1, r1, dt0;
 	float rhs, lhs ;
 
+	float aa, ab, ac, ad, ba, bb, bc, bd;
+
 	dt0 = dt*N;
 	for( k=1; k<N+1; ++k ){ 
 		for( j = 1; j<N+1 ; ++j) { 
 			for( i=1 ; i<N+1 ; ++i ){
-				x = i-dt0*u[IX(i,j,k)] ; y = j-dt0*v[IX(i,j,k)];	z = k-dt0*w[IX(i,j,k)];
+				if( isSolidCell( i,j,k ) ) d[IX(i,j,k)] = 0;
+				else {
+					x = i-dt0*u[IX(i,j,k)] ; y = j-dt0*v[IX(i,j,k)]; z = k-dt0*w[IX(i,j,k)];
+					
+					if (x<0.5f) x=0.5f; if (x>N+0.5f) x=N+0.5f; i0=(int)x; i1=i0+1;			
+					if (y<0.5f) y=0.5f; if (y>N+0.5f) y=N+0.5f; j0=(int)y; j1=j0+1;
+					if (z<0.5f) z=0.5f; if (z>N+0.5f) z=N+0.5f; k0=(int)z; k1=k0+1;
+					
+					s1 = (x-i0); s0 = 1-s1; t1 = (y-j0); t0 = 1-t1; r1 = (z-k0); r0 = 1-r1;
 
-				if (x<0.5f) x=0.5f; if (x>N+0.5f) x=N+0.5f; i0=(int)x; i1=i0+1;			
-				if (y<0.5f) y=0.5f; if (y>N+0.5f) y=N+0.5f; j0=(int)y; j1=j0+1;				
-				if (z<0.5f) z=0.5f; if (z>N+0.5f) z=N+0.5f; k0=(int)z; k1=k0+1;
-				
-				s1 = (x-i0); s0 = 1-s1; t1 = (y-j0); t0 = 1-t1; r1 = (z-k0); r0 = 1-r1;
-				
-				rhs = (t0*(r0*d0[IX(i0,j0,k0)] + r1*d0[IX(i0,j0,k1)]) + 
-				       t1*(r0*d0[IX(i0,j1,k0)] + r1*d0[IX(i0,j1,k1)]));
-				lhs = (t0*(r0*d0[IX(i1,j0,k0)] + r1*d0[IX(i1,j0,k1)]) + 
-				       t1*(r0*d0[IX(i1,j1,k0)] + r1*d0[IX(i1,j1,k1)]));
-
-				d[IX(i,j,k)] = (s0*rhs + s1*lhs );
+					
+					aa = d0[IX(i0,j0,k0)]; //if( isSolidCell( i0, j0, k0 ) ) aa = 0 ;
+					ab = d0[IX(i0,j0,k1)]; //if( isSolidCell( i0, j0, k1 ) ) ab = 0 ;
+					ac = d0[IX(i0,j1,k0)]; //if( isSolidCell( i0, j1, k0 ) ) ac = 0 ;
+					ad = d0[IX(i0,j1,k1)]; //if( isSolidCell( i0, j1, k1 ) ) ad = 0 ;
+					  
+					ba = d0[IX(i1,j0,k0)]; //if( isSolidCell( i1, j0, k0 ) ) ba = 0 ;
+					bb = d0[IX(i1,j0,k1)]; //if( isSolidCell( i1, j0, k1 ) ) bb = 0 ;
+					bc = d0[IX(i1,j1,k0)]; //if( isSolidCell( i1, j1, k0 ) ) bc = 0 ;
+					bd = d0[IX(i1,j1,k1)]; //if( isSolidCell( i1, j1, k1 ) ) bd = 0 ;
+					
+					rhs = (t0*(r0*aa + r1*ab) + 
+					       t1*(r0*ac + r1*ad));
+					lhs = (t0*(r0*ba + r1*bb) + 
+					       t1*(r0*bc + r1*bd));
+					
+					d[IX(i,j,k)] = (s0*rhs + s1*lhs );
+				}
 			}
 		}
 	}
@@ -292,93 +296,113 @@ void Solver::advect ( int N, int b, float * d, float * d0, float * u, float * v,
 } 
 
 void Solver::advect_cool ( int N, int b, 
-			   float * d, float * d0, float *f, float *f0, 
-			   float *T, float *T0,
+			   float * d, float * d0, 
 			   float * u, float * v, float *w, 
-			   float cool, float consume, float taux_conversion_fire_to_smoke,
 			   float dt )
 {
 	int i, j, k, i0, j0, k0, i1, j1, k1;
 	float x, y, z, s0, t0, r0, s1, t1, r1, dt0;
-	float rhs, lhs, c0 ,diff_fire2smoke;
+	float rhs, lhs, c0;
+	float aa, ab, ac, ad, ba, bb, bc, bd;
 
 	dt0 = dt*N;
-	c0 = 1.0f - cool*dt;
+	c0 = 1.0f - SolverParam::getCoolingParam()*dt;
 	for( k=1; k<N+1; ++k ){ 
 		for( j = 1; j<N+1 ; ++j) { 
 			for( i=1 ; i<N+1 ; ++i ){
-				x = i-dt0*u[IX(i,j,k)]; y = j-dt0*v[IX(i,j,k)];	z = k-dt0*w[IX(i,j,k)];
-
-				if (x<0.5f) x=0.5f; if (x>N+0.5f) x=N+0.5f; i0=(int)x; i1=i0+1;			
-				if (y<0.5f) y=0.5f; if (y>N+0.5f) y=N+0.5f; j0=(int)y; j1=j0+1;				
-				if (z<0.5f) z=0.5f; if (z>N+0.5f) z=N+0.5f; k0=(int)z; k1=k0+1;
-				
-				s1 = (x-i0); s0 = 1-s1; t1 = (y-j0); t0 = 1-t1; r1 = (z-k0); r0 = 1-r1;
-				
-				rhs = (t0*(r0*d0[IX(i0,j0,k0)] + r1*d0[IX(i0,j0,k1)]) + 
-				       t1*(r0*d0[IX(i0,j1,k0)] + r1*d0[IX(i0,j1,k1)]));
-				lhs = (t0*(r0*d0[IX(i1,j0,k0)] + r1*d0[IX(i1,j0,k1)]) + 
-				       t1*(r0*d0[IX(i1,j1,k0)] + r1*d0[IX(i1,j1,k1)]));
-
-				
-				rhs = (s0*rhs + s1*lhs) - consume / (10*T[IX(i,j,k)]) ;
-				d[IX(i,j,k)] = ( rhs < 0 ) ? 0 : rhs ;
-				diff_fire2smoke = d[IX(i,j,k)] - d0[IX(i,j,k)];
-				
-				
-				rhs = (t0*(r0*f0[IX(i0,j0,k0)] + r1*f0[IX(i0,j0,k1)]) + 
-				       t1*(r0*f0[IX(i0,j1,k0)] + r1*f0[IX(i0,j1,k1)]));
-				lhs = (t0*(r0*f0[IX(i1,j0,k0)] + r1*f0[IX(i1,j0,k1)]) + 
-				       t1*(r0*f0[IX(i1,j1,k0)] + r1*f0[IX(i1,j1,k1)]));
-
-
-				f[IX(i,j,k)] = (diff_fire2smoke < 0 ) ? (s0*rhs + s1*lhs ) - diff_fire2smoke/taux_conversion_fire_to_smoke : (s0*rhs + s1*lhs );
-
-				
-				rhs = (t0*(r0*T0[IX(i0,j0,k0)] + r1*T0[IX(i0,j0,k1)]) + 
-				       t1*(r0*T0[IX(i0,j1,k0)] + r1*T0[IX(i0,j1,k1)]));
-				lhs = (t0*(r0*T0[IX(i1,j0,k0)] + r1*T0[IX(i1,j0,k1)]) + 
-				       t1*(r0*T0[IX(i1,j1,k0)] + r1*T0[IX(i1,j1,k1)]));
-
-				T[IX(i,j,k)] = (s0*rhs + s1*lhs )*c0 ;
+				if( isSolidCell( i,j,k ) ) d[IX(i,j,k)] = 0;
+				else {
+					x = i-dt0*u[IX(i,j,k)] ; y = j-dt0*v[IX(i,j,k)]; z = k-dt0*w[IX(i,j,k)];
+					
+					if (x<0.5f) x=0.5f; if (x>N+0.5f) x=N+0.5f; i0=(int)x; i1=i0+1;			
+					if (y<0.5f) y=0.5f; if (y>N+0.5f) y=N+0.5f; j0=(int)y; j1=j0+1;
+					if (z<0.5f) z=0.5f; if (z>N+0.5f) z=N+0.5f; k0=(int)z; k1=k0+1;
+					
+					s1 = (x-i0); s0 = 1-s1; t1 = (y-j0); t0 = 1-t1; r1 = (z-k0); r0 = 1-r1;
+					
+					aa = d0[IX(i0,j0,k0)]; //if( isSolidCell( i0, j0, k0 ) ) aa = 0 ;
+					ab = d0[IX(i0,j0,k1)]; //if( isSolidCell( i0, j0, k1 ) ) ab = 0 ;
+					ac = d0[IX(i0,j1,k0)]; //if( isSolidCell( i0, j1, k0 ) ) ac = 0 ;
+					ad = d0[IX(i0,j1,k1)]; //if( isSolidCell( i0, j1, k1 ) ) ad = 0 ;
+					  
+					ba = d0[IX(i1,j0,k0)]; //if( isSolidCell( i1, j0, k0 ) ) ba = 0 ;
+					bb = d0[IX(i1,j0,k1)]; //if( isSolidCell( i1, j0, k1 ) ) bb = 0 ;
+					bc = d0[IX(i1,j1,k0)]; //if( isSolidCell( i1, j1, k0 ) ) bc = 0 ;
+					bd = d0[IX(i1,j1,k1)]; //if( isSolidCell( i1, j1, k1 ) ) bd = 0 ;
+					
+					rhs = (t0*(r0*aa + r1*ab) + 
+					       t1*(r0*ac + r1*ad));
+					lhs = (t0*(r0*ba + r1*bb) + 
+					       t1*(r0*bc + r1*bd));
+					
+					d[IX(i,j,k)] = (s0*rhs + s1*lhs )*c0;
+				}
 			}
 		}
 	}
 	setBoundaries ( N, b, d );
 }
 
+void Solver::calcDiv( int N , float *u, float *v, float *w, float *div, float *p ){
+	int i,j,k;
 
-void Solver::project ( int N, float * u, float * v, float *w, float * p, float * div )
-{
-	
-	int i, j, k;
+	float fw,bw,le,ri,up,dw;
 
 	for( k=1; k<N+1; ++k ){ 
 		for( j = 1; j<N+1 ; ++j) { 
 			for( i=1 ; i<N+1 ; ++i ){
-				div[IX(i,j,k)] = -(u[IX(i+1,j,k)]-u[IX(i-1,j,k)]+
-						   v[IX(i,j+1,k)]-v[IX(i,j-1,k)]+
-						   w[IX(i,j,k+1)]-w[IX(i,j,k-1)] )/(3*N);
+				fw = w[IX(i,j,k+1)]; if( isSolidCell( i,j,k+1 ) ) fw = 0;
+				bw = w[IX(i,j,k-1)]; if( isSolidCell( i,j,k-1 ) ) bw = 0;
+				le = u[IX(i-1,j,k)]; if( isSolidCell( i-1,j,k ) ) le = 0;
+				ri = u[IX(i+1,j,k)]; if( isSolidCell( i+1,j,k ) ) ri = 0;
+				up = v[IX(i,j+1,k)]; if( isSolidCell( i,j+1,k ) ) up = 0;
+				dw = v[IX(i,j-1,k)]; if( isSolidCell( i,j-1,k ) ) dw = 0;
+				div[IX(i,j,k)] = -( le-ri + fw-bw + up-dw)/(2*N);
 				p[IX(i,j,k)] = 0;
 			}
 		}
 	}	
 	setBoundaries ( N, 0, div ); setBoundaries ( N, 0, p );
+}
 
-	linearSolve ( N, 0, p, div, 1, 6 );
+void Solver::correctVel( int N, float *u, float * v, float *w, float * p){
+	int i, j, k;
+	
+	float pfw,pbw,ple,pri,pup,pdw, pc;
+	bool  cpb = false ,cvb= false ,chb = false  ;
 
 	for( k=1; k<N+1; ++k ){ 
 		for( j = 1; j<N+1 ; ++j) { 
 			for( i=1 ; i<N+1 ; ++i ){
-				u[IX(i,j,k)] -= N*(p[IX(i+1,j,k)]-p[IX(i-1,j,k)])/3;
-				v[IX(i,j,k)] -= N*(p[IX(i,j+1,k)]-p[IX(i,j-1,k)])/3;
-				w[IX(i,j,k)] -= N*(p[IX(i,j,k+1)]-p[IX(i,j,k-1)])/3;
+				if( isSolidCell( i,j,k ) ) {
+					u[IX(i,j,k)] = 0;
+					v[IX(i,j,k)] = 0;
+					w[IX(i,j,k)] = 0;
+				} else {
+					pc = p[IX(i,j,k)];
+					ple = p[IX(i-1,j,k)]; if( isSolidCell( i-1, j,k ) ) { cpb = true ; ple = pc; } 
+					pri = p[IX(i+1,j,k)]; if( isSolidCell( i+1, j,k ) ) { cpb = true ; pri = pc; } 
+					pup = p[IX(i,j+1,k)]; if( isSolidCell( i, j+1,k ) ) { cvb = true ; pup = pc; } 
+					pdw = p[IX(i,j-1,k)]; if( isSolidCell( i, j-1,k ) ) { cvb = true ; pdw = pc; } 
+					pbw = p[IX(i,j,k-1)]; if( isSolidCell( i, j-1,k ) ) { chb = true ; pbw = pc; } 
+					pfw = p[IX(i,j,k+1)]; if( isSolidCell( i, j+1,k ) ) { chb = true ; pfw = pc; } 
+					u[IX(i,j,k)] -= cpb?0:(ple - pri)/2 ; 
+					v[IX(i,j,k)] -= cvb?0:(pup - pdw)/2 ; 
+					w[IX(i,j,k)] -= chb?0:(pfw - pbw)/2 ; 
+				}
 			}
 		}
 	}
 	setBoundaries ( N, 1, u ); 
 	setBoundaries ( N, 2, v ); 
 	setBoundaries( N, 3, w);
+}
+
+void Solver::project ( int N, float * u, float * v, float *w, float * p, float * div )
+{
+	calcDiv( N, u, v, w, div, p);
+	linearSolve ( N, 0, p, div, 1, 6 );
+	correctVel( N, u, v, w, p);
 }
 
 void Solver::vorticity_confinement( int N, float *u, float *v, float *w, 
@@ -444,12 +468,13 @@ void Solver::densitiesStepWithTemp ( float dt )
 	addSource ( _N, _d, _srcd, dt );
 	addSource ( _N, _T, _srcT, dt );
 	SWAP ( _d0, _d ); diffuse ( _N, 0, _d, _d0, SolverParam::getDiffusionParamFire() , dt );
-	SWAP ( _f0, _f ); diffuse ( _N, 0, _f, _f0, SolverParam::getDiffusionParamFire() , dt );
-	SWAP ( _T0, _T ); diffuse ( _N, 0, _T, _T0, SolverParam::getDiffusionParamFire() , dt );
+	SWAP ( _f0, _f ); diffuse ( _N, 0, _f, _f0, SolverParam::getDiffusionParamSmoke() , dt );
+	SWAP ( _T0, _T ); diffuse ( _N, 0, _T, _T0, SolverParam::getDiffusionParamTemperature() , dt );
 	
 	SWAP ( _d0, _d ); advect ( _N, 0, _d, _d0, _u, _v, _w, dt );
 	SWAP ( _f0, _f ); advect ( _N, 0, _f, _f0, _u, _v, _w, dt );
-	SWAP ( _T0, _T ); advect ( _N, 0, _T, _T0, _u, _v, _w, dt );
+	SWAP ( _T0, _T ); advect_cool ( _N, 0, _T, _T0, _u, _v, _w, dt );
+	combustion( _N, _d, _f, _T, SolverParam::getConsumingParam(),SolverParam::getFireToSmokeParam(), dt );
 }
 
 
@@ -482,9 +507,9 @@ void Solver::velocitiesStepWithTemp ( float dt )
 	addSource ( _N, _v, _srcv, dt ); 
 	addSource ( _N, _w, _srcw, dt );
 	addBuoyancy( _N, _T, _v, SolverParam::getBuoyancyParam(), dt);
-	vorticity_confinement( _N, _u, _v, _w, 
-			       _u0, _v0, _w0, _T0, 
-			       SolverParam::getVorticityConfinementParam(), dt);
+	//vorticity_confinement( _N, _u, _v, _w, 
+	//_u0, _v0, _w0, _T0, 
+	//SolverParam::getVorticityConfinementParam(), dt);
 
 
 	// speed diffusig due to viscosity

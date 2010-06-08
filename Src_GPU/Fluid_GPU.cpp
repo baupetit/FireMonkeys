@@ -13,9 +13,9 @@ Fluid_GPU::Fluid_GPU(){
 	_grille_depth  = TAILLE_GRILLE;
 	*/
 
-	_grille_width  = 60;
-	_grille_height = 60;
-	_grille_depth  = 60;
+	_grille_width  = 45;
+	_grille_height = 45;
+	_grille_depth  = 45;
 
 
 	s = NULL;
@@ -54,19 +54,24 @@ void Fluid_GPU::resolutionFluid(){
 void Fluid_GPU::Afficher(){
 	// MAJ
 	resolutionFluid();
-    
-    
 
 	// Affichage
 	afficherFlamme();
 }
 
 void Fluid_GPU::Afficher_Face_Camera(Vecteur3D& positionCamera, Vecteur3D& orientationCamera){
+
+	// MAJ
+	resolutionFluid();
+
+	// Affichage
+	dessinerPlansDansTexture3DFaceALaCamera(s->getDensities(),40, positionCamera, orientationCamera);
+	
 }
 
 void Fluid_GPU::afficherFlamme(){
 	// Feu
-	dessinerPlansDansTexture3D(s->getDensities(),100);
+	dessinerPlansDansTexture3D(s->getDensities(),40);
 }
 
 void Fluid_GPU::afficherFumee(){
@@ -74,8 +79,35 @@ void Fluid_GPU::afficherFumee(){
 
 void Fluid_GPU::dessinerPlansDansTexture3DFaceALaCamera(GLuint id_texture, 
                                                         int nb_plans,
-							Vecteur3D& positionCamera, 
-							Vecteur3D& directionCamera){
+							                            Vecteur3D& positionCamera, 
+							                            Vecteur3D& directionCamera){
+	       
+	       
+	       
+	       
+	       
+    //GLuint id0 = s->getPression();
+    GLuint id0 = s->getDensities();
+    //GLuint id0 = s->getSpeed();
+    //GLuint id1 = s->getDestDensities();
+        
+    Texture3D::bindTexture(id0,0);
+    Texture3D::setFilter(GL_LINEAR);
+
+    
+    shader_affichage -> Bind_Program();
+    shader_affichage->lierLevel("texture_entree", 0);
+	       
+	       
+	       
+	       
+	       
+	       
+	       
+	       
+	       
+	       
+	       
 	       
 	Vecteur3D directionInitiale = Vecteur3D (0,0,1);
     
@@ -185,7 +217,13 @@ void Fluid_GPU::dessinerPlansDansTexture3DFaceALaCamera(GLuint id_texture,
 	// Desactivation des elements
 	glDisable(GL_TEXTURE_3D);
 	glDisable(GL_ALPHA_TEST);    
-	glDisable( GL_BLEND );	
+	glDisable( GL_BLEND );
+	
+	
+    shader_affichage -> Unbind_Program();
+    Texture3D::setFilter(GL_NEAREST);	
+    
+    
 }
 
 void Fluid_GPU::dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans){
@@ -202,8 +240,8 @@ void Fluid_GPU::dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans){
 	
 	GLfloat verts[4][3] = { { 0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {1.0, 1.0, 0.0}, {1.0, 0.0, 0.0}};
 
-    GLuint id0 = s->getPression();
-    //GLuint id0 = s->getDensities();
+    //GLuint id0 = s->getPression();
+    GLuint id0 = s->getDensities();
     //GLuint id0 = s->getSpeed();
     //GLuint id1 = s->getDestDensities();
         

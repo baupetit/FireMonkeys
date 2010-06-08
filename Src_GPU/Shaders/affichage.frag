@@ -105,7 +105,7 @@ vec3 corps_noir [81] =
 vec3 getRGB( float temperature )
 {
     vec3 res;
-	int index = int(100.0*temperature);
+	int index = int(150000000.0*temperature);
 	
 	if (index >= couleur_size)
 	    index = 81;
@@ -132,39 +132,46 @@ void main(void)
 	vec4 color_flamme, color_fumee, color_chaleur, flamme_fumee_chaleur, color;
 	
 	flamme_fumee_chaleur = vec4(texture3D( texture_entree,gl_TexCoord[0].stp));
-	
-	color_flamme  = vec4(flamme_fumee_chaleur.y * 1000000.0,
-	                     flamme_fumee_chaleur.y * 1000000.0, 
-	                     flamme_fumee_chaleur.y * 1000000.0,
-	                     (flamme_fumee_chaleur.y - 0.5) * 1000000);
-
-	
-    /*
-	color_flamme  = vec4(getRGB(flamme_fumee_chaleur.z),
-	                     flamme_fumee_chaleur.x * 10000.0);
-	*/                     
-		                     
-	color_fumee   = vec4(0.2, 
-	                     0.2, 
-	                     0.2, 
-	                     flamme_fumee_chaleur.y * 1.0);
-	                     
-	color_chaleur = vec4(0.9, 
-	                     0.8,//flamme_fumee_chaleur.z, 
-	                     0.9,//flamme_fumee_chaleur.z, 
-	                     flamme_fumee_chaleur.z * 10.0);
-	
-	
-	
-	if( color_flamme.a > (color_fumee.a * 1.0) )
+	/*
+	if( flamme_fumee_chaleur.x * 1000000 > flamme_fumee_chaleur.y*0.0002 )
 	{
+	    color_flamme  = vec4( 0.9 - flamme_fumee_chaleur.z * 8000.0, 
+	                          0.5 - flamme_fumee_chaleur.z * 8000.0, 
+	                          flamme_fumee_chaleur.z * 8000,
+	                          flamme_fumee_chaleur.x * 1000.0 - flamme_fumee_chaleur.z * 5000);
 	    color = color_flamme;
 	}	
 	else 
 	{
+    
+	    color_fumee   = vec4(0.2, 
+	                         0.2, 
+	                         0.2, 
+	                         flamme_fumee_chaleur.y*0.002);
+	                     
+	                     
 	    color = color_fumee;
 	}
-
-	gl_FragColor = color_flamme;
+    */
+    
+    
+    
+	color_flamme  = vec4(     0.9 - flamme_fumee_chaleur.z * 5000.0, 
+	                          0.5 - flamme_fumee_chaleur.z * 5000.0, 
+	                          flamme_fumee_chaleur.z * 5000,
+	                          (1.0 - flamme_fumee_chaleur.z * 5000) * flamme_fumee_chaleur.x*4000);
+	color = color_flamme;
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+	                     
+	gl_FragColor = color;
 }
 

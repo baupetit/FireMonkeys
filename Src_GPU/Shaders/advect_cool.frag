@@ -30,8 +30,6 @@ void main (){
 
     
    
-
-    
     if (old_pos.x < 0.5 / taille_width)
         old_pos.x = 0.5 / taille_width;
     if (old_pos.x > 1.0 + 0.5 / taille_width)
@@ -47,7 +45,7 @@ void main (){
     if (old_pos.z > 1.0 + 0.5 / taille_depth)
         old_pos.z = 1.0 + 0.5 / taille_depth;
         
-   
+    
    
     // on cast en int le déplacement
     ivec3 old_int_int = ivec3(taille_width  * old_pos.x,
@@ -89,27 +87,14 @@ void main (){
       
     
 
-    /*
-        
-                              
-    // consommation de la flamme
-    //float consomation = consume / (1.0 + 500000.0 * texture3D ( densite_entree, coord).z );
-    float consomation = 0.0003;
-    calcul.x = calcul.x - consomation;
-    
-    if ( calcul.x > consomation )
-        calcul.y = calcul.y + consomation * fireToSmoke;
-    else    
-        calcul.y = calcul.y + calcul.x * fireToSmoke;
-     
-        
     // disssipation de la chaleur
     calcul.z = calcul.z * c0;    
 
-    */
-    
-    
-//    vec3 calcul = texture3D(densite_entree, old_pos).rgb;
+    // destruction de la matière
+    float temp = calcul.x ;
+    calcul.x = max ( 0, calcul.x - consume*dt);
+    calcul.y = calcul.y + fireToSmoke * (temp - calcul.x);
+
 
     // ecriture du resultat    
     gl_FragData[0] = vec4( calcul, 1.0);
