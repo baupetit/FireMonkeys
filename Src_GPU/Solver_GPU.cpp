@@ -108,15 +108,15 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
 	for (int k = 0; k < _grille_width; k++){
 		for (int j = 0; j < _grille_height; j++){
 			for (int i = 0; i < _grille_depth; i++){    
-				if ( i > 3*_grille_depth/7 && i < 4*_grille_depth/7 &&
-				     k > 3*_grille_width /7  &&  k< 4*_grille_height/7 && 
+				if ( i > 2*_grille_depth/6 && i < 3*_grille_depth/6 &&
+				     k > 2*_grille_width /6  &&  k< 3*_grille_height/6 && 
 				     j < _grille_height/10 )
 				{
-				    *ptr = 0.01;//0.001;//rand()/(float)RAND_MAX;
+				    *ptr = 1.0;//0.01;//rand()/(float)RAND_MAX;
 				    ptr++;
 				    *ptr = 0.0000;//rand()/(float)RAND_MAX;
 				    ptr++;
-				    *ptr = 0.01;//rand()/(float)RAND_MAX;
+				    *ptr = 1.0;//0.01//rand()/(float)RAND_MAX;
 				    ptr++;
 				    *ptr = 1.0f;
 				    ptr++;
@@ -508,6 +508,7 @@ void Solver_GPU::advect_cool ( float dt )
     float consume = SolverParam::getConsumingParam();
     float firetosmoke = SolverParam::getFireToSmokeParam();
     float c0 = 1.0f - SolverParam::getCoolingParam() * dt;
+
 
     shader_advect_cool->Bind_Program();          
 

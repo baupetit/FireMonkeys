@@ -61,9 +61,19 @@ void ViewerGPU::rendu(){
 	//// OBJETS
 	glPushMatrix();
     glMatrixMode (GL_MODELVIEW);
-		
-	//_fluid->Afficher_Entite_Face_Camera(positionCamera, directionCamera);
-   	_fluid->Afficher_Entite();
+
+
+	Vecteur3D positionCamera;
+	positionCamera.x = _distToOrigin*cos(_cameraAngle);
+	positionCamera.y = _cameraHeight;
+	positionCamera.z = _distToOrigin*sin(_cameraAngle);
+	Vecteur3D directionCamera;
+	directionCamera.x = -positionCamera.x;
+	directionCamera.y = 0;
+	directionCamera.z = -positionCamera.z;
+			
+	_fluid->Afficher_Entite_Face_Camera(positionCamera, directionCamera);
+   	//_fluid->Afficher_Entite();
    	
 	glPopMatrix();
 	

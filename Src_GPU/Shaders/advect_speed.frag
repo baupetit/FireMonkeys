@@ -81,7 +81,6 @@ void main (){
 
     
     // ecriture du resultat    
-    //vec3 calcul = vec3(texture3D(vitesse_entree, old_pos).rgb);
     gl_FragData[0] = vec4( calcul, 1.0);
 }
 

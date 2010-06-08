@@ -132,34 +132,13 @@ void main(void)
 	vec4 color_flamme, color_fumee, color_chaleur, flamme_fumee_chaleur, color;
 	
 	flamme_fumee_chaleur = vec4(texture3D( texture_entree,gl_TexCoord[0].stp));
-	
-    /*
-	color_flamme  = vec4(flamme_fumee_chaleur.x * 10000000,
-	                     flamme_fumee_chaleur.y * 10000000, 
-	                     flamme_fumee_chaleur.z * 10000000,
-	                     flamme_fumee_chaleur.x * 10000000 ) ;
-
-	                   
-	
-	color_flamme  = vec4(getRGB(flamme_fumee_chaleur.z),
-	                     flamme_fumee_chaleur.x * 100000.0);
-		                     
-	color_fumee   = vec4(0.2, 
-	                     0.2, 
-	                     0.2, 
-	                     flamme_fumee_chaleur.y * 1.0);
-	                     
-	color_chaleur = vec4(0.9, 
-	                     0.8,//flamme_fumee_chaleur.z, 
-	                     0.9,//flamme_fumee_chaleur.z, 
-	                     flamme_fumee_chaleur.z * 10.0);
-	
-	*/  
-	
-	if( flamme_fumee_chaleur.x * 1000 > flamme_fumee_chaleur.y*0.0002 )
+	/*
+	if( flamme_fumee_chaleur.x * 1000000 > flamme_fumee_chaleur.y*0.0002 )
 	{
-	    color_flamme  = vec4(0.9, 0.5, 0.1,
-	                     flamme_fumee_chaleur.x * 100000.0);
+	    color_flamme  = vec4( 0.9 - flamme_fumee_chaleur.z * 8000.0, 
+	                          0.5 - flamme_fumee_chaleur.z * 8000.0, 
+	                          flamme_fumee_chaleur.z * 8000,
+	                          flamme_fumee_chaleur.x * 1000.0 - flamme_fumee_chaleur.z * 5000);
 	    color = color_flamme;
 	}	
 	else 
@@ -173,6 +152,25 @@ void main(void)
 	                     
 	    color = color_fumee;
 	}
+    */
+    
+    
+    
+	color_flamme  = vec4(     0.9 - flamme_fumee_chaleur.z * 1000.0, 
+	                          0.5 - flamme_fumee_chaleur.z * 1000.0, 
+	                          flamme_fumee_chaleur.z * 800,
+	                          (1.0 - flamme_fumee_chaleur.z * 800) * flamme_fumee_chaleur.x*3000);
+	color = color_flamme;
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 	                     
 	gl_FragColor = color;
 }

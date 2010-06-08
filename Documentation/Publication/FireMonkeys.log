@@ -1,4 +1,4 @@
-This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=latex 2010.6.3)  7 JUN 2010 18:01
+This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=latex 2010.6.3)  8 JUN 2010 08:06
 entering extended mode
  %&-line parsing enabled.
 **FireMonkeys.tex
@@ -596,24 +596,29 @@ Underfull \hbox (badness 10000) in paragraph at lines 658--665
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 669--671
+Underfull \hbox (badness 10000) in paragraph at lines 669--670
+
+ []
+
+File: Perlin3D.ps Graphic file (type eps)
+<Perlin3D.ps> [17]
+Underfull \hbox (badness 10000) in paragraph at lines 675--676
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 672--673
+Underfull \hbox (badness 10000) in paragraph at lines 677--678
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 674--675
+Underfull \hbox (badness 10000) in paragraph at lines 679--680
 
  []
 
-[17]
 File: SansPerlin.ps Graphic file (type eps)
- <SansPerlin.ps>
-Underfull \hbox (badness 10000) in paragraph at lines 680--681
+<SansPerlin.ps>
+Underfull \hbox (badness 10000) in paragraph at lines 685--686
 
  []
 
@@ -621,125 +626,125 @@ File: Perlin1.ps Graphic file (type eps)
 <Perlin1.ps>
 File: Perlin2.ps Graphic file (type eps)
  <Perlin2.ps>
-Overfull \hbox (15.20706pt too wide) in paragraph at lines 682--684
+Overfull \hbox (15.20706pt too wide) in paragraph at lines 687--689
 [][] [] 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 687--691
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 694--696
+[18]
+Underfull \hbox (badness 10000) in paragraph at lines 692--696
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 697--699
+Underfull \hbox (badness 10000) in paragraph at lines 699--701
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 700--702
+Underfull \hbox (badness 10000) in paragraph at lines 702--704
 
  []
 
 
-Overfull \hbox (1.24844pt too wide) in paragraph at lines 708--716
+Underfull \hbox (badness 10000) in paragraph at lines 705--707
+
+ []
+
+
+Overfull \hbox (1.24844pt too wide) in paragraph at lines 713--721
 \OT1/cmr/m/n/10 D'autres out-ils de pro-gram-ma-tion ex-is-tent ( comme OpenCL 
 ) mais nous n'^^Setions
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 708--716
+Underfull \hbox (badness 10000) in paragraph at lines 713--721
 
  []
 
-[18]
-Overfull \hbox (1.2056pt too wide) in paragraph at lines 721--721
+
+Overfull \hbox (1.2056pt too wide) in paragraph at lines 726--726
 []\OT1/cmr/bx/n/12 Transformation du probl^^Reme pour une r^^Sesolution GPU 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 724--726
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 728--730
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 731--735
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 736--739
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 746--752
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 753--755
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 756--760
+Underfull \hbox (badness 10000) in paragraph at lines 729--731
 
  []
 
 [19]
-Underfull \hbox (badness 10000) in paragraph at lines 761--764
+Underfull \hbox (badness 10000) in paragraph at lines 733--735
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 765--768
+Underfull \hbox (badness 10000) in paragraph at lines 736--740
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 769--771
+Underfull \hbox (badness 10000) in paragraph at lines 741--744
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 771--772
+Underfull \hbox (badness 10000) in paragraph at lines 751--757
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 772--775
+Underfull \hbox (badness 10000) in paragraph at lines 758--760
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 776--778
+Underfull \hbox (badness 10000) in paragraph at lines 761--765
 
  []
 
 
-Overfull \hbox (1.90935pt too wide) in paragraph at lines 779--783
+Underfull \hbox (badness 10000) in paragraph at lines 766--769
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 770--773
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 774--776
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 776--777
+
+ []
+
+[20]
+Underfull \hbox (badness 10000) in paragraph at lines 777--780
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 781--783
+
+ []
+
+
+Overfull \hbox (1.90935pt too wide) in paragraph at lines 784--788
 []\OT1/cmr/bx/n/10 Remarque im-por-tante :  \OT1/cmr/m/n/10 Sur le pa-pier cett
 e as-tuce est tr^^Res compr^^Sehensible.
  []
 
-[20] (./FireMonkeys.aux) ) 
+[21] (./FireMonkeys.aux) ) 
 Here is how much of TeX's memory you used:
- 1451 strings out of 95087
- 17371 string characters out of 1183279
+ 1453 strings out of 95087
+ 17394 string characters out of 1183279
  75691 words of memory out of 1500000
- 4635 multiletter control sequences out of 10000+50000
+ 4636 multiletter control sequences out of 10000+50000
  5158 words of font info for 19 fonts, out of 1200000 for 2000
  28 hyphenation exceptions out of 8191
  25i,5n,24p,661b,261s stack positions out of 5000i,500n,6000p,200000b,5000s
 
-Output written on FireMonkeys.dvi (20 pages, 65652 bytes).
+Output written on FireMonkeys.dvi (21 pages, 65804 bytes).

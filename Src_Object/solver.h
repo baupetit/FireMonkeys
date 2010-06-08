@@ -173,7 +173,12 @@ protected :
 		else return tab[IX(i,j,k)];
 	}
 
-	void addSource ( int N, float *x , float *s , float dt );
+	void addSource ( int N, float *x , float *s , float dt );	
+    void addSource3 ( int N, 
+                      float *x1 , float *s1 ,
+                      float *x2 , float *s2 ,
+                      float *x3 , float *s3 ,
+                      float dt );                         
 	void combustion( int N, float *x , float *f, float *T, 
 			 float consumeK, float fireToSmoke,
 			 float dt );

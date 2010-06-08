@@ -1,6 +1,6 @@
 #define SIZE ((N+2)*(N+2)*(N+2))
 #ifndef NB_ITERATION_SOLVE
-#define NB_ITERATION_SOLVE 20
+#define NB_ITERATION_SOLVE 10
 #endif
 
 #include "solver.h"
@@ -126,6 +126,21 @@ void Solver::addSource ( int N, float *x , float *s , float dt )
 {
 	for( int i = 0 ; i < SIZE ; ++i ) 
 		x[i] += dt*s[i];
+}
+
+
+void Solver::addSource3 ( int N, 
+                         float *x1 , float *s1 ,
+                         float *x2 , float *s2 ,
+                         float *x3 , float *s3 ,
+                         float dt )
+{
+	for( int i = 0 ; i < SIZE ; ++i ) 
+	{
+		x1[i] += dt*s1[i];
+		x2[i] += dt*s2[i];
+		x3[i] += dt*s3[i];
+	}	
 }
 
 void Solver::addBuoyancy( int N, float *T, float *v, float buoy, float dt)
@@ -505,14 +520,17 @@ void Solver::velocitiesStep ( float dt )
 void Solver::velocitiesStepWithTemp ( float dt )
 {
 	// Adding sources
+   /*
 	addSource ( _N, _u, _srcu, dt ); 
 	addSource ( _N, _v, _srcv, dt ); 
 	addSource ( _N, _w, _srcw, dt );
-
+	*/
+	addSource3 ( _N, _u, _srcu,_v, _srcv, _w, _srcw, dt ); 
 	addBuoyancy( _N, _T, _v, SolverParam::getBuoyancyParam(), dt);
 	//vorticity_confinement( _N, _u, _v, _w, 
-	//_u0, _v0, _w0, _T0, 
-	//SolverParam::getVorticityConfinementParam(), dt);
+	//                       _u0, _v0, _w0, _T0, 
+	//                       SolverParam::getVorticityConfinementParam(), 
+	//                       dt);
 
 
 	// speed diffusig due to viscosity

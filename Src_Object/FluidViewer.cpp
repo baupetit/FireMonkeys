@@ -72,11 +72,12 @@ void FluidViewer::rendu(){
 	directionCamera.x = -positionCamera.x;
 	directionCamera.y = 0;
 	directionCamera.z = -positionCamera.z;
+
+
 	_fluid->Afficher_Entite_Face_Camera(positionCamera, directionCamera,dt);
 
 
 	_obj->Afficher_Entite(0);
-	
 
 	glPopMatrix();
 	

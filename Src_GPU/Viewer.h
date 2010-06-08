@@ -32,7 +32,7 @@ public :
     
     virtual void rendu() = 0;;
     
-private :
+protected :
     // Instance
     static Viewer *_instance;
 
