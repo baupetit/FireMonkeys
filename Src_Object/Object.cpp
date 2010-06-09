@@ -19,9 +19,6 @@ Object::~Object(){
 	if( grille ) delete [] grille;
 }
 
-/* heat diffusion */
-void Object::diffuserTemperature( float dt ){
-}
 
 /* herited methods */
 void Object::Afficher_Face_Camera(Vecteur3D& positionCamera,
@@ -31,6 +28,7 @@ void Object::Afficher_Face_Camera(Vecteur3D& positionCamera,
 }
 
 
+/* heat diffusion */
 void Object::diffuserTemperature( float dt )
 {
 	int i, j, k, l , c;
@@ -50,9 +48,9 @@ void Object::diffuserTemperature( float dt )
 	
 
 	for ( l=0 ; l<NB_ITERATION_SOLVE ; l++ ) {
-		for( k=1; k<N1+1; ++k ){ 
-			for( j = 1; j<N2+1 ; ++j) { 
-				for( i=1 ; i<N3+1 ; ++i ){
+		for( k=1; k<N1-1; ++k ){ 
+			for( j = 1; j<N2-1 ; ++j) { 
+				for( i=1 ; i<N3-1 ; ++i ){
 					if (grille[_Grille_Ind(i  ,j  ,k  )].plein && 
 					    grille[_Grille_Ind(i+1,j  ,k  )].plein &&
 						grille[_Grille_Ind(i-1,j  ,k  )].plein &&

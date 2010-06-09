@@ -98,7 +98,7 @@ private:
     /**
      * Mise à jour des infos des objets
      */
-    void updateInfo();
+    void updateInfo(float dt);
     
 public :
 	void Afficher( float dt );

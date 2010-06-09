@@ -601,6 +601,7 @@ void Solver::updateInfo( Object& o){
                 temp = _T[IX(solverCell.x, solverCell.y, solverCell.z)];
                 temp = ( temp + (*voxelObj).temperature ) / 2.0;
                 // maj du voxel et du tableau des temps
+                (*voxelObj).temperature0 = temp;
                 (*voxelObj).temperature = temp;
                 _T[IX(solverCell.x, solverCell.y, solverCell.z)] = temp;
                 

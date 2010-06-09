@@ -70,7 +70,7 @@ void Sphere::Afficher(float dt){
 	
 	
 	
-	glPointSize( 2.0f );
+	glPointSize( 4.0f );
 	glDisable(GL_LIGHTING);
 	
 	glBegin(GL_POINTS);
@@ -85,7 +85,7 @@ void Sphere::Afficher(float dt){
 				    glVertex3f( p.x, p.y, p.z );
 				}
 				if( val.frontiere ){
-					glColor3f( val.temperature,0,1 );
+					glColor3f( val.temperature,0,0 );
 					glVertex3f( p.x, p.y, p.z );
 				}
 			}
