@@ -235,7 +235,6 @@ void Viewer::_motionFunc(int x, int y){
 
 void Viewer::mouse(int x, int y){
 	if (dragging) {
-        cout << "drag " << endl;
 		sourisDX = (x-sourisX0)*_distToOrigin/normDist;
 		sourisDY = (y-sourisY0)*_distToOrigin/normDist;
 		sourisX0 = x;
@@ -246,7 +245,6 @@ void Viewer::mouse(int x, int y){
 void Viewer::mouse(int button, int state, int x, int y){
     cout << "mouse ! " << endl;
 	if (button == GLUT_LEFT_BUTTON && state==GLUT_DOWN) {
-        cout << "mouse drag " << endl;
 		dragging = true;
 		sourisX0 = x;
 		sourisY0 = y;
