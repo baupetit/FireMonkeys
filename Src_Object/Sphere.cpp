@@ -36,8 +36,12 @@ Sphere::~Sphere(){
 }
 
 void Sphere::Afficher(float dt){
+
+    /**
 	glColor4f( color.x, color.y, color.z, color.w );
 	glCallList( drawList );
+    */
+    
     /*
 	glPointSize( 2.0f );
 	glDisable(GL_LIGHTING);
@@ -63,6 +67,34 @@ void Sphere::Afficher(float dt){
 	glEnd();
 	glEnable(GL_LIGHTING);
 	*/
+	
+	
+	
+	glPointSize( 2.0f );
+	glDisable(GL_LIGHTING);
+	
+	glBegin(GL_POINTS);
+	for( int k = 0 ; k < grilleSize.z ; ++k ){
+		for( int j = 0 ; j < grilleSize.y ; ++j ){
+			for( int i = 0 ; i < grilleSize.x ; ++i ){
+				Vecteur3D p = cellToPoint( Vecteur3I(i , j , k));
+				Voxel val = grille[_Grille_Ind(i,j,k)];
+				
+				if( val.plein ){
+					glColor3f( val.temperature,0,0 );
+				    glVertex3f( p.x, p.y, p.z );
+				}
+				if( val.frontiere ){
+					glColor3f( val.temperature,0,1 );
+					glVertex3f( p.x, p.y, p.z );
+				}
+			}
+		}
+	}
+	glEnd();
+	glEnable(GL_LIGHTING);
+	
+	
 }
 
 void Sphere::generateVoxels() {

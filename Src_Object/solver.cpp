@@ -104,7 +104,6 @@ int Solver::getSize() const{
 
 void Solver::setDensity( int i , int j , int k , float dens ){
 	_srcd[IX(i,j,k)] = dens ;
-	cout << "ajout de dens : " << dens  << endl;
 }
 
 void Solver::setTemperature( int i, int j, int k, float temp ){
@@ -523,10 +522,10 @@ void Solver::velocitiesStepWithTemp ( float dt )
 	*/
 	addSource3 ( _N, _u, _srcu,_v, _srcv, _w, _srcw, dt ); 
 	addBuoyancy( _N, _T, _v, SolverParam::getBuoyancyParam(), dt);
-	//vorticity_confinement( _N, _u, _v, _w, 
-	//                       _u0, _v0, _w0, _T0, 
-	//                       SolverParam::getVorticityConfinementParam(), 
-	//                       dt);
+	vorticity_confinement( _N, _u, _v, _w, 
+	                       _u0, _v0, _w0, _T0, 
+	                       SolverParam::getVorticityConfinementParam(), 
+	                       dt);
 
 
 	// speed diffusig due to viscosity
@@ -562,21 +561,36 @@ void Solver::updateInfo( Object& o){
  
     Vecteur3I solverCell;
     Voxel *voxelObj = o.grille;
+    
+    if (voxelObj == NULL)
+        return;
+        
     float temp;
     float pyrolise;
      
-    cout << "updateInfo : objet " << (void*)&o << endl;
+    //cout << "updateInfo : objet " << (void*)&o << endl;
     
     for (int i = 0; i < o.grilleSize.x * o.grilleSize.y * o.grilleSize.z ; i++)
     {
+        //cout << " i = " << i << endl;
         // transforme la coord du voxel de lobjet en coord du voxel solver
+        //(*voxelObj).pos.afficher();
         solverCell = objectCellToSolverCell((*voxelObj).pos, o.getAABB().lowerCorner);
+        
         if ( cellIsValid( solverCell) )
         {
             //////////////////
             // presence     //
             //////////////////
-            _filled[IX(solverCell.x, solverCell.y, solverCell.z)].plein = (*voxelObj).plein;
+            if ((*voxelObj).plein)
+            {
+                // presence
+                _filled[IX(solverCell.x, solverCell.y, solverCell.z)].plein = (*voxelObj).plein;
+                // vitesse
+                _u[IX(solverCell.x, solverCell.y, solverCell.z)] = o.vitesse.x;
+                _v[IX(solverCell.x, solverCell.y, solverCell.z)] = o.vitesse.y;
+                _w[IX(solverCell.x, solverCell.y, solverCell.z)] = o.vitesse.z;
+            }
             //temp, combustible, vitesse 
             //uniquement sur les frontieres
             if ((*voxelObj).frontiere)
@@ -623,7 +637,6 @@ void Solver::updateInfo( Object& o){
                     }
                     // on ajoute la matiere cree aux sources
                     _srcd[IX(solverCell.x, solverCell.y, solverCell.z)] += pyrolise;
-                    
                 }
                 
                 //////////////////

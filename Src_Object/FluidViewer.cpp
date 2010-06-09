@@ -22,16 +22,15 @@ FluidViewer::FluidViewer()
 {   
 	Voxel def( true, 
 		   false, 
-		   0,
+		   100,
 		   0,
 		   Vecteur3D(0,0,0), 
-		   0,
+		   10,
 		   0,
 		   0, 
 		   Vecteur3I(0,0,0));
 
-	Sphere *sphere = new Sphere( def,1, Vecteur4D( 0.2,0.2,0.2,0.8 ), 10, 10);
-	sphere->translate(Vecteur3D(3.0,3.0,3.0));
+	Sphere *sphere = new Sphere( def,0.2, Vecteur4D( 0.2,0.2,0.2,0.8 ), 10, 10);
     _objs.push_back(sphere);           
     _fluid = new Fluid(_objs);
 }
@@ -86,13 +85,22 @@ void FluidViewer::rendu(){
 	directionCamera.z = -positionCamera.z;
 
 
-    // affichage et maj fluide
-	_fluid->Afficher_Entite_Face_Camera(positionCamera, directionCamera,dt);
+
+    // deplacement de l'objet
+    _it_objs = _objs.begin();
+    if ( (*_it_objs) != NULL)
+    {
+        (*_it_objs)->translate( Vecteur3D (Viewer::sourisDX, -Viewer::sourisDY, 0.0));
+        (*_it_objs)->updateVitesse();
+    }
 
     // affichage objets
     for(_it_objs = _objs.begin(); _it_objs != _objs.end(); ++_it_objs){
     	(*_it_objs)->Afficher_Entite(0);
     }
+    
+    // affichage et maj fluide
+	_fluid->Afficher_Entite_Face_Camera(positionCamera, directionCamera,dt);
     
 	glPopMatrix();
 	
