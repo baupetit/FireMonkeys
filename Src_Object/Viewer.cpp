@@ -102,7 +102,7 @@ void Viewer::_initRendering(){
 	cout << "Initialisation du rendu " << endl;
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glShadeModel(GL_SMOOTH);
-	glPolygonMode(GL_FRONT, GL_FILL);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glLineWidth(1.0f);
 	glPointSize(2.0f);
 	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);

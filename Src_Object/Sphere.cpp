@@ -8,6 +8,7 @@
 #define M_PI 3.141592653589793238462643383279f
 #endif
 
+#include "MarchingCube.h"
 
 #include <vector>
 using namespace std;
@@ -21,20 +22,21 @@ static bool zero( float f ){
 Sphere::Sphere( Voxel defVox,
 		float radius, Vecteur4D color, 
 		int nb_plans, int nb_quarts  )
-	:Object(defVox),radius(radius),color(color)
+	:Object(defVox),radius(radius)
 {
+	this->color = color ;
 	// compute AABB
 	float spaceDiv  = SolverParam::getSpaceDiv();
 	AABB = BoundingBox( Vecteur3D(-radius-spaceDiv ,-radius -spaceDiv ,-radius - spaceDiv),
 			    Vecteur3D(radius + spaceDiv ,radius + spaceDiv ,radius + spaceDiv) );
 
-	generateDisplayList( nb_plans, nb_quarts );
+//	generateDisplayList( nb_plans, nb_quarts );
 	generateVoxels();
 }
 
 Sphere::~Sphere(){
 }
-
+/*
 void Sphere::Afficher(float dt){
 	//glColor4f( color.x, color.y, color.z, color.w );
 	//glCallList( drawList );
@@ -63,12 +65,11 @@ void Sphere::Afficher(float dt){
 	glEnd();
 	glEnable(GL_LIGHTING);
 }
-
+*/
 void Sphere::generateVoxels() {
 	int nb_x,nb_y,nb_z ;
 	float x_off, y_off, z_off;
 	float spaceDiv  = SolverParam::getSpaceDiv();
-
 
 	cout << "spaceDiv  : " << spaceDiv << endl;
 	cout << "Upper     : " ; AABB.upperCorner.afficher(); cout << endl ;
@@ -114,6 +115,9 @@ void Sphere::generateVoxels() {
 					setVoisinBound( i,j,k );
 				}
 				ref.pos = pos ;
+				setCornerCell( ref );
+				setValuation( ref );
+				Polygonise( ref );
 			}
 		}
 	}
