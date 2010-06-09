@@ -26,6 +26,8 @@ Viewer::Viewer(const string & title, int width, int height,
 	Viewer::_instance = this;
 	dragging = false;
     normDist = 110.0f;
+    
+    
 }
 
 
