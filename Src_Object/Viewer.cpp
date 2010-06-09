@@ -24,6 +24,8 @@ Viewer::Viewer(const string & title, int width, int height,
 	initScene();
 	
 	Viewer::_instance = this;
+	dragging = false;
+    normDist = 110.0f;
 }
 
 
@@ -227,14 +229,36 @@ void Viewer::_motionFunc(int x, int y){
 }
 
 void Viewer::mouse(int x, int y){
-    sourisDX = (x-sourisX0)/150.0;
-    sourisX0 = x;
-    sourisDY = (y-sourisY0)/150.0;
-    sourisY0 = y;
+	if (dragging) {
+        cout << "drag " << endl;
+		sourisDX = (x-sourisX0)*_distToOrigin/normDist;
+		sourisDY = (y-sourisY0)*_distToOrigin/normDist;
+		sourisX0 = x;
+		sourisY0 = y;
+	}
 }
-void Viewer::_mouseFunc(int button, int state, int x, int y){}
+
+void Viewer::mouse(int button, int state, int x, int y){
+    cout << "mouse ! " << endl;
+	if (button == GLUT_LEFT_BUTTON && state==GLUT_DOWN) {
+        cout << "mouse drag " << endl;
+		dragging = true;
+		sourisX0 = x;
+		sourisY0 = y;
+	} else if (button == GLUT_LEFT_BUTTON && state==GLUT_UP) {
+		dragging = false;	
+		sourisDX = 0;
+		sourisDY = 0;			
+	}
+}
+
+void Viewer::_mouseFunc(int button, int state, int x, int y){
+    _instance->mouse(button, state, x, y);
+}
+
 void Viewer::_passiveMotionFunc(int x, int y){
     _instance->mouse(x,y);
+
 }
 
 void Viewer::_reshapeFunc(int w, int h){

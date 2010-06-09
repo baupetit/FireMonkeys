@@ -92,7 +92,7 @@ void FluidViewer::rendu(){
     if ( (*_it_objs) != NULL)
     {
         (*_it_objs)->translate( Vecteur3D (Viewer::sourisDX, -Viewer::sourisDY, 0.0));
-        //(*_it_objs)->updateVitesse();
+        (*_it_objs)->updateVitesse();
     }
 
     // affichage objets
