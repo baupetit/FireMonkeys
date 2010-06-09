@@ -72,6 +72,10 @@ protected :
 	
 	// Touches clavier
 	void  _keyMap(int key, int x, int y);
+	
+	bool selectBois;
+	bool selectMetal;
+	bool selectCire;
 };
 
 

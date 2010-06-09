@@ -31,8 +31,12 @@ FluidViewer::FluidViewer()
 		   1000.1, 
 		   Vecteur3I(0,0,0));
 
-	Sphere *sphere = new Sphere( def,0.5, Vecteur4D( 0.2,0.2,0.2,0.8 ), 10, 10);
-    _objs.push_back(sphere);           
+	Sphere *sphereBois   = new Sphere( def,0.5, Vecteur4D( 0.2,0.2,0.2,0.8 ), 10, 10);
+	Sphere *sphereSphere = new Sphere( def,0.5, Vecteur4D( 0.2,0.2,0.2,0.8 ), 10, 10);
+	Sphere *sphereCire   = new Sphere( def,0.5, Vecteur4D( 0.2,0.2,0.2,0.8 ), 10, 10);
+    _objs.push_back(sphereBois);           
+    _objs.push_back(sphereMetal);           
+    _objs.push_back(sphereCire);           
     _fluid = new Fluid(_objs);
 }
 
@@ -89,6 +93,18 @@ void FluidViewer::rendu(){
 
     // deplacement de l'objet
     _it_objs = _objs.begin();
+    for(_it_objs = _objs.begin(); _it_objs != _objs.end(); ++_it_objs){
+        if (selectBois)
+        {
+        }
+        if (selectCire)
+        {
+        }
+        if (selectMetal)
+        {
+        }
+    	(*_it_objs)->Afficher_Entite(0);
+    }
     if ( (*_it_objs) != NULL)
     {
         (*_it_objs)->translate( Vecteur3D (Viewer::sourisDX, -Viewer::sourisDY, 0.0));
