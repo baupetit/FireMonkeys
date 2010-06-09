@@ -27,6 +27,9 @@ Viewer::Viewer(const string & title, int width, int height,
 	dragging = false;
     normDist = 110.0f;
     
+    selectBois  = false;
+    selectCire  = false;
+    selectMetal = false;    
     
 }
 
