@@ -19,6 +19,7 @@
 
 #include "Object.h"
 
+#include "Perlin.h"
 
 #include <GL/glew.h>
 #include <GL/glut.h>
@@ -31,6 +32,16 @@ class Fluid : public BasicEntite {
 private :
 	/** Solver 3D */
 	Solver *s;
+
+    /** Bruit de perlin */    
+	Perlin *p;
+	Vecteur3D *perl ;
+	Vecteur3D *perl_temps ;
+	float tps1;
+	float tps2;
+    float tps3;
+	GLuint _id_texture_perlin;
+	GLuint _id_texture_perlin_temps;
 
 	/** Temperature indexes */
 	TempToRGB *tempIndex;
@@ -76,7 +87,8 @@ private:
 	/** Affiche la flamme et la fumee face a la camera*/
 	void renduFlammeETFumeeGPUFaceCamera( int nb_plans,
 					      Vecteur3D& positionCamera,
-					      Vecteur3D& directionCamera );
+					      Vecteur3D& directionCamera ,
+					      float t );
 	/** Permet de charger le tableau de la fumée dans la matrice RGBA */
 	void majMatriceFumeeEnMatriceRGBA();
 	/** Permet de charger le tableau de la flamme dans la matrice RGBA */
@@ -94,6 +106,8 @@ private:
 						     Vecteur3D& positionCamera, 
 						     Vecteur3D& directionCamera);
 	
+	void matricePerlinCarreeToTexture3D(const Vecteur3D *matrice, int cote, GLuint id_texture);
+	void VecteurPerlinTempsToTexture1D(const Vecteur3D *matrice, int cote, GLuint id_texture);
 	
     /**
      * Mise à jour des infos des objets

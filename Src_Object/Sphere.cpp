@@ -8,6 +8,7 @@
 #define M_PI 3.141592653589793238462643383279f
 #endif
 
+#include "MarchingCube.h"
 
 #include <vector>
 using namespace std;
@@ -21,55 +22,29 @@ static bool zero( float f ){
 Sphere::Sphere( Voxel defVox,
 		float radius, Vecteur4D color, 
 		int nb_plans, int nb_quarts  )
-	:Object(defVox),radius(radius),color(color)
+	:Object(defVox),radius(radius)
 {
+	this->color = color ;
 	// compute AABB
 	float spaceDiv  = SolverParam::getSpaceDiv();
 	AABB = BoundingBox( Vecteur3D(-radius-spaceDiv ,-radius -spaceDiv ,-radius - spaceDiv),
 			    Vecteur3D(radius + spaceDiv ,radius + spaceDiv ,radius + spaceDiv) );
 
-	generateDisplayList( nb_plans, nb_quarts );
+//	generateDisplayList( nb_plans, nb_quarts );
 	generateVoxels();
 }
 
 Sphere::~Sphere(){
 }
 
+/*
 void Sphere::Afficher(float dt){
 
-    /**
-	glColor4f( color.x, color.y, color.z, color.w );
-	glCallList( drawList );
-    */
+
+	//glColor4f( color.x, color.y, color.z, color.w );
+	//glCallList( drawList );
+
     
-    /*
-	glPointSize( 2.0f );
-	glDisable(GL_LIGHTING);
-	
-	glBegin(GL_POINTS);
-	for( int k = 0 ; k < grilleSize.z ; ++k ){
-		for( int j = 0 ; j < grilleSize.y ; ++j ){
-			for( int i = 0 ; i < grilleSize.x ; ++i ){
-				Vecteur3D p = cellToPoint( Vecteur3I(i , j , k));
-				Voxel val = grille[_Grille_Ind(i,j,k)];
-				
-				if( val.plein ){
-					glColor3f( 1,0,0 );
-				        glVertex3f( p.x, p.y, p.z );
-				}
-				if( val.frontiere ){
-					glColor3f( 0,0,1 );
-					glVertex3f( p.x, p.y, p.z );
-				}
-			}
-		}
-	}
-	glEnd();
-	glEnable(GL_LIGHTING);
-	*/
-	
-	
-	
 	glPointSize( 4.0f );
 	glDisable(GL_LIGHTING);
 	
@@ -95,15 +70,12 @@ void Sphere::Afficher(float dt){
 	}
 	glEnd();
 	glEnable(GL_LIGHTING);
-	
-	
 }
-
+*/
 void Sphere::generateVoxels() {
 	int nb_x,nb_y,nb_z ;
 	float x_off, y_off, z_off;
 	float spaceDiv  = SolverParam::getSpaceDiv();
-
 
 	cout << "spaceDiv  : " << spaceDiv << endl;
 	cout << "Upper     : " ; AABB.upperCorner.afficher(); cout << endl ;
@@ -143,12 +115,18 @@ void Sphere::generateVoxels() {
 		for( int j = 0 ; j < nb_y ; ++j ){
 			for( int i = 0 ; i < nb_x ; ++i ){
 				Voxel &ref = grille[_Grille_Ind(i,j,k)];
+				ref = defVox;
+				ref.plein = false ;
+				ref.frontiere = false ;
 				Vecteur3I pos(i,j,k);
+				ref.pos = pos ;
 				if( isInside( cellToPoint( pos ) ) ){
-					ref = defVox;
+					ref.plein = true ;
 					setVoisinBound( i,j,k );
 				}
-				ref.pos = pos ;
+				setCornerCell( ref );
+				setValuation( ref );
+				Polygonise( ref );
 			}
 		}
 	}

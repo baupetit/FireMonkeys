@@ -24,6 +24,13 @@ Viewer::Viewer(const string & title, int width, int height,
 	initScene();
 	
 	Viewer::_instance = this;
+	dragging = false;
+    normDist = 110.0f;
+    
+    selectBois  = false;
+    selectCire  = false;
+    selectMetal = false;    
+    
 }
 
 
@@ -106,7 +113,7 @@ void Viewer::_initRendering(){
 	cout << "Initialisation du rendu " << endl;
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glShadeModel(GL_SMOOTH);
-	glPolygonMode(GL_FRONT, GL_FILL);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glLineWidth(1.0f);
 	glPointSize(2.0f);
 	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
@@ -227,14 +234,33 @@ void Viewer::_motionFunc(int x, int y){
 }
 
 void Viewer::mouse(int x, int y){
-    sourisDX = (x-sourisX0)/150.0;
-    sourisX0 = x;
-    sourisDY = (y-sourisY0)/150.0;
-    sourisY0 = y;
+	if (dragging) {
+		sourisDX = (x-sourisX0)*_distToOrigin/normDist;
+		sourisDY = (y-sourisY0)*_distToOrigin/normDist;
+		sourisX0 = x;
+		sourisY0 = y;
+	}
 }
-void Viewer::_mouseFunc(int button, int state, int x, int y){}
+
+void Viewer::mouse(int button, int state, int x, int y){
+	if (button == GLUT_LEFT_BUTTON && state==GLUT_DOWN) {
+		dragging = true;
+		sourisX0 = x;
+		sourisY0 = y;
+	} else if (button == GLUT_LEFT_BUTTON && state==GLUT_UP) {
+		dragging = false;	
+		sourisDX = 0;
+		sourisDY = 0;			
+	}
+}
+
+void Viewer::_mouseFunc(int button, int state, int x, int y){
+    _instance->mouse(button, state, x, y);
+}
+
 void Viewer::_passiveMotionFunc(int x, int y){
     _instance->mouse(x,y);
+
 }
 
 void Viewer::_reshapeFunc(int w, int h){
@@ -288,6 +314,21 @@ void Viewer::_keyMap(int key, int x, int y){
 	case GLUT_KEY_PAGE_DOWN :
 		_cameraHeight -= 0.1f * cam_speed;
 		_setCamera();
+		break;
+	case GLUT_KEY_F1 :
+		selectMetal=true;
+		selectBois=false;
+		selectCire=false;
+		break;
+	case GLUT_KEY_F2 :
+		selectMetal=false;
+		selectBois=true;
+		selectCire=false;
+		break;
+	case GLUT_KEY_F3 :
+		selectMetal=false;
+		selectBois=false;
+		selectCire=true;
 		break;
 
 	default:

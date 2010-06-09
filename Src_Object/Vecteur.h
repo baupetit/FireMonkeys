@@ -74,6 +74,14 @@ public:
 		return res;
 	}
     
+	friend Vecteur3<T> operator- (const Vecteur3<T>& v1, float a){
+		Vecteur3<T> res(v1);
+		res.x-=a;
+		res.y-=a;
+		res.z-=a;
+		return res;
+	}
+    
 	friend Vecteur3<T> operator- (const Vecteur3<T>& v1){
 		Vecteur3<T> res(0,0,0);
 		res-=v1;

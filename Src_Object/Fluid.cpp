@@ -23,30 +23,60 @@ static inline float getTempVal( int i, int j, int T ){
 Fluid::Fluid(list<Object *> obj)
 	:obj(obj)
 {
-    tailleGrille = 20;
+    tailleGrille = 35;
     
     s = new Solver(tailleGrille);
     
 	tempIndex = new TempToRGB(256,50);
+	
+	// le bruit
+		//Génération du bruit de perlin.
+	p = new Perlin( 3 , tailleGrille , 7, tailleGrille+2 , tailleGrille+2 , tailleGrille+2 , 0.9f );
+	p->Perlin::init();
+	p->Perlin::init1D();
+
+	perl = p->genererNoise();
+	perl_temps = p->genererNoise1D();
+
+	//attenuation du bruit en dégradé de haut en bas.
+	for (int k=0; k< (tailleGrille+2); k++){
+		for (int j=0; j< (tailleGrille+2); j++){
+			for (int i=0; i< (tailleGrille+2); i++){
+				perl[i+j*(tailleGrille+2)+k*(tailleGrille+2)*(tailleGrille+2)] = 
+				     ((float)j/(float)((tailleGrille+2))) 
+				     * perl[i+j*(tailleGrille+2)+k
+				     *(tailleGrille+2)*(tailleGrille+2)] ;
+				
+				
+			}
+		}
+	}
+	
+
+	
+	
+	
+	
+	
 		
 	// la flamme
 	int mid = tailleGrille/2;
 	
-	s->setDensity( mid ,5, mid, 10.0f );   
-	s->setDensity( mid ,6, mid, 10.0f );   
-	s->setDensity( mid ,4, mid, 10.0f );
-	s->setDensity( mid+1 ,5, mid, 10.0f );   
-	s->setDensity( mid-1 ,5, mid, 10.0f );   
-	s->setDensity( mid ,5, mid+1, 10.0f );   
-	s->setDensity( mid ,5, mid-1, 10.0f );   
+	s->setDensity( mid ,5, mid, 100.0f );   
+	s->setDensity( mid ,6, mid, 100.0f );   
+	s->setDensity( mid ,4, mid, 100.0f );
+	s->setDensity( mid+1 ,5, mid, 100.0f );   
+	s->setDensity( mid-1 ,5, mid, 100.0f );   
+	s->setDensity( mid ,5, mid+1, 100.0f );   
+	s->setDensity( mid ,5, mid-1, 100.0f );   
 	
-	s->setTemperature( mid ,5, mid, 60*((random()+1)/(float)RAND_MAX)*4/1);   
-	s->setTemperature( mid ,6, mid, 42*((random()+1)/(float)RAND_MAX)*4/1);   
-	s->setTemperature( mid ,6, mid, 25*((random()+1)/(float)RAND_MAX)*4/1);   
-	s->setTemperature( mid+1 ,5, mid, 24*((random()+1)/(float)RAND_MAX)*4/1);   
-	s->setTemperature( mid-1 ,5, mid, 38*((random()+1)/(float)RAND_MAX)*4/1);   
-	s->setTemperature( mid ,5, mid+1, 12*((random()+1)/(float)RAND_MAX)*4/1);   
-	s->setTemperature( mid ,5, mid-1, 55*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid ,5, mid, 10*60*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid ,6, mid, 10*42*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid ,6, mid, 10*25*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid+1 ,5, mid, 10*24*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid-1 ,5, mid, 10*38*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid ,5, mid+1, 10*12*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid ,5, mid-1, 10*55*((random()+1)/(float)RAND_MAX)*4/1);   
 	
 	initialiserRenduGPU();
 
@@ -96,7 +126,7 @@ void Fluid::Afficher_Face_Camera(Vecteur3D& positionCamera, Vecteur3D& direction
 */
 	//renduFumeeGPUFaceCamera(positionCamera, directionCamera);
 	//renduFlammeGPUFaceCamera(positionCamera, directionCamera);
-	renduFlammeETFumeeGPUFaceCamera(400, positionCamera, directionCamera);
+	renduFlammeETFumeeGPUFaceCamera(400, positionCamera, directionCamera, dt);
 }    
     
 void Fluid::Afficher(float dt){
@@ -133,8 +163,8 @@ void Fluid::renduFlammeGPUFaceCamera(Vecteur3D& positionCamera, Vecteur3D& direc
 	dessinerPlansDansTexture3DFaceALaCamera(100, positionCamera, directionCamera);
 }
 
-void Fluid::renduFlammeETFumeeGPUFaceCamera( int nb_plans, Vecteur3D& positionCamera, Vecteur3D& directionCamera ){
-	majMatriceFlammeEnMatriceRGBA();
+void Fluid::renduFlammeETFumeeGPUFaceCamera( int nb_plans, Vecteur3D& positionCamera, Vecteur3D& directionCamera ,float t ){
+/*	majMatriceFlammeEnMatriceRGBA();
 	majMatriceFumeeEnMatriceRGBA();
 
 
@@ -163,6 +193,61 @@ void Fluid::renduFlammeETFumeeGPUFaceCamera( int nb_plans, Vecteur3D& positionCa
 	glBindTexture(GL_TEXTURE_3D , 0 );
 	glActiveTexture( GL_TEXTURE1 );
 	glBindTexture(GL_TEXTURE_3D , 0 );
+*/
+	srand(NULL);
+	tps1 += t;
+	tps2 += t;
+	//tps3 = fmod(tps3 + t*((float) rand()) / RAND_MAX,2*M_PI);
+	majMatriceFlammeEnMatriceRGBA();
+	majMatriceFumeeEnMatriceRGBA();
+
+	matriceRGBACarreeToTexture3D(matriceRGBA_smoke, tailleGrille + 2 , _id_texture_fumee);
+	matriceRGBACarreeToTexture3D(matriceRGBA_fire, tailleGrille + 2 , _id_texture_flamme);
+	matricePerlinCarreeToTexture3D(perl, tailleGrille + 2 , _id_texture_perlin);
+	VecteurPerlinTempsToTexture1D(perl_temps, 100 , _id_texture_perlin_temps);
+
+	glBindTexture(GL_TEXTURE_3D, 0);	
+	
+	glActiveTexture( GL_TEXTURE0 );
+	glBindTexture(GL_TEXTURE_3D , _id_texture_flamme );
+	glActiveTexture( GL_TEXTURE1 );
+	glBindTexture(GL_TEXTURE_3D , _id_texture_fumee );
+	glActiveTexture( GL_TEXTURE2 );
+	glBindTexture(GL_TEXTURE_3D , _id_texture_perlin );
+	glActiveTexture( GL_TEXTURE3 );
+	glBindTexture(GL_TEXTURE_1D , _id_texture_perlin_temps );
+
+	glActiveTexture( GL_TEXTURE0 );
+	renderer->Bind_Program();
+	GLuint location_tex1 = glGetUniformLocation( renderer->getProgramId(), "Texture0" );
+	glUniform1i( location_tex1 , 0 );
+    GLuint location_tex2 = glGetUniformLocation( renderer->getProgramId(), "Texture1" );
+	glUniform1i( location_tex2 , 1 );
+    GLuint location_texperl = glGetUniformLocation( renderer->getProgramId(), "Textureperlin" );
+	glUniform1i( location_texperl , 2 );
+	GLuint location_perlintemps = glGetUniformLocation( renderer->getProgramId(), "Temps" );
+	glUniform1i( location_perlintemps , 3 );
+	GLuint location_temps1 = glGetUniformLocation( renderer->getProgramId(), "temps1" );
+	glUniform1f( location_temps1 , ((float) rand()) / RAND_MAX*tps1 );
+	GLuint location_temps2 = glGetUniformLocation( renderer->getProgramId(), "temps2" );
+	glUniform1f( location_temps2 , ((float) rand()) / RAND_MAX*tps2 );
+	GLuint location_temps3 = glGetUniformLocation( renderer->getProgramId(), "temps3" );
+	glUniform1f( location_temps3 , t );
+	// Dessin
+	dessinerPlansDansTexture3DFaceALaCamera(nb_plans, positionCamera, directionCamera);
+	
+	renderer->Unbind_Program();
+
+	glActiveTexture( GL_TEXTURE0 );
+	glBindTexture(GL_TEXTURE_3D , 0 );
+	glActiveTexture( GL_TEXTURE1 );
+	glBindTexture(GL_TEXTURE_3D , 0 );
+	glActiveTexture( GL_TEXTURE2 );
+	glBindTexture(GL_TEXTURE_3D , 0 );
+	glActiveTexture( GL_TEXTURE3 );
+	glBindTexture(GL_TEXTURE_1D , 0 );
+	
+
 }
 
 void Fluid::majMatriceFlammeEnMatriceRGBA(){
@@ -417,4 +502,30 @@ void Fluid::updateInfo(float dt){
 
 
 
+
+void Fluid::matricePerlinCarreeToTexture3D(const Vecteur3D *matrice, int cote, GLuint id_texture){
+	// Chargement en mémoire
+	glBindTexture(GL_TEXTURE_3D, id_texture);
+	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+	glTexImage3D(GL_TEXTURE_3D,0,GL_RGB,cote,cote,cote,
+		     0, GL_RGB, GL_FLOAT, matrice);
+}
+
+void Fluid::VecteurPerlinTempsToTexture1D(const Vecteur3D *matrice, int cote, GLuint id_texture){
+
+	// Chargement en mémoire
+	glBindTexture(GL_TEXTURE_1D, id_texture);
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+	glTexImage1D(GL_TEXTURE_1D,0,GL_RGB,cote,
+		     0, GL_RGB, GL_FLOAT, matrice);
+
+}
 
