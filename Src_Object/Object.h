@@ -47,12 +47,42 @@ protected :
 	}
 
 	inline void setVoisinBound( int i, int j, int k ){
-		if( !grille[_Grille_Ind(i-1,j,k)].plein ) grille[_Grille_Ind(i-1,j,k)].frontiere = true ;
-		if( !grille[_Grille_Ind(i+1,j,k)].plein ) grille[_Grille_Ind(i+1,j,k)].frontiere = true ;
-		if( !grille[_Grille_Ind(i,j-1,k)].plein ) grille[_Grille_Ind(i,j-1,k)].frontiere = true ;
-		if( !grille[_Grille_Ind(i,j+1,k)].plein ) grille[_Grille_Ind(i,j+1,k)].frontiere = true ;
-		if( !grille[_Grille_Ind(i,j,k-1)].plein ) grille[_Grille_Ind(i,j,k-1)].frontiere = true ;
-		if( !grille[_Grille_Ind(i,j,k+1)].plein ) grille[_Grille_Ind(i,j,k+1)].frontiere = true ;
+		if( !grille[_Grille_Ind(i-1,j,k)].plein ) {
+		    grille[_Grille_Ind(i-1,j,k)].frontiere = true ;
+		    grille[_Grille_Ind(i-1,j,k)].repulsion.x = -1.0;
+		    grille[_Grille_Ind(i-1,j,k)].repulsion.y = 0.0;
+		    grille[_Grille_Ind(i-1,j,k)].repulsion.z = 0.0;
+		}    
+		if( !grille[_Grille_Ind(i+1,j,k)].plein ) {
+		    grille[_Grille_Ind(i+1,j,k)].frontiere = true ;
+		    grille[_Grille_Ind(i+1,j,k)].repulsion.x = +1.0;
+		    grille[_Grille_Ind(i+1,j,k)].repulsion.y = 0.0;
+		    grille[_Grille_Ind(i+1,j,k)].repulsion.z = 0.0;
+		}    
+		if( !grille[_Grille_Ind(i,j-1,k)].plein ) {
+		    grille[_Grille_Ind(i,j-1,k)].frontiere = true ;
+		    grille[_Grille_Ind(i,j-1,k)].repulsion.x = 0.0;
+		    grille[_Grille_Ind(i,j-1,k)].repulsion.y = -1.0;
+		    grille[_Grille_Ind(i,j-1,k)].repulsion.z = 0.0;
+		}    
+		if( !grille[_Grille_Ind(i,j+1,k)].plein ) {
+		    grille[_Grille_Ind(i,j+1,k)].frontiere = true ;
+		    grille[_Grille_Ind(i,j+1,k)].repulsion.x = 0.0;
+		    grille[_Grille_Ind(i,j+1,k)].repulsion.y = 1.0;
+		    grille[_Grille_Ind(i,j+1,k)].repulsion.z = 0.0;
+		}    
+		if( !grille[_Grille_Ind(i,j,k-1)].plein ) {
+		    grille[_Grille_Ind(i,j,k-1)].frontiere = true ;
+		    grille[_Grille_Ind(i,j,k-1)].repulsion.x = 0.0;
+		    grille[_Grille_Ind(i,j,k-1)].repulsion.y = 0.0;
+		    grille[_Grille_Ind(i,j,k-1)].repulsion.z = -1.0;
+		}    
+		if( !grille[_Grille_Ind(i,j,k+1)].plein ) {
+		    grille[_Grille_Ind(i,j,k+1)].frontiere = true ;
+		    grille[_Grille_Ind(i,j,k+1)].repulsion.x = 0.0;
+		    grille[_Grille_Ind(i,j,k+1)].repulsion.y = 0.0;
+		    grille[_Grille_Ind(i,j,k+1)].repulsion.z = 1.0;
+		}    
 	}
 	
 	inline void setCornerCell( Voxel& v ){

@@ -23,7 +23,7 @@ static inline float getTempVal( int i, int j, int T ){
 Fluid::Fluid(list<Object *> obj)
 	:obj(obj)
 {
-    tailleGrille = 30;
+    tailleGrille = 20;
     
     s = new Solver(tailleGrille);
     
