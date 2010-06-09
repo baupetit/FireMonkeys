@@ -315,6 +315,21 @@ void Viewer::_keyMap(int key, int x, int y){
 		_cameraHeight -= 0.1f * cam_speed;
 		_setCamera();
 		break;
+	case GLUT_KEY_F1 :
+		selectMetal=true;
+		selectBois=false;
+		selectCire=false;
+		break;
+	case GLUT_KEY_F2 :
+		selectMetal=false;
+		selectBois=true;
+		selectCire=false;
+		break;
+	case GLUT_KEY_F3 :
+		selectMetal=false;
+		selectBois=false;
+		selectCire=true;
+		break;
 
 	default:
 	        break;
