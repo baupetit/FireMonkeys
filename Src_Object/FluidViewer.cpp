@@ -27,11 +27,12 @@ FluidViewer::FluidViewer()
 		   Vecteur3D(0,0,0), 
 		   10,
 		   0,
-		   0, 
-		   Vecteur3I(0,0,0),
-		   0);
+		   1000.1,
+		   1000.1, 
+		   Vecteur3I(0,0,0));
 
-	Sphere *sphere = new Sphere( def,0.2, Vecteur4D( 0.2,0.2,0.2,0.8 ), 10, 10);
+
+	Sphere *sphere = new Sphere( def,0.5, Vecteur4D( 0.2,0.2,0.2,0.8 ), 10, 10);
     _objs.push_back(sphere);           
     _fluid = new Fluid(_objs);
 }
@@ -92,7 +93,7 @@ void FluidViewer::rendu(){
     if ( (*_it_objs) != NULL)
     {
         (*_it_objs)->translate( Vecteur3D (Viewer::sourisDX, -Viewer::sourisDY, 0.0));
-        (*_it_objs)->updateVitesse();
+        //(*_it_objs)->updateVitesse();
     }
 
     // affichage objets

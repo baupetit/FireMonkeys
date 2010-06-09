@@ -8,7 +8,8 @@ Voxel::Voxel(){
 	repulsion = Vecteur3D(0.0,0.0,0.0);
 	tauxConversion = 0.0 ;
 	tempThreshold = 0.0 ;
-	conduction = 0.0 ;
+	diffusion = 0.0 ;
+	conductance = 0.0;
 	pos = Vecteur3I( 0,0,0 );
 	
 }
@@ -20,15 +21,18 @@ Voxel::Voxel( bool plein,
 	      Vecteur3D repulsion, 
 	      float tauxConversion, 
 	      float tempThreshold, 
-	      float conduction, 
+	      float diffusion,  
+	      float conductance, 
 	      Vecteur3I pos ) 
 	:plein(plein),
 	 frontiere(frontiere),
 	 combustibleRestant(combustibleRestant),
 	 temperature(temperature), 
+	 temperature0(temperature), 
 	 repulsion(repulsion), 
 	 tauxConversion(tauxConversion),
 	 tempThreshold(tempThreshold),
-	 conduction(conduction), 
+	 diffusion(diffusion), 
+	 conductance(conductance), 
 	 pos(pos)
 {}
