@@ -28,7 +28,8 @@ protected :
 	}
 
 public :
-	Sphere( float radius, Vecteur4D color, 
+	Sphere( Voxel defVox,
+		float radius, Vecteur4D color, 
 		int nb_plans, int nb_quarts);
 	~Sphere();
 	

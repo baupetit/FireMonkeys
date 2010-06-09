@@ -14,10 +14,13 @@ Object::Object( Voxel defVox )
 	grille = 0;
 }
 
-
 /* destructor */
 Object::~Object(){
 	if( grille ) delete [] grille;
+}
+
+/* heat diffusion */
+void Object::diffuserTemperature( float dt ){
 }
 
 /* herited methods */

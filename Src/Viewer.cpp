@@ -220,7 +220,8 @@ void Viewer::_keyboardFunc(unsigned char key, int x, int y){
 	        break;
 	}
 }
-void Viewer::_motionFunc(int x, int y){}
+void Viewer::_motionFunc(int x, int y){
+}
 void Viewer::_mouseFunc(int button, int state, int x, int y){}
 void Viewer::_passiveMotionFunc(int x, int y){}
 

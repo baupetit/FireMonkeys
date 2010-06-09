@@ -4,6 +4,7 @@
 #include "Vecteur.h"
 
 struct Voxel {
+	
 	bool plein ;
 	bool frontiere ;
 	float combustibleRestant ;
@@ -35,5 +36,6 @@ struct Voxel {
 		
 	    
         
+
 };
 #endif

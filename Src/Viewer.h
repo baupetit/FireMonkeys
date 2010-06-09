@@ -41,6 +41,7 @@ protected :
 	float _cameraHeight;
 	void  _setCamera();
 	
+	
     // Initialisations
 	void _initGlut(const string & title, int width, int height, 
 	               int initPositionX, int initPositionY);
