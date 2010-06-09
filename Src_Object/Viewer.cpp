@@ -243,7 +243,6 @@ void Viewer::mouse(int x, int y){
 }
 
 void Viewer::mouse(int button, int state, int x, int y){
-    cout << "mouse ! " << endl;
 	if (button == GLUT_LEFT_BUTTON && state==GLUT_DOWN) {
 		dragging = true;
 		sourisX0 = x;

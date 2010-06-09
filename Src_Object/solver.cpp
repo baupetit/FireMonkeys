@@ -1,6 +1,6 @@
 #define SIZE ((N+2)*(N+2)*(N+2))
 #ifndef NB_ITERATION_SOLVE
-#define NB_ITERATION_SOLVE 20
+#define NB_ITERATION_SOLVE 10
 #endif
 
 #include "solver.h"
@@ -644,9 +644,9 @@ void Solver::updateInfo( Object& o){
                 // vitesse      //
                 //////////////////
                 // la repulsion ecrase la vitesse en frontiere
-                _u[IX(solverCell.x, solverCell.y, solverCell.z)] = (*voxelObj).repulsion.x + o.vitesse.x;
-                _v[IX(solverCell.x, solverCell.y, solverCell.z)] = (*voxelObj).repulsion.y + o.vitesse.y;
-                _w[IX(solverCell.x, solverCell.y, solverCell.z)] = (*voxelObj).repulsion.z + o.vitesse.z;
+                _u[IX(solverCell.x, solverCell.y, solverCell.z)] = (*voxelObj).repulsion.x * 0.1 + o.vitesse.x;
+                _v[IX(solverCell.x, solverCell.y, solverCell.z)] = (*voxelObj).repulsion.y * 0.1 + o.vitesse.y;
+                _w[IX(solverCell.x, solverCell.y, solverCell.z)] = (*voxelObj).repulsion.z * 0.1 + o.vitesse.z;
             }    
             
         }
