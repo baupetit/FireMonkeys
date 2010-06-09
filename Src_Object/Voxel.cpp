@@ -1,0 +1,33 @@
+#include "Voxel.h"
+
+Voxel::Voxel(){
+	plein = false ;
+	frontiere = false ;
+	combustibleRestant = 0.0 ;
+	temperature = 0.0 ;
+	repulsion = Vecteur3D(0.0,0.0,0.0);
+	tauxConversion = 0.0 ;
+	tempThreshold = 0.0 ;
+	conduction = 0.0 ;
+	pos = Vecteur3I( 0,0,0 );
+}
+	
+Voxel::Voxel( bool plein,  
+	      bool frontiere, 
+	      float combustibleRestant, 
+	      float temperature, 
+	      Vecteur3D repulsion, 
+	      float tauxConversion, 
+	      float tempThreshold, 
+	      float conduction, 
+	      Vecteur3I pos ) 
+	:plein(plein),
+	 frontiere(frontiere),
+	 combustibleRestant(combustibleRestant),
+	 temperature(temperature), 
+	 repulsion(repulsion), 
+	 tauxConversion(tauxConversion),
+	 tempThreshold(tempThreshold),
+	 conduction(conduction), 
+	 pos(pos)
+{}
