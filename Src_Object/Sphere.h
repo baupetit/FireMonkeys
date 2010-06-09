@@ -14,7 +14,6 @@ protected :
 	
 	/* ogl attribs */
 	GLuint drawList ;
-	Vecteur4D color ;
 	
 	virtual void generateVoxels() ;
 	void         generateDisplayList(int nb_plans, int nb_quarts);
@@ -26,14 +25,20 @@ protected :
 		}
 		return false ;
 	}
-
+	
+	inline void setValuation( Voxel& v ){
+		for( int i = 0 ; i<8 ; ++i ){
+			Vecteur3D dist = position - v.corner[i];
+			v.valuation[i] = norme( dist ) - radius;
+		}
+	}
 public :
 	Sphere( Voxel defVox,
 		float radius, Vecteur4D color, 
 		int nb_plans, int nb_quarts);
 	~Sphere();
 	
-	virtual void Afficher(float dt);
+	//virtual void Afficher(float dt);
 
 };
 

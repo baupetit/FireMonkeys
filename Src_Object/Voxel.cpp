@@ -11,6 +11,7 @@ Voxel::Voxel(){
 	diffusion = 0.0 ;
 	conductance = 0.0;
 	pos = Vecteur3I( 0,0,0 );
+	nb_faces = 0;
 }
 	
 Voxel::Voxel( bool plein,  
@@ -34,4 +35,6 @@ Voxel::Voxel( bool plein,
 	 diffusion(diffusion), 
 	 conductance(conductance), 
 	 pos(pos)
-{}
+{
+	nb_faces = 0;
+}
