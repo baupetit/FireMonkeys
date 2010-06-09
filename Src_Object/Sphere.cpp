@@ -36,12 +36,16 @@ Sphere::Sphere( Voxel defVox,
 
 Sphere::~Sphere(){
 }
+
 /*
 void Sphere::Afficher(float dt){
+
+
 	//glColor4f( color.x, color.y, color.z, color.w );
 	//glCallList( drawList );
 
-	glPointSize( 2.0f );
+    
+	glPointSize( 4.0f );
 	glDisable(GL_LIGHTING);
 	
 	glBegin(GL_POINTS);
@@ -52,11 +56,11 @@ void Sphere::Afficher(float dt){
 				Voxel val = grille[_Grille_Ind(i,j,k)];
 				
 				if( val.plein ){
-					glColor3f( 1,0,0 );
-				        glVertex3f( p.x, p.y, p.z );
+					glColor3f( val.temperature,0,0 );
+				    glVertex3f( p.x, p.y, p.z );
 				}
 				if( val.frontiere ){
-					glColor3f( 0,0,1 );
+					glColor3f( val.temperature,0,0 );
 					glVertex3f( p.x, p.y, p.z );
 				}
 			}

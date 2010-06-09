@@ -4,7 +4,7 @@ uniform sampler3D Texture1;
 uniform sampler3D Textureperlin;
 uniform float temps1;
 uniform float temps2;
-
+uniform sampler1D Temps;
 
 
 void main(void)
@@ -14,9 +14,9 @@ void main(void)
 	vec3 coord = gl_TexCoord[0].stp ; 
 	vec3 perl = vec3( texture3D( Textureperlin,gl_TexCoord[0].stp ));
 
-	coord.x = coord.x + perl.x * cos(temps1)*sin(2*temps2);
-	coord.y = coord.y + perl.y * sin(temps1)*sin(2*temps2);
-	coord.z = coord.z + perl.z * cos(2*temps2);
+	coord.x = coord.x + perl.x * 1.05*cos(temps1)*sin(2*temps2);
+	coord.y = coord.y + perl.y * 1.05*sin(temps1)*sin(2*temps2);
+	coord.z = coord.z + perl.z * 1.05*cos(2*temps2);
 
 
 

@@ -7,6 +7,10 @@
 #endif
 
 Viewer *Viewer::_instance = NULL;
+float Viewer::sourisX0 = 0;
+float Viewer::sourisY0 = 0;
+float Viewer::sourisDX = 0;
+float Viewer::sourisDY = 0;
 
 Viewer::Viewer(const string & title, int width, int height,
 	       int initPositionX, int initPositionY){
@@ -218,9 +222,20 @@ void Viewer::_keyboardFunc(unsigned char key, int x, int y){
 	        break;
 	}
 }
-void Viewer::_motionFunc(int x, int y){}
+void Viewer::_motionFunc(int x, int y){
+    _instance->mouse(x,y);
+}
+
+void Viewer::mouse(int x, int y){
+    sourisDX = (x-sourisX0)/150.0;
+    sourisX0 = x;
+    sourisDY = (y-sourisY0)/150.0;
+    sourisY0 = y;
+}
 void Viewer::_mouseFunc(int button, int state, int x, int y){}
-void Viewer::_passiveMotionFunc(int x, int y){}
+void Viewer::_passiveMotionFunc(int x, int y){
+    _instance->mouse(x,y);
+}
 
 void Viewer::_reshapeFunc(int w, int h){
 	// Prevent a divide by zero, when window is too short

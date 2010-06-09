@@ -59,6 +59,14 @@ protected :
 	static void _specialFunc(int key, int x, int y);
 	static void _visibilityFunc(int visible);
 	
+	// Souris
+	static float sourisX0;
+	static float sourisDX;
+	static float sourisY0;
+	static float sourisDY;
+	
+	void mouse(int x, int y);
+	
 	// Touches clavier
 	void  _keyMap(int key, int x, int y);
 };

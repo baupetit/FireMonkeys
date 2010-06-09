@@ -17,8 +17,8 @@
 int main(int argc, char **argv)
 {
 	SolverParam::initSolverParam();
-	//FluidViewer window;
-	ObjectViewer window;
+	FluidViewer window;
+	//ObjectViewer window;
 	window.start();
 	return 0;
 }

@@ -17,13 +17,14 @@
 class Noeud{
 protected :
 	Vecteur3D position;
+	Vecteur3D prevPosition;
 	//Vecteur3D echelle; on s'en sert pas
 	Vecteur3D anglesEuler;
 	Vecteur3D vitesse ;
 	
 	BoundingBox AABB;
 public:
-	Noeud() :position(0,0,0),anglesEuler(0,0,0){}
+	Noeud() :position(0,0,0), prevPosition(0,0,0),anglesEuler(0,0,0) {}
 	~Noeud() {}	
 	
 	/* getters and setters */
@@ -41,6 +42,8 @@ public:
 	
 	Vecteur3D getVitesse();
 	void setVitesse( const Vecteur3D& v );
+	
+	void updateVitesse();
 
 	/* others usefull stuff */
 	void        translate( const Vecteur3D& tr );

@@ -11,7 +11,7 @@
  * @class : Solver
  * @brief : This class is used to modelise the fluid motion in the environnement
  */
-
+#define N _N
 #define IX(i,j,k) ((i)+(N+2)*(j)+((N+2)*(N+2))*(k))
 
 #include "Object.h"
@@ -116,6 +116,7 @@ public :
      */
     void updateInfo( Object& o);
 
+    
 	inline Vecteur3D cellToPoint( int i, int j, int k){
 		Vecteur3D res = AABB.lowerCorner;
 		res.x += (i-1) * SolverParam::getSpaceDiv();
@@ -124,7 +125,22 @@ public :
 		return res ;
 	}
 
+    inline Vecteur3I objectCellToSolverCell(const Vecteur3I& objectCell, const Vecteur3D& objectLowerCorner ){
+        Vecteur3I res = objectCell;
+        res.x += (int)  ( (objectLowerCorner.x - AABB.lowerCorner.x) / SolverParam::getSpaceDiv() );
+        res.y += (int)  ( (objectLowerCorner.y - AABB.lowerCorner.y) / SolverParam::getSpaceDiv() );
+        res.z += (int)  ( (objectLowerCorner.z - AABB.lowerCorner.z) / SolverParam::getSpaceDiv() );
+        return res;
+    }
 
+	
+	inline bool cellIsValid( Vecteur3I c){
+	    if (c.x <0 || c.x >= _N ||
+	        c.y <0 || c.y >= _N ||
+	        c.z <0 || c.z >= _N)
+	        return false;
+	    return true;
+	}
 
 protected :
 	/* size of the grid */
@@ -151,8 +167,6 @@ protected :
 
 	/* Voxels infos */
 	Voxel *_filled;
-	list<Object *> _objs;
-	list<Object *>::iterator _it_objs;
 
     /** Boite englobante */
 	BoundingBox AABB;

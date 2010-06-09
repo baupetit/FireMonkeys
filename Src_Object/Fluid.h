@@ -54,6 +54,7 @@ private :
 
 	/** Liste d'objet */
 	list<Object *> obj;	
+	list<Object *>::iterator _it_objs;
 
 public :
 	Fluid(list<Object *>obj);
@@ -93,6 +94,12 @@ private:
 						     Vecteur3D& positionCamera, 
 						     Vecteur3D& directionCamera);
 	
+	
+    /**
+     * Mise à jour des infos des objets
+     */
+    void updateInfo(float dt);
+    
 public :
 	void Afficher( float dt );
 	void Afficher_Face_Camera(Vecteur3D& positionCamera, 

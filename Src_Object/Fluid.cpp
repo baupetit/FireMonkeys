@@ -23,12 +23,15 @@ static inline float getTempVal( int i, int j, int T ){
 Fluid::Fluid(list<Object *> obj)
 	:obj(obj)
 {
-        tailleGrille = 40;
-        s = new Solver(tailleGrille);
+    tailleGrille = 20;
+    
+    s = new Solver(tailleGrille);
+    
 	tempIndex = new TempToRGB(256,50);
 		
 	// la flamme
 	int mid = tailleGrille/2;
+	
 	s->setDensity( mid ,5, mid, 10.0f );   
 	s->setDensity( mid ,6, mid, 10.0f );   
 	s->setDensity( mid ,4, mid, 10.0f );
@@ -36,6 +39,7 @@ Fluid::Fluid(list<Object *> obj)
 	s->setDensity( mid-1 ,5, mid, 10.0f );   
 	s->setDensity( mid ,5, mid+1, 10.0f );   
 	s->setDensity( mid ,5, mid-1, 10.0f );   
+	
 	s->setTemperature( mid ,5, mid, 60*((random()+1)/(float)RAND_MAX)*4/1);   
 	s->setTemperature( mid ,6, mid, 42*((random()+1)/(float)RAND_MAX)*4/1);   
 	s->setTemperature( mid ,6, mid, 25*((random()+1)/(float)RAND_MAX)*4/1);   
@@ -53,9 +57,6 @@ Fluid::Fluid(list<Object *> obj)
 	float spaceDiv = SolverParam::getSpaceDiv();
 	AABB = BoundingBox(Vecteur3D( -tailleGrille*spaceDiv/2, -tailleGrille*spaceDiv/2, -tailleGrille*spaceDiv/2 ) ,
 			   Vecteur3D(  tailleGrille*spaceDiv/2,  tailleGrille*spaceDiv/2,  tailleGrille*spaceDiv/2 ) );
-
-	//translate(Vecteur3D( 1, 0, 1 ));
-	//obj->translate(Vecteur3D( +0.3,+0.5,0));
 
 }
 
@@ -135,6 +136,7 @@ void Fluid::renduFlammeGPUFaceCamera(Vecteur3D& positionCamera, Vecteur3D& direc
 void Fluid::renduFlammeETFumeeGPUFaceCamera( int nb_plans, Vecteur3D& positionCamera, Vecteur3D& directionCamera ){
 	majMatriceFlammeEnMatriceRGBA();
 	majMatriceFumeeEnMatriceRGBA();
+
 
 	matriceRGBACarreeToTexture3D(matriceRGBA_smoke, tailleGrille + 2 , _id_texture_fumee);
 	matriceRGBACarreeToTexture3D(matriceRGBA_fire, tailleGrille + 2 , _id_texture_flamme);
@@ -396,11 +398,20 @@ void Fluid::dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans){
 }
 
 void Fluid::Mise_A_Jour( float dt ){
+    updateInfo(dt);
 	s->velocitiesStepWithTemp(dt);
 	s->densitiesStepWithTemp(dt);
 }
 
 
+void Fluid::updateInfo(float dt){
+	s->clearFilledInfo();
+    for(_it_objs = obj.begin(); _it_objs != obj.end(); ++_it_objs){
+    	s->updateInfo(**_it_objs);
+    	(**_it_objs).diffuserTemperature(dt);
+    }
+}
+ 
 
 
 

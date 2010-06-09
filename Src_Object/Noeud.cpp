@@ -48,3 +48,9 @@ void        Noeud::rotateXYZ( float angleX, float angleY,
 	anglesEuler.y += angleY ;
 	anglesEuler.z += angleZ ;
 }
+void        Noeud::updateVitesse(){
+    vitesse = position - prevPosition;
+    prevPosition = position;
+}
+
+

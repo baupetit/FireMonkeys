@@ -16,10 +16,12 @@
 #include <cmath>
 
 #include "Triangle.h"
+class Solver;
 
 #define _Grille_Ind(i,j,k) ((i)+((j)*grilleSize.x)+((k)*grilleSize.x*grilleSize.y))
 
 class Object : public BasicEntite {
+friend class Solver;
 protected :
 	// voxelisation
 	Voxel defVox;
@@ -98,6 +100,7 @@ public:
 	virtual void Afficher_Face_Camera(Vecteur3D& positionCamera,
 					  Vecteur3D& directionCamera,
 					  float dt ) ; 
+			
 };
 
 #endif

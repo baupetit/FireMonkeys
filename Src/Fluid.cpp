@@ -24,7 +24,7 @@ Fluid::Fluid()
 {
 	tps1 = 0;
 	tps2 = 0;
-	tps3 = 0;
+	tps3=0;
     tailleGrille = 35;
     s = new Solver(tailleGrille);
     tempIndex = new TempToRGB(256,50);
@@ -33,18 +33,22 @@ Fluid::Fluid()
 	//Génération du bruit de perlin.
 	p = new Perlin( 3 , tailleGrille , 7, tailleGrille+2 , tailleGrille+2 , tailleGrille+2 , 0.9f );
 	p->Perlin::init();
+	p->Perlin::init1D();
 
 	perl = p->genererNoise();
+	perl_temps = p->genererNoise1D();
+
+	for (int i = 0 ; i< 100 ; i++)
+	cout << "x= " << perl_temps[i].x << "y= " << perl_temps[i].y  << "z= " << perl_temps[i].z << endl;
+
 	//attenuation du bruit en dégradé de haut en bas.
-	
 	for (int k=0; k< (tailleGrille+2); k++){
 		for (int j=0; j< (tailleGrille+2); j++){
 			for (int i=0; i< (tailleGrille+2); i++){
 				perl[i+j*(tailleGrille+2)+k*(tailleGrille+2)*(tailleGrille+2)] = ((float)j/(float)((tailleGrille+2))) * perl[i+j*(tailleGrille+2)+k*(tailleGrille+2)*(tailleGrille+2)] ;
 				
-				cout << "x= " << perl[i+j*(tailleGrille+2)+k*(tailleGrille+2)*(tailleGrille+2)].x << "y= " << perl[i+j*(tailleGrille+2)+k*(tailleGrille+2)*(tailleGrille+2)].y  << "z= " << perl[i+j*(tailleGrille+2)+k*(tailleGrille+2)*(tailleGrille+2)].z << endl;
+				
 			}
-			//cout << endl;
 		}
 	}
 	
@@ -151,6 +155,7 @@ void Fluid::renduFlammeETFumeeGPUFaceCamera( int nb_plans, Vecteur3D& positionCa
 	matriceRGBACarreeToTexture3D(matriceRGBA_smoke, tailleGrille + 2 , _id_texture_fumee);
 	matriceRGBACarreeToTexture3D(matriceRGBA_fire, tailleGrille + 2 , _id_texture_flamme);
 	matricePerlinCarreeToTexture3D(perl, tailleGrille + 2 , _id_texture_perlin);
+	VecteurPerlinTempsToTexture1D(perl_temps, 100 , _id_texture_perlin_temps);
 
 	glBindTexture(GL_TEXTURE_3D, 0);	
 	
@@ -160,7 +165,10 @@ void Fluid::renduFlammeETFumeeGPUFaceCamera( int nb_plans, Vecteur3D& positionCa
 	glBindTexture(GL_TEXTURE_3D , _id_texture_fumee );
 	glActiveTexture( GL_TEXTURE2 );
 	glBindTexture(GL_TEXTURE_3D , _id_texture_perlin );
+	glActiveTexture( GL_TEXTURE3 );
+	glBindTexture(GL_TEXTURE_1D , _id_texture_perlin_temps );
 
+	glActiveTexture( GL_TEXTURE0 );
 	renderer->Bind_Program();
 	GLuint location_tex1 = glGetUniformLocation( renderer->getProgramId(), "Texture0" );
 	glUniform1i( location_tex1 , 0 );
@@ -168,13 +176,14 @@ void Fluid::renduFlammeETFumeeGPUFaceCamera( int nb_plans, Vecteur3D& positionCa
 	glUniform1i( location_tex2 , 1 );
     GLuint location_texperl = glGetUniformLocation( renderer->getProgramId(), "Textureperlin" );
 	glUniform1i( location_texperl , 2 );
+	GLuint location_perlintemps = glGetUniformLocation( renderer->getProgramId(), "Temps" );
+	glUniform1i( location_perlintemps , 3 );
 	GLuint location_temps1 = glGetUniformLocation( renderer->getProgramId(), "temps1" );
-	glUniform1f( location_temps1 , tps1 );
+	glUniform1f( location_temps1 , ((float) rand()) / RAND_MAX*tps1 );
 	GLuint location_temps2 = glGetUniformLocation( renderer->getProgramId(), "temps2" );
-	glUniform1f( location_temps2 , tps2 );
+	glUniform1f( location_temps2 , ((float) rand()) / RAND_MAX*tps2 );
 	GLuint location_temps3 = glGetUniformLocation( renderer->getProgramId(), "temps3" );
-	glUniform1f( location_temps3 , tps3 );
-
+	glUniform1f( location_temps3 , t );
 	// Dessin
 	dessinerPlansDansTexture3DFaceALaCamera(nb_plans, positionCamera, directionCamera);
 	
@@ -186,6 +195,8 @@ void Fluid::renduFlammeETFumeeGPUFaceCamera( int nb_plans, Vecteur3D& positionCa
 	glBindTexture(GL_TEXTURE_3D , 0 );
 	glActiveTexture( GL_TEXTURE2 );
 	glBindTexture(GL_TEXTURE_3D , 0 );
+	glActiveTexture( GL_TEXTURE3 );
+	glBindTexture(GL_TEXTURE_1D , 0 );
 	
 }
 
@@ -253,6 +264,19 @@ void Fluid::matricePerlinCarreeToTexture3D(const Vecteur3D *matrice, int cote, G
     	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 	glTexImage3D(GL_TEXTURE_3D,0,GL_RGB,cote,cote,cote,
 		     0, GL_RGB, GL_FLOAT, matrice);
+}
+
+void Fluid::VecteurPerlinTempsToTexture1D(const Vecteur3D *matrice, int cote, GLuint id_texture){
+
+	// Chargement en mémoire
+	glBindTexture(GL_TEXTURE_1D, id_texture);
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+	glTexImage1D(GL_TEXTURE_1D,0,GL_RGB,cote,
+		     0, GL_RGB, GL_FLOAT, matrice);
+
 }
 
 void Fluid::initialiserRenduGPU(){

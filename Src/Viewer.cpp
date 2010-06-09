@@ -102,7 +102,7 @@ void Viewer::_initRendering(){
 	cout << "Initialisation du rendu " << endl;
 	//glClearColor(0.6f, 0.6f, 0.6f, 0.6f);
 	//glClearColor(0.9f, 0.9f, 0.9f, 0.9f);
-	glClearColor(0.5f, 0.5f, 0.5f, 0.9f);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.9f);
 	glShadeModel(GL_SMOOTH);
 	glPolygonMode(GL_FRONT, GL_FILL);
 	glLineWidth(1.0f);
@@ -220,7 +220,8 @@ void Viewer::_keyboardFunc(unsigned char key, int x, int y){
 	        break;
 	}
 }
-void Viewer::_motionFunc(int x, int y){}
+void Viewer::_motionFunc(int x, int y){
+}
 void Viewer::_mouseFunc(int button, int state, int x, int y){}
 void Viewer::_passiveMotionFunc(int x, int y){}
 

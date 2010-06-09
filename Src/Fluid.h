@@ -27,7 +27,7 @@ private :
 	Solver *s;
 	Perlin *p;
 	Vecteur3D *perl ;
-
+	Vecteur3D *perl_temps ;
 	/** Temperature indexes */
 	TempToRGB *tempIndex;
 
@@ -42,6 +42,7 @@ private :
 	/** id de texture3d pour la fumee */
 	GLuint _id_texture_fumee;
 	GLuint _id_texture_perlin;
+	GLuint _id_texture_perlin_temps;
 	/**densité générée*/
 	float gen_dens;
 	/** matrice RGBA pour charger la texture 3D */
@@ -50,8 +51,7 @@ private :
 	
 	float tps1;
 	float tps2;
-	float tps3;
-
+float tps3;
 	/**ID du programme shader pour la multitexture*/
 	Shader *renderer;
 public :
@@ -89,6 +89,8 @@ private:
 	/** Dessine des plans dans la texture3D face a la camera*/
 	void dessinerPlansDansTexture3DFaceALaCamera(int nb_plans,
 	                     Vecteur3D& positionCamera, Vecteur3D& directionCamera);
+
+	void VecteurPerlinTempsToTexture1D(const Vecteur3D *matrice, int cote, GLuint id_texture);
 	
 public :
 	void Afficher( float dt );

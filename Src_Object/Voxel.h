@@ -10,11 +10,13 @@ struct Voxel {
 	bool plein ;
 	bool frontiere ;
 	float combustibleRestant ;
-	float temperature ;
+	float temperature;
+	float temperature0;
 	Vecteur3D repulsion ;
 	float tauxConversion ;
 	float tempThreshold ;
-	float conduction ;
+	float diffusion ;
+	float conductance;
 	Vecteur3I pos ;
 	
 	// pour le marching cube
@@ -26,14 +28,7 @@ struct Voxel {
 	
 	Voxel();
 	
-	Voxel( bool plein,  
-	       bool frontiere, 
-	       float combustibleRestant, 
-	       float temperature, 
-	       Vecteur3D repulsion, 
-	       float tauxConversion,
-	       float tempThreshold, 
-	       float conduction,
-	       Vecteur3I pos );		
+	Voxel( bool plein,  bool frontiere, float combustibleRestant, float temperature, Vecteur3D repulsion, float tempThreshold, float tauxConversion, float diffusion, float conductance, Vecteur3I position );
+
 };
 #endif
