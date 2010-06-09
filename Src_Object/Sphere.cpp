@@ -81,6 +81,7 @@ void Sphere::Afficher(float dt){
 				Voxel val = grille[_Grille_Ind(i,j,k)];
 				
 				if( val.plein ){
+					//cout << val.temperature << endl;
 					glColor3f( val.temperature,0,0 );
 				    glVertex3f( p.x, p.y, p.z );
 				}
@@ -88,6 +89,7 @@ void Sphere::Afficher(float dt){
 					glColor3f( val.temperature,0,0 );
 					glVertex3f( p.x, p.y, p.z );
 				}
+
 			}
 		}
 	}

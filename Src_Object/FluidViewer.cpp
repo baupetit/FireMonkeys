@@ -27,8 +27,8 @@ FluidViewer::FluidViewer()
 		   Vecteur3D(0,0,0), 
 		   10,
 		   0,
-		   1000.1,
-		   1000.1, 
+		   0.0010,
+		   10, 
 		   Vecteur3I(0,0,0));
 
 

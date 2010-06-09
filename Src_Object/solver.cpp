@@ -590,6 +590,7 @@ void Solver::updateInfo( Object& o){
                 _u[IX(solverCell.x, solverCell.y, solverCell.z)] = o.vitesse.x;
                 _v[IX(solverCell.x, solverCell.y, solverCell.z)] = o.vitesse.y;
                 _w[IX(solverCell.x, solverCell.y, solverCell.z)] = o.vitesse.z;
+				
             }
             //temp, combustible, vitesse 
             //uniquement sur les frontieres
