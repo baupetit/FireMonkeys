@@ -28,7 +28,8 @@ FluidViewer::FluidViewer()
 		   10,
 		   0,
 		   0, 
-		   Vecteur3I(0,0,0));
+		   Vecteur3I(0,0,0),
+		   0);
 
 	Sphere *sphere = new Sphere( def,0.2, Vecteur4D( 0.2,0.2,0.2,0.8 ), 10, 10);
     _objs.push_back(sphere);           
