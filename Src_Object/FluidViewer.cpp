@@ -32,12 +32,12 @@ FluidViewer::FluidViewer()
 		   Vecteur3I(0,0,0));
 
 	Sphere *sphereBois   = new Sphere( def,0.5, Vecteur4D( 0.2,0.2,0.2,0.8 ), 10, 10);
-	Sphere *sphereSphere = new Sphere( def,0.5, Vecteur4D( 0.2,0.2,0.2,0.8 ), 10, 10);
+	Sphere *sphereMetal  = new Sphere( def,0.5, Vecteur4D( 0.2,0.2,0.2,0.8 ), 10, 10);
 	Sphere *sphereCire   = new Sphere( def,0.5, Vecteur4D( 0.2,0.2,0.2,0.8 ), 10, 10);
-    _objs.push_back(sphereBois);           
-    _objs.push_back(sphereMetal);           
-    _objs.push_back(sphereCire);           
-    _fluid = new Fluid(_objs);
+	_objs.push_back(sphereBois);           
+	_objs.push_back(sphereMetal);           
+	_objs.push_back(sphereCire);           
+	_fluid = new Fluid(_objs);
 }
 
 FluidViewer::~FluidViewer(){
