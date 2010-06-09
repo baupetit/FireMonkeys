@@ -64,8 +64,11 @@ protected :
 	static float sourisDX;
 	static float sourisY0;
 	static float sourisDY;
+	bool dragging;
+	float normDist;
 	
 	void mouse(int x, int y);
+	void mouse(int button, int state, int x, int y);
 	
 	// Touches clavier
 	void  _keyMap(int key, int x, int y);

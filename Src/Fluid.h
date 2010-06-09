@@ -51,7 +51,7 @@ private :
 	
 	float tps1;
 	float tps2;
-float tps3;
+    float tps3;
 	/**ID du programme shader pour la multitexture*/
 	Shader *renderer;
 public :
