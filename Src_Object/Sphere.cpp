@@ -105,13 +105,14 @@ void Sphere::generateVoxels() {
 	for( int k = 0 ; k < nb_z ; ++k ){
 		for( int j = 0 ; j < nb_y ; ++j ){
 			for( int i = 0 ; i < nb_x ; ++i ){
-				if( isInside( cellToPoint( Vecteur3I(i , j , k) ) ) ){
-					grille[_Grille_Ind(i,j,k)] = defVox;
+				Voxel &ref = grille[_Grille_Ind(i,j,k)];
+				Vecteur3I pos(i,j,k);
+				if( isInside( cellToPoint( pos ) ) ){
+					ref = defVox;
 					setVoisinBound( i,j,k );
-				} else {
-					grille[_Grille_Ind(i,j,k)] = Voxel() ;
 				}
-		        }
+				ref.pos = pos ;
+			}
 		}
 	}
 }
