@@ -22,6 +22,7 @@ struct Voxel {
 	       float combustibleRestant, 
 	       float temperature, 
 	       Vecteur3D repulsion, 
+	       float tauxConversion,
 	       float tempThreshold, 
 	       float conduction,
 	       Vecteur3I pos );		

@@ -18,9 +18,10 @@ static bool zero( float f ){
 	return false ;
 }
 
-Sphere::Sphere( float radius, Vecteur4D color, 
+Sphere::Sphere( Voxel defVox,
+		float radius, Vecteur4D color, 
 		int nb_plans, int nb_quarts  )
-	:radius(radius),color(color)
+	:Object(defVox),radius(radius),color(color)
 {
 	// compute AABB
 	float spaceDiv  = SolverParam::getSpaceDiv();
@@ -35,31 +36,32 @@ Sphere::~Sphere(){
 }
 
 void Sphere::Afficher(float dt){
-	glColor4f( color.x, color.y, color.z, color.w );
-	glCallList( drawList );
+	//glColor4f( color.x, color.y, color.z, color.w );
+	//glCallList( drawList );
 
-	/*
-	  glPointSize( 2.0f );
-	  glDisable(GL_LIGHTING);
+	glPointSize( 2.0f );
+	glDisable(GL_LIGHTING);
 	
-	  glBegin(GL_POINTS);
-	  for( int k = 0 ; k < voxelSize.z ; ++k ){
-	  for( int j = 0 ; j < voxelSize.y ; ++j ){
-	  for( int i = 0 ; i < voxelSize.x ; ++i ){
-	  Vecteur3D p = cellToPoint( i , j , k );
-	  float val = voxel[IJK(i,j,k)];
-	  
-	  if( val > 0.0 )
-	  glColor3f( 1,0,0 );
-	  else 
-	  glColor3f( 0,0,1 );
-	  glVertex3f( p.x, p.y, p.z );
-	  }
-	  }
-	  }
-	  glEnd();
-	  glEnable(GL_LIGHTING);
-	*/
+	glBegin(GL_POINTS);
+	for( int k = 0 ; k < grilleSize.z ; ++k ){
+		for( int j = 0 ; j < grilleSize.y ; ++j ){
+			for( int i = 0 ; i < grilleSize.x ; ++i ){
+				Vecteur3D p = cellToPoint( Vecteur3I(i , j , k));
+				Voxel val = grille[_Grille_Ind(i,j,k)];
+				
+				if( val.plein ){
+					glColor3f( 1,0,0 );
+				        glVertex3f( p.x, p.y, p.z );
+				}
+				if( val.frontiere ){
+					glColor3f( 0,0,1 );
+					glVertex3f( p.x, p.y, p.z );
+				}
+			}
+		}
+	}
+	glEnd();
+	glEnable(GL_LIGHTING);
 }
 
 void Sphere::generateVoxels() {
