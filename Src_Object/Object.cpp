@@ -15,3 +15,5 @@ void Object::Afficher_Face_Camera(Vecteur3D& positionCamera,
 				  float dt ) {
 	Afficher( dt );
 }
+
+

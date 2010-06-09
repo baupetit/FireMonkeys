@@ -1,6 +1,6 @@
 #define SIZE ((N+2)*(N+2)*(N+2))
 #ifndef NB_ITERATION_SOLVE
-#define NB_ITERATION_SOLVE 10
+#define NB_ITERATION_SOLVE 20
 #endif
 
 #include "solver.h"

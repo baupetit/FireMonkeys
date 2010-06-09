@@ -179,9 +179,9 @@ void Fluid::renduFlammeETFumeeGPUFaceCamera( int nb_plans, Vecteur3D& positionCa
 	GLuint location_perlintemps = glGetUniformLocation( renderer->getProgramId(), "Temps" );
 	glUniform1i( location_perlintemps , 3 );
 	GLuint location_temps1 = glGetUniformLocation( renderer->getProgramId(), "temps1" );
-	glUniform1f( location_temps1 , tps1 );
+	glUniform1f( location_temps1 , ((float) rand()) / RAND_MAX*tps1 );
 	GLuint location_temps2 = glGetUniformLocation( renderer->getProgramId(), "temps2" );
-	glUniform1f( location_temps2 , tps2 );
+	glUniform1f( location_temps2 , ((float) rand()) / RAND_MAX*tps2 );
 	GLuint location_temps3 = glGetUniformLocation( renderer->getProgramId(), "temps3" );
 	glUniform1f( location_temps3 , t );
 	// Dessin
