@@ -20,8 +20,10 @@ FluidViewer::FluidViewer()
         :Viewer("Solver Viewer", 800, 600)
 {   
        Sphere *sphere = new Sphere( 1, Vecteur4D( 0.2,0.2,0.2,0.8 ), 10, 10);
-       _objs.push_back(sphere);
        
+       _objs.push_back(sphere);
+
+               
        _fluid = new Fluid(_objs);
 }
 

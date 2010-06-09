@@ -396,11 +396,19 @@ void Fluid::dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans){
 }
 
 void Fluid::Mise_A_Jour( float dt ){
+    updateInfo();
 	s->velocitiesStepWithTemp(dt);
 	s->densitiesStepWithTemp(dt);
 }
 
 
+void Fluid::updateInfo(){
+	s->clearFilledInfo();
+    for(_it_objs = obj.begin(); _it_objs != obj.end(); ++_it_objs){
+    	s->updateInfo(**_it_objs);
+    }
+}
+ 
 
 
 

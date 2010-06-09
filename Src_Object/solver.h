@@ -116,6 +116,7 @@ public :
      */
     void updateInfo( Object& o);
 
+    
 	inline Vecteur3D cellToPoint( int i, int j, int k){
 		Vecteur3D res = AABB.lowerCorner;
 		res.x += (i-1) * SolverParam::getSpaceDiv();
@@ -124,6 +125,12 @@ public :
 		return res ;
 	}
 
+    inline Vecteur3I objectCellToSolverCell(Vecteur3I& objectCell, Vecteur3D& objectLowerCorner ){
+        Vecteur3I res = objectCell;
+        res.x += (int)  ( (objectLowerCorner.x - AABB.lowerCorner.x) / SolverParam::getSpaceDiv() );
+        res.y += (int)  ( (objectLowerCorner.y - AABB.lowerCorner.y) / SolverParam::getSpaceDiv() );
+        res.z += (int)  ( (objectLowerCorner.z - AABB.lowerCorner.z) / SolverParam::getSpaceDiv() );
+    }
 
 
 protected :
@@ -151,8 +158,6 @@ protected :
 
 	/* Voxels infos */
 	Voxel *_filled;
-	list<Object *> _objs;
-	list<Object *>::iterator _it_objs;
 
     /** Boite englobante */
 	BoundingBox AABB;

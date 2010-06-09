@@ -556,22 +556,21 @@ void Solver::clearFilledInfo(){
 	}
 }
 
-
+   
 
 void Solver::updateInfo( Object& o){
-    /*
-    
-
-
-
-
-
-
-
-	s->clearFilledInfo();
-	if( intersect( AABB, obj->getAABB() ) ){
-		s->addObject(obj) ;
+    // Si ça n'intersecte pas on ne considère rien
+    if( ! intersect( AABB, o.getAABB() ) ){
+		return;
 	}
-    */
-
+ 
+    Vecteur3I solverCell;
+ 
+    // 
+    for (int i = 0; i < o.grilleSize.x * o.grilleSize.y * o.grilleSize.z ; i++)
+    {
+        // transforme la coord du voxel en coord dans l'espace
+        //solverCell = objectCellToSolverCell(
+        
+    }
 }
