@@ -29,5 +29,8 @@ struct Voxel {
 		 temperature(temperature), repulsion(repulsion), tempThreshold(tempThreshold),
 		 conduction(conduction)
 		{}
+		
+	    
+        
 };
 #endif

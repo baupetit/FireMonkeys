@@ -17,6 +17,8 @@
 #include "Object.h"
 #include "BoundingBox.h"
 #include "Vecteur.h"
+#include "Voxel.h"
+#include <list>
 
 class Solver {
 public :
@@ -83,11 +85,6 @@ public :
 	 * @brief : return the velocityW matrix
 	 */
 	const float* getVelocityW()const;
-
-	/**
-	 * @brief : return filled info matrix
-	 */ 
-	const int* getFilledInfo()const;
 	
 	/**
 	 * @brief : return the grid size
@@ -108,17 +105,16 @@ public :
 	 * @brief : set the velocity in the given cell
 	 */
 	void setVelocity( int i, int j , int k , float u, float v, float w );
-
-	/**
-	 * @brief : add new object.
-	 */
-	void addObject( Object *p );
 	
 	/**
 	 * @brief : clear filled information
 	 */
 	void clearFilledInfo();
 
+    /**
+     * Mise à jour des infos dans la grille des voxels
+     */
+    void updateInfo( Object& o);
 
 	inline Vecteur3D cellToPoint( int i, int j, int k){
 		Vecteur3D res = AABB.lowerCorner;
@@ -153,25 +149,31 @@ protected :
 	float *_srcv;
 	float *_srcw;
 
-	/* filled infos */
-	int *_filled;
+	/* Voxels infos */
+	Voxel *_filled;
+	list<Object *> _objs;
+	list<Object *>::iterator _it_objs;
 
+    /** Boite englobante */
 	BoundingBox AABB;
 
+
+
+    
 	inline bool isSolidCell( int i, int j, int k ){
 		int N = _N ;
-		return _filled[IX(i,j,k)] != 0;
+		return _filled[IX(i,j,k)].plein;
 	}
 	
 	inline Vecteur3D getObstacleVelocity( int i, int j, int k ){
-		return Vecteur3D(0,0,0);
+		int N = _N ;
+		return _filled[IX(i,j,k)].repulsion;
 	}
 	
-	inline float getValueObstacle( int i, int j, int k, float* tab ){
-		int N = _N ;
-		if( isSolidCell( i,j,k ) ) return 0;
-		else return tab[IX(i,j,k)];
-	}
+
+
+
+
 
 	void addSource ( int N, float *x , float *s , float dt );	
     void addSource3 ( int N, 
@@ -205,6 +207,9 @@ protected :
 				    float *u0, float *v0, float *w0, float *T0, 
 				    float vc_eps, float dt);
 	
+
+
+
 
 };
 

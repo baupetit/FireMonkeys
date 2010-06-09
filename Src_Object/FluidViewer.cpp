@@ -18,14 +18,15 @@ using namespace std;
 
 FluidViewer::FluidViewer()
         :Viewer("Solver Viewer", 800, 600)
-{
-       _obj   = new Sphere( 1, Vecteur4D( 0.2,0.2,0.2,0.8 ), 10, 10) ;
-       _fluid = new Fluid(_obj);
+{   
+       Sphere *sphere = new Sphere( 1, Vecteur4D( 0.2,0.2,0.2,0.8 ), 10, 10);
+       _objs.push_back(sphere);
+       
+       _fluid = new Fluid(_objs);
 }
 
 FluidViewer::~FluidViewer(){
 	delete _fluid;
-	delete _obj;
 }
 
 void FluidViewer::rendu(){
@@ -76,8 +77,9 @@ void FluidViewer::rendu(){
 
 	_fluid->Afficher_Entite_Face_Camera(positionCamera, directionCamera,dt);
 
-
-	_obj->Afficher_Entite(0);
+    for(_it_objs = _objs.begin(); _it_objs != _objs.end(); ++_it_objs){
+    	(*_it_objs)->Afficher_Entite(0);
+    }
 
 	glPopMatrix();
 	
@@ -91,9 +93,6 @@ void FluidViewer::rendu(){
 		frame = 0 ;
 	}
 }
-
-
-
 
 
 

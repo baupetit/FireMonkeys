@@ -19,22 +19,41 @@
 
 class Object : public BasicEntite {
 protected :
+	Voxel defVox;
 	Voxel *grille;
 	Vecteur3I grilleSize;
 	
-	virtual generateVoxels() = 0;
+	virtual void generateVoxels() = 0;
 
 	inline Vecteur3I pointToCell( Vecteur3D p ){
 		Vecteur3I res;
 		res.x = lround((p.x-AABB.lowerCorner.x) / SolverParam::getSpaceDiv()) ;
 		res.y = lround((p.y-AABB.lowerCorner.y) / SolverParam::getSpaceDiv()) ;
 		res.z = lround((p.z-AABB.lowerCorner.z) / SolverParam::getSpaceDiv()) ;
+		return res;
 	}
 
+	inline Vecteur3D cellToPoint( Vecteur3I c ){
+		Vecteur3D res = AABB.lowerCorner ;
+		res.x += c.x * SolverParam::getSpaceDiv();
+		res.y += c.y * SolverParam::getSpaceDiv();
+		res.z += c.z * SolverParam::getSpaceDiv();
+		return res ;
+	}
+
+	inline void setVoisinBound( int i, int j, int k ){
+		if( !grille[_Grille_Ind(i-1,j,k)].plein ) grille[_Grille_Ind(i-1,j,k)].frontiere = true ;
+		if( !grille[_Grille_Ind(i+1,j,k)].plein ) grille[_Grille_Ind(i+1,j,k)].frontiere = true ;
+		if( !grille[_Grille_Ind(i,j-1,k)].plein ) grille[_Grille_Ind(i,j-1,k)].frontiere = true ;
+		if( !grille[_Grille_Ind(i,j+1,k)].plein ) grille[_Grille_Ind(i,j+1,k)].frontiere = true ;
+		if( !grille[_Grille_Ind(i,j,k-1)].plein ) grille[_Grille_Ind(i,j,k-1)].frontiere = true ;
+		if( !grille[_Grille_Ind(i,j,k+1)].plein ) grille[_Grille_Ind(i,j,k+1)].frontiere = true ;
+	}
 public:
 	/* constructor */
 	Object();
-	
+	Object(Voxel defVox);
+
 	/* destructor */
 	virtual ~Object();
 	

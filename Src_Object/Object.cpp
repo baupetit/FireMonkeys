@@ -1,8 +1,16 @@
 #include "Object.h"
 
 Object::Object(){
+	defVox = Voxel();
 	grille = 0;
 }
+
+Object::Object( Voxel defVox )
+	:defVox(defVox)
+{
+	grille = 0;
+}
+
 
 /* destructor */
 Object::~Object(){

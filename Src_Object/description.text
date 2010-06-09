@@ -11,8 +11,8 @@ class Solver :
 nouveaux attributs:
 	 filled   : Voxel[]
 nouvelles methodes:
-	  updateInfo( Object ) : void     // recupere les info de presence, temperature,
-	  	      	       	 	  // combustible et de vitesse
+	 updateInfo( Object ) : void     // recupere les info de presence, temperature,
+	  	      	       	 	         // combustible et de vitesse
 
 class object :
 attributs:
