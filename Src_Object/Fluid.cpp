@@ -23,8 +23,10 @@ static inline float getTempVal( int i, int j, int T ){
 Fluid::Fluid(list<Object *> obj)
 	:obj(obj)
 {
-        tailleGrille = 40;
-        s = new Solver(tailleGrille);
+    tailleGrille = 30;
+    
+    s = new Solver(tailleGrille);
+    
 	tempIndex = new TempToRGB(256,50);
 		
 	// la flamme
@@ -53,9 +55,6 @@ Fluid::Fluid(list<Object *> obj)
 	float spaceDiv = SolverParam::getSpaceDiv();
 	AABB = BoundingBox(Vecteur3D( -tailleGrille*spaceDiv/2, -tailleGrille*spaceDiv/2, -tailleGrille*spaceDiv/2 ) ,
 			   Vecteur3D(  tailleGrille*spaceDiv/2,  tailleGrille*spaceDiv/2,  tailleGrille*spaceDiv/2 ) );
-
-	//translate(Vecteur3D( 1, 0, 1 ));
-	//obj->translate(Vecteur3D( +0.3,+0.5,0));
 
 }
 
@@ -135,6 +134,7 @@ void Fluid::renduFlammeGPUFaceCamera(Vecteur3D& positionCamera, Vecteur3D& direc
 void Fluid::renduFlammeETFumeeGPUFaceCamera( int nb_plans, Vecteur3D& positionCamera, Vecteur3D& directionCamera ){
 	majMatriceFlammeEnMatriceRGBA();
 	majMatriceFumeeEnMatriceRGBA();
+
 
 	matriceRGBACarreeToTexture3D(matriceRGBA_smoke, tailleGrille + 2 , _id_texture_fumee);
 	matriceRGBACarreeToTexture3D(matriceRGBA_fire, tailleGrille + 2 , _id_texture_flamme);

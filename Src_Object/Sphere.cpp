@@ -36,9 +36,9 @@ Sphere::~Sphere(){
 }
 
 void Sphere::Afficher(float dt){
-	//glColor4f( color.x, color.y, color.z, color.w );
-	//glCallList( drawList );
-
+	glColor4f( color.x, color.y, color.z, color.w );
+	glCallList( drawList );
+    /*
 	glPointSize( 2.0f );
 	glDisable(GL_LIGHTING);
 	
@@ -62,6 +62,7 @@ void Sphere::Afficher(float dt){
 	}
 	glEnd();
 	glEnable(GL_LIGHTING);
+	*/
 }
 
 void Sphere::generateVoxels() {
