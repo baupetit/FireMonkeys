@@ -13,6 +13,7 @@ struct Voxel {
 	float temperature;
 	float temperature0;
 	Vecteur3D repulsion ;
+	float tauxPerte ;
 	float tauxConversion ;
 	float tempThreshold ;
 	float diffusion ;
@@ -28,7 +29,7 @@ struct Voxel {
 	
 	Voxel();
 	
-	Voxel( bool plein,  bool frontiere, float combustibleRestant, float temperature, Vecteur3D repulsion, float tempThreshold, float tauxConversion, float diffusion, float conductance, Vecteur3I position );
+	Voxel( bool plein,  bool frontiere, float combustibleRestant, float temperature, Vecteur3D repulsion, float tempThreshold, float tauxConversion, float tauxPerte, float diffusion, float conductance, Vecteur3I position );
 
 };
 #endif

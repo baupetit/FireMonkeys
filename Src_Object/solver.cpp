@@ -614,12 +614,12 @@ void Solver::updateInfo( Object& o){
                 {
                     // on enleve de la matiere
                     // et on recupere la qte cree
-                    (*voxelObj).combustibleRestant -= (*voxelObj).tauxConversion;
+                    (*voxelObj).combustibleRestant -= (*voxelObj).tauxPerte;
                     if ( (*voxelObj).combustibleRestant <= 0)
                     {
                         // conservation de la matiere
                         // on ne peut creer plus de matiere qu'il n'y en avait
-                        pyrolise = (*voxelObj).tauxConversion + (*voxelObj).combustibleRestant;
+                        pyrolise = (*voxelObj).tauxPerte + (*voxelObj).combustibleRestant;
                         // il faut signaler que le voxel est vide
                         // et qu'il n'est plus une frontiere
                         
@@ -637,7 +637,7 @@ void Solver::updateInfo( Object& o){
                         pyrolise = (*voxelObj).tauxConversion;
                     }
                     // on ajoute la matiere cree aux sources
-                    _srcd[IX(solverCell.x, solverCell.y, solverCell.z)] += pyrolise;
+                    _srcd[IX(solverCell.x, solverCell.y, solverCell.z)] += pyrolise * (*voxelObj).tauxConversion;
                 }
                 
                 //////////////////

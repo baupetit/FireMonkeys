@@ -7,6 +7,7 @@ Voxel::Voxel(){
 	temperature = 0.0 ;
 	repulsion = Vecteur3D(0.0,0.0,0.0);
 	tauxConversion = 0.0 ;
+	tauxPerte = 0.0 ;
 	tempThreshold = 0.0 ;
 	diffusion = 0.0 ;
 	conductance = 0.0;
@@ -20,6 +21,7 @@ Voxel::Voxel( bool plein,
 	      float temperature, 
 	      Vecteur3D repulsion, 
 	      float tauxConversion, 
+	      float tauxPerte, 
 	      float tempThreshold, 
 	      float diffusion,  
 	      float conductance, 
@@ -31,6 +33,7 @@ Voxel::Voxel( bool plein,
 	 temperature0(temperature), 
 	 repulsion(repulsion), 
 	 tauxConversion(tauxConversion),
+	 tauxPerte(tauxPerte),
 	 tempThreshold(tempThreshold),
 	 diffusion(diffusion), 
 	 conductance(conductance), 
