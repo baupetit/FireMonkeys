@@ -13,6 +13,7 @@
 #include "Voxel.h"
 #include "Vecteur.h"
 #include "SolverParam.h"
+
 #include <cmath>
 
 #include "Triangle.h"
@@ -27,7 +28,7 @@ protected :
 	Voxel defVox;
 	Voxel *grille;
 	Vecteur3I grilleSize;
-	
+
 	virtual void generateVoxels() = 0;
 
 	inline Vecteur3I pointToCell( Vecteur3D p ){
@@ -208,7 +209,9 @@ public:
 	}
 
 	void diffuserTemperature( float dt );
-
+	
+	void voxelConsome( Voxel *v );
+	
 	/* herited methods */
 	virtual void Afficher( float dt );
 	virtual void Afficher_Face_Camera(Vecteur3D& positionCamera,
