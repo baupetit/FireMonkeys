@@ -114,19 +114,19 @@ void Sphere::generateVoxels() {
 	for( int k = 0 ; k < nb_z ; k++ ){
 		for( int j = 0 ; j < nb_y ; j++ ){
 			for( int i = 0 ; i < nb_x ; i++ ){
-				Voxel &ref = grille[_Grille_Ind(i,j,k)];
-				ref = defVox;
-				ref.plein = false ;
-				ref.frontiere = false ;
+				Voxel *ref = &grille[_Grille_Ind(i,j,k)];
+				*ref = defVox;
+				ref->plein = false ;
+				ref->frontiere = false ;
 				Vecteur3I pos(i,j,k);
-				ref.pos = pos ;
+				ref->pos = pos ;
 				if( isInside( cellToPoint( pos ) ) ){
-					ref.plein = true ;
+					ref->plein = true ;
 					//setVoisinBound( i,j,k );
 				}
-				setCornerCell( ref );
-				setValuation( ref );
-				Polygonise( ref );
+				setCornerCell( *ref );
+				setValuation( *ref );
+				Polygonise( *ref );
 			}
 		}
 	}

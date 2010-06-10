@@ -49,35 +49,27 @@ void Object::Afficher( float dt ){
 		}
 	}
 	glEnd();
-	
-	
-	glPointSize( 4.0f );
-	glDisable(GL_LIGHTING);
-	
-	glBegin(GL_POINTS);
+/*	
 	for( int k = 0 ; k < grilleSize.z ; ++k ){
 		for( int j = 0 ; j < grilleSize.y ; ++j ){
 			for( int i = 0 ; i < grilleSize.x ; ++i ){
 				Vecteur3D p = cellToPoint( Vecteur3I(i , j , k));
 				Voxel val = grille[_Grille_Ind(i,j,k)];
-				
-				if( val.plein ){
-					glColor3f( val.temperature,0,0 );
-				    glVertex3f( p.x, p.y, p.z );
-				}
+
 				if( val.frontiere ){
+					glBegin(GL_LINES);	
+					glColor4f(0.0,0.0,0.0,1.0);
+					p-=AABB.lowerCorner;
+					glVertex3d(p.x,p.y,p.z);
+					glVertex3d(p.x+0.5*val.repulsion.x,p.y+0.5*val.repulsion.y,p.z+0.5*val.repulsion.z);
+					glEnd();
 					glColor3f( val.temperature,0,0 );
 					glVertex3f( p.x, p.y, p.z );
 				}
 			}
 		}
 	}
-	glEnd();
-	glEnable(GL_LIGHTING);
-	
-	
-	
-	
+*/
 }
 
 /* heat diffusion */

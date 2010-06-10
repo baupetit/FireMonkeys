@@ -21,55 +21,46 @@ FluidViewer::FluidViewer()
         :Viewer("Solver Viewer", 800, 600)
 {   
 	Voxel defBois( true, 
-		   false, 
-		   10000.0,
-		   0,
-		   Vecteur3D(0,0,0), 
-		   0.0010,
-		   0.0010,
-		   100,
-		   1.0,
-		   1.0, 
-		   Vecteur3I(0,0,0));
+		       false, 
+		       0000.0,
+		       0,
+		       Vecteur3D(0,0,0), 
+		       0.0010,
+		       0.0010,
+		       100,
+		       1.0,
+		       1.0, 
+		       Vecteur3I(0,0,0));
 
 	Voxel defMetal( true, 
-		   false, 
-		   10,
-		   10000,
-		   Vecteur3D(0,0,0), 
-		   0.0,
-		   0.0,
-		   0,
-		   0.0010,
-		   10, 
-		   Vecteur3I(0,0,0));
-<<<<<<< HEAD
-		   
+			false, 
+			0,
+			0,
+			Vecteur3D(0,0,0), 
+			0.0,
+			0.0,
+			0,
+			0.0010,
+			10, 
+			Vecteur3I(0,0,0));
+	
 	Voxel defCire( true, 
-		   false, 
-		   10,
-		   50,
-		   Vecteur3D(0,0,0), 
-		   0.0010,
-		   0.0,
-		   0,
-		   1000.1,
-		   1000.1, 
-		   Vecteur3I(0,0,0));
+		       false, 
+		       0,
+		       0,
+		       Vecteur3D(0,0,0), 
+		       0.0010,
+		       0.0,
+		       0,
+		       1000.1,
+		       1000.1, 
+		       Vecteur3I(0,0,0));
 		   
 	Sphere *sphereBois   = new Sphere( defBois,0.8, Vecteur4D( 0,1,0,0.8 ), 10, 10);
 	Sphere *sphereMetal  = new Sphere( defMetal,0.8, Vecteur4D( 1,0,0,0.8 ), 10, 10);
 	Sphere *sphereCire   = new Sphere( defCire,0.8, Vecteur4D( 0,0,1,0.8 ), 10, 10);
 	
 	sphereBois->translate( Vecteur3D(-5, -5, 0 ));
-=======
-
-
-	Sphere *sphereBois   = new Sphere( def,1, Vecteur4D( 0,1,0,0.8 ), 10, 10);
-	Sphere *sphereMetal  = new Sphere( def,1, Vecteur4D( 1,0,0,0.8 ), 10, 10);
-	Sphere *sphereCire   = new Sphere( def,1, Vecteur4D( 0,0,1,0.8 ), 10, 10);
-	sphereBois->translate( Vecteur3D(-5, -5, -5 ));
->>>>>>> de118257fbdbc219943e4abca08dee4d49745581
 	sphereMetal->translate(Vecteur3D( -5, 0, 0 ));
 	sphereCire->translate(Vecteur3D( -5, 5, 0 ));
 	

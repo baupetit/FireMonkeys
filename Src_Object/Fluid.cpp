@@ -52,13 +52,6 @@ Fluid::Fluid(list<Object *> obj)
 		}
 	}
 	
-
-	
-	
-	
-	
-	
-		
 	// la flamme
 	int mid = tailleGrille/2;
 	
@@ -70,13 +63,13 @@ Fluid::Fluid(list<Object *> obj)
 	s->setDensity( mid ,5, mid+1, 100.0f );   
 	s->setDensity( mid ,5, mid-1, 100.0f );   
 	
-	s->setTemperature( mid ,5, mid, 10*60*((random()+1)/(float)RAND_MAX)*4/1);   
-	s->setTemperature( mid ,6, mid, 10*42*((random()+1)/(float)RAND_MAX)*4/1);   
-	s->setTemperature( mid ,6, mid, 10*25*((random()+1)/(float)RAND_MAX)*4/1);   
-	s->setTemperature( mid+1 ,5, mid, 10*24*((random()+1)/(float)RAND_MAX)*4/1);   
-	s->setTemperature( mid-1 ,5, mid, 10*38*((random()+1)/(float)RAND_MAX)*4/1);   
-	s->setTemperature( mid ,5, mid+1, 10*12*((random()+1)/(float)RAND_MAX)*4/1);   
-	s->setTemperature( mid ,5, mid-1, 10*55*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid ,5, mid, 600*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid ,6, mid, 420*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid ,6, mid, 250*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid+1 ,5, mid, 240*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid-1 ,5, mid, 380*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid ,5, mid+1, 120*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid ,5, mid-1, 550*((random()+1)/(float)RAND_MAX)*4/1);   
 	
 	initialiserRenduGPU();
 
@@ -98,32 +91,6 @@ Fluid::~Fluid(){
 
 void Fluid::Afficher_Face_Camera(Vecteur3D& positionCamera, Vecteur3D& directionCamera, float dt ){
 	Mise_A_Jour(0.1);
-/*
-	glPointSize( 2.0f );
-	glDisable(GL_LIGHTING);
-
-	int N = s->getSize();
-	const int* voxel = s->getFilledInfo();
-
-	glBegin(GL_POINTS);
-	for( int k = 0 ; k < N+2 ; ++k ){
-		for( int j = 0 ; j < N+2 ; ++j ){
-			for( int i = 0 ; i < N+2 ; ++i ){
-				Vecteur3D p = s->cellToPoint( i , j , k );
-				float val = voxel[IX(i,j,k)];
-	  
-				if( val != 0 ){
-					glColor3f( 1,0,0 );
-					glVertex3f( p.x, p.y, p.z );
-				} else 
-					glColor3f( 0,0,1 );
-
-			}
-		}
-	}
-	glEnd();
-	glEnable(GL_LIGHTING);
-*/
 	//renduFumeeGPUFaceCamera(positionCamera, directionCamera);
 	//renduFlammeGPUFaceCamera(positionCamera, directionCamera);
 	renduFlammeETFumeeGPUFaceCamera(400, positionCamera, directionCamera, dt);
