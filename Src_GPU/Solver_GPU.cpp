@@ -15,7 +15,7 @@
 #include <unistd.h>
 
 
-#define PRECISION_RESOLUTION 30
+#define PRECISION_RESOLUTION 10
 
 
 Solver_GPU::Solver_GPU( int width, int height, int depth ) 
@@ -108,9 +108,9 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
 	for (int k = 0; k < _grille_width; k++){
 		for (int j = 0; j < _grille_height; j++){
 			for (int i = 0; i < _grille_depth; i++){    
-				if ( i > 2*_grille_depth/6 && i < 3*_grille_depth/6 &&
-				     k > 2*_grille_width /6  &&  k< 3*_grille_height/6 && 
-				     j < _grille_height/10 )
+				if ( ( ((i-_grille_depth/2)*(i-_grille_depth/2) + (k-_grille_width/2)*(k-_grille_width/2)) < 2)
+				    && j < _grille_height/6 
+				     )
 				{
 				    *ptr = 1.0;//0.01;//rand()/(float)RAND_MAX;
 				    ptr++;
@@ -628,7 +628,7 @@ void Solver_GPU::velocitiesStepWithTemp ( float dt )
     // Vorticity confinement
     //
     // Diffuse
-	diffuse_speed ( dt );
+    diffuse_speed ( dt );
 	// Project
 	project();
 	// Advect

@@ -46,6 +46,14 @@ void Vecteur3D::normaliser(){
         return res;
     }
     
+     Vecteur3D operator- (const Vecteur3D& v1, const float f){
+        Vecteur3D res(v1);
+        res.x += f;
+        res.y += f;
+        res.z += f;
+        return res;
+    }
+    
      Vecteur3D operator- (const Vecteur3D& v1){
         Vecteur3D res(0,0,0);
         res-=v1;
