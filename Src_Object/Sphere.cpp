@@ -87,6 +87,7 @@ void Sphere::generateVoxels() {
 	nb_z = (int)ceil( fabs( ( AABB.upperCorner.z - AABB.lowerCorner.z ) / spaceDiv ) );
 
 	// Calculate the offset from the bounding box and the grid
+	
 	x_off = ( nb_x*spaceDiv + AABB.lowerCorner.x ) - AABB.upperCorner.x;
 	y_off = ( nb_y*spaceDiv + AABB.lowerCorner.y ) - AABB.upperCorner.y;
 	z_off = ( nb_z*spaceDiv + AABB.lowerCorner.z ) - AABB.upperCorner.z;

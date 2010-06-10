@@ -55,6 +55,7 @@ Fluid::Fluid(list<Object *> obj)
 	// la flamme
 	int mid = tailleGrille/2;
 	
+	/*
 	s->setDensity( mid ,5, mid, 100.0f );   
 	s->setDensity( mid ,6, mid, 100.0f );   
 	s->setDensity( mid ,4, mid, 100.0f );
@@ -62,6 +63,7 @@ Fluid::Fluid(list<Object *> obj)
 	s->setDensity( mid-1 ,5, mid, 100.0f );   
 	s->setDensity( mid ,5, mid+1, 100.0f );   
 	s->setDensity( mid ,5, mid-1, 100.0f );   
+	*/
 	
 	s->setTemperature( mid ,5, mid, 600*((random()+1)/(float)RAND_MAX)*4/1);   
 	s->setTemperature( mid ,6, mid, 420*((random()+1)/(float)RAND_MAX)*4/1);   

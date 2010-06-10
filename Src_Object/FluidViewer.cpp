@@ -17,48 +17,61 @@ using namespace std;
 #include "Sphere.h"
 #include "Voxel.h"
 
+
 FluidViewer::FluidViewer()
         :Viewer("Solver Viewer", 800, 600)
 {   
-	Voxel defBois( true, 
-		       false, 
-		       0000.0,
-		       0,
-		       Vecteur3D(0,0,0), 
-		       0.0010,
-		       0.0010,
-		       100,
-		       1.0,
-		       1.0, 
-		       Vecteur3I(0,0,0));
+	Voxel defBois( true,  // plein 
+			false, // frontiere
+			200.0,// restant 
+			0.0,// temperature 
+			Vecteur3D(0,0,0),  // repulsion
+			0.8,// temp de combustion
+			1.0,// taux de conversion
+			1.0,// taux de perte
+			1.0,// diffusion
+			1.0, // conductance
+			Vecteur3I(0,0,0));
+			
+	Voxel defExplosif( true,  // plein 
+			false, // frontiere
+			2500.0,// restant 
+			0.0,// temperature 
+			Vecteur3D(0,0,0),  // repulsion
+			0.5,// temp de combustion
+			1.0,// taux de conversion
+			1500.0,// taux de perte
+			1.0,// diffusion
+			1.0, // conductance
+			Vecteur3I(0,0,0));
 
-	Voxel defMetal( true, 
-			false, 
-			0,
-			0,
-			Vecteur3D(0,0,0), 
-			0.0,
-			0.0,
-			0,
-			0.0010,
-			10, 
+	Voxel defMetal( true,  // plein 
+			false, // frontiere
+			100.0,// restant 
+			0.0,// temperature 
+			Vecteur3D(0,0,0),  // repulsion
+			0.8,// temp de combustion
+			0.0,// taux de conversion
+			0.0,// taux de perte
+			1.0,// diffusion
+			1.0, // conductance
 			Vecteur3I(0,0,0));
 	
-	Voxel defCire( true, 
-		       false, 
-		       0,
-		       0,
-		       Vecteur3D(0,0,0), 
-		       0.0010,
-		       0.0,
-		       0,
-		       1000.1,
-		       1000.1, 
-		       Vecteur3I(0,0,0));
+	Voxel defCire( true,  // plein 
+			false, // frontiere
+			100.0,// restant 
+			0.0,// temperature 
+			Vecteur3D(0,0,0),  // repulsion
+			0.8,// temp de combustion
+			4.0,// taux de conversion
+			0.0,// taux de perte
+			1.0,// diffusion
+			1.0, // conductance
+			Vecteur3I(0,0,0));
 		   
-	Sphere *sphereBois   = new Sphere( defBois,0.8, Vecteur4D( 0,1,0,0.8 ), 10, 10);
-	Sphere *sphereMetal  = new Sphere( defMetal,0.8, Vecteur4D( 1,0,0,0.8 ), 10, 10);
-	Sphere *sphereCire   = new Sphere( defCire,0.8, Vecteur4D( 0,0,1,0.8 ), 10, 10);
+	Sphere *sphereBois   = new Sphere( defBois,0.2, Vecteur4D( 0.5,0.2,0,0.8 ), 10, 10);
+	Sphere *sphereMetal  = new Sphere( defBois,0.2, Vecteur4D( 0.4,0.4,0.4,0.8 ), 10, 10);
+	Sphere *sphereCire   = new Sphere( defExplosif,0.2, Vecteur4D( 0.6,0.6,0.0,0.8 ), 10, 10);
 	
 	sphereBois->translate( Vecteur3D(-5, -5, 0 ));
 	sphereMetal->translate(Vecteur3D( -5, 0, 0 ));
@@ -67,6 +80,7 @@ FluidViewer::FluidViewer()
 	_objs.push_back(sphereBois);           
 	_objs.push_back(sphereMetal);           
 	_objs.push_back(sphereCire);           
+	
 	_fluid = new Fluid(_objs);
 }
 

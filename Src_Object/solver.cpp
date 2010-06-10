@@ -622,15 +622,8 @@ void Solver::updateInfo( Object& o){
 						// on ne peut creer plus de matiere qu'il n'y en avait
 						pyrolise = (*voxelObj).tauxPerte + (*voxelObj).combustibleRestant;
 						// il faut signaler que le voxel est vide
-						// et qu'il n'est plus une frontiere
-                        
-						/////////////////////////////////////
-						//            TO DO                //
-						//            TO DO                //
-						//            TO DO                //
-						//            TO DO                //        
-						/////////////////////////////////////
-                        
+						// et qu'il n'est plus une frontiere                        
+                        o.voxelConsome(voxelObj);
 					}
 					else
 					{
@@ -638,7 +631,9 @@ void Solver::updateInfo( Object& o){
 						pyrolise = (*voxelObj).tauxPerte;
 					}
 					// on ajoute la matiere cree aux sources
-					_srcd[IX(solverCell.x, solverCell.y, solverCell.z)] += pyrolise * (*voxelObj).tauxConversion;
+					cout << "pyrolise " << pyrolise << endl;
+					_d[IX(solverCell.x, solverCell.y, solverCell.z)] += pyrolise * (*voxelObj).tauxConversion;
+					_T[IX(solverCell.x, solverCell.y, solverCell.z)] += 4.0 * pyrolise * (*voxelObj).tauxConversion;
 				}
                 
 				//////////////////

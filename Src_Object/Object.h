@@ -153,10 +153,13 @@ protected :
 			if (grille[_Grille_Ind(i+1,j-1,k)].plein)  vec += Vecteur3D(-1,1,0);
 			if (grille[_Grille_Ind(i+1,j+1,k)].plein)  vec += Vecteur3D(-1,-1,0);	
 
+            
+            
 			vec.x = (vec.x/(sqrt(vec.x*vec.x+vec.y*vec.y+vec.z*vec.z)));
 			vec.y = (vec.y/(sqrt(vec.x*vec.x+vec.y*vec.y+vec.z*vec.z)));
 			vec.z = (vec.z/(sqrt(vec.x*vec.x+vec.y*vec.y+vec.z*vec.z)));
-
+            
+            
 		
 			//pivotage de Pi/2
 			//Vecteur3D vec_vect_y = Vecteur3D(-vec.z,0.0,vec.x);
