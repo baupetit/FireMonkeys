@@ -85,8 +85,8 @@ Fluid::Fluid(list<Object *> obj)
 	position.z = 0;
 	
 	float spaceDiv = SolverParam::getSpaceDiv();
-	AABB = BoundingBox(Vecteur3D( -tailleGrille*spaceDiv/2, -tailleGrille*spaceDiv/2, -tailleGrille*spaceDiv/2 ) ,
-			   Vecteur3D(  tailleGrille*spaceDiv/2,  tailleGrille*spaceDiv/2,  tailleGrille*spaceDiv/2 ) );
+	AABB = BoundingBox(Vecteur3D( -tailleGrille*(spaceDiv/2), -tailleGrille*(spaceDiv/2), -tailleGrille*(spaceDiv/2) ) ,
+			   Vecteur3D(  tailleGrille*(spaceDiv/2),  tailleGrille*(spaceDiv/2),  tailleGrille*(spaceDiv/2) ) );
 
 }
 
@@ -493,8 +493,11 @@ void Fluid::updateInfo(float dt){
 	s->clearFilledInfo();
     for(_it_objs = obj.begin(); _it_objs != obj.end(); ++_it_objs){
     	s->updateInfo(**_it_objs);
-    	(**_it_objs).diffuserTemperature(dt);
+    	//(**_it_objs).diffuserTemperature(dt);
     }
+	for(_it_objs = obj.begin(); _it_objs != obj.end(); ++_it_objs){
+		(**_it_objs).diffuserTemperature(dt);
+	}
 }
  
 

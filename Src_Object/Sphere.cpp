@@ -111,9 +111,9 @@ void Sphere::generateVoxels() {
 
 	// calculate the grid
 	grille = new Voxel[nb_x*nb_y*nb_z];
-	for( int k = 0 ; k < nb_z ; ++k ){
-		for( int j = 0 ; j < nb_y ; ++j ){
-			for( int i = 0 ; i < nb_x ; ++i ){
+	for( int k = 0 ; k < nb_z ; k++ ){
+		for( int j = 0 ; j < nb_y ; j++ ){
+			for( int i = 0 ; i < nb_x ; i++ ){
 				Voxel &ref = grille[_Grille_Ind(i,j,k)];
 				ref = defVox;
 				ref.plein = false ;
@@ -122,11 +122,21 @@ void Sphere::generateVoxels() {
 				ref.pos = pos ;
 				if( isInside( cellToPoint( pos ) ) ){
 					ref.plein = true ;
-					setVoisinBound( i,j,k );
+					//setVoisinBound( i,j,k );
 				}
 				setCornerCell( ref );
 				setValuation( ref );
 				Polygonise( ref );
+			}
+		}
+	}
+	for( int k = 0 ; k < nb_z ; k++ ){
+		for( int j = 0 ; j < nb_y ; j++ ){
+			for( int i = 0 ; i < nb_x ; i++ ){
+
+					setVoisinBound( i,j,k );
+				
+				
 			}
 		}
 	}

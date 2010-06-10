@@ -182,7 +182,7 @@ void Object::diffuserTemperature( float dt )
 										grille[_Grille_Ind(i,j,k+1)].diffusion* grille[_Grille_Ind(i,j,k+1)].temperature +
 										grille[_Grille_Ind(i,j,k-1)].diffusion* grille[_Grille_Ind(i,j,k-1)].temperature ) )/c;
 					//cout << "a= " << a << endl;
-					cout << grille[_Grille_Ind(i,j,k)].temperature << endl;	
+					//cout << grille[_Grille_Ind(i,j,k)].temperature << endl;	
 					} else if (grille[_Grille_Ind(i  ,j  ,k  )].frontiere) {
 						//on est a la frontiere on la met a jour avec le transfert thermique 
 						//qui sort de l'objet, on ne considere donc que ses voisins plein.
