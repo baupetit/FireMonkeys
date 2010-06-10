@@ -22,14 +22,14 @@ FluidViewer::FluidViewer()
 {   
 	Voxel defBois( true, 
 		   false, 
-		   10,
+		   10000.0,
 		   0,
 		   Vecteur3D(0,0,0), 
 		   0.0010,
 		   0.0010,
 		   100,
-		   1000.1,
-		   1000.1, 
+		   1.0,
+		   1.0, 
 		   Vecteur3I(0,0,0));
 
 	Voxel defMetal( true, 

@@ -558,6 +558,12 @@ void Solver::updateInfo( Object& o){
     if( ! intersect( AABB, o.getAABB() ) ){
 		return;
 	}
+	cout << "intersect ! " << endl;
+	o.getAABB().lowerCorner.afficher();
+	o.getAABB().upperCorner.afficher();
+	cout << "  " << endl;
+	AABB.lowerCorner.afficher();
+	AABB.upperCorner.afficher();
  
     Vecteur3I solverCell;
     Voxel *voxelObj = o.grille;
@@ -634,7 +640,7 @@ void Solver::updateInfo( Object& o){
                     else
                     {
                         // generation de matiere
-                        pyrolise = (*voxelObj).tauxConversion;
+                        pyrolise = (*voxelObj).tauxPerte;
                     }
                     // on ajoute la matiere cree aux sources
                     _srcd[IX(solverCell.x, solverCell.y, solverCell.z)] += pyrolise * (*voxelObj).tauxConversion;

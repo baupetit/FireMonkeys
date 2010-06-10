@@ -402,8 +402,8 @@ void Fluid::dessinerPlansDansTexture3DFaceALaCamera(int nb_plans,
 
 	glPushMatrix();
 	glScalef( tailleGrille*SolverParam::getSpaceDiv(),
-		  tailleGrille*SolverParam::getSpaceDiv(),
-		  tailleGrille*SolverParam::getSpaceDiv());
+		      tailleGrille*SolverParam::getSpaceDiv(),
+		      tailleGrille*SolverParam::getSpaceDiv());
 		  
 
 	// Vecteur de coordonnées

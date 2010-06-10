@@ -39,10 +39,10 @@ protected :
 	}
 
 	inline Vecteur3D cellToPoint( Vecteur3I c ){
-		Vecteur3D res = AABB.lowerCorner ;
-		res.x += c.x * SolverParam::getSpaceDiv();
-		res.y += c.y * SolverParam::getSpaceDiv();
-		res.z += c.z * SolverParam::getSpaceDiv();
+		Vecteur3D res;
+		res.x = c.x * SolverParam::getSpaceDiv();
+		res.y = c.y * SolverParam::getSpaceDiv();
+		res.z = c.z * SolverParam::getSpaceDiv();
 		return res ;
 	}
 
