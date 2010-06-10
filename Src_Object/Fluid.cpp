@@ -23,7 +23,7 @@ static inline float getTempVal( int i, int j, int T ){
 Fluid::Fluid(list<Object *> obj)
 	:obj(obj)
 {
-    tailleGrille = 20;
+    tailleGrille = 35;
     
     s = new Solver(tailleGrille);
     
@@ -62,21 +62,21 @@ Fluid::Fluid(list<Object *> obj)
 	// la flamme
 	int mid = tailleGrille/2;
 	
-	s->setDensity( mid ,5, mid, 10.0f );   
-	s->setDensity( mid ,6, mid, 10.0f );   
-	s->setDensity( mid ,4, mid, 10.0f );
-	s->setDensity( mid+1 ,5, mid, 10.0f );   
-	s->setDensity( mid-1 ,5, mid, 10.0f );   
-	s->setDensity( mid ,5, mid+1, 10.0f );   
-	s->setDensity( mid ,5, mid-1, 10.0f );   
+	s->setDensity( mid ,5, mid, 100.0f );   
+	s->setDensity( mid ,6, mid, 100.0f );   
+	s->setDensity( mid ,4, mid, 100.0f );
+	s->setDensity( mid+1 ,5, mid, 100.0f );   
+	s->setDensity( mid-1 ,5, mid, 100.0f );   
+	s->setDensity( mid ,5, mid+1, 100.0f );   
+	s->setDensity( mid ,5, mid-1, 100.0f );   
 	
-	s->setTemperature( mid ,5, mid, 60*((random()+1)/(float)RAND_MAX)*4/1);   
-	s->setTemperature( mid ,6, mid, 42*((random()+1)/(float)RAND_MAX)*4/1);   
-	s->setTemperature( mid ,6, mid, 25*((random()+1)/(float)RAND_MAX)*4/1);   
-	s->setTemperature( mid+1 ,5, mid, 24*((random()+1)/(float)RAND_MAX)*4/1);   
-	s->setTemperature( mid-1 ,5, mid, 38*((random()+1)/(float)RAND_MAX)*4/1);   
-	s->setTemperature( mid ,5, mid+1, 12*((random()+1)/(float)RAND_MAX)*4/1);   
-	s->setTemperature( mid ,5, mid-1, 55*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid ,5, mid, 10*60*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid ,6, mid, 10*42*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid ,6, mid, 10*25*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid+1 ,5, mid, 10*24*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid-1 ,5, mid, 10*38*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid ,5, mid+1, 10*12*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid ,5, mid-1, 10*55*((random()+1)/(float)RAND_MAX)*4/1);   
 	
 	initialiserRenduGPU();
 

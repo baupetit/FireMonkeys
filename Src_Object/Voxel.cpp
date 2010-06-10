@@ -13,6 +13,7 @@ Voxel::Voxel(){
 	conductance = 0.0;
 	pos = Vecteur3I( 0,0,0 );
 	nb_faces = 0;
+
 }
 	
 Voxel::Voxel( bool plein,  
