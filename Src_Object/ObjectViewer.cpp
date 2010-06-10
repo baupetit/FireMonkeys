@@ -11,6 +11,7 @@ static Voxel def( true,
 		  Vecteur3D(0,0,0), 
 		  0,
 		  0,
+		  0,
 		  0, 
 		  0,
 		  Vecteur3I(0,0,0));

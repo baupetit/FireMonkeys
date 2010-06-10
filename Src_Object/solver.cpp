@@ -558,6 +558,12 @@ void Solver::updateInfo( Object& o){
     if( ! intersect( AABB, o.getAABB() ) ){
 		return;
 	}
+	cout << "intersect ! " << endl;
+	o.getAABB().lowerCorner.afficher();
+	o.getAABB().upperCorner.afficher();
+	cout << "  " << endl;
+	AABB.lowerCorner.afficher();
+	AABB.upperCorner.afficher();
  
     Vecteur3I solverCell;
     Voxel *voxelObj = o.grille;
@@ -615,12 +621,12 @@ void Solver::updateInfo( Object& o){
                 {
                     // on enleve de la matiere
                     // et on recupere la qte cree
-                    (*voxelObj).combustibleRestant -= (*voxelObj).tauxConversion;
+                    (*voxelObj).combustibleRestant -= (*voxelObj).tauxPerte;
                     if ( (*voxelObj).combustibleRestant <= 0)
                     {
                         // conservation de la matiere
                         // on ne peut creer plus de matiere qu'il n'y en avait
-                        pyrolise = (*voxelObj).tauxConversion + (*voxelObj).combustibleRestant;
+                        pyrolise = (*voxelObj).tauxPerte + (*voxelObj).combustibleRestant;
                         // il faut signaler que le voxel est vide
                         // et qu'il n'est plus une frontiere
                         
@@ -635,10 +641,10 @@ void Solver::updateInfo( Object& o){
                     else
                     {
                         // generation de matiere
-                        pyrolise = (*voxelObj).tauxConversion;
+                        pyrolise = (*voxelObj).tauxPerte;
                     }
                     // on ajoute la matiere cree aux sources
-                    _srcd[IX(solverCell.x, solverCell.y, solverCell.z)] += pyrolise;
+                    _srcd[IX(solverCell.x, solverCell.y, solverCell.z)] += pyrolise * (*voxelObj).tauxConversion;
                 }
                 
                 //////////////////

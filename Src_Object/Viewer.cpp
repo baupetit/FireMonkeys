@@ -97,9 +97,9 @@ void Viewer::start(){
 
 void Viewer::_initCamera(){
 	cout << "Initialisation de la camera " << endl;
-	_cameraAngle = M_PI*0.75f;
+	_cameraAngle = M_PI*0.55f;
 	_distToOrigin = 20.0f;
-	_cameraHeight = 0.5f;
+	_cameraHeight = 0.0f;
 }
 
 void Viewer::_initDepth(){
