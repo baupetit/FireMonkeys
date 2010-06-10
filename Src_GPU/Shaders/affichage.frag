@@ -18,23 +18,26 @@ void main(void)
     vec3 coord = gl_TexCoord[0].stp ;
     
     
-	coord.x = coord.x + perl.x * 0.05 * cos(temps1)*sin(2*temps2);
-	coord.y = coord.y + perl.y * 0.02 * sin(temps1)*sin(2*temps2);
-	coord.z = coord.z + perl.z * 0.05 * cos(2*temps2);
+	color_fumee = vec4(texture3D( texture_entree,coord));
 	
-	
+	coord.x = coord.x + perl.x * 0.01 * cos(temps1)*sin(2*temps2);
+	coord.y = coord.y + perl.y * 0.03 * sin(temps1)*sin(2*temps2);
+	coord.z = coord.z + perl.z * 0.01 * cos(2*temps2);	
 	
 	flamme_fumee_chaleur = vec4(texture3D( texture_entree,coord));
 
-    vec3 couleurtext = texture1D( ColorTexture, flamme_fumee_chaleur.z * 1100).rgb;
-
-    color.r = flamme_fumee_chaleur.x;
-    color.g = flamme_fumee_chaleur.x;
-    color.b = flamme_fumee_chaleur.x;
-    color.a = flamme_fumee_chaleur.x;
+    vec3 couleurtext;
+    
     	                     
     color *= 1000;	
-    color = vec4(couleurtext,flamme_fumee_chaleur.x*1000);               
+    if (flamme_fumee_chaleur.x * 1000 > color_fumee.y){
+        couleurtext = texture1D( ColorTexture,   0.4 + ( flamme_fumee_chaleur.z *100 )).rgb;
+        color = vec4(couleurtext,flamme_fumee_chaleur.x*200 - flamme_fumee_chaleur.z*100);               
+    }
+    else {
+        couleurtext = vec3(color_fumee.y, color_fumee.y, color_fumee.y);
+        color = vec4(couleurtext,color_fumee.y*0.1);               
+    }
 	gl_FragColor = color;
 }
 

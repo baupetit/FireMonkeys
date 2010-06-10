@@ -56,13 +56,9 @@ FluidViewer::FluidViewer()
 		   1000.1, 
 		   Vecteur3I(0,0,0));
 		
-		    cout << " TA RACE " << endl;   
-	Sphere *sphereBois   = new Sphere( defBois, 0.8, Vecteur4D( 0,1,0,0.8 ), 10, 10);
-		    cout << " TA RACE " << endl;
-	Sphere *sphereMetal  = new Sphere( defMetal, 0.8, Vecteur4D( 1,0,0,0.8 ), 10, 10);
-		    cout << " TA RACE " << endl;
-	Sphere *sphereCire   = new Sphere( defCire, 0.8, Vecteur4D( 0,0,1,0.8 ), 10, 10);
-		    cout << " TA RACE " << endl;
+	Sphere *sphereBois   = new Sphere( defBois,1, Vecteur4D( 0,1,0,0.8 ), 10, 10);
+	Sphere *sphereMetal  = new Sphere( defMetal,1, Vecteur4D( 1,0,0,0.8 ), 10, 10);
+	Sphere *sphereCire   = new Sphere( defCire,1, Vecteur4D( 0,0,1,0.8 ), 10, 10);
 	
 	sphereBois->translate( Vecteur3D(-5, -5, 0 ));
 	sphereMetal->translate(Vecteur3D( -5, 0, 0 ));

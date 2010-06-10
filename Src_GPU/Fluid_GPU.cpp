@@ -15,7 +15,7 @@ Fluid_GPU::Fluid_GPU(){
 
 	_grille_width  = 40;
 	_grille_height = 40;
-	_grille_depth  = 40;
+	_grille_depth  = 40 ;
 
 
 	s = NULL;

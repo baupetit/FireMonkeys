@@ -112,11 +112,11 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
 				    && j < _grille_height/6 
 				     )
 				{
-				    *ptr = 1.0;//0.01;//rand()/(float)RAND_MAX;
+				    *ptr = rand()/(float)RAND_MAX;
 				    ptr++;
 				    *ptr = 0.0000;//rand()/(float)RAND_MAX;
 				    ptr++;
-				    *ptr = 1.0;//0.01//rand()/(float)RAND_MAX;
+				    *ptr = rand()/(float)RAND_MAX;
 				    ptr++;
 				    *ptr = 1.0f;
 				    ptr++;
@@ -146,11 +146,11 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
 			for (int i = 0; i < _grille_depth; i++){    
 				if ( j < _grille_height/5 )
 				{
-				    *ptr = 0.00 * ( rand()/(float)RAND_MAX - 0.5 );
+				    *ptr = 0.000 * ( rand()/(float)RAND_MAX - 0.5 );
 				    ptr++;
-				    *ptr = 0.00 * rand()/(float)RAND_MAX;
+				    *ptr = 0.000 * rand()/(float)RAND_MAX;
 				    ptr++;
-				    *ptr = 0.00 * ( rand()/(float)RAND_MAX - 0.5 );
+				    *ptr = 0.000 * ( rand()/(float)RAND_MAX - 0.5 );
 				    ptr++;
 				    *ptr = 1.0f;
 				    ptr++;
@@ -330,6 +330,7 @@ void Solver_GPU::diffuse ( float dt ){
 	float a1= arf * SolverParam::getDiffusionParamFire();
 	float a2= arf * SolverParam::getDiffusionParamSmoke();
 	float a3= arf * SolverParam::getDiffusionParamTemperature();
+	
 
     Vecteur3D a = Vecteur3D(a1,a2,a3);
     
