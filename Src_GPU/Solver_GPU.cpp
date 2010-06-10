@@ -15,7 +15,7 @@
 #include <unistd.h>
 
 
-#define PRECISION_RESOLUTION 30
+#define PRECISION_RESOLUTION 10
 
 
 Solver_GPU::Solver_GPU( int width, int height, int depth ) 
@@ -108,15 +108,15 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
 	for (int k = 0; k < _grille_width; k++){
 		for (int j = 0; j < _grille_height; j++){
 			for (int i = 0; i < _grille_depth; i++){    
-				if ( i > 2*_grille_depth/6 && i < 3*_grille_depth/6 &&
-				     k > 2*_grille_width /6  &&  k< 3*_grille_height/6 && 
-				     j < _grille_height/10 )
+				if ( ( ((i-_grille_depth/2)*(i-_grille_depth/2) + (k-_grille_width/2)*(k-_grille_width/2)) < 2)
+				    && j < _grille_height/6 
+				     )
 				{
-				    *ptr = 1.0;//0.01;//rand()/(float)RAND_MAX;
+				    *ptr = rand()/(float)RAND_MAX;
 				    ptr++;
 				    *ptr = 0.0000;//rand()/(float)RAND_MAX;
 				    ptr++;
-				    *ptr = 1.0;//0.01//rand()/(float)RAND_MAX;
+				    *ptr = rand()/(float)RAND_MAX;
 				    ptr++;
 				    *ptr = 1.0f;
 				    ptr++;
@@ -146,11 +146,11 @@ Solver_GPU::Solver_GPU( int width, int height, int depth )
 			for (int i = 0; i < _grille_depth; i++){    
 				if ( j < _grille_height/5 )
 				{
-				    *ptr = 0.00 * ( rand()/(float)RAND_MAX - 0.5 );
+				    *ptr = 0.000 * ( rand()/(float)RAND_MAX - 0.5 );
 				    ptr++;
-				    *ptr = 0.00 * rand()/(float)RAND_MAX;
+				    *ptr = 0.000 * rand()/(float)RAND_MAX;
 				    ptr++;
-				    *ptr = 0.00 * ( rand()/(float)RAND_MAX - 0.5 );
+				    *ptr = 0.000 * ( rand()/(float)RAND_MAX - 0.5 );
 				    ptr++;
 				    *ptr = 1.0f;
 				    ptr++;
@@ -330,6 +330,7 @@ void Solver_GPU::diffuse ( float dt ){
 	float a1= arf * SolverParam::getDiffusionParamFire();
 	float a2= arf * SolverParam::getDiffusionParamSmoke();
 	float a3= arf * SolverParam::getDiffusionParamTemperature();
+	
 
     Vecteur3D a = Vecteur3D(a1,a2,a3);
     
@@ -628,7 +629,7 @@ void Solver_GPU::velocitiesStepWithTemp ( float dt )
     // Vorticity confinement
     //
     // Diffuse
-	diffuse_speed ( dt );
+    diffuse_speed ( dt );
 	// Project
 	project();
 	// Advect

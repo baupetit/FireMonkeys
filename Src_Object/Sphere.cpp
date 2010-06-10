@@ -99,7 +99,7 @@ void Sphere::generateVoxels() {
 	if( !zero( y_off ) ) { 
 		AABB.lowerCorner.y -= y_off/2.0f; 
 		AABB.upperCorner.y += y_off/2.0f; 
-	}
+	}    
 	if( !zero( z_off ) ) { 
 		AABB.lowerCorner.z -= z_off/2.0f; 
 		AABB.upperCorner.z += z_off/2.0f; 
