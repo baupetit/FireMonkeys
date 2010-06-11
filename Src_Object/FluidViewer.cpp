@@ -9,7 +9,7 @@
 
 #include <cmath>
 #ifndef M_PI
-	#define M_PI 3.14159265358979323846f
+#define M_PI 3.14159265358979323846f
 #endif
 using namespace std;
 
@@ -23,42 +23,32 @@ FluidViewer::FluidViewer()
 {   
 
 	Voxel defBois( true,  // plein 
-			false, // frontiere
-			200.0,// restant 
-			0.0,// temperature 
-			Vecteur3D(0,0,0),  // repulsion
-			0.8,// temp de combustion
-			0.1,// taux de conversion
-			10.0,// taux de perte
-			0.1,// diffusion
-			1.0, // conductance
-			Vecteur3I(0,0,0));
+		       false, // frontiere
+		       200.0,// restant 
+		       0.0,// temperature 
+		       Vecteur3D(0,0,0),  // repulsion
+		       0.8,// temp de combustion
+		       0.1,// taux de conversion
+		       10.0,// taux de perte
+		       0.1,// diffusion
+		       1.0, // conductance
+		       0.1,// fumee
+		       Vecteur3I(0,0,0));
 			
 	Voxel defExplosif( true,  // plein 
-			false, // frontiere
-			1500.0,// restant 
-			0.0,// temperature 
-			Vecteur3D(0,0,0),  // repulsion
-			0.5,// temp de combustion
-			1.0,// taux de conversion
-			1500.0,// taux de perte
-			1.0,// diffusion
-			1.0, // conductance
-			Vecteur3I(0,0,0));
+			   false, // frontiere
+			   1500.0,// restant 
+			   0.0,// temperature 
+			   Vecteur3D(0,0,0),  // repulsion
+			   0.5,// temp de combustion
+			   0.0,// taux de conversion
+			   1500.0,// taux de perte
+			   1.0,// diffusion
+			   1.0, // conductance
+			   10.,// fumee
+			   Vecteur3I(0,0,0));
 
 	Voxel defMetal( true,  // plein 
-			false, // frontiere
-			100.0,// restant 
-			0.0,// temperature 
-			Vecteur3D(0,0,0),  // repulsion
-			0.8,// temp de combustion
-			0.0,// taux de conversion
-			0.0,// taux de perte
-			1.0,// diffusion
-			1.0, // conductance
-			Vecteur3I(0,0,0));
-	
-	Voxel defCire( true,  // plein 
 			false, // frontiere
 			100.0,// restant 
 			0.0,// temperature 
@@ -68,12 +58,26 @@ FluidViewer::FluidViewer()
 			0.0,// taux de perte
 			1.0,// diffusion
 			1.0, // conductance
+			0.1,// fumee
 			Vecteur3I(0,0,0));
+	
+	Voxel defCire( true,  // plein 
+		       false, // frontiere
+		       100.0,// restant 
+		       0.0,// temperature 
+		       Vecteur3D(0,0,0),  // repulsion
+		       0.8,// temp de combustion
+		       4.0,// taux de conversion
+		       0.0,// taux de perte
+		       1.0,// diffusion
+		       1.0, // conductance
+		       0.0,// fumee
+		       Vecteur3I(0,0,0));
 
 		   
 
 	Sphere *sphereBois   = new Sphere( defBois,0.5, Vecteur4D( 0.5,0.2,0,0.8 ), 10, 10);
-	Sphere *sphereMetal  = new Sphere( defBois,0.2, Vecteur4D( 0.4,0.4,0.4,0.8 ), 10, 10);
+	Sphere *sphereMetal  = new Sphere( defMetal,0.2, Vecteur4D( 0.4,0.4,0.4,0.8 ), 10, 10);
 	Sphere *sphereCire   = new Sphere( defExplosif,0.2, Vecteur4D( 0.6,0.6,0.0,0.8 ), 10, 10);
 	
 	sphereBois->translate( Vecteur3D(-5, -5, 0 ));
@@ -138,34 +142,34 @@ void FluidViewer::rendu(){
 
 
 
-    // deplacement de l'objet
-    _it_objs = _objs.begin();
-    if (selectBois)
-    {
-        (*_it_objs)->translate( Vecteur3D (Viewer::sourisDX, -Viewer::sourisDY, 0.0));
-        (*_it_objs)->updateVitesse();
-    }
-    if (selectCire)
-    {
-        _it_objs++;
-        (*_it_objs)->translate( Vecteur3D (Viewer::sourisDX, -Viewer::sourisDY, 0.0));
-        (*_it_objs)->updateVitesse();
-    }
-    if (selectMetal)
-    {
-        _it_objs++;
-        _it_objs++;
-        (*_it_objs)->translate( Vecteur3D (Viewer::sourisDX, -Viewer::sourisDY, 0.0));
-        (*_it_objs)->updateVitesse();
-    }
+	// deplacement de l'objet
+	_it_objs = _objs.begin();
+	if (selectBois)
+	{
+		(*_it_objs)->translate( Vecteur3D (Viewer::sourisDX, -Viewer::sourisDY, 0.0));
+		(*_it_objs)->updateVitesse();
+	}
+	if (selectCire)
+	{
+		_it_objs++;
+		(*_it_objs)->translate( Vecteur3D (Viewer::sourisDX, -Viewer::sourisDY, 0.0));
+		(*_it_objs)->updateVitesse();
+	}
+	if (selectMetal)
+	{
+		_it_objs++;
+		_it_objs++;
+		(*_it_objs)->translate( Vecteur3D (Viewer::sourisDX, -Viewer::sourisDY, 0.0));
+		(*_it_objs)->updateVitesse();
+	}
     
 
-    // affichage objets
-    for(_it_objs = _objs.begin(); _it_objs != _objs.end(); ++_it_objs){
-    	(*_it_objs)->Afficher_Entite(0);
-    }
+	// affichage objets
+	for(_it_objs = _objs.begin(); _it_objs != _objs.end(); ++_it_objs){
+		(*_it_objs)->Afficher_Entite(0);
+	}
     
-    // affichage et maj fluide
+	// affichage et maj fluide
 	_fluid->Afficher_Entite_Face_Camera(positionCamera, directionCamera,dt);
     
 	glPopMatrix();
