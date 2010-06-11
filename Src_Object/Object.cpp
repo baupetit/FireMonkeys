@@ -51,23 +51,23 @@ void Object::Afficher( float dt ){
 	glEnd();
 /*	
 	for( int k = 0 ; k < grilleSize.z ; ++k ){
-		for( int j = 0 ; j < grilleSize.y ; ++j ){
-			for( int i = 0 ; i < grilleSize.x ; ++i ){
-				Vecteur3D p = cellToPoint( Vecteur3I(i , j , k));
-				Voxel val = grille[_Grille_Ind(i,j,k)];
+	for( int j = 0 ; j < grilleSize.y ; ++j ){
+	for( int i = 0 ; i < grilleSize.x ; ++i ){
+	Vecteur3D p = cellToPoint( Vecteur3I(i , j , k));
+	Voxel val = grille[_Grille_Ind(i,j,k)];
 
-				if( val.frontiere ){
-					glBegin(GL_LINES);	
-					glColor4f(0.0,0.0,0.0,1.0);
-					p-=AABB.lowerCorner;
-					glVertex3d(p.x,p.y,p.z);
-					glVertex3d(p.x+0.5*val.repulsion.x,p.y+0.5*val.repulsion.y,p.z+0.5*val.repulsion.z);
-					glEnd();
-					glColor3f( val.temperature,0,0 );
-					glVertex3f( p.x, p.y, p.z );
-				}
-			}
-		}
+	if( val.frontiere ){
+	glBegin(GL_LINES);	
+	glColor4f(0.0,0.0,0.0,1.0);
+	p-=AABB.lowerCorner;
+	glVertex3d(p.x,p.y,p.z);
+	glVertex3d(p.x+0.5*val.repulsion.x,p.y+0.5*val.repulsion.y,p.z+0.5*val.repulsion.z);
+	glEnd();
+	glColor3f( val.temperature,0,0 );
+	glVertex3f( p.x, p.y, p.z );
+	}
+	}
+	}
 	}
 */
 
@@ -84,7 +84,7 @@ void Object::Afficher( float dt ){
 				if( val.plein ){
 					//cout << val.temperature << endl;
 					glColor3f( val.temperature,0,0 );
-				    glVertex3f( p.x, p.y, p.z );
+					glVertex3f( p.x, p.y, p.z );
 				}
 				if( val.frontiere ){
 					glColor3f( val.temperature,0,0 );
@@ -98,13 +98,72 @@ void Object::Afficher( float dt ){
 	glEnable(GL_LIGHTING);
 }
 
+Vecteur3D Object::repulse (int i, int j, int k){
+	//condition i j k est donnée pour une frontiere, on cherche tous les frontieres distantes de 1
+		
+	Vecteur3D vec = Vecteur3D(0,0,0);
+	if (grille[_Grille_Ind(i  ,j  ,k  )].frontiere){
+		//comparaison aux 9 devant	
+		if (grille[_Grille_Ind(i  ,j  ,k-1)].plein)  vec += Vecteur3D(0,0,1); 		
+		if (grille[_Grille_Ind(i  ,j-1,k-1)].plein)  vec += Vecteur3D(0,1,1);
+		if (grille[_Grille_Ind(i  ,j+1,k-1)].plein)  vec += Vecteur3D(0,-1,1);
+		if (grille[_Grille_Ind(i-1,j  ,k-1)].plein)  vec += Vecteur3D(1,0,1); 
+		if (grille[_Grille_Ind(i-1,j-1,k-1)].plein)  vec += Vecteur3D(1,1,1);
+		if (grille[_Grille_Ind(i-1,j+1,k-1)].plein)  vec += Vecteur3D(1,-1,1);
+		if (grille[_Grille_Ind(i+1,j  ,k-1)].plein)  vec += Vecteur3D(-1,0,1);
+		if (grille[_Grille_Ind(i+1,j-1,k-1)].plein)  vec += Vecteur3D(-1,1,1);
+		if (grille[_Grille_Ind(i+1,j+1,k-1)].plein)  vec += Vecteur3D(-1,-1,1);
+
+		//comparaison aux 9 derriere		
+		if (grille[_Grille_Ind(i  ,j  ,k+1)].plein)  vec += Vecteur3D(0,0,-1); 		
+		if (grille[_Grille_Ind(i  ,j-1,k+1)].plein)  vec += Vecteur3D(0,1,-1);
+		if (grille[_Grille_Ind(i  ,j+1,k+1)].plein)  vec += Vecteur3D(0,-1,-1);
+		if (grille[_Grille_Ind(i-1,j  ,k+1)].plein)  vec += Vecteur3D(1,0,-1); 
+		if (grille[_Grille_Ind(i-1,j-1,k+1)].plein)  vec += Vecteur3D(1,1,-1);
+		if (grille[_Grille_Ind(i-1,j+1,k+1)].plein)  vec += Vecteur3D(1,-1,-1);
+		if (grille[_Grille_Ind(i+1,j  ,k+1)].plein)  vec += Vecteur3D(-1,0,-1);
+		if (grille[_Grille_Ind(i+1,j-1,k+1)].plein)  vec += Vecteur3D(-1,1,-1);
+		if (grille[_Grille_Ind(i+1,j+1,k+1)].plein)  vec += Vecteur3D(-1,-1,-1);
+
+		//comparaison aux 8 du plan
+		//if (grille[_Grille_Ind(i  ,j  ,k)].plein)  vec += Vecteur3D(0,0,-1); 		
+		if (grille[_Grille_Ind(i  ,j-1,k)].plein)  vec += Vecteur3D(0,1,0);
+		if (grille[_Grille_Ind(i  ,j+1,k)].plein)  vec += Vecteur3D(0,-1,0);
+		if (grille[_Grille_Ind(i-1,j  ,k)].plein)  vec += Vecteur3D(1,0,0); 
+		if (grille[_Grille_Ind(i-1,j-1,k)].plein)  vec += Vecteur3D(1,1,0);
+		if (grille[_Grille_Ind(i-1,j+1,k)].plein)  vec += Vecteur3D(1,-1,0);
+		if (grille[_Grille_Ind(i+1,j  ,k)].plein)  vec += Vecteur3D(-1,0,0);
+		if (grille[_Grille_Ind(i+1,j-1,k)].plein)  vec += Vecteur3D(-1,1,0);
+		if (grille[_Grille_Ind(i+1,j+1,k)].plein)  vec += Vecteur3D(-1,-1,0);	
+
+            
+            
+		vec.x = (vec.x/(sqrt(vec.x*vec.x+vec.y*vec.y+vec.z*vec.z)));
+		vec.y = (vec.y/(sqrt(vec.x*vec.x+vec.y*vec.y+vec.z*vec.z)));
+		vec.z = (vec.z/(sqrt(vec.x*vec.x+vec.y*vec.y+vec.z*vec.z)));
+            
+            
+		
+		//pivotage de Pi/2
+		//Vecteur3D vec_vect_y = Vecteur3D(-vec.z,0.0,vec.x);
+		vec.rotationAutourAxeX( M_PI /2 );
+		vec.rotationAutourAxeZ( M_PI /2 );
+		vec.normaliser();
+	}
+	//cout << "pour i j k = " << i << " " << j << " " << k << " " << "x= " << vec.x << " y= " << vec.y << " z= " << vec.z << endl;
+	
+	return vec;
+
+}
+
+
 void Object::voxelConsome( Voxel *v ){
 	// quand un voxel est comsomme
 	//  - deplacement de la valeur de ses huits sommets ( par spaceDiv )
 	//  - transmission de l'information au 26 voisins
 	//  - re-calcul de la triangulation localement (27 cases)
 	//  - recherche de la frontiere localement
-                        cout << "voxelConsome" << endl;
+	cout << "voxelConsome" << endl;
 }
 
 /* heat diffusion */
@@ -131,9 +190,9 @@ void Object::diffuserTemperature( float dt )
 			for( i=1 ; i<N3-1 ; ++i ){
 				if (grille[_Grille_Ind(i,j,k)].plein){
 					//cout << grille[_Grille_Ind(i,j,k)].temperature << endl;
-				tmp = grille[_Grille_Ind(i,j,k)].temperature;		
-				grille[_Grille_Ind(i,j,k)].temperature  = grille[_Grille_Ind(i,j,k)].temperature0;
-				grille[_Grille_Ind(i,j,k)].temperature0 = tmp;
+					tmp = grille[_Grille_Ind(i,j,k)].temperature;		
+					grille[_Grille_Ind(i,j,k)].temperature  = grille[_Grille_Ind(i,j,k)].temperature0;
+					grille[_Grille_Ind(i,j,k)].temperature0 = tmp;
 				}
 				//cout << tmp << endl;
 			}
@@ -145,15 +204,15 @@ void Object::diffuserTemperature( float dt )
 		for( k=1; k<N1-1; ++k ){ 
 			for( j = 1; j<N2-1 ; ++j) { 
 				for( i=1 ; i<N3-1 ; ++i ){
-					 if (grille[_Grille_Ind(i  ,j  ,k  )].plein && (
-						grille[_Grille_Ind(i+1,j  ,k  )].frontiere ||
-						grille[_Grille_Ind(i-1,j  ,k  )].frontiere ||
-						grille[_Grille_Ind(i  ,j+1,k  )].frontiere ||
-						grille[_Grille_Ind(i  ,j-1,k  )].frontiere ||
-						grille[_Grille_Ind(i  ,j  ,k+1)].frontiere ||
-						grille[_Grille_Ind(i  ,j  ,k-1)].frontiere )){
-						 //on a au moins 1 voxel frontiere proche
-						 //il faut compter le nombre de voxel voisins qui sont plein: pour le c (1+nb_plein*a);
+					if (grille[_Grille_Ind(i  ,j  ,k  )].plein && (
+						    grille[_Grille_Ind(i+1,j  ,k  )].frontiere ||
+						    grille[_Grille_Ind(i-1,j  ,k  )].frontiere ||
+						    grille[_Grille_Ind(i  ,j+1,k  )].frontiere ||
+						    grille[_Grille_Ind(i  ,j-1,k  )].frontiere ||
+						    grille[_Grille_Ind(i  ,j  ,k+1)].frontiere ||
+						    grille[_Grille_Ind(i  ,j  ,k-1)].frontiere )){
+						//on a au moins 1 voxel frontiere proche
+						//il faut compter le nombre de voxel voisins qui sont plein: pour le c (1+nb_plein*a);
 						grille[_Grille_Ind(i,j,k)].temperature = grille[_Grille_Ind(i,j,k)].temperature0;
 						c = 1; 
 						//on teste pour chaque voisin:					
@@ -163,7 +222,7 @@ void Object::diffuserTemperature( float dt )
 							c += a*(grille[_Grille_Ind(i+1,j,k)].diffusion);
 						} else {
 							grille[_Grille_Ind(i,j,k)].temperature += b*
-									(grille[_Grille_Ind(i,j,k)].conductance)*grille[_Grille_Ind(i+1,j  ,k  )].temperature;
+								(grille[_Grille_Ind(i,j,k)].conductance)*grille[_Grille_Ind(i+1,j  ,k  )].temperature;
 							c += b*(grille[_Grille_Ind(i,j,k)].conductance);
 						}
 						if (grille[_Grille_Ind(i-1,j  ,k  )].plein) {
@@ -172,7 +231,7 @@ void Object::diffuserTemperature( float dt )
 							c += a*(grille[_Grille_Ind(i-1,j,k)].diffusion);
 						} else {
 							grille[_Grille_Ind(i,j,k)].temperature += b*
-									(grille[_Grille_Ind(i,j,k)].conductance)*grille[_Grille_Ind(i-1,j  ,k  )].temperature;
+								(grille[_Grille_Ind(i,j,k)].conductance)*grille[_Grille_Ind(i-1,j  ,k  )].temperature;
 							c += b*(grille[_Grille_Ind(i,j,k)].conductance);
 						}
 						if (grille[_Grille_Ind(i,j+1,k  )].plein) {
@@ -181,7 +240,7 @@ void Object::diffuserTemperature( float dt )
 							c += a*(grille[_Grille_Ind(i,j+1,k)].diffusion);
 						} else {
 							grille[_Grille_Ind(i,j,k)].temperature += b*
-									(grille[_Grille_Ind(i,j,k)].conductance)*grille[_Grille_Ind(i,j+1,k  )].temperature;
+								(grille[_Grille_Ind(i,j,k)].conductance)*grille[_Grille_Ind(i,j+1,k  )].temperature;
 							c += b*(grille[_Grille_Ind(i,j,k)].conductance);
 						}
 						if (grille[_Grille_Ind(i,j-1,k  )].plein) {
@@ -190,7 +249,7 @@ void Object::diffuserTemperature( float dt )
 							c += a*(grille[_Grille_Ind(i,j-1,k)].diffusion);
 						} else {
 							grille[_Grille_Ind(i,j,k)].temperature += b*
-									(grille[_Grille_Ind(i,j,k)].conductance)*grille[_Grille_Ind(i,j-1  ,k  )].temperature;
+								(grille[_Grille_Ind(i,j,k)].conductance)*grille[_Grille_Ind(i,j-1  ,k  )].temperature;
 							c += b*(grille[_Grille_Ind(i,j,k)].conductance);
 						}
 						if (grille[_Grille_Ind(i,j  ,k+1)].plein) {
@@ -199,7 +258,7 @@ void Object::diffuserTemperature( float dt )
 							c += a*(grille[_Grille_Ind(i,j,k+1)].diffusion);
 						} else {
 							grille[_Grille_Ind(i,j,k)].temperature += b*
-									(grille[_Grille_Ind(i,j,k)].conductance)*grille[_Grille_Ind(i,j  ,k+1)].temperature;
+								(grille[_Grille_Ind(i,j,k)].conductance)*grille[_Grille_Ind(i,j  ,k+1)].temperature;
 							c += b*(grille[_Grille_Ind(i,j,k)].conductance);
 						}
 						if (grille[_Grille_Ind(i,j  ,k-1)].plein) {
@@ -208,39 +267,39 @@ void Object::diffuserTemperature( float dt )
 							c += a*(grille[_Grille_Ind(i,j,k-1)].diffusion);
 						} else {
 							grille[_Grille_Ind(i,j,k)].temperature += b*
-									(grille[_Grille_Ind(i,j,k)].conductance)*grille[_Grille_Ind(i,j  ,k-1)].temperature;
+								(grille[_Grille_Ind(i,j,k)].conductance)*grille[_Grille_Ind(i,j  ,k-1)].temperature;
 							c += b*(grille[_Grille_Ind(i,j,k)].conductance);
 						}
 	
 						grille[_Grille_Ind(i,j,k)].temperature /= c;
 						
-					//sinon on se concentre sur la frontiere.
+						//sinon on se concentre sur la frontiere.
 					}					
 					else if (grille[_Grille_Ind(i  ,j  ,k  )].plein && 
-					    grille[_Grille_Ind(i+1,j  ,k  )].plein &&
-						grille[_Grille_Ind(i-1,j  ,k  )].plein &&
-						grille[_Grille_Ind(i  ,j+1,k  )].plein &&
-						grille[_Grille_Ind(i  ,j-1,k  )].plein &&
-						grille[_Grille_Ind(i  ,j  ,k+1)].plein &&
-						grille[_Grille_Ind(i  ,j  ,k-1)].plein ){
+						 grille[_Grille_Ind(i+1,j  ,k  )].plein &&
+						 grille[_Grille_Ind(i-1,j  ,k  )].plein &&
+						 grille[_Grille_Ind(i  ,j+1,k  )].plein &&
+						 grille[_Grille_Ind(i  ,j-1,k  )].plein &&
+						 grille[_Grille_Ind(i  ,j  ,k+1)].plein &&
+						 grille[_Grille_Ind(i  ,j  ,k-1)].plein ){
 						//le cas ou on est dans la matiere avec que des voisins matiere
 						//conduction thermique classique avc un coefficient de diffusion 
 						//diff propre au matériau
 						c = 1 +  a*(grille[_Grille_Ind(i+1,j,k)].diffusion +
-												 grille[_Grille_Ind(i-1,j,k)].diffusion +
-												 grille[_Grille_Ind(i,j+1,k)].diffusion +
-												 grille[_Grille_Ind(i,j-1,k)].diffusion +
-												 grille[_Grille_Ind(i,j,k+1)].diffusion +
-												 grille[_Grille_Ind(i,j,k-1)].diffusion );
+							    grille[_Grille_Ind(i-1,j,k)].diffusion +
+							    grille[_Grille_Ind(i,j+1,k)].diffusion +
+							    grille[_Grille_Ind(i,j-1,k)].diffusion +
+							    grille[_Grille_Ind(i,j,k+1)].diffusion +
+							    grille[_Grille_Ind(i,j,k-1)].diffusion );
 						grille[_Grille_Ind(i,j,k)].temperature = ( grille[_Grille_Ind(i,j,k)].temperature0 + a*(
-									  	grille[_Grille_Ind(i+1,j,k)].diffusion* grille[_Grille_Ind(i+1,j,k)].temperature +
-									  	grille[_Grille_Ind(i-1,j,k)].diffusion* grille[_Grille_Ind(i-1,j,k)].temperature +
-									 	grille[_Grille_Ind(i,j+1,k)].diffusion* grille[_Grille_Ind(i,j+1,k)].temperature +
-										grille[_Grille_Ind(i,j-1,k)].diffusion* grille[_Grille_Ind(i,j-1,k)].temperature +
-										grille[_Grille_Ind(i,j,k+1)].diffusion* grille[_Grille_Ind(i,j,k+1)].temperature +
-										grille[_Grille_Ind(i,j,k-1)].diffusion* grille[_Grille_Ind(i,j,k-1)].temperature ) )/c;
-					//cout << "a= " << a << endl;
-					//cout << grille[_Grille_Ind(i,j,k)].temperature << endl;	
+												   grille[_Grille_Ind(i+1,j,k)].diffusion* grille[_Grille_Ind(i+1,j,k)].temperature +
+												   grille[_Grille_Ind(i-1,j,k)].diffusion* grille[_Grille_Ind(i-1,j,k)].temperature +
+												   grille[_Grille_Ind(i,j+1,k)].diffusion* grille[_Grille_Ind(i,j+1,k)].temperature +
+												   grille[_Grille_Ind(i,j-1,k)].diffusion* grille[_Grille_Ind(i,j-1,k)].temperature +
+												   grille[_Grille_Ind(i,j,k+1)].diffusion* grille[_Grille_Ind(i,j,k+1)].temperature +
+												   grille[_Grille_Ind(i,j,k-1)].diffusion* grille[_Grille_Ind(i,j,k-1)].temperature ) )/c;
+						//cout << "a= " << a << endl;
+						//cout << grille[_Grille_Ind(i,j,k)].temperature << endl;	
 					} else if (grille[_Grille_Ind(i  ,j  ,k  )].frontiere) {
 						//on est a la frontiere on la met a jour avec le transfert thermique 
 						//qui sort de l'objet, on ne considere donc que ses voisins plein.
@@ -249,37 +308,37 @@ void Object::diffuserTemperature( float dt )
 						c = 1;
 						if (grille[_Grille_Ind(i+1,j  ,k  )].plein) {
 							grille[_Grille_Ind(i,j,k)].temperature += b*
-									(grille[_Grille_Ind(i+1,j,k)].conductance)*grille[_Grille_Ind(i+1,j,k)].temperature;
+								(grille[_Grille_Ind(i+1,j,k)].conductance)*grille[_Grille_Ind(i+1,j,k)].temperature;
 							c += b*(grille[_Grille_Ind(i+1,j,k)].conductance);
 						} 
 
 						if (grille[_Grille_Ind(i-1,j  ,k  )].plein)  {
 							grille[_Grille_Ind(i,j,k)].temperature += b*
-									(grille[_Grille_Ind(i-1,j,k)].conductance)*grille[_Grille_Ind(i-1,j,k)].temperature;
+								(grille[_Grille_Ind(i-1,j,k)].conductance)*grille[_Grille_Ind(i-1,j,k)].temperature;
 							c += b*(grille[_Grille_Ind(i-1,j,k)].conductance);
 						} 
 
 						if (grille[_Grille_Ind(i  ,j+1,k  )].plein)  {
 							grille[_Grille_Ind(i,j,k)].temperature += b*
-									(grille[_Grille_Ind(i,j+1,k)].conductance)*grille[_Grille_Ind(i,j+1,k)].temperature;
+								(grille[_Grille_Ind(i,j+1,k)].conductance)*grille[_Grille_Ind(i,j+1,k)].temperature;
 							c += b*(grille[_Grille_Ind(i,j+1,k)].conductance);
 						} 
 
 						if (grille[_Grille_Ind(i  ,j-1,k  )].plein)  {
 							grille[_Grille_Ind(i,j,k)].temperature += b*
-									(grille[_Grille_Ind(i,j-1,k)].conductance)*grille[_Grille_Ind(i,j-1,k)].temperature;
+								(grille[_Grille_Ind(i,j-1,k)].conductance)*grille[_Grille_Ind(i,j-1,k)].temperature;
 							c += b*(grille[_Grille_Ind(i,j-1,k)].conductance);
 						} 
 
 						if (grille[_Grille_Ind(i  ,j  ,k+1)].plein)  {
 							grille[_Grille_Ind(i,j,k)].temperature += b*
-									(grille[_Grille_Ind(i,j,k+1)].conductance)*grille[_Grille_Ind(i,j,k+1)].temperature;
+								(grille[_Grille_Ind(i,j,k+1)].conductance)*grille[_Grille_Ind(i,j,k+1)].temperature;
 							c += b*(grille[_Grille_Ind(i,j,k+1)].conductance);
 						} 
 
 						if (grille[_Grille_Ind(i  ,j  ,k-1)].plein)  {
 							grille[_Grille_Ind(i,j,k)].temperature += b*
-									(grille[_Grille_Ind(i,j,k-1)].conductance)*grille[_Grille_Ind(i,j,k-1)].temperature;
+								(grille[_Grille_Ind(i,j,k-1)].conductance)*grille[_Grille_Ind(i,j,k-1)].temperature;
 							c += b*(grille[_Grille_Ind(i,j,k-1)].conductance);
 						} 
 
@@ -296,17 +355,17 @@ void Object::diffuserTemperature( float dt )
 /*	
 
 	for( k=1; k<N1-1; ++k ){ 
-		for( j = 1; j<N2-1 ; ++j) { 
-			for( i=1 ; i<N3-1 ; ++i ){
-				if (grille[_Grille_Ind(i,j,k)].plein)
-					//cout << grille[_Grille_Ind(i,j,k)].temperature << endl;
-				tmp = grille[_Grille_Ind(i,j,k)].temperature;		
-				grille[_Grille_Ind(i,j,k)].temperature  = grille[_Grille_Ind(i,j,k)].temperature0;
-				grille[_Grille_Ind(i,j,k)].temperature0 = tmp;
+	for( j = 1; j<N2-1 ; ++j) { 
+	for( i=1 ; i<N3-1 ; ++i ){
+	if (grille[_Grille_Ind(i,j,k)].plein)
+	//cout << grille[_Grille_Ind(i,j,k)].temperature << endl;
+	tmp = grille[_Grille_Ind(i,j,k)].temperature;		
+	grille[_Grille_Ind(i,j,k)].temperature  = grille[_Grille_Ind(i,j,k)].temperature0;
+	grille[_Grille_Ind(i,j,k)].temperature0 = tmp;
 								
-				//cout << tmp << endl;
-			}
-		}
+	//cout << tmp << endl;
+	}
+	}
 	}
 */
 }
