@@ -123,7 +123,12 @@ Le modèle CPU présente un taux d'image par secondes suffisant pour montrer
 le bon fonctionnement du modèle. Toutes les fonctionalités du modèles sont
 implémentées et opérationelles. (environ 9 fps avec une grille 40x40x40)\\
 La version GPU est comme prévu beaucoup plus rapide et permet d'utiliser
-une taille de grille plus importante. (environ avec une grille )\\
+une taille de grille plus importante. (environ 9 fps avec une grille 100x100x100)\\
+Nous avons donc réussi à optenir un modèle de combustion complet et intéractif en CPU,
+et un modèle de fluide complet en GPU. L'ajout d'un modèle 
+d'objet au GPU de devrait pas trop affecter les performances. Les performances sont 
+donc suffisamment bonnes pour valider notre contrainte de temps réel.
+
 
 
 %%%%%%%%%%%%%%%%%
@@ -377,7 +382,7 @@ la caméra correspondent à l'orientation de la flamme dans l'espace. Ceci nous 
 
 \subsubsection{Rendu de la flamme}
 
-Une flamme ne saurait être jolie si l'on ne prend pas en compte la variation lumineuse en fonction de la température. Pour cela nous avons considéré notre flamme corps un modèle de corps noir, c'est à dire une entité qui rayonne à des longueurs d'ondes différentes en fonction de la température, cela en utilisant la formule de Planck pour le corps noir:\\
+Une flamme ne saurait être jolie si l'on ne prennait pas en compte la variation de la couleur en fonction de la température. Pour cela nous avons considéré notre flamme comme un modèle de corps noir, c'est à dire une entité qui rayonne à des longueurs d'ondes différentes en fonction de sa température, cela en utilisant la \textbf{formule de Planck} pour le corps noir:\\
 
 \begin{equation}
 	L_{\lambda} = \frac{2hc^{2}\lambda^{-5}}{exp(\frac{hc}{k\lambda T})-1}
@@ -385,17 +390,19 @@ Une flamme ne saurait être jolie si l'on ne prend pas en compte la variation lu
 Où h est la constante de planck, c la vitesse de la lumière, et k la constante de Boltzmann.\\
 
 On obtient donc une relation entre la température de notre flamme et sa luminance, ce qui nous permet d'avoir un rendu fonction de la température. De plus nous avons ajusté la transparence de la flamme en réglant l'$\alpha$ en tenant compte de la densité de gaz qui brule et de la température de la flamme (les flammes bleus sont plus transparentes que les rouges et jaunes).\\
+Pour éviter de calculer cette formule assez complexe à chaque fois, nous \textbf{stockons} un grand nombre de valeurs dans un tableau.
 
 
 \subsubsection{Rendu de la fumée}
 
 	Pour le rendu de la fumée, il s'agit simplement d'un niveau de gris avec une transparence $\alpha$ fonction de la densité de fumée en un point.\\
 
+
 \subsubsection{Multitexturing}
 
-	Le second problème d'affichage qui se posa à nous fut le moment ou nous devions afficher la flamme ET la fumée. Le fait d'afficher sous forme de plan posa des problème au niveau de la précision du Z-Buffer d'OpenGL qui ne savait plus quelle texture était devant l'autre et cela provoquait un effet de clignotement indésirable.\\
+	Un problème d'affichage qui se posa rapidement à nous fut le moment ou nous devions afficher la flamme ET la fumée avec une texture volumique. Le fait d'afficher sous forme de plans posa des problème au niveau de la précision du Z-Buffer d'OpenGL qui ne savait plus quelle texture était devant l'autre et cela provoquait un effet de clignotement indésirable.\\
 
-La solution que nous avons retenue pour palier a ce problème était de réaliser un fragment shader au niveau du GPU pour faire un affichage Multitexture prenant en compte l'alpha des 2 texture.\\
+La solution que nous avons retenue pour palier à ce problème était de réaliser un \textbf{fragment shader} pour faire un affichage Multitexturé prenant en compte l'alpha des 2 texture.\\
 
 Le principe en lui même est assez simple:\\
 Pour chaque pixel de notre texture\\
@@ -408,7 +415,8 @@ fin\\
 
 \subsubsection{amélioration de rendu : Bruit de Perlin 4D}
 
-Dans la réalité il y a toujours un "vent ambiant" autour d'une flamme, ce qui à pour conséquence de multiples effets de mouvements au niveau de sa surface. Pour simuler cet effet nous ajoutons \textbf{lors du rendu par le fragment shader} un bruit de perlin 4D (dont une dimension temporelle pour conserver la cohérence du mouvement).\\
+Dans la réalité il y a toujours un "vent ambiant" autour d'une flamme, ainsi que de nombreux phénomènes 
+macroscopiques, ce qui à pour conséquence de multiples effets de mouvements au niveau de sa surface. Pour simuler cet effet nous ajoutons lors du rendu par le fragment shader un \textbf{bruit de perlin 4D} (dont une dimension temporelle pour conserver la cohérence du mouvement).\\
 
 \begin{center}
 \includegraphics[scale=0.3]{Perlin3D.ps}
@@ -438,14 +446,6 @@ $\sum_{i=0}^{n-1} p^i = \frac{1 - p^n}{1 - p}$.\\
 
 \subsection{Résultats}
 
-Taille de la grille : 20 x 20 \\
-FPS : 25\\
-
-Taille de la grille : 30 x 30 \\
-FPS : 8\\
-
-Taille de la grille : 30 x 30 \\
-FPS : 4\\
 
 %----------------------------------------------------------------------------------------------------------------------------------------
 %%%%%%%%%%%%%%%%%
@@ -456,7 +456,8 @@ Nous utilisons le langage \textbf{GLSL} ( Open\textbf{GL S}hading
 \textbf{L}anguage).  Ce langage de shader est utilisé en général pour
 le rendu de scène 3D. Le shader utilisé est un \textbf{fragment
   shader}.  Il est (très grossièrement) destiné à changer la couleur
-d'affichage d'un objet.\\ D'autres outils de programmation existent (
+d'affichage d'un objet.\\ 
+D'autres outils de programmation existent (
 comme OpenCL ) mais nous n'étions pas tous compatibles avec cette
 technologie.  Nous avons donc choisi le GLSL qui est suporté par un
 bien plus grand nombre de carte graphiques.\\
@@ -470,10 +471,13 @@ notre système de fluide avec des outils qui sont à priori pas destinés
 \subsubsection{Matrice 3 dimensions == Texture 3D}
 Notre matrice 3 dimensions dans lequel nous traitons le modèle de
 fluide peut se rapprocher d'une \textbf{Texture 3D} d'OpenGL. \\
+Il faut cependant noter que les couleurs d'une matrice sont stockées entre 0.0 et 1.0,
+ce qui implique un changement de repère entre les résultats des calculs
+et la façon de les stocker.
 
-\subsubsection{Operation sur le point (i,j,k) de la texture == FragmentShader}
-Un shader c'est un programme. Un fragment shader est un programme qui
-s'applique sur la couleur d'un pixel d'un objet.\\ 
+\subsubsection{Operation sur le point (i,j,k) de la matrice == FragmentShader}
+\textbf{Un shader c'est un programme qui s'execute sur une carte graphique}. 
+Un fragment shader est un programme qui s'applique sur la couleur d'un pixel d'un objet.\\ 
 
 Le principe de fonctionnement d'un shader est simple. On active le
 shader, on dessine, on désactive le shader. Tout ce qui est dessiné
@@ -487,6 +491,8 @@ texture3D et toutes les couleurs de celle-ci seront modifiées.\\
 La première difficulté est de pouvoir traiter l'ensemble de la Texture
 3D avec le shader. On peut le faire en dessinant plusieurs fois un
 plan et en changeant ses coordonnées de texture.
+Il ne faut pas oublier de regler la taille du  \textbf{viewport} du rendu
+qui doit être égal à la taille de la grille.
 
 
 \subsubsection{Itération == Framebuffer ( render to texture 3D ) }
@@ -503,14 +509,14 @@ d'enregistrer ce qui s'affiche à l'écran dans une texture.\\
 \paragraph*{Principe du render to texture 3D} Nous avons un
 \textbf{FrameBuffer}. Lorsqu'il est actif, le dessin ne s'affiche pas
 sur l'écran, mais est conservé en mémoire. Nous pouvons rediriger la
-sortie du framebuffer vers une texture. \\ 
+sortie du framebuffer vers un tranche ( un layer ) de la texture3D. \\ 
 
 Il nous faut donc deux textures : la texture courante, et la texture
 dans lequel on enregistrera les résultat du traitement par le
 shader.\\
  
-Si notre texture 3D fait 128 x 128 x 128, nous allons dessiner dans une fenêtre
-de 128x128 chaque tranche de la texture. \\
+Si notre texture 3D fait 128 x 128 x 128, nous allons dessiner dans un viewport
+de 128x128 chaque tranche ( les 128 tranches de profondeur ) de la texture. \\
 Lors du traitement de la tranche i, nous:\\
 \begin{itemize}
 \item activons le shader ( qui applique le calcul de résolution) (en
@@ -525,45 +531,137 @@ résultat du shader appliqué à la première texture.\\
  
 \textbf{Remarque importante : } Sur le papier cette astuce est très
 compréhensible. La mettre en place n'est pas si facile puisqu' un
-simple paramètre mal configuré entraine un résultat faux, et trouver
+simple paramètre mal configuré entraine un résultat faux, et en trouver
 la cause n'est pas évident...
+
+
+\subsection{Détail de l'adaptation}
+Les matrices de gaz, fumée et chaleur sont maintenant stockées dans les 
+couleurs RGB d'une texture3D.
+Les trois composantes de la vitesse sont aussi stockées dans les couleurs RGB 
+d'une matrice3D.
+Les sources de densité et de vitesse sont aussi stockées dans des texture3D.
+Ainsi la première étape consiste à charger en mémoire les textures
+qui nous serviront par la suite.\\
+
+Chaque étape de calcul a un shader associé. Le code des fragment shader 
+est quasi identique à ce qu'on peut trouver à l'intérieur de la boucle
+des fonctions de la partie CPU. Il a fallut néanmoins rajouter des modificateurs
+de repères car le résultat final est stocké dans une texture3D, dont les composantes
+sont entre 0.0 et 1.0. Pour effectuer un calcul il faut charger le shader associé,
+lier les textures3D aux entrées et sorties du shader, lier les variables intervenant
+dans les calculs, et enfin appliquer le rendu dans le framebuffer.\\
  
-\subsection{Amélioration}
+ 
+\subsection{Rendu}
+Au niveau du rendu, nous utilisons exactement le même principe que pour la partie CPU,
+à savoir un bruit de perlin et une coloration en fonction de la température.
+Cependant, nous avons transformé notre tableau de valeurs de coloration en texture,
+afin d'exploiter au mieux la capacité du shader à manipuler les textures ( la manipulation
+d'un tableau en shader étant horriblement lente ).
+Notons que pour le rendu nous ne faisons plus de phase "matrice to texture3D" ce qui permet
+un \textbf{gain de temps important}.
+
+ 
+\subsection{Tentative d'amélioration}
 Un framebuffer est capable de dessiner dans plusieurs tranches de la
 texture en même temps (en général 8). Par défaut il dessinera la même
 chose dans les 8 tranches. Nous avons donc créé un shader qui dessine
 dans les 8 tranches de sortie les 8 tranches de l'entrée
-correspondantes. Ainsi nous évitons les allez et retour entre le CPU
-et le GPU ce qui permet un gain en performances.
+correspondantes.\\
+Malheureusement il n'y a aucun gain de temps, et les shaders sont
+un poil plus compliqués à réaliser. Nous avons donc enlevé cette méthode.
 
+\subsection{Résultats - Tableau comparatif de performances}
+Les résultat en terme de perfomance sont plutôt bons. Cependant il faut
+bien avoir conscience qu'ils dépendent totalement de la carte graphique utilisée,
+contraitement au modèle CPU qui tourne à peut près à la même vitesse sur les processeurs
+actuels.\\
+
+Ainsi voici un tableau comparatif des performances des modèles:\\
+
+\begin{tabular}{|l|c|r|}
+  \hline
+  ...              &  & 2x5600+, Geforce9800 & Athlon QL-62, HD3200 & pi7, HD5730 \\
+  \hline
+  CPU 20x20x20     &  &  &  & \\ 
+  CPU 30x30x30     &  &  &  & \\ 
+  CPU 40x40x40     &  &  &  & \\ 
+  GPU 40x40x40     &  &  &  & \\ 
+  GPU 70x70x70     &  &  &  & \\ 
+  GPU 100x100x100  &  &  &  & \\ 
+  \hline
+\end{tabular}
+
+
+
+
+
+\subsection{Conclusion}
+Le modèle GPU est donc totalement justifié. Son gain énorme de performance valide l'idée
+qu'un modèle de fluide réaliste peut être utilisé en temps réel avec une grande grille. 
+Même si notre modèle CPU est interactif, la grille 40x40x40 et ses 8 fps est
+trop petite pour réaliser un logiciel de simulation. Cependant, notre version GPU
+nous montre que notre modèle de fluide peut être utilisé dans une application 
+temps réel de grande envergure. Avec 8 fps en 100x100x100, dans une version
+pouvant encore être optimisée, nous pensons que tous les efforts fournis
+sur l'implémentation en GPU n'ont pas été vains. 
+
+
+
+
+%----------------------------------------------------------------------------------------------------------------------------------------
+%%%%%%%%%%%%%%%%%
+\section{Modèle d'objet}
+%%%%%%%%%%%%%%%%%
+
+\subsection{Détail du modèle}
+Nous utilisons une \textbf{grille de voxels} pour représenter les objets. Chaque voxel
+a plusieurs attributs : comme sa température de combustion, sa quantité de matière,
+son taux de combustion, son taux de conversion en gaz, son taux de conversion en fumée,
+sa température, sa vitesse de répulsion.\\
+Nous avons choisi ce modèle car le fait de représenter les objets en voxels
+permet de faire le lien rapidement entre la grille de l'objet et la grille du fluide,
+avec une simple fonction prenant en compte la position des objets et la valeur d'une division
+de l'espace.\\
+
+Chaque objet est initialisé avec un voxel de base. Nous pouvons donc jouer sur les propriétés
+de notre objet pour optenir tout un tas d'effet. Par exemple, nous pouvons réaliser des
+explosifs, des grenades fumigènes, des bout de bois qui brulent, des objets
+qui se décomposent sans bruler, des objets insensibles à la chaleur...
+
+\subsection{Chargement des objets}
+Nous avons réalisé un \textbf{chargeur de fichier .obj}. A l'aide d'un \textbf{calculateur de
+champs de distance}, nous construisons l'équivalent de notre objet maillé en grille de voxel.
+
+
+\subsection{Intéraction avec le fluide}
+Concrètement, nous avons englobé notre fluide et nos objets par une \textbf{boite englobante}.
+Lorsqu'il y a intéraction, nous convertissons les coordonnées (i,j,k) de la grille de
+l'objet en coordonnées (i',j',k') dans le modèle de fluide. Si ces coordonnées sont 
+valides, alors il y a intéraction du voxel avec le fluide.
+
+\subsection{Propagation de la chaleur}
+
+
+\subsection{Rendu}
+Pour chaque grile de voxel, nous calculons son maillage avec un \textbf{marching cube adaptatif}.
+Nous stockons le maillage calculé dans des tableaux, ces tableaux étant associés aux voxels
+qu'ils représentent. Lors du rendu, nous parcourons la liste des triangles calculés
+et les affichons. Lorsqu'un voxel est modifié, nous recalculons le marching cube uniquement
+là ou la modification intervient. Ainsi nous disposons d' un modèle d'objets déformables
+dont le rendu est effectué de manière efficace.
+
+\subsection{Combustion}
+Lorsque la température d'un voxel situé sur la frontière dépasse un seuil critique, l'objet commence à perdre de la matière.
+En fonction des paramètres, le voxel va generer plus ou moins de gaz, de fumée, et de température.
+Les elements générés 
+
+\subsection{Destruction}
 
 \subsection{Résultats}
 
 
-
-
-%----------------------------------------------------------------------------------------------------------------------------------------
-%%%%%%%%%%%%%%%%%
-\section{Propagation sur l'objet}
-%%%%%%%%%%%%%%%%%
-
-
-
-
-
-%----------------------------------------------------------------------------------------------------------------------------------------
-%%%%%%%%%%%%%%%%%
-\section{Destruction de l'objet}
-%%%%%%%%%%%%%%%%%
-
-
-
-
-
-%----------------------------------------------------------------------------------------------------------------------------------------
-%%%%%%%%%%%%%%%%%
-\section{Propagation dans l'environnement}
-%%%%%%%%%%%%%%%%%
 
 
 
@@ -792,9 +890,8 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
 \textbf{Auteur(s)} : Xiaoming Wei, Wei Li, Klaus Mueller1 and Arie Kaufman.\\
 \textbf{Publication} : IEEE Visualization 2002. \\
 \textbf{Sujet(s) abordé(s)} : Méthode d'affichage de feu avec des particules et une texture "Splat"\\ 
-\textbf{Principe} :\\	
-\textbf{Point(s) positif(s)} :\\
-\textbf{Conclusion} :\\
+\textbf{Principe} : C'est une méthode de rendu efficace adaptée aux particules.\\	
+\textbf{Conclusion} : Nous n'utiliserons pas cette technique, car nous avons trouvé mieux pour le modèle de fluide.\\ 
 
 
 \subsubsection{Physically Based Modeling and Animation of Fire}
@@ -856,25 +953,11 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
 
 
 
-\subsubsection{Reliable Isotropic Tetrahedral Mesh Generation Based On An Advancing Front Method}
-\textbf{Auteur(s)} : Yasushi Ito, Alan M. Shih and Bharat K. Soni.\\
-\textbf{Publication} :\\
-\textbf{Sujet(s) abordé(s)} : \\
-\textbf{Principe} :\\	
-\textbf{Point(s) positif(s)} :\\
-\textbf{Point(s) négatif(s)} :\\
-\textbf{Conclusion} :\\
-
-
 \subsubsection{Adaptative Physics Based Tetrahedral Mesh Generation Using Level Sets}
 \textbf{Auteur(s)} : Robert Bridson, Joseph Teran, Neil Molino, Ronald Fedkiw.\\
 \textbf{Publication} : Engineering with Computers (2005)\\
 \textbf{Sujet(s) abordé(s)} : \\
 	Présentation d'un algorithme de génération de Mesh Tetrahédral, dont l'entrée est une fonction distance, une grille cartésienne ou un octree.
-\textbf{Principe} :\\	
-\textbf{Point(s) positif(s)} :\\
-\textbf{Point(s) négatif(s)} :\\
-\textbf{Conclusion} :\\
 
 
 
