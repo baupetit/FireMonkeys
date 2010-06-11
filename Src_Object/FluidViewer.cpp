@@ -29,13 +29,13 @@ FluidViewer::FluidViewer()
 			0.8,// temp de combustion
 			1.0,// taux de conversion
 			1.0,// taux de perte
-			1.0,// diffusion
+			0.1,// diffusion
 			1.0, // conductance
 			Vecteur3I(0,0,0));
 			
 	Voxel defExplosif( true,  // plein 
 			false, // frontiere
-			2500.0,// restant 
+			1500.0,// restant 
 			0.0,// temperature 
 			Vecteur3D(0,0,0),  // repulsion
 			0.5,// temp de combustion
