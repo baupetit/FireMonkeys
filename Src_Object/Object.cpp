@@ -50,7 +50,7 @@ void Object::Afficher( float dt ){
 	}
 	glEnd();
 
-	
+	/*
 	for( int k = 0 ; k < grilleSize.z ; ++k ){
 	for( int j = 0 ; j < grilleSize.y ; ++j ){
 	for( int i = 0 ; i < grilleSize.x ; ++i ){
@@ -96,7 +96,7 @@ void Object::Afficher( float dt ){
 	}
 	glEnd();
 	glEnable(GL_LIGHTING);
-
+*/
 }
 
 Vecteur3D Object::repulse (int i, int j, int k){

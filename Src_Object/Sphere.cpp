@@ -27,8 +27,8 @@ Sphere::Sphere( Voxel defVox,
 	this->color = color ;
 	// compute AABB
 	float spaceDiv  = SolverParam::getSpaceDiv();
-	AABB = BoundingBox( Vecteur3D(-radius-spaceDiv ,-radius -spaceDiv ,-radius - spaceDiv),
-			    Vecteur3D(radius + spaceDiv ,radius + spaceDiv ,radius + spaceDiv) );
+	AABB = BoundingBox( Vecteur3D(-radius-2*spaceDiv ,-radius -2*spaceDiv ,-radius -2* spaceDiv),
+			    Vecteur3D(radius + 2*spaceDiv ,radius + 2*spaceDiv ,radius +2* spaceDiv) );
 
 //	generateDisplayList( nb_plans, nb_quarts );
 	generateVoxels();
