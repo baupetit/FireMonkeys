@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=latex 2010.5.21)  11 JUN 2010 17:23
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=latex 2010.5.21)  11 JUN 2010 17:36
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -305,14 +305,10 @@ Package babel Info: Making ? an active character on input line 123.
 *
 (/usr/share/texmf-texlive/tex/generic/babel/frenchb.cfg)))
 (/usr/share/texmf-texlive/tex/latex/carlisle/scalefnt.sty)
-
-! LaTeX Error: File `fullpage.sty' not found.
-
-Type X to quit or <RETURN> to proceed,
-or enter new name. (Default extension: sty)
-
-Enter file name: 
-(./FireMonkeys.aux)
+(/usr/share/texmf-texlive/tex/latex/fullpage.sty
+Package: fullpage 1999/02/23 1.1 (PWD)
+\FP@margin=\skip43
+) (./FireMonkeys.aux)
 \openout1 = `FireMonkeys.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 23.
@@ -346,19 +342,7 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 3.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <5> on input line 3.
-
-Overfull \hbox (8.88957pt too wide) in paragraph at lines 30--30
- [][] []\OT1/cmr/m/n/10 Operation sur le point (i,j,k) de la tex-ture == Frag-m
-entShader []  
- []
-
-
-Overfull \hbox (0.44511pt too wide) in paragraph at lines 43--43
- [][] []\OT1/cmr/m/n/10 Real-Time Sim-u-la-tion of De-for-ma-tion and Frac-ture
- of Stiff 
- []
-
-[2])
+ [2])
 \tf@toc=\write3
 \openout3 = `FireMonkeys.toc'.
 
@@ -372,202 +356,196 @@ Underfull \hbox (badness 10000) in paragraph at lines 96--97
 
  []
 
+
+Underfull \hbox (badness 10000) in paragraph at lines 118--127
+
+ []
+
 [4]
-Underfull \hbox (badness 10000) in paragraph at lines 160--171
+Underfull \hbox (badness 10000) in paragraph at lines 170--181
 
  []
 
 [5]
-Underfull \hbox (badness 10000) in paragraph at lines 194--199
+Underfull \hbox (badness 10000) in paragraph at lines 208--213
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 200--206
+Underfull \hbox (badness 10000) in paragraph at lines 214--220
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 207--211
+Underfull \hbox (badness 10000) in paragraph at lines 221--225
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 214--217
+Underfull \hbox (badness 10000) in paragraph at lines 228--231
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 219--223
+Underfull \hbox (badness 10000) in paragraph at lines 233--237
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 238--240
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 241--246
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 246--251
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 251--255
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 256--260
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 261--263
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 265--268
 
  []
 
 [6]
-Underfull \hbox (badness 10000) in paragraph at lines 224--226
+Underfull \hbox (badness 10000) in paragraph at lines 268--274
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 227--232
+Underfull \hbox (badness 10000) in paragraph at lines 286--288
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 232--237
+Underfull \hbox (badness 10000) in paragraph at lines 309--313
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 237--241
+Underfull \hbox (badness 10000) in paragraph at lines 314--324
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 242--246
+Underfull \hbox (badness 10000) in paragraph at lines 327--329
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 247--249
+Underfull \hbox (badness 10000) in paragraph at lines 331--336
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 251--254
+Underfull \hbox (badness 10000) in paragraph at lines 338--340
 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 254--260
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 272--274
-
- []
-
-
-Overfull \hbox (71.42938pt too wide) detected at line 278
-[]\OML/cmm/m/it/10 p \OT1/cmr/m/n/10 = [] + [] + []
  []
 
 [7]
-Overfull \hbox (24.04317pt too wide) detected at line 293
-\OML/cmm/m/it/10 u[] \OT1/cmr/m/n/10 = []
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 295--299
+Underfull \hbox (badness 10000) in paragraph at lines 341--345
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 300--310
+Underfull \hbox (badness 10000) in paragraph at lines 347--350
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 313--315
+Underfull \hbox (badness 10000) in paragraph at lines 356--359
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 317--322
+Underfull \hbox (badness 10000) in paragraph at lines 370--371
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 324--326
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 327--331
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 333--336
-
- []
-
-[8]
-Underfull \hbox (badness 10000) in paragraph at lines 342--345
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 356--357
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 358--360
+Underfull \hbox (badness 10000) in paragraph at lines 372--374
 
  []
 
 File: plan_en_coupe.ps Graphic file (type eps)
 <plan_en_coupe.ps>
-Underfull \hbox (badness 10000) in paragraph at lines 367--368
+Underfull \hbox (badness 10000) in paragraph at lines 381--382
 
  []
 
-[9]
-Underfull \hbox (badness 10000) in paragraph at lines 371--373
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 374--375
+[8]
+Underfull \hbox (badness 10000) in paragraph at lines 385--387
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 379--380
+Underfull \hbox (badness 10000) in paragraph at lines 388--389
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 383--384
+Underfull \hbox (badness 10000) in paragraph at lines 393--394
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 385--386
+Underfull \hbox (badness 10000) in paragraph at lines 397--398
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 387--394
+Underfull \hbox (badness 10000) in paragraph at lines 399--400
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 398--399
+Underfull \hbox (badness 10000) in paragraph at lines 401--408
 
  []
 
-[10]
+
+Underfull \hbox (badness 10000) in paragraph at lines 412--413
+
+ []
+
 File: Perlin3D.ps Graphic file (type eps)
- <Perlin3D.ps>
-Underfull \hbox (badness 10000) in paragraph at lines 404--405
+<Perlin3D.ps> [9]
+Underfull \hbox (badness 10000) in paragraph at lines 418--419
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 406--407
+Underfull \hbox (badness 10000) in paragraph at lines 420--421
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 408--409
+Underfull \hbox (badness 10000) in paragraph at lines 422--423
 
  []
 
 File: SansPerlin.ps Graphic file (type eps)
 <SansPerlin.ps>
-Underfull \hbox (badness 10000) in paragraph at lines 414--415
+Underfull \hbox (badness 10000) in paragraph at lines 428--429
 
  []
 
@@ -575,193 +553,153 @@ File: Perlin1.ps Graphic file (type eps)
 <Perlin1.ps>
 File: Perlin2.ps Graphic file (type eps)
  <Perlin2.ps>
-Overfull \hbox (15.20706pt too wide) in paragraph at lines 416--418
-[][] [] 
+Underfull \hbox (badness 10000) in paragraph at lines 435--439
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 442--444
+
+ []
+
+[10]
+Underfull \hbox (badness 10000) in paragraph at lines 445--447
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 448--450
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 456--464
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 472--474
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 476--478
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 479--483
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 484--487
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 494--500
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 501--503
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 504--508
+
  []
 
 [11]
-Underfull \hbox (badness 10000) in paragraph at lines 421--425
+Underfull \hbox (badness 10000) in paragraph at lines 509--512
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 428--430
+Underfull \hbox (badness 10000) in paragraph at lines 513--516
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 431--433
+Underfull \hbox (badness 10000) in paragraph at lines 517--519
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 434--436
+Underfull \hbox (badness 10000) in paragraph at lines 519--520
 
  []
 
 
-Overfull \hbox (1.24844pt too wide) in paragraph at lines 442--450
-\OT1/cmr/m/n/10 D'autres out-ils de pro-gram-ma-tion ex-is-tent ( comme OpenCL 
-) mais nous n'^^Setions
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 442--450
+Underfull \hbox (badness 10000) in paragraph at lines 520--523
 
  []
 
 
-Overfull \hbox (1.2056pt too wide) in paragraph at lines 455--455
-[]\OT1/cmr/bx/n/12 Transformation du probl^^Reme pour une r^^Sesolution GPU 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 458--460
+Underfull \hbox (badness 10000) in paragraph at lines 524--526
 
  []
 
 [12]
-Underfull \hbox (badness 10000) in paragraph at lines 462--464
+Underfull \hbox (badness 10000) in paragraph at lines 624--638
+
+ []
+
+[13] [14]
+Underfull \hbox (badness 10000) in paragraph at lines 698--709
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 465--469
+Underfull \hbox (badness 10000) in paragraph at lines 711--736
+
+ []
+
+[15]
+Underfull \hbox (badness 10000) in paragraph at lines 774--790
+
+ []
+
+[16]
+Underfull \hbox (badness 10000) in paragraph at lines 793--799
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 470--473
+Underfull \hbox (badness 10000) in paragraph at lines 802--814
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 480--486
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 487--489
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 490--494
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 495--498
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 499--502
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 503--505
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 505--506
-
- []
-
-[13]
-Underfull \hbox (badness 10000) in paragraph at lines 506--509
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 510--512
-
- []
-
-
-Overfull \hbox (1.90935pt too wide) in paragraph at lines 513--517
-[]\OT1/cmr/bx/n/10 Remarque im-por-tante :  \OT1/cmr/m/n/10 Sur le pa-pier cett
-e as-tuce est tr^^Res compr^^Sehensible.
- []
-
-[14]
-Underfull \hbox (badness 10000) in paragraph at lines 610--624
-
- []
-
-[15] [16]
-Overfull \hbox (9.69489pt too wide) in paragraph at lines 665--681
-\OT1/cmr/m/n/10 La m^^Sethode de de-struc-tion de l'ob-jet bas^^See sur des t^^
-Setrah^^Redres est tr^^Res int^^Seressante. 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 684--695
+Underfull \hbox (badness 10000) in paragraph at lines 820--833
 
  []
 
 [17]
-Underfull \hbox (badness 10000) in paragraph at lines 697--722
+Underfull \hbox (badness 10000) in paragraph at lines 836--853
 
  []
 
 
-Overfull \hbox (6.82114pt too wide) in paragraph at lines 724--742
-[]\OT1/cmr/bx/n/10 Auteur(s) \OT1/cmr/m/n/10 : Al-fred R. Fuller, Hari Kr-ish-n
-an, Karim Mahrous, Bernd Hamann,
- []
-
-[18]
-Overfull \hbox (0.94696pt too wide) in paragraph at lines 745--754
-\OT1/cmr/m/n/10 phases, et int^^Seraction en-tre les solides et les liq-uides e
-t gas. \OT1/cmr/bx/n/10 Point(s) n^^Segatif(s) \OT1/cmr/m/n/10 : 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 760--776
-
- []
-
-[19]
-Underfull \hbox (badness 10000) in paragraph at lines 779--785
+Underfull \hbox (badness 10000) in paragraph at lines 861--868
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 788--800
+Underfull \hbox (badness 10000) in paragraph at lines 871--879
 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 806--819
-
- []
-
-[20]
-Underfull \hbox (badness 10000) in paragraph at lines 822--839
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 847--854
-
- []
-
-[21]
-Underfull \hbox (badness 10000) in paragraph at lines 857--865
-
- []
-
-[22] (./FireMonkeys.aux) ) 
+[18] (./FireMonkeys.aux) ) 
 Here is how much of TeX's memory you used:
- 1552 strings out of 495062
- 19165 string characters out of 1182644
- 82319 words of memory out of 3000000
- 4739 multiletter control sequences out of 15000+50000
+ 1568 strings out of 495062
+ 19423 string characters out of 1182644
+ 83319 words of memory out of 3000000
+ 4752 multiletter control sequences out of 15000+50000
  5158 words of font info for 19 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
  25i,5n,24p,661b,227s stack positions out of 5000i,500n,10000p,200000b,50000s
 
-Output written on FireMonkeys.dvi (22 pages, 71244 bytes).
+Output written on FireMonkeys.dvi (18 pages, 74476 bytes).

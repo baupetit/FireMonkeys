@@ -50,7 +50,7 @@ void Object::Afficher( float dt ){
 	}
 	glEnd();
 
-/*	
+	/*
 	for( int k = 0 ; k < grilleSize.z ; ++k ){
 	for( int j = 0 ; j < grilleSize.y ; ++j ){
 	for( int i = 0 ; i < grilleSize.x ; ++i ){
@@ -70,8 +70,7 @@ void Object::Afficher( float dt ){
 	}
 	}
 	}
-*/
-/*
+
 	glPointSize( 4.0f );
 	glDisable(GL_LIGHTING);
 	
@@ -97,7 +96,7 @@ void Object::Afficher( float dt ){
 	}
 	glEnd();
 	glEnable(GL_LIGHTING);
-*/
+	*/
 }
 
 Vecteur3D Object::repulse (int i, int j, int k){
@@ -140,20 +139,25 @@ Vecteur3D Object::repulse (int i, int j, int k){
 
             
 
-		/* 
+           
 
 		//pivotage de Pi/2
+
 		Vecteur3D vec_vect_y = Vecteur3D(-vec.z,0.0,vec.x);
 		vec.x = (vec.x*vec_vect_y.x+vec.y*vec_vect_y.y+vec.z*vec_vect_y.z)*vec_vect_y.x - vec.x*vec.y;
 		vec.y = (vec.x*vec_vect_y.x+vec.y*vec_vect_y.y+vec.z*vec_vect_y.z)*vec_vect_y.y + vec.x*vec.x + vec.z*vec.z ;
 		vec.z = (vec.x*vec_vect_y.x+vec.y*vec_vect_y.y+vec.z*vec_vect_y.z)*vec_vect_y.z - vec.z*vec.y;
-		*/
+
+		
+		if (vec.x==0 && vec.y==0 && vec.z==0) return vec;
+
+		
 		vec.x = (vec.x/(sqrt(vec.x*vec.x+vec.y*vec.y+vec.z*vec.z)));
 		vec.y = (vec.y/(sqrt(vec.x*vec.x+vec.y*vec.y+vec.z*vec.z)));
 		vec.z = (vec.z/(sqrt(vec.x*vec.x+vec.y*vec.y+vec.z*vec.z)));
 
 	}
-	//cout << "pour i j k = " << i << " " << j << " " << k << " " << "x= " << vec.x << " y= " << vec.y << " z= " << vec.z << endl;
+		//cout << "pour i j k = " << i << " " << j << " " << k << " " << "x= " << vec.x << " y= " << vec.y << " z= " << vec.z << endl;
 	
 	return vec;
 
@@ -181,6 +185,7 @@ void Object::voxelConsome( Voxel *v ){
 		voisin = &grille[_Grille_Ind(v->pos.x-1,v->pos.y-1,v->pos.z-1)];
 		voisin->valuation[_FUR_] += spaceDiv;
 		Polygonise( *voisin );				
+		
 
 		// 2
 		voisin = &grille[_Grille_Ind(v->pos.x-1,v->pos.y,v->pos.z-1)];
@@ -399,6 +404,16 @@ void Object::voxelConsome( Voxel *v ){
 		Polygonise( *voisin );
 		
 		cout << "voxelConsome" << endl;
+
+		// mise a jour de la force de repulsion
+		Vecteur3I pos = v-> pos ;
+		for( int k = -1; k<2 ; ++k ){
+			for( int j = -1; j<2 ; ++j ){
+				for( int i = -1; i<2 ; ++i ){
+					repulse( pos.x+i, pos.y+j, pos.z+k);
+				}
+			}
+		}
 	}
 }
 

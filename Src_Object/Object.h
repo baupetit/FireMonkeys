@@ -128,7 +128,9 @@ protected :
 
 	}
 
+
 	Vecteur3D repulse (int i, int j, int k);
+
 	
 	inline void setCornerCell( Voxel& v ){
 		Vecteur3D orig = cellToPoint( v.pos );
