@@ -50,7 +50,7 @@ void Object::Afficher( float dt ){
 	}
 	glEnd();
 
-	
+	/*
 	for( int k = 0 ; k < grilleSize.z ; ++k ){
 	for( int j = 0 ; j < grilleSize.y ; ++j ){
 	for( int i = 0 ; i < grilleSize.x ; ++i ){
@@ -96,7 +96,7 @@ void Object::Afficher( float dt ){
 	}
 	glEnd();
 	glEnable(GL_LIGHTING);
-
+	*/
 }
 
 Vecteur3D Object::repulse (int i, int j, int k){
@@ -404,6 +404,16 @@ void Object::voxelConsome( Voxel *v ){
 		Polygonise( *voisin );
 		
 		cout << "voxelConsome" << endl;
+
+		// mise a jour de la force de repulsion
+		Vecteur3I pos = v-> pos ;
+		for( int k = -1; k<2 ; ++k ){
+			for( int j = -1; j<2 ; ++j ){
+				for( int i = -1; i<2 ; ++i ){
+					repulse( pos.x+i, pos.y+j, pos.z+k);
+				}
+			}
+		}
 	}
 }
 
