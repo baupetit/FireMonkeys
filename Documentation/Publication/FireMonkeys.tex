@@ -4,14 +4,14 @@
 % définit le type de document et ses options
 \documentclass[a4paper,10pt]{article}
 
-% des paquetages indispensables, qui ajoutent des fonctionnalites
+% des paquetages indispensables, qui ajoutent des fonctionnalités
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 \usepackage{lscape}
 \usepackage{url}
 \usepackage{xspace}
 \usepackage[francais]{babel}
-%\usepackage{fullpage}
+\usepackage{fullpage}
 
 \pagestyle{plain}
 
@@ -43,7 +43,7 @@
 	\includegraphics[scale=0.3]{feu.ps}\\
 	\vspace{2cm}
 	%%
-	Etudiants impliqués :\\
+	Étudiants impliqués :\\
 	Benjamin Aupetit - IRVM - benjamin.aupetit@ensimag.imag.fr\\
 	Julien Champeau - IRVM - julien.champeau@ensimag.imag.fr\\
 	Arnaud Emilien - IRVM - arnaud.emilien@ensimag.imag.fr\\
@@ -70,38 +70,70 @@
 %%%%%%%%%%%%%%%%%
 \section{Présentation du projet}
 \subsection{Introduction}
+Il existe de nombreux travaux de modélisation du feu. Cependant, peu d'entre eux
+modélisent la totalité du processus de combustion. Nous avons trouvé interessant
+de répondre à la problématique : comment modéliser une combustion réaliste et temps réel?
+
 
 \subsection{Objectifs initiaux}
-Le but principal de notre projet est de modéliser du feu en temps
-réel. Cette modélisation devra être la plus réaliste possible, en
-effet nous voulons permettre d'integrer notre solution dans un
+Le but principal de notre projet est de réaliser un modèle de combustion en 3D temps
+réel. \\
+Cette modélisation devra être la plus réaliste possible : en
+effet nous voulons permettre d'intégrer notre solution dans un
 environnement temps réel qui requiert un comportement proche de la
-réalité en restant intéractif. Dans ce sens notre solution ne sera pas
-adaptée à tous les jeux videos, car ceux ci ne necessitent pas une
-approche réaliste mais juste des effets visuels impressionants.\\
+réalité en restant interactif.
+Dans ce sens notre solution ne sera pas adaptée à tous les jeux vidéos, car ceux ci ne nécessitent pas une
+approche réaliste mais juste des effets visuels impressionnants.\\
 
 Notre solution devra ainsi répondre aux critères suivants :
 \begin{itemize}
-\item Modèle de flamme convainquant 
-\item Génération de fumée
-\item Propagation réaliste sur l'objet 
+\item Modèle de flamme convainquant. 
+\item Génération de fumée.
+\item Propagation réaliste sur l'objet. 
 \item Prise en compte des flux d'air ( vent, advection du feu... )
-\item Destruction procedurale progressive d'un objet
-\item Propagation à l'environnement
+\item Interaction du système avec les objets.
+\item Destruction procédurale progressive d'un objet.
+\item Propagation à l'environnement.\\
 \end{itemize}
 
-\subsection{Aperçu}
+
+\subsection{Moyens utilisés}
+Sachant que nous voulons réaliser une application temps réel, nous avons décider dans 
+un premier temps de le réaliser sur \textbf{CPU} en utilisant \textbf{OpenGL} pour valider le modèle, 
+puis de l'adapter en \textbf{Shader GLSL}. Les calculs réalisés étant hautement 
+parallélisables, la programmation sur GPU est indispensable.
+
+\subsection{La démarche}
+Notre démarche a été similaire à celle d'un chercheur effectuant une nouvelle
+publication. En effet, nous avons commencé par effectuer une série de recherche
+bibliographique pour saisir au mieux les avantages et inconvénients de différentes
+méthodes, et ainsi d'en tirer le meilleur pour réaliser notre modèle.\\
+Nous avons effectué un compte rendu de la plupart des articles lu, ceux-ci
+se trouvent dans la partie \textbf{recherche bibliographique} de ce document.\\
+Nous avons ensuite implémenté notre modèle dont nous justifions les choix
+dans la suite de ce document.
+
+
+\subsection{Résultats}
+Nous avons ainsi implémenté totalement le modèle de fluide et d'objet sur CPU, 
+et le modèle de fluide sur GPU. Le modèle d'objet nécessite une adaptation plus
+importante aux fonctionalités de la carte graphique, que nous expliquerons 
+dans la suite de ce document.\\
+Le modèle CPU présente un taux d'image par secondes suffisant pour montrer 
+le bon fonctionnement du modèle. Toutes les fonctionalités du modèles sont
+implémentées et opérationelles. (environ 9 fps avec une grille 40x40x40)\\
+La version GPU est comme prévu beaucoup plus rapide et permet d'utiliser
+une taille de grille plus importante. (environ avec une grille )\\
+
+Nous détaillons 
 
 %%%%%%%%%%%%%%%%%
 \section{Aperçu de notre modèle}
 Ici nous présentons un résumé de notre modèle global. Ce modèle a été
-établi pour avoir un idée générale et ainsi choisir les modèles
-adaptés pour chaque parties. En effet nous devons nous assurer de la
-compatibilité de ceux ci, pour eviter les incohérences entre les
-différentes étapes, ou des calculs de syncrhonisation entre les
-phases. Par exemple la représentation des objets doit être définié dès
-le début mais aussi permettre toutes les opérations que nous pourrions
-être amenné à y apporter.
+établi pour unifier les différents modèles du processus de combustion. 
+En effet nous devons nous assurer de la compatibilité de ceux ci, pour éviter les incohérences entre les
+différentes étapes, ou des calculs de synchronisation entre les
+phases. 
 
 \subsection{Les flammes}
 Pour modéliser les flammes il faut différencier deux aspects. Le rendu
@@ -109,31 +141,431 @@ des flammes d'une part, et la modélisation du phénomène associé
 d'autre part.
 
 \subsubsection{Un modèle de fluide pour le feu}
-Basé sur les travaux de \textbf{Jos Stam} (stable fluids). Ce modèle inclu la
-diffusion de la densité, la chaleur, la vitesse des fluides utilisés (
-``combustible'', fumée, air ). Il permettra aussi de gerer plus
-simplement la diffusion du feu dans l'environnement.
+Le modèle de fluide est basé sur les travaux de \textbf{Jos Stam, stable fluids}. 
+Ce modèle inclue la diffusion de la densité de gaz, la densité de fumée, la chaleur, 
+la vitesse de l' air. Il permet aussi de gérer plus
+simplement la diffusion du feu entre les objets dans tout son environnement.
 
 \subsubsection{Le rendu des flammes et de la fumée}
 Pour rendre les flammes nous avons besoin d'une méthode rapide mais
 donnant une impression de réalisme. Pour faire ceci nous utilisons une
-méthode expliquée \textbf{Zeki Melek}. Cette méthode consiste à
-découper le fluide en ``tranches'' othogonale à l'orientation de la
-camera. Dans chaque tranche on calcule une texture d'après la densité
-de fluide représentant la flamme. Ensuite avant le rendu on applique
-un bruit de Perlin ( en 4D ) sur chaque tranche, et enfin on applique
-un effet de ``bloom'' sur chaque texture pour modéliser la luminosité
-du feu. De plus nous appliquons une couleur à la flamme qui est fonction de 
-sa chaleur ( principe du corps noir ).\\
-La fumée sera rendue de la même manière que la flamme.
+méthode inspirée de celle de \textbf{Zeki Melek}. Notre méthode consiste à
+transformer la matrice du fluide en texture3D, puis de découper le fluide en 
+``tranches'' orthogonales à l'orientation de la camera. Pour chaque tranche,
+nous calculons les coordonnées de textures des points la constituant. 
+Ainsi notre méthode de \textbf{rendu de texture3D} permet de visualiser le fluide
+à 360 degrés.\\
+Nous utilisons de plus un shader GLSL de \textbf{multitexturing}. Ce shader
+permet dans un premier temps de choisir si nous devons afficher la flamme ou la
+fumée, en fonction qui rajoute un \textbf{bruit de Perlin}
+aux coordonnées de texture, multiplié par un \textbf{dégradé vertical}. Ceci
+permet d'avoir une flamme réaliste, dont les flammes sont plus violentes
+dessus que dessous.\\
+Enfin, nous déterminons la couleur de la flamme en nous basant sur le
+\textbf{principe du corps noir}, qui détermine la coloration de la flamme
+en fonction de la chaleur.
 
 \subsection{Les objets}
-Dans un premier temps nous nous concentrerons sur des objets qui se
-décomposent lors de la combustion. Pour cela nous utilisons une
-décomposition tétrahédrale des maillages des objets pour les
-décomposer. Cette méthode permet en effet de détruire localement les
-maillages en conservant la géometrie locale des objet (si elle ne
-brule pas).
+\subsubsection{L'ajout des objets au modèle de fluide}
+Nos objets sont représentés sous formes de \textbf{grilles de voxels}, ce qui 
+permet d'interagir facilement avec la grille uniforme du fluide.
+Ces grilles de voxels sont indépendantes du fluide, et propres à chaque objets.
+Nous réalisons le liens entre les objets et le fluide en nous basant 
+sur les positions des boites englobantes des objets et du fluide,
+puis en convertissant les coordonnées dans un modèle en coordonnées dans un autre.\\
+Les voxels de l'objet ont tous des paramètres propres, ce qui permet
+de dégrader progressivement l'objet, de générer du gaz et de la chaleur,
+d'influencer le champs de vitesse... Ces paramètres offrent la possibilité d'avoir
+plusieurs types de matériaux : citons par exemple des matériaux insensibles à
+la chaleur, d'autres prenant feu, et encore d'autres qui se dégradent sans bruler...\\
+
+Les objets peuvent être chargés à partir d'un mesh au format \textbf{.obj}. 
+Nous convertissons ce mesh en grille de voxel grâce à notre calculateur de 
+\textbf{champs de distance}.
+
+\subsubsection{Interactions avec le fluide}
+Lorsqu'un objet rentre en contact avec le fluide, il y a \textbf{échange de chaleur aux
+bords de l'objet}. Puis nous avons modélisé la diffusion de la chaleur au sein
+de l'objet en nous servant de \textbf{l'équation de la chaleur}.\\
+Nous avons ajouté autour de l'objet un champs de répulsion qui force le fluide
+à contourner l'objet.
+
+\subsubsection{Le rendu des objets}
+Au niveau du rendu, nous utilisons un \textbf{marching cube adaptatif}. Cela nous permet
+d'afficher simplement et rapidement la grille de voxels. De plus, lorsque nous brulons un voxel,
+nous signalons ce voxel brulé à l'algorithme, qui recalcule la surface uniquement 
+là ou c'est nécessaire.
+
+
+
+
+
+
+%----------------------------------------------------------------------------------------------------------------------------------------
+%%%%%%%%%%%%%%%%%
+\section{Modèle de fluide pour la flamme, la fumée et la chaleur}
+%%%%%%%%%%%%%%%%%
+Comme décris dans l'aperçu, nous nous sommes focalisé sur un modèle
+``réaliste'' qui peut être exploité en temps réel. Pour cela nous
+avons choisit un modèle de fluide pour représenter les flammes et la fumée. 
+Nous avons préféré le modèle de fluide au modèle de particules
+car c'est un modèle qui s'adapte parfaitement à la combustion d'un objet.\\
+
+Le principe de base est le suivant: lorsqu'un objet brûle il libère un
+fluide inflammable, si la température est suffisante ce gaz
+s'enflamme, sinon il devient en partie de la fumée. Quand le
+combustible enflammé s'éloigne de la source de chaleur, il refroidi et
+lorsqu'il atteint une température suffisamment faible il se transforme
+en un autre gaz( invisible ) et en fumée.\\
+
+Pour faire cela nous avons besoin de quatre informations en permanence
+: le champ de vitesse de l'air, le champs de température, le champs de combustible
+ et le champs de fumée. En nous basant sur le modèle développé par \textbf{Jos Stam} 
+ dans \textbf{Stable Fluid} nous pouvons faire évoluer le système.\\
+
+
+\subsection{Plus de détails :}
+Le modèle de fluide qui semble être bien adapté à la représentation du
+feu est basé sur le principe des équations de Navier-Stokes pour la
+dynamique des fluides indéformables:\\
+\begin{equation}
+   \frac{\partial x}{\partial t} = -(\vec{u}.\nabla)x + \nu{\nabla^2}x+ \vec{f} 
+\end{equation}
+\\
+Ou $u$ représente le champ de vitesse du milieu et $x$ la valeur
+transporté par ce champ (densité par exemple)\\
+
+Cette équation est constitué de 3 termes principaux (4 en théorie mais
+on a pas introduit l'effet de la pression ambiante) :\\
+\begin{itemize}
+\item{Un terme d'advection: $-(\vec{u}.\nabla)x$}\\ Le champ de
+  vitesse va servir à transporter la quantité de fluide dans
+  l'espace. L'auto-advection du champ de vitesse (
+  $-(\vec{u}.\nabla)\vec{u}$ ) est ce qui va permettre le mouvement
+  des particules de gaz dans le milieu.\\
+\item{Un terme de Diffusion: $\nu{\nabla^2}x$}\\ Le terme $\nu$
+  représente la viscosité du fluide et le terme de diffusion de
+  l'équation de Navier-Stokes sert en fait à modéliser la capacité
+  d'un fluide à se mouvoir dans l'espace qui l'entoure. Plus $\nu$ est
+  élevé et moins le fluide pourra se mouvoir dans le milieu.\\
+\item{Un terme représentant les forces extérieures : $\vec{f}$}\\ Ce
+  terme sert a modifier le comportement de la valeur $x$ dans le champ
+  de vitesse lorsqu'une force extérieure rentre en jeu (du vent par
+  exemple).\\
+\end{itemize}
+Pour construire notre modèle de feu, nous allons considérer 2
+variables : $\vec{u}$ le champ de vitesse et $\rho$ la densité du
+fluide. Notre feu sera alors un champ de densité en mouvement dans un
+champ de vitesse.\\ 
+
+La résolution se fera par étapes : l'ajout des forces externes, la
+diffusion du fluide et l'impacte de l'advection.\\
+
+\begin{enumerate}
+\item{Les forces~:}\\ L'ajout des forces externes dans le cas de la
+  densité consiste en fait a ajouter une source de densité la ou on le
+  souhaite.\\
+\item{La diffusion~:}\\ Cela consiste à échanger la densité d'une case
+  de notre grille de l'espace avec ses 6 voisins (haut, bas, gauche,
+  droite, devant, derrière). Ce qu'il se passe en fait c'est que la
+  case va perdre de la densité en la cédant à ses voisins mais va
+  aussi en gagner car ses voisins aussi sont soumis a cela et lui
+  transfère aussi du fluide.\\ 
+  
+  
+  Résolution:
+  \begin{equation}
+    \frac{\partial \vec{u}}{\partial t} =  \nu{\nabla^2}\vec{u} 
+  \end{equation}
+  \begin{equation}
+    \vec{u}(\vec{x},t+\delta t) = \vec{u}(\vec{x},t) +\nu \delta t {\nabla^2} \vec{u}(\vec{x},t) 
+  \end{equation}
+  D'où:
+  \begin{equation}
+    (I - \nu \delta t {\nabla^2})\vec{u}(\vec{x},t+\delta t) = \vec{u}(\vec{x},t) 
+  \end{equation}
+  \\
+  
+  Calcul du laplacien:
+  \begin{equation}
+    {\nabla^2}p = \frac{p_{i+1,j,k} - 2p_{i,j,k} + p_{i-1,j,k} }{({\delta x})^2} + \frac{p_{i,j+1,k} - 2p_{i,j,k} + p_{i,j+1,k}}{({\delta y})^2} + \frac{p_{i,j,k+1} - 2p_{i,j,k} + p_{i,j,k-1}}{({\delta z})^2} 
+  \end{equation}
+  Qui dans le cas où $\delta x = \delta y =\delta z$ nous donne:
+  \begin{equation}
+    {\nabla^2}p = \frac{p_{i+1,j,k} + p_{i-1,j,k} + p_{i,j+1,k} + p_{i,j-1,k} + p_{i,j,k+1} + p_{i,j,k-1} - 6p_{i,j,k} }{({\delta x})^2} 
+  \end{equation}
+  
+  Grâce a cela on trouve facilement la formule pour la résolution:
+  \begin{equation}
+    u_{i,j,k}^{l+1} = \frac{u_{i+1,j,k}^{l} + 
+      u_{i-1,j,k}^{l} + 
+      u_{i,j+1,k}^{l} +
+      u_{i,j-1,k}^{l} + 
+      u_{i,j,k+1}^{l} + 
+      u_{i,j,k-1}^{l} + 
+      \frac{({\delta x})^2}{\nu \delta t} u_{i,j,k}^{l}}{ 6 + \frac{({\delta x})^2}{\nu \delta t}} 
+  \end{equation}
+  
+  La résolution linéaire de cette équation combinée à une relaxation de
+  Gauss-Seidel nous permet de considérer une méthode stable, même pour
+  des taux de diffusion ($ \frac{\nu \delta t}{({\delta x})^2}$)
+  grand.\\
+  
+  \item{L'advection~:}\\ L'advection est le procédé par lequel le
+    champ de vitesse du fluide transporte la matière d'un endroit a un
+    autre. Le plus simple est de voir la densité de matière comme une
+    quantité de particules et qu'il faut voir a chaque pas de
+    temps. Et ce que l'on fait c'est que l'on considère les centres de
+    nos cellules comme étant des particules, et plutôt que de regarder
+    ou vont se rendre ces particules, on regarde d'ou elle
+    proviendrait si on faisait un pas de temps en arrière. On
+    interpole ainsi les densités depuis leur position d'avant avec
+    celles de leurs plus proches voisins.\\
+\end{enumerate}
+
+\subsection{Nos améliorations :}
+Par rapport au modèle de \textbf{Stam}, nous avons rajouté des éléments en plus 
+nous permettant de gérer plusieurs phénomènes pour notre feu:\\
+ 
+\subsubsection{La Température :}
+La température est un facteur important pour le feu car la température
+va générer une force ( \textbf{buoyancy} ) qui va modifier le champs de vitesse 
+(l'air chaud qui monte) et donc cela va avoir un impact sur le mouvement de notre
+flamme.\\ 
+Cette force a pour forme:\\
+\begin{equation}
+	\vec{f} = \sigma T \vec{k} 
+\end{equation}
+\\
+
+Nous avons donc un paramètre de température en plus de la densité de gaz, qui
+est géré par les mêmes équations, mais a cela nous avons rajouté un
+coefficient de refroidissement qui fait baisser la température lorsque
+l'on s'éloigne de la source.\\
+
+\subsubsection{Vorticity confinement :}
+Le fait d'utiliser une méthode de relaxation pour rendre le système
+stable a pour conséquence de provoquer une dissipation d'énergie dans
+notre calcul et donc une perte de donnée. \\
+
+Le moyen de palier à ce problème est d'utiliser la technique de \textbf{Ron Fedkiw
+: "vorticity confinement"} qui redonne au fluide l'énergie perdue par le
+calcul du laplacien.
+
+\subsubsection{Génération de fumée :}
+Le feu (ainsi que les objets qui brûlent) produit de la fumée, nous avons donc géré un
+deuxième fluide évoluant dans le même champ de vitesse avec des
+paramètres qui lui sont propres.\\
+
+Nous avons donc introduit un paramètre de \textbf{consommation de la
+  matière} qui a chaque pas de temps va diminuer la densité de fluide
+"feu". En parallèle nous produisons de la densité "fumée" la où on
+consume le feu , modulé avec un paramètre de conversion (ex: 10
+particules de feu forment 3 particules de fumée).
+
+
+\subsection{Méthode de rendu}
+\subsubsection{Affichage volumique}
+
+Dans notre cas nous avons à faire à des textures3D, qui peuvent impliquer des problèmes lors de l'affichage. Nous avons donc opté pour la solution suivante:\\
+
+Nous affichons N plans de coupe de notre texture3D, chaque plan étant orthogonal a la direction de la caméra. Pour cela nous avons du implémenter tout un ensemble d'opérations faisant en sorte que les coordonnées de texture des plans orthogonaux à 
+la caméra correspondent à l'orientation de la flamme dans l'espace. Ceci nous permet alors de visionner notre texture volumique depuis n'importe quel point de l'espace.\\
+\begin{center}
+\includegraphics[scale=0.3]{plan_en_coupe.ps}
+\end{center}
+
+
+\subsubsection{Rendu de la flamme}
+
+Une flamme ne saurait être jolie si l'on ne prend pas en compte la variation lumineuse en fonction de la température. Pour cela nous avons considéré notre flamme corps un modèle de corps noir, c'est à dire une entité qui rayonne à des longueurs d'ondes différentes en fonction de la température, cela en utilisant la formule de Planck pour le corps noir:\\
+
+\begin{equation}
+	L_{\lambda} = \frac{2hc^{2}\lambda^{-5}}{exp(\frac{hc}{k\lambda T})-1}
+\end{equation}
+Où h est la constante de planck, c la vitesse de la lumière, et k la constante de Boltzmann.\\
+
+On obtient donc une relation entre la température de notre flamme et sa luminance, ce qui nous permet d'avoir un rendu fonction de la température. De plus nous avons ajusté la transparence de la flamme en réglant l'$\alpha$ en tenant compte de la densité de gaz qui brule et de la température de la flamme (les flammes bleus sont plus transparentes que les rouges et jaunes).\\
+
+
+\subsubsection{Rendu de la fumée}
+
+	Pour le rendu de la fumée, il s'agit simplement d'un niveau de gris avec une transparence $\alpha$ fonction de la densité de fumée en un point.\\
+
+\subsubsection{Multitexturing}
+
+	Le second problème d'affichage qui se posa à nous fut le moment ou nous devions afficher la flamme ET la fumée. Le fait d'afficher sous forme de plan posa des problème au niveau de la précision du Z-Buffer d'OpenGL qui ne savait plus quelle texture était devant l'autre et cela provoquait un effet de clignotement indésirable.\\
+
+La solution que nous avons retenue pour palier a ce problème était de réaliser un fragment shader au niveau du GPU pour faire un affichage Multitexture prenant en compte l'alpha des 2 texture.\\
+
+Le principe en lui même est assez simple:\\
+Pour chaque pixel de notre texture\\
+      si $\alpha_{texture1}>\alpha_{texture2}$ alors \\
+            affichage texture1;\\
+      sinon \\
+            affichage texture2;\\
+fin\\
+
+
+\subsubsection{amélioration de rendu : Bruit de Perlin 4D}
+
+Dans la réalité il y a toujours un "vent ambiant" autour d'une flamme, ce qui à pour conséquence de multiples effets de mouvements au niveau de sa surface. Pour simuler cet effet nous ajoutons \textbf{lors du rendu par le fragment shader} un bruit de perlin 4D (dont une dimension temporelle pour conserver la cohérence du mouvement).\\
+
+\begin{center}
+\includegraphics[scale=0.3]{Perlin3D.ps}
+\end{center}
+
+Le fait d'ajouter ce bruit lors du rendu dans le shader ne modifie pas la position spatiale des densités, des températures et de la fumée et ne perturbe donc pas les calculs de l'équation de dynamique des fluides.\\ 
+
+Les rendus obtenus étant plutôt convaincant :\\
+
+Sans bruit de Perlin:\\
+\begin{center}
+\includegraphics[scale=0.3]{SansPerlin.ps}
+\end{center}
+
+
+Avec Bruit de Perlin:\\
+
+\includegraphics[scale=0.3]{Perlin1.ps}
+\includegraphics[scale=0.3]{Perlin2.ps}
+
+
+
+L'expression mathématique du bruit de Perlin est la suivante :\\
+$P_n(x) = \sum_{i=0}^{n-1} p^i bruitPerlin(2^i.x)$.\\
+C'est une série (absolument) convergente, majorée par la série géométrique :\\
+$\sum_{i=0}^{n-1} p^i = \frac{1 - p^n}{1 - p}$.\\
+
+\subsection{Résultats}
+
+Taille de la grille : 20 x 20 \\
+FPS : 25\\
+
+Taille de la grille : 30 x 30 \\
+FPS : 8\\
+
+Taille de la grille : 30 x 30 \\
+FPS : 4\\
+
+%----------------------------------------------------------------------------------------------------------------------------------------
+%%%%%%%%%%%%%%%%%
+\section{Modèle de flamme et de fumée GPU}
+%%%%%%%%%%%%%%%%% 
+
+Nous utilisons le langage \textbf{GLSL} ( Open\textbf{GL S}hading
+\textbf{L}anguage).  Ce langage de shader est utilisé en général pour
+le rendu de scène 3D. Le shader utilisé est un \textbf{fragment
+  shader}.  Il est (très grossièrement) destiné à changer la couleur
+d'affichage d'un objet.\\ D'autres outils de programmation existent (
+comme OpenCL ) mais nous n'étions pas tous compatibles avec cette
+technologie.  Nous avons donc choisi le GLSL qui est suporté par un
+bien plus grand nombre de carte graphiques.\\
+
+Nous avons donc du mettre en place des outils permettant de résoudre
+notre système de fluide avec des outils qui sont à priori pas destinés
+à ce genre de problèmes.
+
+\subsection{Transformation du problème pour une résolution GPU}
+
+\subsubsection{Matrice 3 dimensions == Texture 3D}
+Notre matrice 3 dimensions dans lequel nous traitons le modèle de
+fluide peut se rapprocher d'une \textbf{Texture 3D} d'OpenGL. \\
+
+\subsubsection{Operation sur le point (i,j,k) de la texture == FragmentShader}
+Un shader c'est un programme. Un fragment shader est un programme qui
+s'applique sur la couleur d'un pixel d'un objet.\\ 
+
+Le principe de fonctionnement d'un shader est simple. On active le
+shader, on dessine, on désactive le shader. Tout ce qui est dessiné
+pendant qu'il est actif subit toutes les modifications effectuées par
+le shader.\\ 
+
+Ainsi lorsqu'on fait une triple boucle pour parcourir l'ensemble des
+éléments du tableau, il suffit d'appliquer un shader sur notre
+texture3D et toutes les couleurs de celle-ci seront modifiées.\\
+
+La première difficulté est de pouvoir traiter l'ensemble de la Texture
+3D avec le shader. On peut le faire en dessinant plusieurs fois un
+plan et en changeant ses coordonnées de texture.
+
+
+\subsubsection{Itération == Framebuffer ( render to texture 3D ) }
+Un \textbf{shader} ne s'applique qu'au moment du dessin.  C'est à dire
+qu'on active le shader, on dessine, on désactive le shader. Tout ce
+qui est dessiné lorsqu'il est actif subit ses modifications. Mais du
+coup, la texture 3D initiale n'est jamais modifiée. Or lorsqu'on fait
+une itération dans le calcul il est essentiel de conserver le résultat
+dans une texture 3D.\\ 
+
+Avec une méthode de \textbf{render to texture} il est possible
+d'enregistrer ce qui s'affiche à l'écran dans une texture.\\
+
+\paragraph*{Principe du render to texture 3D} Nous avons un
+\textbf{FrameBuffer}. Lorsqu'il est actif, le dessin ne s'affiche pas
+sur l'écran, mais est conservé en mémoire. Nous pouvons rediriger la
+sortie du framebuffer vers une texture. \\ 
+
+Il nous faut donc deux textures : la texture courante, et la texture
+dans lequel on enregistrera les résultat du traitement par le
+shader.\\
+ 
+Si notre texture 3D fait 128 x 128 x 128, nous allons dessiner dans une fenêtre
+de 128x128 chaque tranche de la texture. \\
+Lors du traitement de la tranche i, nous:\\
+\begin{itemize}
+\item activons le shader ( qui applique le calcul de résolution) (en
+  fait on l'active une seule fois au début)\\
+\item redirigeons la sortie du framebuffer vers la tranche i de la texture de sortie,\\
+\item dessinons un plan ( dont les coordonnées de texture
+  correspondent à la tranche i) et dont la texture est la texture
+  d'entrée\\
+\end{itemize}
+Ainsi en sortie de l'itération nous avons dans la seconde texture le
+résultat du shader appliqué à la première texture.\\
+ 
+\textbf{Remarque importante : } Sur le papier cette astuce est très
+compréhensible. La mettre en place n'est pas si facile puisqu' un
+simple paramètre mal configuré entraine un résultat faux, et trouver
+la cause n'est pas évident...
+ 
+\subsection{Amélioration}
+Un framebuffer est capable de dessiner dans plusieurs tranches de la
+texture en même temps (en général 8). Par défaut il dessinera la même
+chose dans les 8 tranches. Nous avons donc créé un shader qui dessine
+dans les 8 tranches de sortie les 8 tranches de l'entrée
+correspondantes. Ainsi nous évitons les allez et retour entre le CPU
+et le GPU ce qui permet un gain en performances.
+
+
+\subsection{Résultats}
+
+
+
+
+%----------------------------------------------------------------------------------------------------------------------------------------
+%%%%%%%%%%%%%%%%%
+\section{Propagation sur l'objet}
+%%%%%%%%%%%%%%%%%
+
+
+
+
+
+%----------------------------------------------------------------------------------------------------------------------------------------
+%%%%%%%%%%%%%%%%%
+\section{Destruction de l'objet}
+%%%%%%%%%%%%%%%%%
+
+
+
+
+
+%----------------------------------------------------------------------------------------------------------------------------------------
+%%%%%%%%%%%%%%%%%
+\section{Propagation dans l'environnement}
+%%%%%%%%%%%%%%%%%
+
 
 
 
@@ -145,10 +577,10 @@ utiliser...
 
 \subsubsection{Real-Time Fluid Dynamics for Games}
 \textbf{Auteur(s)} : Jos Stam.\\
-\textbf{Publication} : Proceedings of the Game Developer Conference, March 2003 \\
+\textbf{Publication} : Proceedings of the Game Développer Conférence, March 2003 \\
 \textbf{Sujet(s) abordé(s)} : \\
     Modèle de fluide temps réel, pouvant être utilisé pour le feu, la fumée\\
-	Le modèle gère: le deplacement du fluide, la gestion de combustible,les forces appliquées sur le fluide.\\	
+	Le modèle gère: le déplacement du fluide, la gestion de combustible,les forces appliquées sur le fluide.\\	
 \textbf{Principe} :\\
 	Le modèle a été décomposé sur plusieurs étapes : génération du fluide par des sources, ajout des forces, diffusion du fluide, puis résolution de l'équation de la densité et de l'équation de la vitesse (équations de Navier-Stockes).
 	Pour résoudre les deux équations, il utilise une astuce permettant de résoudre le système très rapidement.
@@ -160,10 +592,10 @@ utiliser...
 	Peut être adapté pour qu'un objet influe sur le modèle.\\
 	Résultat réellement joli et réaliste.\\
 	Très bien expliqué.\\
-	Il a fournit un exemple 2D pour de la fumée, plutôt impréssionant.\\
+	Il a fournit un exemple 2D pour de la fumée, plutôt impressionnant.\\
 	Le modèle peut s'adapter au feu, à la fumée, et à l'eau.\\
 \textbf{Point(s) négatif(s)} :\\
-	La zone d'influence est assez petite, il faut voir si c'est possible de l'étendre sans trop allourdir les calculs. (Octree?) \\
+	La zone d'influence est assez petite, il faut voir si c'est possible de l'étendre sans trop alourdir les calculs. (Octree?) \\
 	Pas trop de détails sur la représentation graphique du feu.\\	
 	La dissipation numérique implique que le résultat n'est pas exact.\\
 \textbf{Conclusion} :\\
@@ -239,7 +671,7 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
 	Pas temps réel.\\
 	Compliqué à mettre en place.\\
 \textbf{Conclusion} :\\
-	La complexité de la programmation est assez importante. L'avantage de cette méthode est d'avoir un très haut niveau de détail en effectuant plus de calculs là o`u cela est nécessaire. La précision que nous désiront n'est peut être pas suffisante pour nécessiter un tel modèle.
+	La complexité de la programmation est assez importante. L'avantage de cette méthode est d'avoir un très haut niveau de détail en effectuant plus de calculs là o`u cela est nécessaire. La précision que nous désirons n'est peut être pas suffisante pour nécessiter un tel modèle.
 
 
 
@@ -249,7 +681,7 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
 \textbf{Sujet(s) abordé(s)} : \\
 	Destruction réaliste et temps réel d'un objet. \\
 \textbf{Principe} :\\	
-	C'est la simplification d'un problème de propagation en négligeant les effets microscopiques, qui ne sont pas vraiment visibles en temps réel, mais coûtent énormement en calcul.\\
+	C'est la simplification d'un problème de propagation en négligeant les effets microscopiques, qui ne sont pas vraiment visibles en temps réel, mais coûtent énormément en calcul.\\
 	Les meshs sont représentés par des "tetrahedral meshes". Le modèle de propagation continu est transformé en modèle discret. L'élasticité des objets est prise en compte.\\
 \textbf{Point(s) positif(s)} :\\
 	Temps réel.\\
@@ -290,7 +722,7 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
 	Rapide à calculer.\\
 	Très efficace pour changer la texture d'un objet brulé.\\
 	Propagation fonction d'un champ de vent.\\
-	Les particules de feu générées peuvent être utilisées pour génerer un feu 
+	Les particules de feu générées peuvent être utilisées pour générer un feu 
 	sur un autre objet ou sur une autre partie de l'objet.\\
 \textbf{Point(s) négatif(s)} :\\
 	Ne peut pas s'adapter à la destruction d'un objet.\\
@@ -298,7 +730,7 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
 	allumer des foyer aux autres endroits du mesh.\\
 	La propagation surfacique n'est pas toujours adaptés.\\	
 \textbf{Conclusion} :\\
-	Ce modèle est interessant, mais nécessite d'être beaucoup modifié pour 
+	Ce modèle est intéressant, mais nécessite d'être beaucoup modifié pour 
 	correspondre à notre but. Il n'est pas très adapté à la destruction des objets. 
 	(Sauf si nous voulons uniquement dégrader la texture de l'objet) \\
 
@@ -448,386 +880,6 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
 
 
 
-
-
-
-
-
-%----------------------------------------------------------------------------------------------------------------------------------------
-%%%%%%%%%%%%%%%%%
-\section{Mise en place du modèle global}
-%%%%%%%%%%%%%%%%%
-
-
-
-
-%----------------------------------------------------------------------------------------------------------------------------------------
-%%%%%%%%%%%%%%%%%
-\section{Modèle de flamme et de fumée}
-%%%%%%%%%%%%%%%%%
-Comme décris dans l'aperçu, nous nous sommes focalisé sur un modèle
-``réaliste'' qui peut être exploité en temps réel. Pour cela nous
-avons choisit un modèle de fluide pour représenter les flammes ainsi
-que pour la fumée.\\
-
-Le principe de base est le suivant: lorsqu'un objet brûle il libère un
-fluide inflammable, si la température est suffisante ce gas
-s'enflamme, sinon il devient en partie de la fumée. Quand le
-combustible enflammé s'éloigne de la source de chaleur, il refroidi et
-lorsqu'il ateint une température suffisament faible il se transforme
-en un autre gas( invisible ) et en fumée.\\
-
-Pour faire cela nous avons besoin de quatre informations en permanance
-: le champ de vitesse, de température, de combustible et de fumée. En
-appliquant ensuite le modèle développé par \textbf{Jos Stam} dans
-\textbf{Stable Fluid} nous pouvons faire évoluer le système.\\
-
-
-\subsection{Plus de détails :}
-Le modéle de fluide qui semble être bien adapté à la représentation du
-feu est basé sur le principe des équations de Navier-Stokes pour la
-dynamique des fluides indéformables:\\
-\begin{equation}
-   \frac{\partial x}{\partial t} = -(\vec{u}.\nabla)x + \nu{\nabla^2}x+ \vec{f} 
-\end{equation}
-\\
-Ou $u$ représente le champ de vitesse du milieu et $x$ la valeur
-transporté par ce champ (densité par exemple)\\
-
-Cette équation est constitué de 3 termes principaux (4 en théorie mais
-on a pas introduit l'effet de la pression ambiante) :\\
-\begin{itemize}
-\item{Un terme d'advection: $-(\vec{u}.\nabla)x$}\\ Le champ de
-  vitesse va servir à transporter la quantité de fluide dans
-  l'espace. L'auto-advection du champ de vitesse (
-  $-(\vec{u}.\nabla)\vec{u}$ ) est ce qui va permettre le mouvement
-  des particules de gas dans le milieu.\\
-\item{Un terme de Diffusion: $\nu{\nabla^2}x$}\\ Le terme $\nu$
-  représente la viscosité du fluide et le terme de diffusion de
-  l'équation de Navier-Stokes sert en fait à modéliser la capacité
-  d'un fluide à se mouvoir dans l'espace qui l'entoure. Plus $\nu$ est
-  élevé et moins le fluide pourra se mouvoir dans le milieu.\\
-\item{Un terme représentant les forces extérieures : $\vec{f}$}\\ Ce
-  terme sert a modifier le comportement de la valeur $x$ dans le champ
-  de vitesse lorsqu'une force extérieure rentre en jeu (du vent par
-  exemple).\\
-\end{itemize}
-Pour construire notre modele de feu, nous allons considerer 2
-variables : $\vec{u}$ le champ de vitesse et $\rho$ la densité du
-fluide. Notre feu sera alors un champ de densité en mouvement dans un
-champ de vitesse.\\ 
-
-La résolution se fera par étapes : l'ajout des forces externes, la
-diffusion du fluide et l'impacte de l'advection.\\
-
-\begin{enumerate}
-\item{Les forces~:}\\ L'ajout des forces externes dans le cas de la
-  densité consiste en fait a ajouter une souce de densité la ou on le
-  souhaite.\\
-\item{La diffusion~:}\\ Cela consiste à échanger la densité d'une case
-  de notre grille de l'espace avec ses 6 voisins (haut, bas, gauche,
-  droite, devant, derriere). Ce qu'il se passe en fait c'est que la
-  case va perdre de la densité en la cédant à ses voisins mais va
-  aussi en gagner car ses voisins aussi sont soumis a cela et lui
-  transfére aussi du fluide.\\ 
-  
-  
-  Résolution:
-  \begin{equation}
-    \frac{\partial \vec{u}}{\partial t} =  \nu{\nabla^2}\vec{u} 
-  \end{equation}
-  \begin{equation}
-    \vec{u}(\vec{x},t+\delta t) = \vec{u}(\vec{x},t) +\nu \delta t {\nabla^2} \vec{u}(\vec{x},t) 
-  \end{equation}
-  D'où:
-  \begin{equation}
-    (I - \nu \delta t {\nabla^2})\vec{u}(\vec{x},t+\delta t) = \vec{u}(\vec{x},t) 
-  \end{equation}
-  \\
-  
-  Calcul du laplacien:
-  \begin{equation}
-    {\nabla^2}p = \frac{p_{i+1,j,k} - 2p_{i,j,k} + p_{i-1,j,k} }{({\delta x})^2} + \frac{p_{i,j+1,k} - 2p_{i,j,k} + p_{i,j+1,k}}{({\delta y})^2} + \frac{p_{i,j,k+1} - 2p_{i,j,k} + p_{i,j,k-1}}{({\delta z})^2} 
-  \end{equation}
-  Qui dans le cas où $\delta x = \delta y =\delta z$ nous donne:
-  \begin{equation}
-    {\nabla^2}p = \frac{p_{i+1,j,k} + p_{i-1,j,k} + p_{i,j+1,k} + p_{i,j-1,k} + p_{i,j,k+1} + p_{i,j,k-1} - 6p_{i,j,k} }{({\delta x})^2} 
-  \end{equation}
-  
-  Grace a cela on trouve facilement la formule pour la résolution:
-  \begin{equation}
-    u_{i,j,k}^{l+1} = \frac{u_{i+1,j,k}^{l} + 
-      u_{i-1,j,k}^{l} + 
-      u_{i,j+1,k}^{l} +
-      u_{i,j-1,k}^{l} + 
-      u_{i,j,k+1}^{l} + 
-      u_{i,j,k-1}^{l} + 
-      \frac{({\delta x})^2}{\nu \delta t} u_{i,j,k}^{l}}{ 6 + \frac{({\delta x})^2}{\nu \delta t}} 
-  \end{equation}
-  
-  La résolution linéaire de cette équation combinée à une relaxation de
-  Gauss-Seidel nous permet de considerer une méthode stable, même pour
-  des taux de diffusion ($ \frac{\nu \delta t}{({\delta x})^2}$)
-  grand.\\
-  
-  \item{L'advection~:}\\ L'advection est le procédé par lequel le
-    champ de vitesse du fluide transporte la matière d'un endroit a un
-    autre. Le plus simple est de voir la densité de matiere comme une
-    quantité de particules et qu'il faut voir a chaque pas de
-    temps. Et ce que l'on fait c'est que l'on considére les centres de
-    nos cellules comme étant des particules, et plutot que de regarder
-    ou vont se rendre ces particules, on regarde d'ou elle
-    proviendrait si on faisait un pas de temps en arriere. On
-    interpole ainsi les densités depuis leur position d'avant avec
-    celles de leurs plus proches voisins.\\
-\end{enumerate}
-
-\subsection{Nos améliorations :}
-Nous avons rajouté des éléments en plus dans notre code nous
-permettant de gérer plusieurs phénoménes pour notre feu:\\
- 
-\subsubsection{La Température :}
-La température est un facteur important pour le feu car la température
-va générer une force qui va modifier le champ de vitesse (l'air chaud
-qui monte) et donc cela va avoir un impact sur le mouvement de notre
-flamme.\\ Cette force a pour forme:\\
-\begin{equation}
-	\vec{f} = \sigma T \vec{k} 
-\end{equation}
-\\
-
-Nous avons donc un paramétre de température en plus de la densité qui
-est géré par les mêmes équations, mais a cela nous avons rajouté un
-coefficient de refroidissement qui fait baisser la température lorsque
-l'on s'éloigne de la source.\\
-
-\subsubsection{Vorticity confinement :}
-Le fait d'utiliser une méthode de relaxation pour rendre le système
-stable a pour conséquence de provoquer une dissipation d'énergie dans
-notre calcul et donc une perte de donnée. \\
-
-Le moyen de palier à ce problème est d'utiliser la technique de Fedkiw
-: "vorticity confinement" qui redonne au fluid l'energie perdue par le
-calcul du laplacien.
-
-\subsubsection{Génération de fumée :}
-Le feu dans notre modèle produit de la fumée, nous avons donc géré un
-deuxieme fluide évoluant dans le même champ de vitesse avec des
-paramétres qui lui sont propres.\\
-
-Nous avons donc introduit un paramétre de \textbf{consommation de la
-  matiere} qui a chaque pas de temps va diminuer la densité de fluide
-"feu". En paralléle nous produisons de la densité "fumée" la où on
-consume le feu , modulé avec un paramétre de convertion (ex: 10
-particules de feu forment 3 particules de fumée).
-
-
-\subsection{Méthode de rendu}
-\subsubsection{Affichage volumique}
-
-Dans notre cas nous avons à faire à des textures volumiques donc nous nous sommes confrontés très tôt au probléme de l'affichage. Nous avons donc opté pour la solution suivante:\\
-
-Afficher N plans de coupe de notre texture. Chaque plan étant orthogonal a la direction de la caméra. Pour cela nous avons du implementer toutes les actions qui nous permettaient de nous déplacer dans l'espace autour d'un point et donc de faire pivoter nos plans de coupe en meme temps que la caméra. Ceci nous permet alors de visionner notre texture volumique depuis n'importe quel poit de l'espace.\\
-\begin{center}
-\includegraphics[scale=0.3]{plan_en_coupe.ps}
-\end{center}
-
-
-\subsubsection{Rendu de la flamme}
-
-Une flamme ne saurait être jolie si l'on ne prend pas en compte la variation lumineuse en fonction de la température. Pour cela nous avons considéré notre flamme corps un modéle de corps noir, c'est à dire une entité qui rayonne à des longueurs d'ondes différentes en fonction de la température, cela en utilisant la formule de Planck pour le corps noir:\\
-
-\begin{equation}
-	L_{\lambda} = \frac{2hc^{2}\lambda^{-5}}{exp(\frac{hc}{k\lambda T})-1}
-\end{equation}
-Où h est la constante de planck, c la vitesse de la lumiere, et k la constante de Boltzmann.\\
-
-On obtient donc une relation entre la température de notre flamme et sa luminance, ce qui nous permet d'avoir un rendu fonction de la température. De plus nous avons ajusté la transparence de la flamme en réglant l'$\alpha$ en tenant compte de la densité de gas qui brule et de la température de la flamme (les flammes bleus sont plus transparentes que les rouges et jaunes).\\
-
-
-\subsubsection{Rendu de la fumée}
-
-	Pour le rendu de la fummée, il s'agit simplement d'un niveau de gris avec une transparence $\alpha$ fonction de la densité de fumée en un point.\\
-
-\subsubsection{Multitexturing}
-
-	Le second probléme d'affichage qui se posa à nous fut le moment ou nous devions afficher la flamme ET la fumée. Le fait d'afficher sous forme de plan posa des probleme au niveau de la précision du Z-Buffer d'OpenGL qui ne savait plus quelle texture était devant l'autre et cela provoquait un effet de clignotement indésirable.\\
-
-La solution que nous avons retenue pour palier a ce problème était de réaliser un fragment shader au niveau du GPU pour faire un affichage Multitexture prenant en compte l'alpha des 2 texture.\\
-
-Le principe en lui même est assez simple:\\
-Pour chaque pixel de notre texture\\
-      si $\alpha_{texture1}>\alpha_{texture2}$ alors \\
-            affichage texture1;\\
-      sinon \\
-            affichage texture2;\\
-fin\\
-
-
-\subsubsection{amélioration de rendu : Bruit de Perlin 4D}
-
-Dans la réalité il y a toujours un "vent ambiant" autour d'une flamme, ce qui à pour conséquence de multiples effets de mouvements au niveau de sa surface. Pour simuler cet effet nous ajoutons \textbf{lors du rendu par le fragment shader} un bruit de perlin 4D (dont une dimension temporelle pour conserver la cohérence du mouvement).\\
-
-\begin{center}
-\includegraphics[scale=0.3]{Perlin3D.ps}
-\end{center}
-
-Le fait d'ajouter ce bruit lors du rendu dans le shader ne modifie pas la position spatiale des densités, des températures et de la fumée et ne perturbe donc pas les calculs de l'équation de dynamique des fluides.\\ 
-
-Les rendus obtenus étant plutôt convaincant :\\
-
-Sans bruit de Perlin:\\
-\begin{center}
-\includegraphics[scale=0.3]{SansPerlin.ps}
-\end{center}
-
-
-Avec Bruit de Perlin:\\
-
-\includegraphics[scale=0.3]{Perlin1.ps}
-\includegraphics[scale=0.3]{Perlin2.ps}
-
-
-
-L'expression mathématique du bruit de Perlin est la suivante :\\
-$P_n(x) = \sum_{i=0}^{n-1} p^i bruitPerlin(2^i.x)$.\\
-C'est une série (absolument) convergente, majorée par la série géométrique :\\
-$\sum_{i=0}^{n-1} p^i = \frac{1 - p^n}{1 - p}$.\\
-
-\subsection{Résultats}
-
-Taille de la grille : 20 x 20 \\
-FPS : 25\\
-
-Taille de la grille : 30 x 30 \\
-FPS : 8\\
-
-Taille de la grille : 30 x 30 \\
-FPS : 4\\
-
-%----------------------------------------------------------------------------------------------------------------------------------------
-%%%%%%%%%%%%%%%%%
-\section{Modèle de flamme et de fumée GPU}
-%%%%%%%%%%%%%%%%% 
-
-Nous utilisons le langage \textbf{GLSL} ( Open\textbf{GL S}hading
-\textbf{L}anguage).  Ce langage de shader est utilisé en général pour
-le rendu de scène 3D. Le shader utilisé est un \textbf{fragment
-  shader}.  Il est (très grossièrement) destiné à changer la couleur
-d'affichage d'un objet.\\ D'autres outils de programmation existent (
-comme OpenCL ) mais nous n'étions pas tous compatibles avec cette
-technologie.  Nous avons donc choisi le GLSL qui est suporté par un
-bien plus grand nombre de carte graphiques.\\
-
-Nous avons donc du mettre en place des outils permettant de résoudre
-notre système de fluide avec des outils qui sont à priori pas destinés
-à ce genre de problèmes.
-
-\subsection{Transformation du problème pour une résolution GPU}
-
-\subsubsection{Matrice 3 dimensions == Texture 3D}
-Notre matrice 3 dimensions dans lequel nous traitons le modèle de
-fluide peut se rapprocher d'une \textbf{Texture 3D} d'OpenGL. \\
-
-\subsubsection{Operation sur le point (i,j,k) de la texture == FragmentShader}
-Un shader c'est un programme. Un fragment shader est un programme qui
-s'applique sur la couleur d'un pixel d'un objet.\\ 
-
-Le principe de fonctionnement d'un shader est simple. On active le
-shader, on dessine, on désactive le shader. Tout ce qui est dessiné
-pendant qu'il est actif subit toutes les modifications effectuées par
-le shader.\\ 
-
-Ainsi lorsqu'on fait une triple boucle pour parcourir l'ensemble des
-elements du tableau, il suffit d'appliquer un shader sur notre
-texture3D et toutes les couleurs de celle-ci seront modifiées.\\
-
-La première difficulté est de pouvoir traiter l'ensemble de la Texture
-3D avec le shader. On peut le faire en dessinant plusieurs fois un
-plan et en changeant ses coordonnées de texture.
-
-
-\subsubsection{Iteration == Framebuffer ( render to texture 3D ) }
-Un \textbf{shader} ne s'applique qu'au moment du dessin.  C'est à dire
-qu'on active le shader, on dessine, on désactive le shader. Tout ce
-qui est dessiné lorsqu'il est actif subit ses modifications. Mais du
-coup, la texture 3D initiale n'est jamais modifiée. Or lorsqu'on fait
-une itération dans le calcul il est essentiel de conserver le résultat
-dans une texture 3D.\\ 
-
-Avec une méthode de \textbf{render to texture} il est possible
-d'enregistrer ce qui s'affiche à l'écran dans une texture.\\
-
-\paragraph*{Principe du render to texture 3D} Nous avons un
-\textbf{FrameBuffer}. Lorsqu'il est actif, le dessin ne s'affiche pas
-sur l'écran, mais est conservé en mémoire. Nous pouvons rediriger la
-sortie du framebuffer vers une texture. \\ 
-
-Il nous faut donc deux textures : la texture courante, et la texture
-dans lequel on enregistrera les résultat du traitement par le
-shader.\\
- 
-Si notre texture 3D fait 128 x 128 x 128, nous allons dessiner dans une fenetre
-de 128x128 chaque tranche de la texture. \\
-Lors du traitement de la tranche i, nous:\\
-\begin{itemize}
-\item activons le shader ( qui applique le calcul de résolution) (en
-  fait on l'active une seule fois au début)\\
-\item redirigeons la sortie du framebuffer vers la tranche i de la texture de sortie,\\
-\item dessinons un plan ( dont les coordonnées de texture
-  correspondent à la tranche i) et dont la texture est la texture
-  d'entree\\
-\end{itemize}
-Ainsi en sortie de l'itération nous avons dans la seconde texture le
-résultat du shader appliqué à la premiere texture.\\
- 
-\textbf{Remarque importante : } Sur le papier cette astuce est très
-compréhensible. La mettre en place n'est pas si facile puisqu' un
-simple paramètre mal configuré entraine un résultat faux, et trouver
-la cause n'est pas évident...
- 
-\subsection{Amélioration}
-Un framebuffer est capable de dessiner dans plusieurs tranches de la
-texture en même temps (en général 8). Par défaut il dessinera la même
-chose dans les 8 tranches. Nous avons donc créé un shader qui dessine
-dans les 8 tranches de sortie les 8 tranches de l'entrée
-correspondantes. Ainsi nous évitons les allez et retour entre le CPU
-et le GPU ce qui permet un gain en performances.
-
-
-\subsection{Résultats}
-
-
-
-
-%----------------------------------------------------------------------------------------------------------------------------------------
-%%%%%%%%%%%%%%%%%
-\section{Propagation sur l'objet}
-%%%%%%%%%%%%%%%%%
-
-
-
-
-
-%----------------------------------------------------------------------------------------------------------------------------------------
-%%%%%%%%%%%%%%%%%
-\section{Destruction de l'objet}
-%%%%%%%%%%%%%%%%%
-
-
-
-
-
-%----------------------------------------------------------------------------------------------------------------------------------------
-%%%%%%%%%%%%%%%%%
-\section{Propagation dans l'environnement}
-%%%%%%%%%%%%%%%%%
-
-
-%----------------------------------------------------------------------------------------------------------------------------------------
-%%%%%%%%%%%%%%%%%
-\section{Références}
-%%%%%%%%%%%%%%%%%
 
 
 %----------------------------------------------------------------------------------------------------------------------------------------
