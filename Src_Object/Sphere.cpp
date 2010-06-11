@@ -87,6 +87,7 @@ void Sphere::generateVoxels() {
 	nb_z = (int)ceil( fabs( ( AABB.upperCorner.z - AABB.lowerCorner.z ) / spaceDiv ) );
 
 	// Calculate the offset from the bounding box and the grid
+	
 	x_off = ( nb_x*spaceDiv + AABB.lowerCorner.x ) - AABB.upperCorner.x;
 	y_off = ( nb_y*spaceDiv + AABB.lowerCorner.y ) - AABB.upperCorner.y;
 	z_off = ( nb_z*spaceDiv + AABB.lowerCorner.z ) - AABB.upperCorner.z;
@@ -99,7 +100,7 @@ void Sphere::generateVoxels() {
 	if( !zero( y_off ) ) { 
 		AABB.lowerCorner.y -= y_off/2.0f; 
 		AABB.upperCorner.y += y_off/2.0f; 
-	}
+	}    
 	if( !zero( z_off ) ) { 
 		AABB.lowerCorner.z -= z_off/2.0f; 
 		AABB.upperCorner.z += z_off/2.0f; 
@@ -114,29 +115,26 @@ void Sphere::generateVoxels() {
 	for( int k = 0 ; k < nb_z ; k++ ){
 		for( int j = 0 ; j < nb_y ; j++ ){
 			for( int i = 0 ; i < nb_x ; i++ ){
-				Voxel &ref = grille[_Grille_Ind(i,j,k)];
-				ref = defVox;
-				ref.plein = false ;
-				ref.frontiere = false ;
+				Voxel *ref = &grille[_Grille_Ind(i,j,k)];
+				*ref = defVox;
+				ref->plein = false ;
+				ref->frontiere = false ;
 				Vecteur3I pos(i,j,k);
-				ref.pos = pos ;
+				ref->pos = pos ;
 				if( isInside( cellToPoint( pos ) ) ){
-					ref.plein = true ;
+					ref->plein = true ;
 					//setVoisinBound( i,j,k );
 				}
-				setCornerCell( ref );
-				setValuation( ref );
-				Polygonise( ref );
+				setCornerCell( *ref );
+				setValuation( *ref );
+				Polygonise( *ref );
 			}
 		}
 	}
 	for( int k = 0 ; k < nb_z ; k++ ){
 		for( int j = 0 ; j < nb_y ; j++ ){
 			for( int i = 0 ; i < nb_x ; i++ ){
-
 					setVoisinBound( i,j,k );
-				
-				
 			}
 		}
 	}

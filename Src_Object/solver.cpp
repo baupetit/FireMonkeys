@@ -125,10 +125,10 @@ void Solver::addSource ( int N, float *x , float *s , float dt )
 
 
 void Solver::addSource3 ( int N, 
-                         float *x1 , float *s1 ,
-                         float *x2 , float *s2 ,
-                         float *x3 , float *s3 ,
-                         float dt )
+			  float *x1 , float *s1 ,
+			  float *x2 , float *s2 ,
+			  float *x3 , float *s3 ,
+			  float dt )
 {
 	for( int i = 0 ; i < SIZE ; ++i ) 
 	{
@@ -230,12 +230,12 @@ void Solver::linearSolve ( int N, int b, float * x, float * x0, float a, float c
 					vf = x[IX(i,j,k+1)];
 					vb = x[IX(i,j,k-1)];
 					/*
-					if( isSolidCell( i-1, j, k ) ){ vl = vc; }
-					if( isSolidCell( i+1, j, k ) ){ vr = vc; }
-					if( isSolidCell( i, j-1, k ) ){ vd = vc; }
-					if( isSolidCell( i, j+1, k ) ){ vu = vc; }
-					if( isSolidCell( i, j, k-1 ) ){ vb = vc; }
-					if( isSolidCell( i, j, k+1 ) ){ vf = vc; }
+					  if( isSolidCell( i-1, j, k ) ){ vl = vc; }
+					  if( isSolidCell( i+1, j, k ) ){ vr = vc; }
+					  if( isSolidCell( i, j-1, k ) ){ vd = vc; }
+					  if( isSolidCell( i, j+1, k ) ){ vu = vc; }
+					  if( isSolidCell( i, j, k-1 ) ){ vb = vc; }
+					  if( isSolidCell( i, j, k+1 ) ){ vf = vc; }
 					*/
 					x[IX(i,j,k)] = ( vc + a*( vl+vr+vu+vd+vf+vb ))/c;
 				}
@@ -275,31 +275,31 @@ void Solver::advect ( int N, int b, float * d, float * d0, float * u, float * v,
 			for( i=1 ; i<N+1 ; ++i ){
 				//if( isSolidCell( i,j,k ) ) d[IX(i,j,k)] = 0;
 				//else {
-					x = i-dt0*u[IX(i,j,k)] ; y = j-dt0*v[IX(i,j,k)]; z = k-dt0*w[IX(i,j,k)];
+				x = i-dt0*u[IX(i,j,k)] ; y = j-dt0*v[IX(i,j,k)]; z = k-dt0*w[IX(i,j,k)];
 					
-					if (x<0.5f) x=0.5f; if (x>N+0.5f) x=N+0.5f; i0=(int)x; i1=i0+1;			
-					if (y<0.5f) y=0.5f; if (y>N+0.5f) y=N+0.5f; j0=(int)y; j1=j0+1;
-					if (z<0.5f) z=0.5f; if (z>N+0.5f) z=N+0.5f; k0=(int)z; k1=k0+1;
+				if (x<0.5f) x=0.5f; if (x>N+0.5f) x=N+0.5f; i0=(int)x; i1=i0+1;			
+				if (y<0.5f) y=0.5f; if (y>N+0.5f) y=N+0.5f; j0=(int)y; j1=j0+1;
+				if (z<0.5f) z=0.5f; if (z>N+0.5f) z=N+0.5f; k0=(int)z; k1=k0+1;
 					
-					s1 = (x-i0); s0 = 1-s1; t1 = (y-j0); t0 = 1-t1; r1 = (z-k0); r0 = 1-r1;
+				s1 = (x-i0); s0 = 1-s1; t1 = (y-j0); t0 = 1-t1; r1 = (z-k0); r0 = 1-r1;
 
 					
-					aa = d0[IX(i0,j0,k0)]; //if( isSolidCell( i0, j0, k0 ) ) aa = 0 ;
-					ab = d0[IX(i0,j0,k1)]; //if( isSolidCell( i0, j0, k1 ) ) ab = 0 ;
-					ac = d0[IX(i0,j1,k0)]; //if( isSolidCell( i0, j1, k0 ) ) ac = 0 ;
-					ad = d0[IX(i0,j1,k1)]; //if( isSolidCell( i0, j1, k1 ) ) ad = 0 ;
+				aa = d0[IX(i0,j0,k0)]; //if( isSolidCell( i0, j0, k0 ) ) aa = 0 ;
+				ab = d0[IX(i0,j0,k1)]; //if( isSolidCell( i0, j0, k1 ) ) ab = 0 ;
+				ac = d0[IX(i0,j1,k0)]; //if( isSolidCell( i0, j1, k0 ) ) ac = 0 ;
+				ad = d0[IX(i0,j1,k1)]; //if( isSolidCell( i0, j1, k1 ) ) ad = 0 ;
 					  
-					ba = d0[IX(i1,j0,k0)]; //if( isSolidCell( i1, j0, k0 ) ) ba = 0 ;
-					bb = d0[IX(i1,j0,k1)]; //if( isSolidCell( i1, j0, k1 ) ) bb = 0 ;
-					bc = d0[IX(i1,j1,k0)]; //if( isSolidCell( i1, j1, k0 ) ) bc = 0 ;
-					bd = d0[IX(i1,j1,k1)]; //if( isSolidCell( i1, j1, k1 ) ) bd = 0 ;
+				ba = d0[IX(i1,j0,k0)]; //if( isSolidCell( i1, j0, k0 ) ) ba = 0 ;
+				bb = d0[IX(i1,j0,k1)]; //if( isSolidCell( i1, j0, k1 ) ) bb = 0 ;
+				bc = d0[IX(i1,j1,k0)]; //if( isSolidCell( i1, j1, k0 ) ) bc = 0 ;
+				bd = d0[IX(i1,j1,k1)]; //if( isSolidCell( i1, j1, k1 ) ) bd = 0 ;
 					
-					rhs = (t0*(r0*aa + r1*ab) + 
-					       t1*(r0*ac + r1*ad));
-					lhs = (t0*(r0*ba + r1*bb) + 
-					       t1*(r0*bc + r1*bd));
+				rhs = (t0*(r0*aa + r1*ab) + 
+				       t1*(r0*ac + r1*ad));
+				lhs = (t0*(r0*ba + r1*bb) + 
+				       t1*(r0*bc + r1*bd));
 					
-					d[IX(i,j,k)] = (s0*rhs + s1*lhs );
+				d[IX(i,j,k)] = (s0*rhs + s1*lhs );
 				//}
 			}
 		}
@@ -324,30 +324,30 @@ void Solver::advect_cool ( int N, int b,
 			for( i=1 ; i<N+1 ; ++i ){
 				//if( isSolidCell( i,j,k ) ) d[IX(i,j,k)] = 0;
 				//else {
-					x = i-dt0*u[IX(i,j,k)] ; y = j-dt0*v[IX(i,j,k)]; z = k-dt0*w[IX(i,j,k)];
+				x = i-dt0*u[IX(i,j,k)] ; y = j-dt0*v[IX(i,j,k)]; z = k-dt0*w[IX(i,j,k)];
 					
-					if (x<0.5f) x=0.5f; if (x>N+0.5f) x=N+0.5f; i0=(int)x; i1=i0+1;			
-					if (y<0.5f) y=0.5f; if (y>N+0.5f) y=N+0.5f; j0=(int)y; j1=j0+1;
-					if (z<0.5f) z=0.5f; if (z>N+0.5f) z=N+0.5f; k0=(int)z; k1=k0+1;
+				if (x<0.5f) x=0.5f; if (x>N+0.5f) x=N+0.5f; i0=(int)x; i1=i0+1;			
+				if (y<0.5f) y=0.5f; if (y>N+0.5f) y=N+0.5f; j0=(int)y; j1=j0+1;
+				if (z<0.5f) z=0.5f; if (z>N+0.5f) z=N+0.5f; k0=(int)z; k1=k0+1;
 					
-					s1 = (x-i0); s0 = 1-s1; t1 = (y-j0); t0 = 1-t1; r1 = (z-k0); r0 = 1-r1;
+				s1 = (x-i0); s0 = 1-s1; t1 = (y-j0); t0 = 1-t1; r1 = (z-k0); r0 = 1-r1;
 					
-					aa = d0[IX(i0,j0,k0)]; //if( isSolidCell( i0, j0, k0 ) ) aa = 0 ;
-					ab = d0[IX(i0,j0,k1)]; //if( isSolidCell( i0, j0, k1 ) ) ab = 0 ;
-					ac = d0[IX(i0,j1,k0)]; //if( isSolidCell( i0, j1, k0 ) ) ac = 0 ;
-					ad = d0[IX(i0,j1,k1)]; //if( isSolidCell( i0, j1, k1 ) ) ad = 0 ;
+				aa = d0[IX(i0,j0,k0)]; //if( isSolidCell( i0, j0, k0 ) ) aa = 0 ;
+				ab = d0[IX(i0,j0,k1)]; //if( isSolidCell( i0, j0, k1 ) ) ab = 0 ;
+				ac = d0[IX(i0,j1,k0)]; //if( isSolidCell( i0, j1, k0 ) ) ac = 0 ;
+				ad = d0[IX(i0,j1,k1)]; //if( isSolidCell( i0, j1, k1 ) ) ad = 0 ;
 					  
-					ba = d0[IX(i1,j0,k0)]; //if( isSolidCell( i1, j0, k0 ) ) ba = 0 ;
-					bb = d0[IX(i1,j0,k1)]; //if( isSolidCell( i1, j0, k1 ) ) bb = 0 ;
-					bc = d0[IX(i1,j1,k0)]; //if( isSolidCell( i1, j1, k0 ) ) bc = 0 ;
-					bd = d0[IX(i1,j1,k1)]; //if( isSolidCell( i1, j1, k1 ) ) bd = 0 ;
+				ba = d0[IX(i1,j0,k0)]; //if( isSolidCell( i1, j0, k0 ) ) ba = 0 ;
+				bb = d0[IX(i1,j0,k1)]; //if( isSolidCell( i1, j0, k1 ) ) bb = 0 ;
+				bc = d0[IX(i1,j1,k0)]; //if( isSolidCell( i1, j1, k0 ) ) bc = 0 ;
+				bd = d0[IX(i1,j1,k1)]; //if( isSolidCell( i1, j1, k1 ) ) bd = 0 ;
 					
-					rhs = (t0*(r0*aa + r1*ab) + 
-					       t1*(r0*ac + r1*ad));
-					lhs = (t0*(r0*ba + r1*bb) + 
-					       t1*(r0*bc + r1*bd));
+				rhs = (t0*(r0*aa + r1*ab) + 
+				       t1*(r0*ac + r1*ad));
+				lhs = (t0*(r0*ba + r1*bb) + 
+				       t1*(r0*bc + r1*bd));
 					
-					d[IX(i,j,k)] = (s0*rhs + s1*lhs )*c0;
+				d[IX(i,j,k)] = (s0*rhs + s1*lhs )*c0;
 				//}
 			}
 		}
@@ -391,16 +391,16 @@ void Solver::correctVel( int N, float *u, float * v, float *w, float * p){
 				//	v[IX(i,j,k)] = 0;
 				//	w[IX(i,j,k)] = 0;
 				//} else {
-					pc = p[IX(i,j,k)];
-					ple = p[IX(i-1,j,k)]; //if( isSolidCell( i-1, j,k ) ) { cpb = true ; ple = pc; } 
-					pri = p[IX(i+1,j,k)]; //if( isSolidCell( i+1, j,k ) ) { cpb = true ; pri = pc; } 
-					pup = p[IX(i,j+1,k)]; //if( isSolidCell( i, j+1,k ) ) { cvb = true ; pup = pc; } 
-					pdw = p[IX(i,j-1,k)]; //if( isSolidCell( i, j-1,k ) ) { cvb = true ; pdw = pc; } 
-					pbw = p[IX(i,j,k-1)]; //if( isSolidCell( i, j,k-1 ) ) { chb = true ; pbw = pc; } 
-					pfw = p[IX(i,j,k+1)]; //if( isSolidCell( i, j,k+1 ) ) { chb = true ; pfw = pc; } 
-					u[IX(i,j,k)] -= cpb?0:(ple - pri)/2 ; 
-					v[IX(i,j,k)] -= cvb?0:(pup - pdw)/2 ; 
-					w[IX(i,j,k)] -= chb?0:(pfw - pbw)/2 ; 
+				pc = p[IX(i,j,k)];
+				ple = p[IX(i-1,j,k)]; //if( isSolidCell( i-1, j,k ) ) { cpb = true ; ple = pc; } 
+				pri = p[IX(i+1,j,k)]; //if( isSolidCell( i+1, j,k ) ) { cpb = true ; pri = pc; } 
+				pup = p[IX(i,j+1,k)]; //if( isSolidCell( i, j+1,k ) ) { cvb = true ; pup = pc; } 
+				pdw = p[IX(i,j-1,k)]; //if( isSolidCell( i, j-1,k ) ) { cvb = true ; pdw = pc; } 
+				pbw = p[IX(i,j,k-1)]; //if( isSolidCell( i, j,k-1 ) ) { chb = true ; pbw = pc; } 
+				pfw = p[IX(i,j,k+1)]; //if( isSolidCell( i, j,k+1 ) ) { chb = true ; pfw = pc; } 
+				u[IX(i,j,k)] -= cpb?0:(ple - pri)/2 ; 
+				v[IX(i,j,k)] -= cvb?0:(pup - pdw)/2 ; 
+				w[IX(i,j,k)] -= chb?0:(pfw - pbw)/2 ; 
 				//}
 			}
 		}
@@ -515,10 +515,10 @@ void Solver::velocitiesStep ( float dt )
 void Solver::velocitiesStepWithTemp ( float dt )
 {
 	// Adding sources
-    /*
-	addSource ( _N, _u, _srcu, dt ); 
-	addSource ( _N, _v, _srcv, dt ); 
-	addSource ( _N, _w, _srcw, dt );
+	/*
+	  addSource ( _N, _u, _srcu, dt ); 
+	  addSource ( _N, _v, _srcv, dt ); 
+	  addSource ( _N, _w, _srcw, dt );
 	*/
 	addSource3 ( _N, _u, _srcu,_v, _srcv, _w, _srcw, dt ); 
 	addBuoyancy( _N, _T, _v, SolverParam::getBuoyancyParam(), dt);
@@ -554,10 +554,11 @@ void Solver::clearFilledInfo(){
    
 
 void Solver::updateInfo( Object& o){
-    // Si ça n'intersecte pas on ne considère rien
-    if( ! intersect( AABB, o.getAABB() ) ){
+	// Si ça n'intersecte pas on ne considère rien
+	if( ! intersect( AABB, o.getAABB() ) ){
 		return;
 	}
+
 	/*
 	cout << "intersect ! " << endl;
 	o.getAABB().lowerCorner.afficher();
@@ -568,125 +569,100 @@ void Solver::updateInfo( Object& o){
  */
     Vecteur3I solverCell;
     Voxel *voxelObj = o.grille;
+
     
-    if (voxelObj == NULL)
-        return;
+	if (voxelObj == NULL)
+		return;
         
-    float temp;
-    float pyrolise;
+	float temp;
+	float pyrolise;
      
-    //cout << "updateInfo : objet " << (void*)&o << endl;
+	//cout << "updateInfo : objet " << (void*)&o << endl;
     
-    for (int i = 0; i < o.grilleSize.x * o.grilleSize.y * o.grilleSize.z ; i++)
-    {
-        //cout << " i = " << i << endl;
-        // transforme la coord du voxel de lobjet en coord du voxel solver
-        //(*voxelObj).pos.afficher();
-        solverCell = objectCellToSolverCell((*voxelObj).pos, o.getAABB().lowerCorner);
+	for (int i = 0; i < o.grilleSize.x * o.grilleSize.y * o.grilleSize.z ; i++)
+	{
+		//cout << " i = " << i << endl;
+		// transforme la coord du voxel de lobjet en coord du voxel solver
+		//(*voxelObj).pos.afficher();
+		solverCell = objectCellToSolverCell((*voxelObj).pos, o.getAABB().lowerCorner);
         
-        if ( cellIsValid( solverCell) )
-        {
-            //////////////////
-            // presence     //
-            //////////////////
-            if ((*voxelObj).plein)
-            {
-                // presence
-                _filled[IX(solverCell.x, solverCell.y, solverCell.z)].plein = (*voxelObj).plein;
-                // vitesse
-                _u[IX(solverCell.x, solverCell.y, solverCell.z)] = o.vitesse.x;
-                _v[IX(solverCell.x, solverCell.y, solverCell.z)] = o.vitesse.y;
-                _w[IX(solverCell.x, solverCell.y, solverCell.z)] = o.vitesse.z;
+		if ( cellIsValid( solverCell) )
+		{
+			//////////////////
+			// presence     //
+			//////////////////
+			if ((*voxelObj).plein)
+			{
+				// presence
+				_filled[IX(solverCell.x, solverCell.y, solverCell.z)].plein = (*voxelObj).plein;
+				// vitesse
+				_u[IX(solverCell.x, solverCell.y, solverCell.z)] = o.vitesse.x;
+				_v[IX(solverCell.x, solverCell.y, solverCell.z)] = o.vitesse.y;
+				_w[IX(solverCell.x, solverCell.y, solverCell.z)] = o.vitesse.z;
 				
-            }
-            //temp, combustible, vitesse 
-            //uniquement sur les frontieres
-            if ((*voxelObj).frontiere)
-            {
-                //////////////////
-                // temperature  //
-                //////////////////
-                temp = _T[IX(solverCell.x, solverCell.y, solverCell.z)];
-                temp = ( temp + (*voxelObj).temperature ) / 2.0;
-                // maj du voxel et du tableau des temps
-                (*voxelObj).temperature0 = temp;
-                (*voxelObj).temperature = temp;
-                _T[IX(solverCell.x, solverCell.y, solverCell.z)] = temp;
+			}
+			//temp, combustible, vitesse 
+			//uniquement sur les frontieres
+			if ((*voxelObj).frontiere)
+			{
+				//////////////////
+				// temperature  //
+				//////////////////
+				temp = _T[IX(solverCell.x, solverCell.y, solverCell.z)];
+				temp = ( temp + (*voxelObj).temperature ) / 2.0;
+				// maj du voxel et du tableau des temps
+				(*voxelObj).temperature0 = temp;
+				(*voxelObj).temperature = temp;
+				_T[IX(solverCell.x, solverCell.y, solverCell.z)] = temp;
                 
-                //////////////////
-                // combustible  //
-                //////////////////
-                //generation de combustible
-                //et si la temp est assez grande pour la pyrolise
-                if (temp > (*voxelObj).tempThreshold)
-                {
-                    // on enleve de la matiere
-                    // et on recupere la qte cree
-                    (*voxelObj).combustibleRestant -= (*voxelObj).tauxPerte;
-                    if ( (*voxelObj).combustibleRestant <= 0)
-                    {
-                        // conservation de la matiere
-                        // on ne peut creer plus de matiere qu'il n'y en avait
-                        pyrolise = (*voxelObj).tauxPerte + (*voxelObj).combustibleRestant;
-                        // il faut signaler que le voxel est vide
-                        // et qu'il n'est plus une frontiere
-                        
-                        /////////////////////////////////////
-                        //            TO DO                //
-                        //            TO DO                //
-                        //            TO DO                //
-                        //            TO DO                //        
-                        /////////////////////////////////////
-                        
-                    }
-                    else
-                    {
-                        // generation de matiere
-                        pyrolise = (*voxelObj).tauxPerte;
-                    }
-                    // on ajoute la matiere cree aux sources
-                    _srcd[IX(solverCell.x, solverCell.y, solverCell.z)] += pyrolise * (*voxelObj).tauxConversion;
-                }
+				//////////////////
+				// combustible  //
+				//////////////////
+				//generation de combustible
+				//et si la temp est assez grande pour la pyrolise
+				if (temp > (*voxelObj).tempThreshold)
+				{
+					// on enleve de la matiere
+					// et on recupere la qte cree
+					(*voxelObj).combustibleRestant -= (*voxelObj).tauxPerte;
+					if ( (*voxelObj).combustibleRestant <= 0)
+					{
+						// conservation de la matiere
+						// on ne peut creer plus de matiere qu'il n'y en avait
+						pyrolise = (*voxelObj).tauxPerte + (*voxelObj).combustibleRestant;
+						// il faut signaler que le voxel est vide
+						// et qu'il n'est plus une frontiere                        
+                        o.voxelConsome(voxelObj);
+					}
+					else
+					{
+						// generation de matiere
+						pyrolise = (*voxelObj).tauxPerte;
+					}
+					// on ajoute la matiere cree aux sources
+					cout << "pyrolise " << pyrolise << endl;
+					_d[IX(solverCell.x, solverCell.y, solverCell.z)] += pyrolise * (*voxelObj).tauxConversion;
+					_T[IX(solverCell.x, solverCell.y, solverCell.z)] += 4.0 * pyrolise * (*voxelObj).tauxConversion;
+				}
                 
-                //////////////////
-                // vitesse      //
-                //////////////////
-                // la repulsion ecrase la vitesse en frontiere
-/*
-				cout << "norme " << sqrt(_u[IX(solverCell.x, solverCell.y, solverCell.z)] * _u[IX(solverCell.x, solverCell.y, solverCell.z)]
-						+_v[IX(solverCell.x, solverCell.y, solverCell.z)] * _v[IX(solverCell.x, solverCell.y, solverCell.z)] 
-						+_w[IX(solverCell.x, solverCell.y, solverCell.z)] * _w[IX(solverCell.x, solverCell.y, solverCell.z)] ) << endl;
-			    	
-				float vitesse_carre = _u[IX(solverCell.x, solverCell.y-1, solverCell.z)] * _u[IX(solverCell.x, solverCell.y-1, solverCell.z)]
-						+_v[IX(solverCell.x, solverCell.y-1, solverCell.z)] * _v[IX(solverCell.x, solverCell.y-1, solverCell.z)] 
-						+_w[IX(solverCell.x, solverCell.y-1, solverCell.z)] * _w[IX(solverCell.x, solverCell.y-1, solverCell.z)];
-				
-				cout << "V2 " << vitesse_carre << endl; 
+  
 
-	*/		
-			Vecteur3D lol = o.cellToPoint((*voxelObj).pos);
+				//////////////////
+				// vitesse      //
+				//////////////////
+				// la repulsion ecrase la vitesse en frontiere
 
-				//afichage des forces.
-			glBegin(GL_LINES);	
-				glColor4f(0.0,0.0,0.0,1.0);
-	        	glVertex3d(lol.x,lol.y,lol.z);
-				glVertex3d(lol.x+0.5*(*voxelObj).repulsion.x,lol.y+0.5*(*voxelObj).repulsion.y,lol.z+0.5*(*voxelObj).repulsion.z);
-    	    glEnd();
+				_u[IX(solverCell.x, solverCell.y, solverCell.z)] += (*voxelObj).repulsion.x * 2 + o.vitesse.x;
+				_v[IX(solverCell.x, solverCell.y, solverCell.z)] += (*voxelObj).repulsion.y * 2 + o.vitesse.y;
+				_w[IX(solverCell.x, solverCell.y, solverCell.z)] += (*voxelObj).repulsion.z * 2 + o.vitesse.z;
+			}    
 
-
-
-
-
-                _u[IX(solverCell.x, solverCell.y, solverCell.z)] = (*voxelObj).repulsion.x * 1 + o.vitesse.x;
-                _v[IX(solverCell.x, solverCell.y, solverCell.z)] = (*voxelObj).repulsion.y * 1 + o.vitesse.y;
-                _w[IX(solverCell.x, solverCell.y, solverCell.z)] = (*voxelObj).repulsion.z * 1 + o.vitesse.z;
-            }    
             
-        }
+		}
         
-        // MAJ
-        voxelObj++;
+		// MAJ
+		voxelObj++;
         
-    }
+	}
     
 }

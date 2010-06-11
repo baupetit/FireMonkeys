@@ -13,9 +13,9 @@ Fluid_GPU::Fluid_GPU(){
 	_grille_depth  = TAILLE_GRILLE;
 	*/
 
-	_grille_width  = 50;
-	_grille_height = 50;
-	_grille_depth  = 50;
+	_grille_width  = 40;
+	_grille_height = 40;
+	_grille_depth  = 40 ;
 
 
 	s = NULL;
@@ -26,6 +26,133 @@ Fluid_GPU::Fluid_GPU(){
     echelle.z = 1.0;
     
     
+    int tailleGrille = _grille_width;    
+	//Génération du bruit de perlin.
+	p = new Perlin( 3 , tailleGrille , 7, tailleGrille+2 , tailleGrille+2 , tailleGrille+2 , 0.9f );
+	p->Perlin::init();
+	p->Perlin::init1D();
+
+	perl = p->genererNoise();
+	perl_temps = p->genererNoise1D();
+
+	for (int i = 0 ; i< 100 ; i++)
+	cout << "x= " << perl_temps[i].x << "y= " << perl_temps[i].y  << "z= " << perl_temps[i].z << endl;
+
+	//attenuation du bruit en dégradé de haut en bas.
+	for (int k=0; k< (tailleGrille+2); k++){
+		for (int j=0; j< (tailleGrille+2); j++){
+			for (int i=0; i< (tailleGrille+2); i++){
+				perl[i+j*(tailleGrille+2)+k*(tailleGrille+2)*(tailleGrille+2)] = ((float)j/(float)((tailleGrille+2))) * perl[i+j*(tailleGrille+2)+k*(tailleGrille+2)*(tailleGrille+2)] ;
+				
+				
+			}
+		}
+	}
+
+    // Couleur
+       float fColorMatch[][3]={
+         {0.0014, 0.0000, 0.0065},
+         {0.0022, 0.0001, 0.0105},
+         {0.0042, 0.0001, 0.0201},
+         {0.0076, 0.0002, 0.0362},
+         {0.0143, 0.0004, 0.0679},
+         {0.0232, 0.0006, 0.1102},
+         {0.0435, 0.0012, 0.2074},
+         {0.0776, 0.0022, 0.3713},
+         {0.1344, 0.0040, 0.6456},
+         {0.2148, 0.0073, 1.0391},
+         {0.2839, 0.0116, 1.3856},
+         {0.3285, 0.0168, 1.6230},
+         {0.3483, 0.0230, 1.7471},
+         {0.3481, 0.0298, 1.7826},
+         {0.3362, 0.0380, 1.7721},
+         {0.3187, 0.0480, 1.7441},
+         {0.2908, 0.0600, 1.6692},
+         {0.2511, 0.0739, 1.5281},
+         {0.1954, 0.0910, 1.2876},
+         {0.1421, 0.1126, 1.0419},
+         {0.0956, 0.1390, 0.8130},
+         {0.0580, 0.1693, 0.6162},
+         {0.0320, 0.2080, 0.4652},
+         {0.0147, 0.2586, 0.3533},
+         {0.0049, 0.3230, 0.2720},
+         {0.0024, 0.4073, 0.2123},
+         {0.0093, 0.5030, 0.1582},
+         {0.0291, 0.6082, 0.1117},
+         {0.0633, 0.7100, 0.0782},
+         {0.1096, 0.7932, 0.0573},
+         {0.1655, 0.8620, 0.0422},
+         {0.2257, 0.9149, 0.0298},
+         {0.2904, 0.9540, 0.0203},
+         {0.3597, 0.9803, 0.0134},
+         {0.4334, 0.9950, 0.0087},
+         {0.5121, 1.0000, 0.0057},
+         {0.5945, 0.9950, 0.0039},
+         {0.6784, 0.9786, 0.0027},
+         {0.7621, 0.9520, 0.0021},
+         {0.8425, 0.9154, 0.0018},
+         {0.9163, 0.8700, 0.0017},
+         {0.9786, 0.8163, 0.0014},
+         {1.0263, 0.7570, 0.0011},
+         {1.0567, 0.6949, 0.0010},
+         {1.0622, 0.6310, 0.0008},
+         {1.0456, 0.5668, 0.0006},
+         {1.0026, 0.5030, 0.0003},
+         {0.9384, 0.4412, 0.0002},
+         {0.8544, 0.3810, 0.0002},
+         {0.7514, 0.3210, 0.0001},
+         {0.6424, 0.2650, 0.0000},
+         {0.5419, 0.2170, 0.0000},
+         {0.4479, 0.1750, 0.0000},
+         {0.3608, 0.1382, 0.0000},
+         {0.2835, 0.1070, 0.0000},
+         {0.2187, 0.0816, 0.0000},
+         {0.1649, 0.0610, 0.0000},
+         {0.1212, 0.0446, 0.0000},
+         {0.0874, 0.0320, 0.0000},
+         {0.0636, 0.0232, 0.0000},
+         {0.0468, 0.0170, 0.0000},
+         {0.0329, 0.0119, 0.0000},
+         {0.0227, 0.0082, 0.0000},
+         {0.0158, 0.0057, 0.0000},
+         {0.0114, 0.0041, 0.0000},
+         {0.0081, 0.0029, 0.0000},
+         {0.0058, 0.0021, 0.0000},
+         {0.0041, 0.0015, 0.0000},
+         {0.0029, 0.0010, 0.0000},
+         {0.0020, 0.0007, 0.0000},
+         {0.0014, 0.0005, 0.0000},
+         {0.0010, 0.0004, 0.0000},
+         {0.0007, 0.0002, 0.0000},
+         {0.0005, 0.0002, 0.0000},
+         {0.0003, 0.0001, 0.0000},
+         {0.0002, 0.0001, 0.0000},
+         {0.0002, 0.0001, 0.0000},
+         {0.0001, 0.0000, 0.0000},
+         {0.0001, 0.0000, 0.0000},
+         {0.0001, 0.0000, 0.0000},
+         {0.0000, 0.0000, 0.0000}};
+
+    float *color = new float[253];
+    float *temp = color;
+    for (int i = 0; i < 81; i ++){
+        *temp = fColorMatch[i][0];
+        temp++; 
+        *temp = fColorMatch[i][1];
+        temp++; 
+        *temp = fColorMatch[i][2];
+        temp++; 
+    }
+    
+	glBindTexture(GL_TEXTURE_1D, _color_texture);
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+	glTexImage1D(GL_TEXTURE_1D,0,GL_RGB,81, 0, GL_RGB, GL_FLOAT, color);
+    
+
+	
 
 }
 
@@ -47,8 +174,8 @@ void Fluid_GPU::initialiserFluid(){
 }
 
 void Fluid_GPU::resolutionFluid(){
-	s->densitiesStepWithTemp(0.012);
-	s->velocitiesStepWithTemp(0.012);
+	s->densitiesStepWithTemp(0.1);
+	s->velocitiesStepWithTemp(0.1);
 }
 
 void Fluid_GPU::Afficher(){
@@ -65,13 +192,13 @@ void Fluid_GPU::Afficher_Face_Camera(Vecteur3D& positionCamera, Vecteur3D& orien
 	resolutionFluid();
 
 	// Affichage
-	dessinerPlansDansTexture3DFaceALaCamera(s->getDensities(),40, positionCamera, orientationCamera);
+	dessinerPlansDansTexture3DFaceALaCamera(s->getDensities(),100, positionCamera, orientationCamera);
 	
 }
 
 void Fluid_GPU::afficherFlamme(){
 	// Feu
-	dessinerPlansDansTexture3D(s->getDensities(),40);
+	dessinerPlansDansTexture3D(s->getDensities(),100);
 }
 
 void Fluid_GPU::afficherFumee(){
@@ -82,21 +209,52 @@ void Fluid_GPU::dessinerPlansDansTexture3DFaceALaCamera(GLuint id_texture,
 							                            Vecteur3D& positionCamera, 
 							                            Vecteur3D& directionCamera){
 	       
+	float t = 0.2;
+	int tailleGrille = _grille_width;
 	       
-	       
+	srand(NULL);
+	tps1 += t;
+	tps2 += t;
+	matricePerlinCarreeToTexture3D(perl, tailleGrille + 2 , _id_texture_perlin);
+	VecteurPerlinTempsToTexture1D(perl_temps, 100 , _id_texture_perlin_temps);
+
 	       
 	       
     //GLuint id0 = s->getPression();
     GLuint id0 = s->getDensities();
     //GLuint id0 = s->getSpeed();
     //GLuint id1 = s->getDestDensities();
-        
-    Texture3D::bindTexture(id0,0);
-    Texture3D::setFilter(GL_LINEAR);
 
-    
+	glActiveTexture( GL_TEXTURE0 );
+	glBindTexture(GL_TEXTURE_3D , id0 );
+	
+	glActiveTexture( GL_TEXTURE1 );
+	glBindTexture(GL_TEXTURE_3D , _id_texture_perlin );
+	
+	glActiveTexture( GL_TEXTURE2 );
+	glBindTexture(GL_TEXTURE_1D , _id_texture_perlin_temps );
+	
+	glActiveTexture( GL_TEXTURE3 );
+	glBindTexture(GL_TEXTURE_1D , _color_texture );
+	
+	
+	glActiveTexture( GL_TEXTURE0 );
+	
+	
+	Texture3D::setFilter(GL_LINEAR);        	
+	
+	
+
     shader_affichage -> Bind_Program();
+    
     shader_affichage->lierLevel("texture_entree", 0);
+    shader_affichage->lierLevel("Textureperlin", 1);
+    shader_affichage->lierLevel("Temps", 2);
+    shader_affichage->lierLevel("ColorTexture", 3);    
+    shader_affichage->lierFloat("temps1", ((float) rand()) / RAND_MAX*tps2 );
+    shader_affichage->lierFloat("temps2", ((float) rand()) / RAND_MAX*tps2 );
+    shader_affichage->lierFloat("temps3", t);
+    
 	       
 	       
 	       
@@ -283,3 +441,37 @@ void Fluid_GPU::dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans){
     glDisable(GL_BLEND);
 	glPopMatrix();	
 }
+
+
+
+
+
+
+
+
+void Fluid_GPU::matricePerlinCarreeToTexture3D(const Vecteur3D *matrice, int cote, GLuint id_texture){
+	// Chargement en mémoire
+	glBindTexture(GL_TEXTURE_3D, id_texture);
+	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+	glTexImage3D(GL_TEXTURE_3D,0,GL_RGB,cote,cote,cote,
+		     0, GL_RGB, GL_FLOAT, matrice);
+}
+
+void Fluid_GPU::VecteurPerlinTempsToTexture1D(const Vecteur3D *matrice, int cote, GLuint id_texture){
+
+	// Chargement en mémoire
+	glBindTexture(GL_TEXTURE_1D, id_texture);
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+	glTexImage1D(GL_TEXTURE_1D,0,GL_RGB,cote,
+		     0, GL_RGB, GL_FLOAT, matrice);
+
+}
+
