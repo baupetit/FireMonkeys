@@ -50,7 +50,7 @@ void Object::Afficher( float dt ){
 	}
 	glEnd();
 	
-	
+	/*
 	glPointSize( 4.0f );
 	glDisable(GL_LIGHTING);
 	
@@ -74,7 +74,7 @@ void Object::Afficher( float dt ){
 	}
 	glEnd();
 	glEnable(GL_LIGHTING);
-	
+	*/
 	
 	
 	

@@ -558,13 +558,14 @@ void Solver::updateInfo( Object& o){
     if( ! intersect( AABB, o.getAABB() ) ){
 		return;
 	}
+	/*
 	cout << "intersect ! " << endl;
 	o.getAABB().lowerCorner.afficher();
 	o.getAABB().upperCorner.afficher();
 	cout << "  " << endl;
 	AABB.lowerCorner.afficher();
 	AABB.upperCorner.afficher();
- 
+ */
     Vecteur3I solverCell;
     Voxel *voxelObj = o.grille;
     
@@ -651,7 +652,7 @@ void Solver::updateInfo( Object& o){
                 // vitesse      //
                 //////////////////
                 // la repulsion ecrase la vitesse en frontiere
-
+/*
 				cout << "norme " << sqrt(_u[IX(solverCell.x, solverCell.y, solverCell.z)] * _u[IX(solverCell.x, solverCell.y, solverCell.z)]
 						+_v[IX(solverCell.x, solverCell.y, solverCell.z)] * _v[IX(solverCell.x, solverCell.y, solverCell.z)] 
 						+_w[IX(solverCell.x, solverCell.y, solverCell.z)] * _w[IX(solverCell.x, solverCell.y, solverCell.z)] ) << endl;
@@ -662,14 +663,15 @@ void Solver::updateInfo( Object& o){
 				
 				cout << "V2 " << vitesse_carre << endl; 
 
-				Vecteur3D lol = o.cellToPoint((*voxelObj).pos);
+	*/		
+			Vecteur3D lol = o.cellToPoint((*voxelObj).pos);
 
 				//afichage des forces.
-				glBegin(GL_LINES);	
-			glColor4f(0.0,0.0,0.0,1.0);
-		     glVertex3d(lol.x,lol.y,lol.z);
+			glBegin(GL_LINES);	
+				glColor4f(0.0,0.0,0.0,1.0);
+	        	glVertex3d(lol.x,lol.y,lol.z);
 				glVertex3d(lol.x+0.5*(*voxelObj).repulsion.x,lol.y+0.5*(*voxelObj).repulsion.y,lol.z+0.5*(*voxelObj).repulsion.z);
-		     glEnd();
+    	    glEnd();
 
 
 

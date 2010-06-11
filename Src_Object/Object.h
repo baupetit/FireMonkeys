@@ -39,15 +39,15 @@ protected :
 	}
 
 	inline Vecteur3D cellToPoint( Vecteur3I c ){
-		Vecteur3D res;
-		res.x = c.x * SolverParam::getSpaceDiv();
-		res.y = c.y * SolverParam::getSpaceDiv();
-		res.z = c.z * SolverParam::getSpaceDiv();
+		Vecteur3D res = AABB.lowerCorner;
+		res.x += c.x * SolverParam::getSpaceDiv();
+		res.y += c.y * SolverParam::getSpaceDiv();
+		res.z += c.z * SolverParam::getSpaceDiv();
 		return res ;
 	}
 
 	inline void setVoisinBound( int i, int j, int k ){
-	if ( grille[_Grille_Ind(i,j,k)].plein ) {
+	if ( grille[_Grille_Ind(i,j,k)].plein && i-1>=0) {
 		if( !grille[_Grille_Ind(i-1,j,k)].plein ) {
 		    grille[_Grille_Ind(i-1,j,k)].frontiere = true ;
 					
@@ -56,7 +56,7 @@ protected :
 		    grille[_Grille_Ind(i-1,j,k)].repulsion.z = repulse(i-1,j,k).z;
 			
 		}    
-		if( !grille[_Grille_Ind(i+1,j,k)].plein ) {
+		if( !grille[_Grille_Ind(i+1,j,k)].plein && i+1<=grilleSize.x){
 		    grille[_Grille_Ind(i+1,j,k)].frontiere = true ;
 			grille[_Grille_Ind(i+1,j,k)].repulsion.x = repulse(i+1,j,k).x;
 		    grille[_Grille_Ind(i+1,j,k)].repulsion.y = repulse(i+1,j,k).y;
@@ -67,7 +67,7 @@ protected :
 		    grille[_Grille_Ind(i+1,j,k)].repulsion.z = 0.0;
 			*/
 		}    
-		if( !grille[_Grille_Ind(i,j-1,k)].plein ) {
+		if( !grille[_Grille_Ind(i,j-1,k)].plein && j-1>=0) {
 		    grille[_Grille_Ind(i,j-1,k)].frontiere = true ;
 		    grille[_Grille_Ind(i,j-1,k)].repulsion.x = repulse(i,j-1,k).x;
 		    grille[_Grille_Ind(i,j-1,k)].repulsion.y = repulse(i,j-1,k).y;
@@ -78,7 +78,7 @@ protected :
 		    grille[_Grille_Ind(i,j-1,k)].repulsion.z = 0.0;
 			*/
 		}    
-		if( !grille[_Grille_Ind(i,j+1,k)].plein ) {
+		if( !grille[_Grille_Ind(i,j+1,k)].plein && j+1<=grilleSize.y) {
 		    grille[_Grille_Ind(i,j+1,k)].frontiere = true ;
 		    grille[_Grille_Ind(i,j+1,k)].repulsion.x = repulse(i,j+1,k).x;
 		    grille[_Grille_Ind(i,j+1,k)].repulsion.y = repulse(i,j+1,k).y;
@@ -89,7 +89,7 @@ protected :
 		    grille[_Grille_Ind(i,j+1,k)].repulsion.z = 0.0;
 			*/
 		}    
-		if( !grille[_Grille_Ind(i,j,k-1)].plein ) {
+		if( !grille[_Grille_Ind(i,j,k-1)].plein && k-1>=0 ) {
 		    grille[_Grille_Ind(i,j,k-1)].frontiere = true ;
 		    grille[_Grille_Ind(i,j,k-1)].repulsion.x = repulse(i,j,k-1).x;
 		    grille[_Grille_Ind(i,j,k-1)].repulsion.y = repulse(i,j,k-1).y;
@@ -100,7 +100,7 @@ protected :
 		    grille[_Grille_Ind(i,j,k-1)].repulsion.z = -1.0;
 			*/
 		}    
-		if( !grille[_Grille_Ind(i,j,k+1)].plein ) {
+		if( !grille[_Grille_Ind(i,j,k+1)].plein && k+1<=grilleSize.z) {
 		    grille[_Grille_Ind(i,j,k+1)].frontiere = true ;
 		    grille[_Grille_Ind(i,j,k+1)].repulsion.x = repulse(i,j,k+1).x;
 		    grille[_Grille_Ind(i,j,k+1)].repulsion.y = repulse(i,j,k+1).y;
@@ -158,7 +158,14 @@ protected :
 		*/
 		
 		//pivotage de Pi/2
-		//Vecteur3D vec_vect_y = Vecteur3D(-vec.z,0.0,vec.x);
+		Vecteur3D vec_vect_y = Vecteur3D(-vec.z,0.0,vec.x);
+		vec.x = (vec.x*vec_vect_y.x+vec.y*vec_vect_y.y+vec.z*vec_vect_y.z)*vec_vect_y.x - vec.x*vec.y;
+		vec.y = (vec.x*vec_vect_y.x+vec.y*vec_vect_y.y+vec.z*vec_vect_y.z)*vec_vect_y.y + vec.x*vec.x + vec.z*vec.z ;
+		vec.z = (vec.x*vec_vect_y.x+vec.y*vec_vect_y.y+vec.z*vec_vect_y.z)*vec_vect_y.z - vec.z*vec.y;
+
+		vec.x = (vec.x/(sqrt(vec.x*vec.x+vec.y*vec.y+vec.z*vec.z)));
+		vec.y = (vec.y/(sqrt(vec.x*vec.x+vec.y*vec.y+vec.z*vec.z)));
+		vec.z = (vec.z/(sqrt(vec.x*vec.x+vec.y*vec.y+vec.z*vec.z)));
 
 		}
 		//cout << "pour i j k = " << i << " " << j << " " << k << " " << "x= " << vec.x << " y= " << vec.y << " z= " << vec.z << endl;
