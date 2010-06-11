@@ -157,14 +157,19 @@ protected :
 
             
 
-           /* 
+           
 
 		//pivotage de Pi/2
+
 		Vecteur3D vec_vect_y = Vecteur3D(-vec.z,0.0,vec.x);
 		vec.x = (vec.x*vec_vect_y.x+vec.y*vec_vect_y.y+vec.z*vec_vect_y.z)*vec_vect_y.x - vec.x*vec.y;
 		vec.y = (vec.x*vec_vect_y.x+vec.y*vec_vect_y.y+vec.z*vec_vect_y.z)*vec_vect_y.y + vec.x*vec.x + vec.z*vec.z ;
 		vec.z = (vec.x*vec_vect_y.x+vec.y*vec_vect_y.y+vec.z*vec_vect_y.z)*vec_vect_y.z - vec.z*vec.y;
-*/
+
+		
+		if (vec.x==0 && vec.y==0 && vec.z==0) return vec;
+
+		
 		vec.x = (vec.x/(sqrt(vec.x*vec.x+vec.y*vec.y+vec.z*vec.z)));
 		vec.y = (vec.y/(sqrt(vec.x*vec.x+vec.y*vec.y+vec.z*vec.z)));
 		vec.z = (vec.z/(sqrt(vec.x*vec.x+vec.y*vec.y+vec.z*vec.z)));

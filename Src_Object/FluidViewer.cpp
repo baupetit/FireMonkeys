@@ -71,9 +71,9 @@ FluidViewer::FluidViewer()
 			Vecteur3I(0,0,0));
 
 		   
-	Sphere *sphereBois   = new Sphere( defBois,0.2, Vecteur4D( 0.5,0.2,0,0.8 ), 10, 10);
-	Sphere *sphereMetal  = new Sphere( defBois,0.2, Vecteur4D( 0.4,0.4,0.4,0.8 ), 10, 10);
-	Sphere *sphereCire   = new Sphere( defExplosif,0.2, Vecteur4D( 0.6,0.6,0.0,0.8 ), 10, 10);
+	Sphere *sphereBois   = new Sphere( defBois,0.8, Vecteur4D( 0.5,0.2,0,0.8 ), 10, 10);
+	Sphere *sphereMetal  = new Sphere( defBois,0.8, Vecteur4D( 0.4,0.4,0.4,0.8 ), 10, 10);
+	Sphere *sphereCire   = new Sphere( defExplosif,0.8, Vecteur4D( 0.6,0.6,0.0,0.8 ), 10, 10);
 	
 	sphereBois->translate( Vecteur3D(-5, -5, 0 ));
 	sphereMetal->translate(Vecteur3D( -5, 0, 0 ));
