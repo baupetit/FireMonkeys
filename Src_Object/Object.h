@@ -19,6 +19,17 @@
 #include "Triangle.h"
 class Solver;
 
+// define pour valuation
+#define _BDL_ 0
+#define _BDR_ 4
+#define _BUL_ 3
+#define _BUR_ 7
+#define _FDL_ 1
+#define _FDR_ 5
+#define _FUL_ 2
+#define _FUR_ 6
+
+
 #define _Grille_Ind(i,j,k) ((i)+((j)*grilleSize.x)+((k)*grilleSize.x*grilleSize.y))
 
 class Object : public BasicEntite {
@@ -117,69 +128,9 @@ protected :
 
 	}
 
-	Vecteur3D repulse (int i, int j, int k){
-		//condition i j k est donnée pour une frontiere, on cherche tous les frontieres distantes de 1
-		
-		Vecteur3D vec = Vecteur3D(0,0,0);
-		if (grille[_Grille_Ind(i  ,j  ,k  )].frontiere){
-			//comparaison aux 9 devant	
-			if (grille[_Grille_Ind(i  ,j  ,k-1)].plein)  vec += Vecteur3D(0,0,1); 		
-			if (grille[_Grille_Ind(i  ,j-1,k-1)].plein)  vec += Vecteur3D(0,1,1);
-			if (grille[_Grille_Ind(i  ,j+1,k-1)].plein)  vec += Vecteur3D(0,-1,1);
-			if (grille[_Grille_Ind(i-1,j  ,k-1)].plein)  vec += Vecteur3D(1,0,1); 
-			if (grille[_Grille_Ind(i-1,j-1,k-1)].plein)  vec += Vecteur3D(1,1,1);
-			if (grille[_Grille_Ind(i-1,j+1,k-1)].plein)  vec += Vecteur3D(1,-1,1);
-			if (grille[_Grille_Ind(i+1,j  ,k-1)].plein)  vec += Vecteur3D(-1,0,1);
-			if (grille[_Grille_Ind(i+1,j-1,k-1)].plein)  vec += Vecteur3D(-1,1,1);
-			if (grille[_Grille_Ind(i+1,j+1,k-1)].plein)  vec += Vecteur3D(-1,-1,1);
 
-			//comparaison aux 9 derriere		
-			if (grille[_Grille_Ind(i  ,j  ,k+1)].plein)  vec += Vecteur3D(0,0,-1); 		
-			if (grille[_Grille_Ind(i  ,j-1,k+1)].plein)  vec += Vecteur3D(0,1,-1);
-			if (grille[_Grille_Ind(i  ,j+1,k+1)].plein)  vec += Vecteur3D(0,-1,-1);
-			if (grille[_Grille_Ind(i-1,j  ,k+1)].plein)  vec += Vecteur3D(1,0,-1); 
-			if (grille[_Grille_Ind(i-1,j-1,k+1)].plein)  vec += Vecteur3D(1,1,-1);
-			if (grille[_Grille_Ind(i-1,j+1,k+1)].plein)  vec += Vecteur3D(1,-1,-1);
-			if (grille[_Grille_Ind(i+1,j  ,k+1)].plein)  vec += Vecteur3D(-1,0,-1);
-			if (grille[_Grille_Ind(i+1,j-1,k+1)].plein)  vec += Vecteur3D(-1,1,-1);
-			if (grille[_Grille_Ind(i+1,j+1,k+1)].plein)  vec += Vecteur3D(-1,-1,-1);
+	Vecteur3D repulse (int i, int j, int k);
 
-			//comparaison aux 8 du plan
-			//if (grille[_Grille_Ind(i  ,j  ,k)].plein)  vec += Vecteur3D(0,0,-1); 		
-			if (grille[_Grille_Ind(i  ,j-1,k)].plein)  vec += Vecteur3D(0,1,0);
-			if (grille[_Grille_Ind(i  ,j+1,k)].plein)  vec += Vecteur3D(0,-1,0);
-			if (grille[_Grille_Ind(i-1,j  ,k)].plein)  vec += Vecteur3D(1,0,0); 
-			if (grille[_Grille_Ind(i-1,j-1,k)].plein)  vec += Vecteur3D(1,1,0);
-			if (grille[_Grille_Ind(i-1,j+1,k)].plein)  vec += Vecteur3D(1,-1,0);
-			if (grille[_Grille_Ind(i+1,j  ,k)].plein)  vec += Vecteur3D(-1,0,0);
-			if (grille[_Grille_Ind(i+1,j-1,k)].plein)  vec += Vecteur3D(-1,1,0);
-			if (grille[_Grille_Ind(i+1,j+1,k)].plein)  vec += Vecteur3D(-1,-1,0);	
-
-            
-
-           
-
-		//pivotage de Pi/2
-
-		Vecteur3D vec_vect_y = Vecteur3D(-vec.z,0.0,vec.x);
-		vec.x = (vec.x*vec_vect_y.x+vec.y*vec_vect_y.y+vec.z*vec_vect_y.z)*vec_vect_y.x - vec.x*vec.y;
-		vec.y = (vec.x*vec_vect_y.x+vec.y*vec_vect_y.y+vec.z*vec_vect_y.z)*vec_vect_y.y + vec.x*vec.x + vec.z*vec.z ;
-		vec.z = (vec.x*vec_vect_y.x+vec.y*vec_vect_y.y+vec.z*vec_vect_y.z)*vec_vect_y.z - vec.z*vec.y;
-
-		
-		if (vec.x==0 && vec.y==0 && vec.z==0) return vec;
-
-		
-		vec.x = (vec.x/(sqrt(vec.x*vec.x+vec.y*vec.y+vec.z*vec.z)));
-		vec.y = (vec.y/(sqrt(vec.x*vec.x+vec.y*vec.y+vec.z*vec.z)));
-		vec.z = (vec.z/(sqrt(vec.x*vec.x+vec.y*vec.y+vec.z*vec.z)));
-
-		}
-		//cout << "pour i j k = " << i << " " << j << " " << k << " " << "x= " << vec.x << " y= " << vec.y << " z= " << vec.z << endl;
-	
-		return vec;
-
-	}
 	
 	inline void setCornerCell( Voxel& v ){
 		Vecteur3D orig = cellToPoint( v.pos );
@@ -192,14 +143,14 @@ protected :
 		Vecteur3D FUL( -1,  1,  1 );
 		Vecteur3D FUR(  1,  1,  1 );
 				
-		v.corner[0] = orig+BDL*(SolverParam::getSpaceDiv()/2);
-		v.corner[1] = orig+FDL*(SolverParam::getSpaceDiv()/2);
-		v.corner[2] = orig+FUL*(SolverParam::getSpaceDiv()/2);
-		v.corner[3] = orig+BUL*(SolverParam::getSpaceDiv()/2);
-		v.corner[4] = orig+BDR*(SolverParam::getSpaceDiv()/2);
-		v.corner[5] = orig+FDR*(SolverParam::getSpaceDiv()/2);
-		v.corner[6] = orig+FUR*(SolverParam::getSpaceDiv()/2);
-		v.corner[7] = orig+BUR*(SolverParam::getSpaceDiv()/2);
+		v.corner[_BDL_] = orig+BDL*(SolverParam::getSpaceDiv()/2);
+		v.corner[_FDL_] = orig+FDL*(SolverParam::getSpaceDiv()/2);
+		v.corner[_FUL_] = orig+FUL*(SolverParam::getSpaceDiv()/2);
+		v.corner[_BUL_] = orig+BUL*(SolverParam::getSpaceDiv()/2);
+		v.corner[_BDR_] = orig+BDR*(SolverParam::getSpaceDiv()/2);
+		v.corner[_FDR_] = orig+FDR*(SolverParam::getSpaceDiv()/2);
+		v.corner[_FUR_] = orig+FUR*(SolverParam::getSpaceDiv()/2);
+		v.corner[_BUR_] = orig+BUR*(SolverParam::getSpaceDiv()/2);
 	}
 
 	virtual void setValuation( Voxel& v ) = 0;
