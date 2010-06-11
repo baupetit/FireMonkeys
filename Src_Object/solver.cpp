@@ -558,9 +558,18 @@ void Solver::updateInfo( Object& o){
 	if( ! intersect( AABB, o.getAABB() ) ){
 		return;
 	}
- 
-	Vecteur3I solverCell;
-	Voxel *voxelObj = o.grille;
+
+	/*
+	cout << "intersect ! " << endl;
+	o.getAABB().lowerCorner.afficher();
+	o.getAABB().upperCorner.afficher();
+	cout << "  " << endl;
+	AABB.lowerCorner.afficher();
+	AABB.upperCorner.afficher();
+ */
+    Vecteur3I solverCell;
+    Voxel *voxelObj = o.grille;
+
     
 	if (voxelObj == NULL)
 		return;
@@ -636,6 +645,8 @@ void Solver::updateInfo( Object& o){
 					_T[IX(solverCell.x, solverCell.y, solverCell.z)] += 4.0 * pyrolise * (*voxelObj).tauxConversion;
 				}
                 
+  
+
 				//////////////////
 				// vitesse      //
 				//////////////////
@@ -645,6 +656,7 @@ void Solver::updateInfo( Object& o){
 				_v[IX(solverCell.x, solverCell.y, solverCell.z)] += (*voxelObj).repulsion.y * 2 + o.vitesse.y;
 				_w[IX(solverCell.x, solverCell.y, solverCell.z)] += (*voxelObj).repulsion.z * 2 + o.vitesse.z;
 			}    
+
             
 		}
         

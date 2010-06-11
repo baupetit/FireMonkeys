@@ -134,10 +134,7 @@ void Sphere::generateVoxels() {
 	for( int k = 0 ; k < nb_z ; k++ ){
 		for( int j = 0 ; j < nb_y ; j++ ){
 			for( int i = 0 ; i < nb_x ; i++ ){
-
 					setVoisinBound( i,j,k );
-				
-				
 			}
 		}
 	}

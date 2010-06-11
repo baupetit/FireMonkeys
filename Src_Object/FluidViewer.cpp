@@ -21,14 +21,15 @@ using namespace std;
 FluidViewer::FluidViewer()
         :Viewer("Solver Viewer", 800, 600)
 {   
+
 	Voxel defBois( true,  // plein 
 			false, // frontiere
 			200.0,// restant 
 			0.0,// temperature 
 			Vecteur3D(0,0,0),  // repulsion
 			0.8,// temp de combustion
-			1.0,// taux de conversion
-			1.0,// taux de perte
+			0.1,// taux de conversion
+			10.0,// taux de perte
 			0.1,// diffusion
 			1.0, // conductance
 			Vecteur3I(0,0,0));
@@ -68,8 +69,9 @@ FluidViewer::FluidViewer()
 			1.0,// diffusion
 			1.0, // conductance
 			Vecteur3I(0,0,0));
+
 		   
-	Sphere *sphereBois   = new Sphere( defBois,0.2, Vecteur4D( 0.5,0.2,0,0.8 ), 10, 10);
+	Sphere *sphereBois   = new Sphere( defBois,0.5, Vecteur4D( 0.5,0.2,0,0.8 ), 10, 10);
 	Sphere *sphereMetal  = new Sphere( defBois,0.2, Vecteur4D( 0.4,0.4,0.4,0.8 ), 10, 10);
 	Sphere *sphereCire   = new Sphere( defExplosif,0.2, Vecteur4D( 0.6,0.6,0.0,0.8 ), 10, 10);
 	

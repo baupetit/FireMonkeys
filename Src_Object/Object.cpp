@@ -1,7 +1,7 @@
 #include "Object.h"
 #define NB_ITERATION_SOLVE 10
  
-
+#include "MarchingCube.h"
 
 #include <GL/glew.h>
 #include <GL/glut.h>
@@ -49,6 +49,7 @@ void Object::Afficher( float dt ){
 		}
 	}
 	glEnd();
+
 /*	
 	for( int k = 0 ; k < grilleSize.z ; ++k ){
 	for( int j = 0 ; j < grilleSize.y ; ++j ){
@@ -70,7 +71,7 @@ void Object::Afficher( float dt ){
 	}
 	}
 */
-
+/*
 	glPointSize( 4.0f );
 	glDisable(GL_LIGHTING);
 	
@@ -78,7 +79,7 @@ void Object::Afficher( float dt ){
 	for( int k = 0 ; k < grilleSize.z ; ++k ){
 		for( int j = 0 ; j < grilleSize.y ; ++j ){
 			for( int i = 0 ; i < grilleSize.x ; ++i ){
-				Vecteur3D p = cellToPoint( Vecteur3I(i , j , k));
+				Vecteur3D p = cellToPoint( Vecteur3I(i , j , k)) - AABB.lowerCorner;
 				Voxel val = grille[_Grille_Ind(i,j,k)];
 				
 				if( val.plein ){
@@ -96,6 +97,7 @@ void Object::Afficher( float dt ){
 	}
 	glEnd();
 	glEnable(GL_LIGHTING);
+*/
 }
 
 Vecteur3D Object::repulse (int i, int j, int k){
@@ -137,18 +139,19 @@ Vecteur3D Object::repulse (int i, int j, int k){
 		if (grille[_Grille_Ind(i+1,j+1,k)].plein)  vec += Vecteur3D(-1,-1,0);	
 
             
-            
+
+		/* 
+
+		//pivotage de Pi/2
+		Vecteur3D vec_vect_y = Vecteur3D(-vec.z,0.0,vec.x);
+		vec.x = (vec.x*vec_vect_y.x+vec.y*vec_vect_y.y+vec.z*vec_vect_y.z)*vec_vect_y.x - vec.x*vec.y;
+		vec.y = (vec.x*vec_vect_y.x+vec.y*vec_vect_y.y+vec.z*vec_vect_y.z)*vec_vect_y.y + vec.x*vec.x + vec.z*vec.z ;
+		vec.z = (vec.x*vec_vect_y.x+vec.y*vec_vect_y.y+vec.z*vec_vect_y.z)*vec_vect_y.z - vec.z*vec.y;
+		*/
 		vec.x = (vec.x/(sqrt(vec.x*vec.x+vec.y*vec.y+vec.z*vec.z)));
 		vec.y = (vec.y/(sqrt(vec.x*vec.x+vec.y*vec.y+vec.z*vec.z)));
 		vec.z = (vec.z/(sqrt(vec.x*vec.x+vec.y*vec.y+vec.z*vec.z)));
-            
-            
-		
-		//pivotage de Pi/2
-		//Vecteur3D vec_vect_y = Vecteur3D(-vec.z,0.0,vec.x);
-		vec.rotationAutourAxeX( M_PI /2 );
-		vec.rotationAutourAxeZ( M_PI /2 );
-		vec.normaliser();
+
 	}
 	//cout << "pour i j k = " << i << " " << j << " " << k << " " << "x= " << vec.x << " y= " << vec.y << " z= " << vec.z << endl;
 	
@@ -159,11 +162,244 @@ Vecteur3D Object::repulse (int i, int j, int k){
 
 void Object::voxelConsome( Voxel *v ){
 	// quand un voxel est comsomme
-	//  - deplacement de la valeur de ses huits sommets ( par spaceDiv )
-	//  - transmission de l'information au 26 voisins
-	//  - re-calcul de la triangulation localement (27 cases)
-	//  - recherche de la frontiere localement
-	cout << "voxelConsome" << endl;
+	if( v->frontiere ){
+		float spaceDiv = SolverParam::getSpaceDiv();
+		//  - deplacement de la valeur de ses huits sommets ( par spaceDiv )
+		//  - re-calcul de la triangulation localement (27 cases)
+		//  - recherche de la frontiere localement
+
+		for( int l =0; l < 8; ++l ){
+			v->valuation[l] += spaceDiv;
+		}
+		Polygonise( *v );
+		v->frontiere = false ;
+
+		//  - transmission de l'information au 26 voisins
+		// 9 deriere
+		Voxel *voisin;
+		// 1
+		voisin = &grille[_Grille_Ind(v->pos.x-1,v->pos.y-1,v->pos.z-1)];
+		voisin->valuation[_FUR_] += spaceDiv;
+		Polygonise( *voisin );				
+
+		// 2
+		voisin = &grille[_Grille_Ind(v->pos.x-1,v->pos.y,v->pos.z-1)];
+		voisin->valuation[_FUR_] += spaceDiv;
+		voisin->valuation[_FDR_] += spaceDiv;
+		Polygonise( *voisin );
+		if( voisin->plein ){
+			voisin->plein = false ;
+			voisin->frontiere = true ;
+		}
+		
+		// 3
+		voisin = &grille[_Grille_Ind(v->pos.x-1,v->pos.y+1,v->pos.z-1)];
+		voisin->valuation[_FDR_] += spaceDiv;
+		Polygonise( *voisin );
+		
+		// 4
+		voisin = &grille[_Grille_Ind(v->pos.x,v->pos.y-1,v->pos.z-1)];
+		voisin->valuation[_FUR_] += spaceDiv;
+		voisin->valuation[_FUL_] += spaceDiv;
+		Polygonise( *voisin );
+		if( voisin->plein ){
+			voisin->plein = false ;
+			voisin->frontiere = true ;
+		}
+
+		// 5
+		voisin = &grille[_Grille_Ind(v->pos.x,v->pos.y,v->pos.z-1)];
+		voisin->valuation[_FUR_] += spaceDiv;
+		voisin->valuation[_FUL_] += spaceDiv;
+		voisin->valuation[_FDR_] += spaceDiv;
+		voisin->valuation[_FDL_] += spaceDiv;
+		Polygonise( *voisin );
+		if( voisin->plein ){
+			voisin->plein = false ;
+			voisin->frontiere = true ;
+		}
+
+		// 6
+		voisin = &grille[_Grille_Ind(v->pos.x,v->pos.y+1,v->pos.z-1)];
+		voisin->valuation[_FDR_] += spaceDiv;
+		voisin->valuation[_FDL_] += spaceDiv;
+		Polygonise( *voisin );
+		if( voisin->plein ){
+			voisin->plein = false ;
+			voisin->frontiere = true ;
+		}
+
+		
+		// 7
+		voisin = &grille[_Grille_Ind(v->pos.x+1,v->pos.y-1,v->pos.z-1)];
+		voisin->valuation[_FUL_] += spaceDiv;
+		Polygonise( *voisin );
+
+		// 8
+		voisin = &grille[_Grille_Ind(v->pos.x+1,v->pos.y,v->pos.z-1)];
+		voisin->valuation[_FUL_] += spaceDiv;
+		voisin->valuation[_FDL_] += spaceDiv;
+		Polygonise( *voisin );
+		if( voisin->plein ){
+			voisin->plein = false ;
+			voisin->frontiere = true ;
+		}
+
+		// 9
+		voisin = &grille[_Grille_Ind(v->pos.x+1,v->pos.y+1,v->pos.z-1)];
+		voisin->valuation[_FDL_] += spaceDiv;
+		Polygonise( *voisin );
+
+		
+		// 8 meme plan
+		// 1
+		voisin = &grille[_Grille_Ind(v->pos.x-1,v->pos.y-1,v->pos.z)];
+		voisin->valuation[_FUR_] += spaceDiv;
+		voisin->valuation[_BUR_] += spaceDiv;
+		Polygonise( *voisin );
+
+		// 2
+		voisin = &grille[_Grille_Ind(v->pos.x-1,v->pos.y,v->pos.z)];
+		voisin->valuation[_FUR_] += spaceDiv;
+		voisin->valuation[_BUR_] += spaceDiv;
+		voisin->valuation[_FDR_] += spaceDiv;
+		voisin->valuation[_BDR_] += spaceDiv;
+		Polygonise( *voisin );
+		if( voisin->plein ){
+			voisin->plein = false ;
+			voisin->frontiere = true ;
+		}
+
+		// 3
+		voisin = &grille[_Grille_Ind(v->pos.x-1,v->pos.y+1,v->pos.z)];
+		voisin->valuation[_FDR_] += spaceDiv;
+		voisin->valuation[_BDR_] += spaceDiv;
+		Polygonise( *voisin );
+
+		// 4
+		voisin = &grille[_Grille_Ind(v->pos.x,v->pos.y-1,v->pos.z)];
+		voisin->valuation[_FUR_] += spaceDiv;
+		voisin->valuation[_FUL_] += spaceDiv;
+		voisin->valuation[_BUR_] += spaceDiv;
+		voisin->valuation[_BUL_] += spaceDiv;
+		Polygonise( *voisin );
+		if( voisin->plein ){
+			voisin->plein = false ;
+			voisin->frontiere = true ;
+		}
+
+		// 6
+		voisin = &grille[_Grille_Ind(v->pos.x,v->pos.y+1,v->pos.z)];
+		voisin->valuation[_FDR_] += spaceDiv;
+		voisin->valuation[_FDL_] += spaceDiv;
+		voisin->valuation[_BDR_] += spaceDiv;
+		voisin->valuation[_BDL_] += spaceDiv;
+		Polygonise( *voisin );
+		if( voisin->plein ){
+			voisin->plein = false ;
+			voisin->frontiere = true ;
+		}
+
+		// 7
+		voisin = &grille[_Grille_Ind(v->pos.x+1,v->pos.y-1,v->pos.z)];
+		voisin->valuation[_FUL_] += spaceDiv;
+		voisin->valuation[_BUL_] += spaceDiv;
+		Polygonise( *voisin );
+
+		// 8
+		voisin = &grille[_Grille_Ind(v->pos.x+1,v->pos.y,v->pos.z)];
+		voisin->valuation[_FUL_] += spaceDiv;
+		voisin->valuation[_BUL_] += spaceDiv;
+		voisin->valuation[_FDL_] += spaceDiv;
+		voisin->valuation[_BDL_] += spaceDiv;
+		Polygonise( *voisin );
+		if( voisin->plein ){
+			voisin->plein = false ;
+			voisin->frontiere = true ;
+		}
+
+		// 9
+		voisin = &grille[_Grille_Ind(v->pos.x+1,v->pos.y+1,v->pos.z)];
+		voisin->valuation[_FDL_] += spaceDiv;
+		voisin->valuation[_BDL_] += spaceDiv;
+		Polygonise( *voisin );
+
+		
+		// 9 devant
+		// 1
+		voisin = &grille[_Grille_Ind(v->pos.x-1,v->pos.y-1,v->pos.z+1)];
+		voisin->valuation[_BUR_] += spaceDiv;
+		Polygonise( *voisin );
+
+		// 2
+		voisin = &grille[_Grille_Ind(v->pos.x-1,v->pos.y,v->pos.z+1)];
+		voisin->valuation[_BUR_] += spaceDiv;
+		voisin->valuation[_BDR_] += spaceDiv;
+		Polygonise( *voisin );
+		if( voisin->plein ){
+			voisin->plein = false ;
+			voisin->frontiere = true ;
+		}
+
+		// 3
+		voisin = &grille[_Grille_Ind(v->pos.x-1,v->pos.y+1,v->pos.z+1)];
+		voisin->valuation[_BDR_] += spaceDiv;
+		Polygonise( *voisin );
+
+		// 4
+		voisin = &grille[_Grille_Ind(v->pos.x,v->pos.y-1,v->pos.z+1)];
+		voisin->valuation[_BUR_] += spaceDiv;
+		voisin->valuation[_BUL_] += spaceDiv;
+		Polygonise( *voisin );
+		if( voisin->plein ){
+			voisin->plein = false ;
+			voisin->frontiere = true ;
+		}
+
+		// 5
+		voisin = &grille[_Grille_Ind(v->pos.x,v->pos.y,v->pos.z+1)];
+		voisin->valuation[_BUR_] += spaceDiv;
+		voisin->valuation[_BUL_] += spaceDiv;
+		voisin->valuation[_BDR_] += spaceDiv;
+		voisin->valuation[_BDL_] += spaceDiv;
+		Polygonise( *voisin );
+		if( voisin->plein ){
+			voisin->plein = false ;
+			voisin->frontiere = true ;
+		}
+
+		// 6
+		voisin = &grille[_Grille_Ind(v->pos.x,v->pos.y+1,v->pos.z+1)];
+		voisin->valuation[_BDR_] += spaceDiv;
+		voisin->valuation[_BDL_] += spaceDiv;
+		Polygonise( *voisin );
+		if( voisin->plein ){
+			voisin->plein = false ;
+			voisin->frontiere = true ;
+		}
+
+		// 7
+		voisin = &grille[_Grille_Ind(v->pos.x+1,v->pos.y-1,v->pos.z+1)];
+		voisin->valuation[_BUL_] += spaceDiv;
+		Polygonise( *voisin );
+
+		// 8
+		voisin = &grille[_Grille_Ind(v->pos.x+1,v->pos.y,v->pos.z+1)];
+		voisin->valuation[_BUL_] += spaceDiv;
+		voisin->valuation[_BDL_] += spaceDiv;
+		Polygonise( *voisin );
+		if( voisin->plein ){
+			voisin->plein = false ;
+			voisin->frontiere = true ;
+		}
+
+		// 9
+		voisin = &grille[_Grille_Ind(v->pos.x+1,v->pos.y+1,v->pos.z+1)];
+		voisin->valuation[_BDL_] += spaceDiv;
+		Polygonise( *voisin );
+		
+		cout << "voxelConsome" << endl;
+	}
 }
 
 /* heat diffusion */

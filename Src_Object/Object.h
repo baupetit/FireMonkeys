@@ -19,6 +19,17 @@
 #include "Triangle.h"
 class Solver;
 
+// define pour valuation
+#define _BDL_ 0
+#define _BDR_ 4
+#define _BUL_ 3
+#define _BUR_ 7
+#define _FDL_ 1
+#define _FDR_ 5
+#define _FUL_ 2
+#define _FUR_ 6
+
+
 #define _Grille_Ind(i,j,k) ((i)+((j)*grilleSize.x)+((k)*grilleSize.x*grilleSize.y))
 
 class Object : public BasicEntite {
@@ -48,14 +59,15 @@ protected :
 	}
 
 	inline void setVoisinBound( int i, int j, int k ){
+
 		if ( grille[_Grille_Ind(i,j,k)].plein ) {
 			if( !grille[_Grille_Ind(i-1,j,k)].plein ) {
 				grille[_Grille_Ind(i-1,j,k)].frontiere = true ;
-					
 				grille[_Grille_Ind(i-1,j,k)].repulsion.x = repulse(i-1,j,k).x;
 				grille[_Grille_Ind(i-1,j,k)].repulsion.y = repulse(i-1,j,k).y;
 				grille[_Grille_Ind(i-1,j,k)].repulsion.z = repulse(i-1,j,k).z;
 			
+
 			}    
 			if( !grille[_Grille_Ind(i+1,j,k)].plein ) {
 				grille[_Grille_Ind(i+1,j,k)].frontiere = true ;
@@ -113,7 +125,9 @@ protected :
 				*/
 			}   
 		}
+
 	}
+
 	Vecteur3D repulse (int i, int j, int k);
 	
 	inline void setCornerCell( Voxel& v ){
@@ -127,14 +141,14 @@ protected :
 		Vecteur3D FUL( -1,  1,  1 );
 		Vecteur3D FUR(  1,  1,  1 );
 				
-		v.corner[0] = orig+BDL*(SolverParam::getSpaceDiv()/2);
-		v.corner[1] = orig+FDL*(SolverParam::getSpaceDiv()/2);
-		v.corner[2] = orig+FUL*(SolverParam::getSpaceDiv()/2);
-		v.corner[3] = orig+BUL*(SolverParam::getSpaceDiv()/2);
-		v.corner[4] = orig+BDR*(SolverParam::getSpaceDiv()/2);
-		v.corner[5] = orig+FDR*(SolverParam::getSpaceDiv()/2);
-		v.corner[6] = orig+FUR*(SolverParam::getSpaceDiv()/2);
-		v.corner[7] = orig+BUR*(SolverParam::getSpaceDiv()/2);
+		v.corner[_BDL_] = orig+BDL*(SolverParam::getSpaceDiv()/2);
+		v.corner[_FDL_] = orig+FDL*(SolverParam::getSpaceDiv()/2);
+		v.corner[_FUL_] = orig+FUL*(SolverParam::getSpaceDiv()/2);
+		v.corner[_BUL_] = orig+BUL*(SolverParam::getSpaceDiv()/2);
+		v.corner[_BDR_] = orig+BDR*(SolverParam::getSpaceDiv()/2);
+		v.corner[_FDR_] = orig+FDR*(SolverParam::getSpaceDiv()/2);
+		v.corner[_FUR_] = orig+FUR*(SolverParam::getSpaceDiv()/2);
+		v.corner[_BUR_] = orig+BUR*(SolverParam::getSpaceDiv()/2);
 	}
 
 	virtual void setValuation( Voxel& v ) = 0;
