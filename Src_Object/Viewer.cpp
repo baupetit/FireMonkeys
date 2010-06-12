@@ -43,7 +43,7 @@ void Viewer::_setCamera(){
 	float z = _distToOrigin*sin(_cameraAngle);
 
 	glLoadIdentity();
-	gluLookAt(x, y, z, -x, y, -z, 0.0f, 0.0f, 1.0f);
+	gluLookAt(x, y, z, -x, y, -z, 0.0f, 1.0f, 0.0f);
 
 	glutPostRedisplay();
 }	

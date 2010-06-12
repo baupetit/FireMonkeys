@@ -27,14 +27,47 @@
 
 \addtobeamertemplate{footline}{\hfill\insertframenumber/\inserttotalframenumber\hspace{2em}\null}
 
+
 \title{Fire Monkeys\\ Modélisation de feu en temps réel}
 \author{Benjamin Aupetit - Julien Champeau - Arnaud Emilien}
 \date{Jun 14 2010}
 
 \begin{document}
 
+%% 0 - Présentation de l'équipe
 \begin{frame}
    \titlepage
+\end{frame}
+
+%% 1 - Présenter le plan de la présentation
+\begin{frame}
+  \tableofcontents
+\end{frame}
+
+% 2 - Expliquer l'objectif :
+%    Réaliser un modèle de combustion d'objets en 3D temps réel.
+\section{Objectif}
+\begin{frame}{Objectif}
+  Réaliser un modéle de combustion d'objets en 3D temps réel.\\
+  \textbf{image}
+  \begin{itemize}
+    \item{Le feu}% flamme réaliste visuellement.
+    \item{La fumée}% comportement réaliste.
+    \item{Iteraction avec des objets}% gérer les collisions entre le feu et les objets
+    \item{Propagation sur l'objet}% propagation du feu sur un objet
+    \item{Combustion d'objet}% destruction de l'objet par le feu
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Les étapes de notre démarche}
+  Pour réaliser notre projet nous avont du prendre une démarche à laquelle nous n'étions pas familier.\\
+  \begin{itemize}
+  \item{découvrir le milieu scientifique} % domaine de recherche
+  \item{étudier différents articles} % étude du sujet
+  \item{Concevoir notre propre modèle} % comprehension des article et choix d'une solution
+  \item{Implémenter le modèle} % sur CPU
+  \item{Améliorer le modèle} GPU ( objectif initial ) %
+  \end{itemize}
 \end{frame}
 
 % example pour une slide 

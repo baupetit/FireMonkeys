@@ -38,12 +38,12 @@ FluidViewer::FluidViewer()
 			
 	Voxel defExplosif( true,  // plein 
 			   false, // frontiere
-			   1500.0,// restant 
+			   15000.0,// restant 
 			   0.0,// temperature 
 			   Vecteur3D(0,0,0),  // repulsion
 			   0.5,// temp de combustion
-			   0.0,// taux de conversion
-			   1500.0,// taux de perte
+			   1.0,// taux de conversion
+			   15000.0,// taux de perte
 			   1.0,// diffusion
 			   1.0, // conductance
 			   0.,// fumee
@@ -81,7 +81,7 @@ FluidViewer::FluidViewer()
 	Sphere *sphereMetal  = new Sphere( defMetal,0.2, Vecteur4D( 0.4,0.4,0.4,0.8 ), 10, 10);
 	Sphere *sphereCire   = new Sphere( defExplosif,0.2, Vecteur4D( 0.6,0.6,0.0,0.8 ), 10, 10);
 
-	ObjectMesh *toto = new ObjectMesh( defBois, "Meshes/monkey.obj", Vecteur4D( 0.5, 0.6, 0.1, 0.9 ) );
+	ObjectMesh *toto = new ObjectMesh( defExplosif, "Meshes/monkey.obj", Vecteur4D( 0.5, 0.6, 0.1, 0.9 ) );
 
 	sphereBois->translate( Vecteur3D(-5, -5, 0 ));
 	sphereMetal->translate(Vecteur3D( -5, 0, 0 ));
