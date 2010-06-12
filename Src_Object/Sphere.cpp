@@ -1,6 +1,6 @@
 #include "Sphere.h"
 
-#define TINY_FLOAT 0.001
+#define TINY_FLOAT 0.000001
 
 #include <cfloat>
 #include <cmath>
@@ -28,7 +28,7 @@ Sphere::Sphere( Voxel defVox,
 	// compute AABB
 	float spaceDiv  = SolverParam::getSpaceDiv();
 	AABB = BoundingBox( Vecteur3D(-radius-2*spaceDiv ,-radius -2*spaceDiv ,-radius -2* spaceDiv),
-			    Vecteur3D(radius + 2*spaceDiv ,radius + 2*spaceDiv ,radius +2* spaceDiv) );
+			    Vecteur3D(radius + 2*spaceDiv ,radius + 2*spaceDiv ,radius + 2*spaceDiv) );
 
 //	generateDisplayList( nb_plans, nb_quarts );
 	generateVoxels();

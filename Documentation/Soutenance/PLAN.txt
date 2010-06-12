@@ -1,0 +1,55 @@
+Ce qu'ils doivent retenir :
+    - Beaucoup de travail, sujet ambitieux ( motivation, engagement )
+    - Le résultat est extremement satisfaisant ( réalisation de l'objectif, 
+                                                 organisation et travail efficace, 
+                                                 bons choix effectués)
+    - De la recherche autonome ( autonomie, chercher, comprendre )
+    - Beaucoup de nouvelles connaissances ( recherche d'un modèle, réalisation d'un modèle, GPU, organisation)
+    - Equipe efficace et organisée ( rapports, soutenance, résultat du projet )
+    
+    
+
+
+
+0 - Présentation de l'équipe
+
+1 - Présenter le plan de la présentation
+
+2 - Expliquer l'objectif :
+    Réaliser un modèle de combustion d'objets en 3D temps réel.
+    
+    Cad réaliser un modèle comprennant :
+    Feu + Fumée + Interaction avec des objets + Propagation sur Objets + Combustion d'objets
+    
+    Cad :
+    > Decouvrir le milieu scientifique
+    > Etudier différents articles
+    > Concevoir notre propre modèle
+    > Implémenter le modèle
+    > (Objectif initial) le convertir en GPU
+    
+3 - Parler de l'ambition du projet
+    Très ambitieux, beaucoup de travail à fournir.
+    Beaucoup d'organisation.
+    Pas de connaissances GPU.
+    
+4 - Détailler ce qui a été réalisé :
+    Tout le modèle CPU. + Images
+    La moitié du modèle en GPU. + Images
+    
+5 - 
+    
+    
+    
+    
+  - Critiques du résultat
+  - Améliorations possibles
+  
+  - Remerciements :
+  
+    Marie-Paule Cani pour avoir accepté de nous encadré, 
+    pour ses conseils et des indices de recherche.
+    
+    Cyril Crassin pour nous avoir aidé à comprendre le fonctionnement de GLSL.
+    
+    Nintendo pour Super Smash Bross Melee © 
