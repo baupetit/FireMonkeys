@@ -54,7 +54,7 @@ FluidViewer::FluidViewer()
 			100.0,// restant 
 			0.0,// temperature 
 			Vecteur3D(0,0,0),  // repulsion
-			0.8,// temp de combustion
+			1000008,// temp de combustion
 			4.0,// taux de conversion
 			0.0,// taux de perte
 			1.0,// diffusion
@@ -78,7 +78,7 @@ FluidViewer::FluidViewer()
 		   
 
 	Sphere *sphereBois   = new Sphere( defBois,0.5, Vecteur4D( 0.5,0.2,0,0.8 ), 10, 10);
-	Sphere *sphereMetal  = new Sphere( defMetal,0.2, Vecteur4D( 0.4,0.4,0.4,0.8 ), 10, 10);
+	Sphere *sphereMetal  = new Sphere( defMetal,1.5, Vecteur4D( 0.4,0.4,0.4,0.8 ), 10, 10);
 	Sphere *sphereCire   = new Sphere( defExplosif,0.2, Vecteur4D( 0.6,0.6,0.0,0.8 ), 10, 10);
 
 	ObjectMesh *toto = new ObjectMesh( defExplosif, "Meshes/monkey.obj", Vecteur4D( 0.5, 0.6, 0.1, 0.9 ) );

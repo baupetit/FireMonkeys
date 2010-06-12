@@ -50,6 +50,7 @@ void Object::Afficher( float dt ){
 	}
 	glEnd();
 
+
 	/*
 	for( int k = 0 ; k < grilleSize.z ; ++k ){
 	for( int j = 0 ; j < grilleSize.y ; ++j ){
@@ -62,6 +63,7 @@ void Object::Afficher( float dt ){
 	glColor4f(0.0,0.0,0.0,1.0);
 	p-=AABB.lowerCorner;
 	glVertex3d(p.x,p.y,p.z);
+	glColor4f(1.0,0.0,0.0,1.0);
 	glVertex3d(p.x+0.5*val.repulsion.x,p.y+0.5*val.repulsion.y,p.z+0.5*val.repulsion.z);
 	glEnd();
 	glColor3f( val.temperature,0,0 );
@@ -70,7 +72,7 @@ void Object::Afficher( float dt ){
 	}
 	}
 	}
-
+/*
 	glPointSize( 4.0f );
 	glDisable(GL_LIGHTING);
 	
@@ -96,7 +98,9 @@ void Object::Afficher( float dt ){
 	}
 	glEnd();
 	glEnable(GL_LIGHTING);
+
 	*/
+
 }
 
 Vecteur3D Object::repulse (int i, int j, int k){
@@ -144,9 +148,16 @@ Vecteur3D Object::repulse (int i, int j, int k){
 		//pivotage de Pi/2
 
 		Vecteur3D vec_vect_y = Vecteur3D(-vec.z,0.0,vec.x);
-		vec.x = (vec.x*vec_vect_y.x+vec.y*vec_vect_y.y+vec.z*vec_vect_y.z)*vec_vect_y.x - vec.x*vec.y;
-		vec.y = (vec.x*vec_vect_y.x+vec.y*vec_vect_y.y+vec.z*vec_vect_y.z)*vec_vect_y.y + vec.x*vec.x + vec.z*vec.z ;
-		vec.z = (vec.x*vec_vect_y.x+vec.y*vec_vect_y.y+vec.z*vec_vect_y.z)*vec_vect_y.z - vec.z*vec.y;
+		float b = vec_vect_y.x*vec_vect_y.x+vec_vect_y.y*vec_vect_y.y+vec_vect_y.z*vec_vect_y.z ;
+		if (vec_vect_y.x*vec_vect_y.x+vec_vect_y.y*vec_vect_y.y+vec_vect_y.z*vec_vect_y.z!=0 ){
+			vec_vect_y.x = (vec_vect_y.x/(sqrt(b)));
+			vec_vect_y.y = (vec_vect_y.y/(sqrt(b)));
+			vec_vect_y.z = (vec_vect_y.z/(sqrt(b)));
+		}
+		float a = (vec.x*vec_vect_y.x+vec.y*vec_vect_y.y+vec.z*vec_vect_y.z);
+		vec.x = a*vec_vect_y.x + vec_vect_y.y*vec.z - vec_vect_y.z*vec.y;
+		vec.y = a*vec_vect_y.y + vec_vect_y.z*vec.x - vec_vect_y.x*vec.z;
+		vec.z = a*vec_vect_y.z + vec_vect_y.x*vec.y - vec_vect_y.y*vec.x;
 
 		
 		if (vec.x==0 && vec.y==0 && vec.z==0) return vec;

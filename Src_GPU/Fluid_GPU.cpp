@@ -1,6 +1,7 @@
 #include "Fluid_GPU.h"
 
 #include <iostream>
+#include <cstdlib>
 using namespace std;
 
 
@@ -13,9 +14,9 @@ Fluid_GPU::Fluid_GPU(){
 	_grille_depth  = TAILLE_GRILLE;
 	*/
 
-	_grille_width  = 40;
-	_grille_height = 40;
-	_grille_depth  = 40 ;
+	_grille_width  = 80;
+	_grille_height = 80;
+	_grille_depth  = 80 ;
 
 
 	s = NULL;
