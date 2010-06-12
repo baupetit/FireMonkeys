@@ -43,7 +43,7 @@ void Viewer::_setCamera(){
 	float z = _distToOrigin*sin(_cameraAngle);
 
 	glLoadIdentity();
-	gluLookAt(x, y, z, -x, y, -z, 0.0f, 0.0f, 1.0f);
+	gluLookAt(x, y, z, -x, y, -z, 0.0f, 1.0f, 0.0f);
 
 	glutPostRedisplay();
 }	
@@ -351,3 +351,68 @@ void Viewer::rendu(){/*
 		     glEnd();
 		     */
 }
+/*
+
+void Viewer::RenderToFile(char* Filename, short width, short height){
+
+	// Create the offscreen 
+	// ---------------------------------------
+	//CreateOffscreenBuffers(m_offscreen_SizeX, m_offscreen_SizeY);
+ 
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	
+ 
+	// Render the scene
+	// ----------------
+	_instance->rendu();
+
+ 
+	// Save result of rendering to destination file
+	// --------------------------------------------
+	// Create a BMP buffer to save the scene to
+	byte* bmpBuffer = (byte*) malloc(m_offscreen_SizeX * m_offscreen_SizeY * 3);
+	if (!bmpBuffer)	exit(0);
+ 
+	// Read the frame buffer pixels into the bmp buffer	
+	glReadPixels(0, 0, m_offscreen_SizeX - 1, m_offscreen_SizeY - 1, GL_BGR, GL_UNSIGNED_BYTE, bmpBuffer);
+ 
+	// Open destination File
+	FILE *file = NULL;
+	fopen_s(&file, fileName, "wb");
+	if (!file) return 0;
+ 
+	// Create & configure Bitmap and File info headers
+	BITMAPFILEHEADER bitmapFileHeader;
+	BITMAPINFOHEADER bitmapInfoHeader;
+ 
+	bitmapFileHeader.bfType			= 0x4D42; //"BM"
+	bitmapFileHeader.bfSize			= m_offscreen_SizeX * m_offscreen_SizeY * 3;
+	bitmapFileHeader.bfReserved1	= 0;
+	bitmapFileHeader.bfReserved2	= 0;
+	bitmapFileHeader.bfOffBits		= sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER);
+ 
+	bitmapInfoHeader.biSize			= sizeof(BITMAPINFOHEADER);
+	bitmapInfoHeader.biWidth		= m_offscreen_SizeX - 1;
+	bitmapInfoHeader.biHeight		= m_offscreen_SizeY - 1;
+	bitmapInfoHeader.biPlanes		= 1;
+	bitmapInfoHeader.biBitCount		= 24;
+	bitmapInfoHeader.biCompression	= BI_RGB;
+	bitmapInfoHeader.biSizeImage	= 0;
+	bitmapInfoHeader.biXPelsPerMeter= 0; // ?
+	bitmapInfoHeader.biYPelsPerMeter= 0; // ?
+	bitmapInfoHeader.biClrUsed		= 0;
+	bitmapInfoHeader.biClrImportant = 0;
+ 
+	fwrite(&bitmapFileHeader, sizeof(BITMAPFILEHEADER), 1, file);
+	fwrite(&bitmapInfoHeader, sizeof(BITMAPINFOHEADER), 1, file);
+	fwrite(bmpBuffer, m_offscreen_SizeX*m_offscreen_SizeY*3, 1, file);
+	fclose(file);
+	free(bmpBuffer);
+ 
+	// Unbind and Delete offscreen Buffers
+	// ----------------------------------
+	//ReleaseOffscreenBuffers();
+	
+}
+*/
+
