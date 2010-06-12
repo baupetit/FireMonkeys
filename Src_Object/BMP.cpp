@@ -28,13 +28,16 @@ void BMP::newImage( int w, int h ){
 	width = w;
 	height = h;
 	size = w * h;
-	pixels = new unsigned long[size];
+	pixels = new unsigned long[3*size];
 }
 
-void BMP::clear( unsigned long clearColor ){
+void BMP::clear( unsigned char r , unsigned char g , unsigned char b ){
 	if( pixels ){
-		for( int i = 0; i < width*height ; ++ i ){
-			pixels[i] = clearColor ;
+		for( int i = 0; i < width*height*3 ; i+=3 ){
+			pixels[i] = r ;
+			pixels[i+1] = g ;
+			pixels[i+2] = b ;
+			
 		}
 	}
 }
@@ -101,12 +104,18 @@ int BMP::write( string path ){
 	// Write pixels.
 	// Note that BMP has lower rows first.
 	//
+	long size = width * height * 3 ;
+	if( size != fwrite( pixels, 1, size, f) )  {
+		fclose (f);
+		return 0;
+	}
+	/*
 	for (j=height-1; j >= 0; j--) {
 		for (i=0; i < width; i++) {
 			unsigned char rgb[3];
 			int ix = i + j * width;
 			unsigned long pixel = pixels[ix];
-			rgb[0] = (pixel >> 8)& 0xff;
+			rgb[0] = (pixel >> 8) & 0xff;
 			rgb[1] = (pixel >> 16) & 0xff;
 			rgb[2] = (pixel >> 24) & 0xff;
 			if (3 != fwrite (rgb, 1, 3, f)) {
@@ -116,7 +125,7 @@ int BMP::write( string path ){
 			}
 		}
 	}
-
+	*/
 	fclose (f);
 	return 1;
 

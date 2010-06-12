@@ -6,7 +6,7 @@ using namespace std;
 
 struct BMP{
 	int width, height;
-	unsigned long *pixels;
+	unsigned char *pixels;
 	
 	BMP();
 	~BMP();
@@ -15,7 +15,7 @@ struct BMP{
 	void newImage( int w, int h) ;
 	
 	/* clear image */
-	void clear(unsigned long clearColor );
+	void clear( unsigned char r , unsigned char g , unsigned char b );
 
 	/* write an image */
 	int write( string path );
