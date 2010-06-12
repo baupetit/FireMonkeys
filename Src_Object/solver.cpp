@@ -487,6 +487,19 @@ void Solver::densitiesStepWithTemp ( float dt )
 	SWAP ( _f0, _f ); advect ( _N, 0, _f, _f0, _u, _v, _w, dt );
 	SWAP ( _T0, _T ); advect_cool ( _N, 0, _T, _T0, _u, _v, _w, dt );
 	combustion( _N, _d, _f, _T, SolverParam::getConsumingParam(),SolverParam::getFireToSmokeParam(), dt );
+
+
+	for(int k=1; k<N+1; ++k ){ 
+		for(int j = 1; j<N+1 ; ++j) { 
+			for(int i=1 ; i<N+1 ; ++i ){
+				//Vecteur3D p = cellToPoint( Vecteur3D(i , j , k));
+				glBegin(GL_LINES);
+				glColor4f(0.0,0.0,0.0,1.0);
+				glVertex3f((float)i/10,(float)j/10,(float)k/10);
+				glColor4f(0.0,0.0,0.0,1.0);
+				glVertex3f((float)i/10+_u[IX(i,j,k)]/10,(float)j/10+_v[IX(i,j,k)]/10,(float)k/10+_w[IX(i,j,k)]/10);
+				glEnd();
+			}}}
 }
 
 
@@ -654,9 +667,9 @@ void Solver::updateInfo( Object& o){
 				//////////////////
 				// la repulsion ecrase la vitesse en frontiere
 
-				_u[IX(solverCell.x, solverCell.y, solverCell.z)] = (*voxelObj).repulsion.x * 1 + o.vitesse.x;
-				_v[IX(solverCell.x, solverCell.y, solverCell.z)] = (*voxelObj).repulsion.y * 1 + o.vitesse.y;
-				_w[IX(solverCell.x, solverCell.y, solverCell.z)] = (*voxelObj).repulsion.z * 1 + o.vitesse.z;
+				_u[IX(solverCell.x, solverCell.y, solverCell.z)] = (*voxelObj).repulsion.x *5.0 + o.vitesse.x;
+				_v[IX(solverCell.x, solverCell.y, solverCell.z)] = (*voxelObj).repulsion.y *5.0 + o.vitesse.y;
+				_w[IX(solverCell.x, solverCell.y, solverCell.z)] = (*voxelObj).repulsion.z *5.0 + o.vitesse.z;
 			}    
 
             

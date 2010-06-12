@@ -135,9 +135,9 @@ public :
 
 	
 	inline bool cellIsValid( Vecteur3I c){
-	    if (c.x <0 || c.x >= _N ||
-	        c.y <0 || c.y >= _N ||
-	        c.z <0 || c.z >= _N)
+	    if (c.x <=0 || c.x > _N ||
+	        c.y <=0 || c.y > _N ||
+	        c.z <=0 || c.z > _N)
 	        return false;
 	    return true;
 	}

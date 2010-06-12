@@ -32,7 +32,7 @@ FluidViewer::FluidViewer()
 		       10.0,// taux de perte
 		       0.1,// diffusion
 		       1.0, // conductance
-		       0.1,// fumee
+		       0,// fumee
 		       Vecteur3I(0,0,0));
 			
 	Voxel defExplosif( true,  // plein 
@@ -45,7 +45,7 @@ FluidViewer::FluidViewer()
 			   1500.0,// taux de perte
 			   1.0,// diffusion
 			   1.0, // conductance
-			   10.,// fumee
+			   0.,// fumee
 			   Vecteur3I(0,0,0));
 
 	Voxel defMetal( true,  // plein 
@@ -53,12 +53,12 @@ FluidViewer::FluidViewer()
 			100.0,// restant 
 			0.0,// temperature 
 			Vecteur3D(0,0,0),  // repulsion
-			0.8,// temp de combustion
+			1000008,// temp de combustion
 			4.0,// taux de conversion
 			0.0,// taux de perte
 			1.0,// diffusion
 			1.0, // conductance
-			0.1,// fumee
+			0.,// fumee
 			Vecteur3I(0,0,0));
 	
 	Voxel defCire( true,  // plein 
@@ -77,7 +77,7 @@ FluidViewer::FluidViewer()
 		   
 
 	Sphere *sphereBois   = new Sphere( defBois,0.5, Vecteur4D( 0.5,0.2,0,0.8 ), 10, 10);
-	Sphere *sphereMetal  = new Sphere( defMetal,0.2, Vecteur4D( 0.4,0.4,0.4,0.8 ), 10, 10);
+	Sphere *sphereMetal  = new Sphere( defMetal,1.5, Vecteur4D( 0.4,0.4,0.4,0.8 ), 10, 10);
 	Sphere *sphereCire   = new Sphere( defExplosif,0.2, Vecteur4D( 0.6,0.6,0.0,0.8 ), 10, 10);
 	
 	sphereBois->translate( Vecteur3D(-5, -5, 0 ));
