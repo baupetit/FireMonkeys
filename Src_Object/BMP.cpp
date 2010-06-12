@@ -63,6 +63,7 @@ int BMP::write( string path ){
 	//----------------------------------------
 	// Prepare header
 	//
+	for( int i = 0 ; i < HDRLEN; ++i ) h[i] = 0;
 	len = HDRLEN + 3 * width * height;
 	h[0] = 'B';
 	h[1] = 'M';
@@ -117,4 +118,5 @@ int BMP::write( string path ){
 
 	fclose (f);
 	return 1;
+
 }
