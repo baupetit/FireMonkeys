@@ -33,8 +33,6 @@ void Object::Afficher_Face_Camera(Vecteur3D& positionCamera,
 
 void Object::Afficher( float dt ){
 	int i,j,k,l ;
-
-    
     
 	glColor4f( color.x, color.y, color.z, color.w );
 	glBegin( GL_TRIANGLES );
@@ -49,63 +47,10 @@ void Object::Afficher( float dt ){
 		}
 	}
 	glEnd();
-
-
-	/*
-	for( int k = 0 ; k < grilleSize.z ; ++k ){
-	for( int j = 0 ; j < grilleSize.y ; ++j ){
-	for( int i = 0 ; i < grilleSize.x ; ++i ){
-	Vecteur3D p = cellToPoint( Vecteur3I(i , j , k));
-	Voxel val = grille[_Grille_Ind(i,j,k)];
-
-	if( val.frontiere ){
-	glBegin(GL_LINES);	
-	glColor4f(0.0,0.0,0.0,1.0);
-	p-=AABB.lowerCorner;
-	glVertex3d(p.x,p.y,p.z);
-	glColor4f(1.0,0.0,0.0,1.0);
-	glVertex3d(p.x+0.5*val.repulsion.x,p.y+0.5*val.repulsion.y,p.z+0.5*val.repulsion.z);
-	glEnd();
-	glColor3f( val.temperature,0,0 );
-	glVertex3f( p.x, p.y, p.z );
-	}
-	}
-	}
-	}
-/*
-	glPointSize( 4.0f );
-	glDisable(GL_LIGHTING);
-	
-	glBegin(GL_POINTS);
-	for( int k = 0 ; k < grilleSize.z ; ++k ){
-		for( int j = 0 ; j < grilleSize.y ; ++j ){
-			for( int i = 0 ; i < grilleSize.x ; ++i ){
-				Vecteur3D p = cellToPoint( Vecteur3I(i , j , k)) - AABB.lowerCorner;
-				Voxel val = grille[_Grille_Ind(i,j,k)];
-				
-				if( val.plein ){
-					//cout << val.temperature << endl;
-					glColor3f( val.temperature,0,0 );
-					glVertex3f( p.x, p.y, p.z );
-				}
-				if( val.frontiere ){
-					glColor3f( val.temperature,0,0 );
-					glVertex3f( p.x, p.y, p.z );
-				}
-
-			}
-		}
-	}
-	glEnd();
-	glEnable(GL_LIGHTING);
-
-	*/
-
 }
 
 Vecteur3D Object::repulse (int i, int j, int k){
 	//condition i j k est donnée pour une frontiere, on cherche tous les frontieres distantes de 1
-		
 	Vecteur3D vec = Vecteur3D(0,0,0);
 	if (grille[_Grille_Ind(i  ,j  ,k  )].frontiere){
 		//comparaison aux 9 devant	
@@ -141,12 +86,7 @@ Vecteur3D Object::repulse (int i, int j, int k){
 		if (grille[_Grille_Ind(i+1,j-1,k)].plein)  vec += Vecteur3D(-1,1,0);
 		if (grille[_Grille_Ind(i+1,j+1,k)].plein)  vec += Vecteur3D(-1,-1,0);	
 
-            
-
-           
-
 		//pivotage de Pi/2
-
 		Vecteur3D vec_vect_y = Vecteur3D(-vec.z,0.0,vec.x);
 		float b = vec_vect_y.x*vec_vect_y.x+vec_vect_y.y*vec_vect_y.y+vec_vect_y.z*vec_vect_y.z ;
 		if (vec_vect_y.x*vec_vect_y.x+vec_vect_y.y*vec_vect_y.y+vec_vect_y.z*vec_vect_y.z!=0 ){
@@ -159,19 +99,12 @@ Vecteur3D Object::repulse (int i, int j, int k){
 		vec.y = a*vec_vect_y.y + vec_vect_y.z*vec.x - vec_vect_y.x*vec.z;
 		vec.z = a*vec_vect_y.z + vec_vect_y.x*vec.y - vec_vect_y.y*vec.x;
 
-		
 		if (vec.x==0 && vec.y==0 && vec.z==0) return vec;
-
-		
 		vec.x = (vec.x/(sqrt(vec.x*vec.x+vec.y*vec.y+vec.z*vec.z)));
 		vec.y = (vec.y/(sqrt(vec.x*vec.x+vec.y*vec.y+vec.z*vec.z)));
 		vec.z = (vec.z/(sqrt(vec.x*vec.x+vec.y*vec.y+vec.z*vec.z)));
-
 	}
-		//cout << "pour i j k = " << i << " " << j << " " << k << " " << "x= " << vec.x << " y= " << vec.y << " z= " << vec.z << endl;
-	
 	return vec;
-
 }
 
 
@@ -613,21 +546,4 @@ void Object::diffuserTemperature( float dt )
 		}
 		//setBoundaries ( N, b, x );
 	}
-
-/*	
-
-	for( k=1; k<N1-1; ++k ){ 
-	for( j = 1; j<N2-1 ; ++j) { 
-	for( i=1 ; i<N3-1 ; ++i ){
-	if (grille[_Grille_Ind(i,j,k)].plein)
-	//cout << grille[_Grille_Ind(i,j,k)].temperature << endl;
-	tmp = grille[_Grille_Ind(i,j,k)].temperature;		
-	grille[_Grille_Ind(i,j,k)].temperature  = grille[_Grille_Ind(i,j,k)].temperature0;
-	grille[_Grille_Ind(i,j,k)].temperature0 = tmp;
-								
-	//cout << tmp << endl;
-	}
-	}
-	}
-*/
 }
