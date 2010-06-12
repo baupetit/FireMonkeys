@@ -28,7 +28,7 @@ void BMP::newImage( int w, int h ){
 	width = w;
 	height = h;
 	size = w * h;
-	pixels = new unsigned long[3*size];
+	pixels = new unsigned char[3*size];
 }
 
 void BMP::clear( unsigned char r , unsigned char g , unsigned char b ){
@@ -46,8 +46,8 @@ int BMP::write( string path ){
 	FILE *f;
 	unsigned char h[HDRLEN];
 	unsigned long len;
-	int i, j;
-
+	//int i, j;
+	
 	if (!pixels)
 		return -1;
 	//----------
