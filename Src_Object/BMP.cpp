@@ -76,33 +76,42 @@ int BMP::write( string path ){
 	h[5] = (len >> 24) & 0xff;
 	//Bytes 6-10: No idea. Leave this zeroed.
 	//Bytes 11-14: Double word. Start of the bitmap.
-	h[10] = HDRLEN;
+	h[11] = HDRLEN;
 	//Bytes 15-18: Double word. Size of the header. Normally set to 40. The header is considered to start at offset 15.
-	h[14] = 40;
+	h[15] = 40;
 	//Bytes 19-22: Double word. Width.
-	h[18] = width & 0xff;
-	h[19] = (width >> 8) & 0xff;
-	h[20] = (width >> 16) & 0xff;
+	h[19] = width & 0xff;
+	h[20] = (width >> 8) & 0xff;
+	h[21] = (width >> 16) & 0xff;
+	h[22] = (width >> 24) & 0xff;
 	//Bytes 23-26: Double word. Height.
-	h[22] = height & 0xff;
-	h[23] = (height >> 8) & 0xff;
-	h[24] = (height >> 16) & 0xff;
+	h[23] = height & 0xff;
+	h[24] = (height >> 8) & 0xff;
+	h[25] = (height >> 16) & 0xff;
+	h[26] = (height >> 24) & 0xff;
 	//Bytes 27-28: Word. Planes. Must be 1.
-	h[26] = 1;
+	h[27] = 1;
 	//Bytes 29-30: Word. Bits per pixel. You'll need this as 24.
-	h[28] = 24;
+	h[29] = 24;
 	//Bytes 31-34: Double word. Compression. Leave it as zero.
-	h[34] = 16;
+	h[31] = 0;
+	h[32] = 0;
+	h[33] = 0;
+	h[34] = 0;
 	//Bytes 35-38: Double word. Compressed size. Since there's no compression, this value will be the same as file size.
+	h[35] = 0;
+	h[36] = 0;
+	h[37] = 0;
+	h[38] = 0;
 	//Bytes 39-42: Double word. Horizontal resolution. See below.
+	h[39] = 0x13; // 2835 pixels/meter
+	h[41] = 0x0b;
 	//Bytes 43-46: Double word. Vertical resolution. Pixels per meter, according to Wikipedia. The values seem to vary, but 2835 should do for both.
+	h[43] = 0x13; // 2835 pixels/meter
+	h[44] = 0x0b;
 	//Bytes 47-50: Double word. Number of colors in the palette. Leave as zero.
 	//Bytes 51-54: Double word. "Important colors". Leave as zero.
-	h[36] = 0x13; // 2835 pixels/meter
-	h[37] = 0x0b;
-	h[42] = 0x13; // 2835 pixels/meter
-	h[43] = 0x0b;
-
+	
 	//Bytes 55-EOF: Bitmap.
 
 
