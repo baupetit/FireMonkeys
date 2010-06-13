@@ -124,10 +124,10 @@ le bon fonctionnement du modèle. Toutes les fonctionalités du modèles sont
 implémentées et opérationelles. (environ 9 fps avec une grille 40x40x40)\\
 La version GPU est comme prévu beaucoup plus rapide et permet d'utiliser
 une taille de grille plus importante. (environ 9 fps avec une grille 100x100x100)\\
-Nous avons donc réussi à optenir un modèle de combustion complet et intéractif en CPU,
+Nous sommes donc satisfaits de notre travail, nous avons réussi à obtenir un modèle de combustion complet et intéractif en CPU,
 et un modèle de fluide complet en GPU. L'ajout d'un modèle 
 d'objet au GPU de devrait pas trop affecter les performances. Les performances sont 
-donc suffisamment bonnes pour valider notre contrainte de temps réel.
+donc suffisamment bonnes pour valider notre contrainte de temps réel.\\
 
 
 
@@ -269,7 +269,14 @@ diffusion du fluide et l'impacte de l'advection.\\
 \item{Les forces~:}\\ L'ajout des forces externes dans le cas de la
   densité consiste en fait a ajouter une source de densité la ou on le
   souhaite.\\
-\item{La diffusion~:}\\ Cela consiste à échanger la densité d'une case
+\item{La diffusion~:}\\ 
+
+    \begin{center}
+	\includegraphics[scale=0.5]{STAM.ps}\\
+	Echange d'informations dans la grille - Jos Stam
+    \end{center}
+  
+  Cela consiste à échanger la densité d'une case
   de notre grille de l'espace avec ses 6 voisins (haut, bas, gauche,
   droite, devant, derrière). Ce qu'il se passe en fait c'est que la
   case va perdre de la densité en la cédant à ses voisins mais va
@@ -311,11 +318,17 @@ diffusion du fluide et l'impacte de l'advection.\\
   \end{equation}
   
   La résolution linéaire de cette équation combinée à une relaxation de
-  Gauss-Seidel nous permet de considérer une méthode stable, même pour
+  \textvf{Gauss-Seidel} nous permet de considérer une méthode stable, même pour
   des taux de diffusion ($ \frac{\nu \delta t}{({\delta x})^2}$)
   grand.\\
   
-  \item{L'advection~:}\\ L'advection est le procédé par lequel le
+  \item{L'advection~:}\\ 
+    \begin{center}
+	\includegraphics[scale=0.5]{STAM2.ps}\\
+	Principe de l'advection - Jos Stam
+    \end{center}
+  
+  L'advection est le procédé par lequel le
     champ de vitesse du fluide transporte la matière d'un endroit a un
     autre. Le plus simple est de voir la densité de matière comme une
     quantité de particules et qu'il faut voir a chaque pas de
@@ -344,7 +357,7 @@ Cette force a pour forme:\\
 
 Nous avons donc un paramètre de température en plus de la densité de gaz, qui
 est géré par les mêmes équations, mais a cela nous avons rajouté un
-coefficient de refroidissement qui fait baisser la température lorsque
+\textvf{coefficient de refroidissement} qui fait baisser la température lorsque
 l'on s'éloigne de la source.\\
 
 \subsubsection{Vorticity confinement :}
@@ -368,6 +381,12 @@ consume le feu , modulé avec un paramètre de conversion (ex: 10
 particules de feu forment 3 particules de fumée).
 
 
+\subsubsection{Résumé :}
+Notre modèle de fluide est donc constitué de 4 grilles à pas constant, une grille pour le gaz,
+une grille pour la fumée, une grille pour la chaleur, et une dernière grille pour la vitesse. 
+Nous traitons ces grilles selon le principe de résolution de Jos Stam, avec des traitements supplémentaires
+qui ont été détaillés  ci dessus.
+
 \subsection{Méthode de rendu}
 \subsubsection{Affichage volumique}
 
@@ -379,6 +398,18 @@ la caméra correspondent à l'orientation de la flamme dans l'espace. Ceci nous 
 \includegraphics[scale=0.3]{plan_en_coupe.ps}
 \end{center}
 
+
+    \begin{center}
+	\includegraphics[scale=0.5]{Render3D.ps}\\
+	Plans de coupes dans la texture3D.\\
+	
+	\includegraphics[scale=0.5]{Render3D2.ps}\\
+	Plans de coupes dans la texture3D, orientés faces à la camera.\\
+	
+	\includegraphics[scale=0.5]{Render3D3.ps}\\
+	Plans de coupes dans la texture3D, orientés faces à la camera, affichés normalement.\\
+    \end{center}
+    
 
 \subsubsection{Rendu de la flamme}
 
@@ -392,6 +423,13 @@ Où h est la constante de planck, c la vitesse de la lumière, et k la constante
 On obtient donc une relation entre la température de notre flamme et sa luminance, ce qui nous permet d'avoir un rendu fonction de la température. De plus nous avons ajusté la transparence de la flamme en réglant l'$\alpha$ en tenant compte de la densité de gaz qui brule et de la température de la flamme (les flammes bleus sont plus transparentes que les rouges et jaunes).\\
 Pour éviter de calculer cette formule assez complexe à chaque fois, nous \textbf{stockons} un grand nombre de valeurs dans un tableau.
 
+
+
+    \begin{center}
+	\includegraphics[scale=0.5]{Flamme.ps}\\
+	Rendu de la couleur de la flamme en fonction de la température de l'air.\\
+    \end{center}
+    
 
 \subsubsection{Rendu de la fumée}
 
@@ -419,7 +457,7 @@ Dans la réalité il y a toujours un "vent ambiant" autour d'une flamme, ainsi q
 macroscopiques, ce qui à pour conséquence de multiples effets de mouvements au niveau de sa surface. Pour simuler cet effet nous ajoutons lors du rendu par le fragment shader un \textbf{bruit de perlin 4D} (dont une dimension temporelle pour conserver la cohérence du mouvement).\\
 
 \begin{center}
-\includegraphics[scale=0.3]{Perlin3D.ps}
+\includegraphics[scale=0.5]{Perlin3D.ps}
 \end{center}
 
 Le fait d'ajouter ce bruit lors du rendu dans le shader ne modifie pas la position spatiale des densités, des températures et de la fumée et ne perturbe donc pas les calculs de l'équation de dynamique des fluides.\\ 
@@ -428,14 +466,14 @@ Les rendus obtenus étant plutôt convaincant :\\
 
 Sans bruit de Perlin:\\
 \begin{center}
-\includegraphics[scale=0.3]{SansPerlin.ps}
+\includegraphics[scale=0.5]{SansPerlin.ps}
 \end{center}
 
 
 Avec Bruit de Perlin:\\
 
-\includegraphics[scale=0.3]{Perlin1.ps}
-\includegraphics[scale=0.3]{Perlin2.ps}
+\includegraphics[scale=0.4]{Perlin1.ps}
+\includegraphics[scale=0.4]{Perlin2.ps}
 
 
 
@@ -447,7 +485,9 @@ $\sum_{i=0}^{n-1} p^i = \frac{1 - p^n}{1 - p}$.\\
 \subsection{Résultats}
 
 
+
 %----------------------------------------------------------------------------------------------------------------------------------------
+\newpage
 %%%%%%%%%%%%%%%%%
 \section{Modèle de flamme et de fumée GPU}
 %%%%%%%%%%%%%%%%% 
@@ -506,7 +546,9 @@ dans une texture 3D.\\
 Avec une méthode de \textbf{render to texture} il est possible
 d'enregistrer ce qui s'affiche à l'écran dans une texture.\\
 
-\paragraph*{Principe du render to texture 3D} Nous avons un
+\paragraph*{Principe du render to texture 3D :}\\
+
+ Nous avons un
 \textbf{FrameBuffer}. Lorsqu'il est actif, le dessin ne s'affiche pas
 sur l'écran, mais est conservé en mémoire. Nous pouvons rediriger la
 sortie du framebuffer vers un tranche ( un layer ) de la texture3D. \\ 
@@ -551,6 +593,12 @@ de repères car le résultat final est stocké dans une texture3D, dont les comp
 sont entre 0.0 et 1.0. Pour effectuer un calcul il faut charger le shader associé,
 lier les textures3D aux entrées et sorties du shader, lier les variables intervenant
 dans les calculs, et enfin appliquer le rendu dans le framebuffer.\\
+
+
+    \begin{center}
+	\includegraphics[scale=0.5]{GPU.ps}\\
+	Coloration de la flamme sur le modèle GPU.
+    \end{center}
  
  
 \subsection{Rendu}
@@ -572,26 +620,76 @@ correspondantes.\\
 Malheureusement il n'y a aucun gain de temps, et les shaders sont
 un poil plus compliqués à réaliser. Nous avons donc enlevé cette méthode.
 
-\subsection{Résultats - Tableau comparatif de performances}
+\subsection{Résultats - Comparatif de performances}
 Les résultat en terme de perfomance sont plutôt bons. Cependant il faut
 bien avoir conscience qu'ils dépendent totalement de la carte graphique utilisée,
 contraitement au modèle CPU qui tourne à peut près à la même vitesse sur les processeurs
 actuels.\\
 
-Ainsi voici un tableau comparatif des performances des modèles:\\
 
-\begin{tabular}{|l|c|r|}
-  \hline
-  ...              &  & 2x5600+, Geforce9800 & Athlon QL-62, HD3200 & pi7, HD5730 \\
-  \hline
-  CPU 20x20x20     &  &  &  & \\ 
-  CPU 30x30x30     &  &  &  & \\ 
-  CPU 40x40x40     &  &  &  & \\ 
-  GPU 40x40x40     &  &  &  & \\ 
-  GPU 70x70x70     &  &  &  & \\ 
-  GPU 100x100x100  &  &  &  & \\ 
-  \hline
-\end{tabular}
+2x5600+, Geforce9800
+  CPU 20x20x20      : 9 fps
+  CPU 30x30x30      : 4 fps
+  CPU 40x40x40      : 2 fps
+  CPU 50x50x50      : 1 fps
+  CPU 60x60x60      : < 1 fps
+  CPU 70x70x70      : < 1 fps
+  
+  GPU 20x20x20      : 26 fps
+  GPU 30x30x30      : 15 fps
+  GPU 40x40x40      : 10 fps
+  GPU 50x50x50      : 6 fps
+  GPU 60x60x60      : 6 fps
+  GPU 70x70x70      :
+  GPU 100x100x100   :
+  
+ Athlon QL-62, HD3200
+  CPU 20x20x20      :
+  CPU 30x30x30      : 
+  CPU 40x40x40      : 
+  CPU 50x50x50      :
+  CPU 60x60x60      :
+  CPU 70x70x70      : 
+  
+  GPU 20x20x20      : 
+  GPU 30x30x30      : 
+  GPU 40x40x40      :
+  GPU 50x50x50      : 
+  GPU 60x60x60      : 
+  GPU 70x70x70      :
+  GPU 100x100x100   :
+  
+pi7, HD5730
+  CPU 20x20x20      :
+  CPU 30x30x30      : 
+  CPU 40x40x40      : 
+  CPU 50x50x50      :
+  CPU 60x60x60      :
+  CPU 70x70x70      : 
+  
+  GPU 20x20x20      : 
+  GPU 30x30x30      : 
+  GPU 40x40x40      :
+  GPU 50x50x50      : 
+  GPU 60x60x60      : 
+  GPU 70x70x70      :
+  GPU 100x100x100   :
+  
+Benjamin
+  CPU 20x20x20      :
+  CPU 30x30x30      : 
+  CPU 40x40x40      : 
+  CPU 50x50x50      :
+  CPU 60x60x60      :
+  CPU 70x70x70      : 
+  
+  GPU 20x20x20      : 
+  GPU 30x30x30      : 
+  GPU 40x40x40      :
+  GPU 50x50x50      : 
+  GPU 60x60x60      : 
+  GPU 70x70x70      :
+  GPU 100x100x100   :
 
 
 
@@ -611,6 +709,7 @@ sur l'implémentation en GPU n'ont pas été vains.
 
 
 %----------------------------------------------------------------------------------------------------------------------------------------
+\newpage
 %%%%%%%%%%%%%%%%%
 \section{Modèle d'objet}
 %%%%%%%%%%%%%%%%%
@@ -665,7 +764,7 @@ Les elements générés
 
 
 
-
+\newpage
 \section{Analyses Bibliographiques}
 %%%%%%%%%%%%%%%%%
 Cette section regroupe les différents articles lus, concernant les travaux déjà effectués dans ce domaine. 
@@ -673,6 +772,10 @@ Nous allons expliquer brièvement de quoi ils parlent, ce que nous en avons rete
 utiliser...
 
 \subsubsection{Real-Time Fluid Dynamics for Games}
+    \begin{center}
+	\includegraphics[scale=0.5]{JosStam1.ps}
+    \end{center}
+
 \textbf{Auteur(s)} : Jos Stam.\\
 \textbf{Publication} : Proceedings of the Game Développer Conférence, March 2003 \\
 \textbf{Sujet(s) abordé(s)} : \\
@@ -683,22 +786,26 @@ utiliser...
 	Pour résoudre les deux équations, il utilise une astuce permettant de résoudre le système très rapidement.
 	Enfin, il utilise le principe de conservation de la masse, qui rajoute des effets réalistes de vortex, avec la décomposition de Hodge.\\
 \textbf{Point(s) positif(s)} :\\
-	Temps réel.\\
-	C'est facile à implémenter (moins de 100 lignes pour la version 2D)\\
-	Peut être adapté pour la propagation du feu.\\
-	Peut être adapté pour qu'un objet influe sur le modèle.\\
-	Résultat réellement joli et réaliste.\\
-	Très bien expliqué.\\
-	Il a fournit un exemple 2D pour de la fumée, plutôt impressionnant.\\
-	Le modèle peut s'adapter au feu, à la fumée, et à l'eau.\\
+    - Ce modèle est un des plus connus dans le monde de la modélisation de fluide temps réel\\
+	- Temps réel.\\
+	- C'est facile à implémenter (moins de 100 lignes pour la version 2D)\\
+	- Peut être adapté pour la propagation du feu.\\
+	- Peut être adapté pour qu'un objet influe sur le modèle.\\
+	- Résultat réellement joli et réaliste.\\
+	- Très bien expliqué.\\
+	- Stam a fournit un exemple d'implémentation pour la version 2D pour de la fumée, plutôt impressionnant.\\
+	- Le modèle peut s'adapter tout types de fluides.\\
 \textbf{Point(s) négatif(s)} :\\
-	La zone d'influence est assez petite, il faut voir si c'est possible de l'étendre sans trop alourdir les calculs. (Octree?) \\
-	Pas trop de détails sur la représentation graphique du feu.\\	
-	La dissipation numérique implique que le résultat n'est pas exact.\\
+	- La zone d'influence est assez petite, il faut voir si c'est possible de l'étendre sans trop alourdir les calculs. (Octree?) \\
+	- Pas trop de détails sur la représentation graphique du feu.\\	
+	- La dissipation numérique implique que le résultat n'est pas exact.\\
 \textbf{Conclusion} :\\
-	C'est sans doute ce que nous allons adapter, pour qu'il serve à la fois pour le feu, la fumée, et la propagation.
+	C'est sur ce modèle que nous avons construit notre modèle de fluide.
 
 \subsubsection{Stable Fluids}
+    \begin{center}
+	\includegraphics[scale=0.5]{Stable.ps}
+    \end{center}
 \textbf{Auteur(s)} : Jos Stam.\\
 \textbf{Publication} : SIGGRAPH 99 Conference Proceedings\\
 \textbf{Sujet(s) abordé(s)} : \\
@@ -707,17 +814,20 @@ Résolution de l'équation des fluides ( Navier-Stockes) avec, pour la première
 C'est une résolution de Navier-Stockes orientée "Computer Graphic", dans le sens o`u la résolution n'est pas exacte, et ne serait pas utilisable pour des vraies simulations de fluides, mais est "graphiquement adaptée" au problème de fluides.\\
 Résolution en quatre étapes : ajout des forces, advection, diffusion, conservation de la masse.\\
 \textbf{Point(s) positif(s)} : \\
-2D et 3D.\\
-Facile à implémenter.\\
-Résolution stable et temps réel.\\
-Résultat réaliste.\\
+- 2D et 3D.\\
+- Facile à implémenter.\\
+- Résolution stable et temps réel.\\
+- Résultat réaliste.\\
 \textbf{Point(s) négatif(s)} :\\
-La dissipation numérique implique que le résultat n'est pas exact.\\
+- La dissipation numérique implique que le résultat n'est pas exact.\\
 \textbf{Conclusion} :\\
 Ce modèle de fluide semble le plus adapté si nous choisissons d'utiliser un modèle de fluide pour le feu, la fumée et la propagation.
 
 
 \subsubsection{An Interactive Simulation Framework for Burning Objets}
+    \begin{center}
+	\includegraphics[scale=0.5]{Interactive.ps}
+    \end{center}
 \textbf{Auteur(s)} : Zeki Melek, John Keyser.\\
 \textbf{Publication} : Technical Report 2005 3 1, Texas AM Department of Computer Science, 2005. \\
 \textbf{Sujet(s) abordé(s)} : \\
@@ -727,14 +837,17 @@ d'objets.\\
 \textbf{Principe} :\\	
 Le modèle de fluide utilise Stable Fluid de \textbf{Stam}. \\
 \textbf{Point(s) positif(s)} :\\
-    Temps réel\\
-    Modèle de fluide, propagation, gestion des objets, destruction des objets.\\
+    - Temps réel\\
+    - Modèle de fluide, propagation, gestion des objets, destruction des objets.\\
 \textbf{Point(s) négatif(s)} :\\
-    L'implémentation CPU est lente ( 4fps pour une grille 20*20*20 )\\      
+    - L'implémentation CPU est lente ( 4fps pour une grille 20*20*20 )\\      
 \textbf{Conclusion} :\\
 
 
 \subsubsection{Visual Simulation of Smoke}
+    \begin{center}
+	\includegraphics[scale=0.3]{Smoke.ps}
+    \end{center}
 \textbf{Auteur(s)} : Ronald Fedkiw, Jos Stam, Henrik Wann Jensen.\\
 \textbf{Publication} : SIGGRAPH 2001 Conference Proceedings \\
 \textbf{Sujet(s) abordé(s)} : \\
@@ -745,15 +858,17 @@ Le modèle de fluide utilise Stable Fluid de \textbf{Stam}. \\
 Pour le rendu : ils découpent la grille de voxels en plusieurs plans, rendus comme une superposition de plans transparents.
 Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de rayons.\\
 \textbf{Point(s) positif(s)} :\\
-	Gestion de la chaleur.\\
-	Rendu très réaliste de la fumée.\\
+	- Rendu très réaliste de la fumée.\\
 \textbf{Point(s) négatif(s)} :\\
-	Pas en temps réel.\\
+	- Pas en temps réel.\\
 \textbf{Conclusion} :\\
 	La méthode de rendu semble interessante. De plus la création de minis vortex est un atout pour le côté réaliste du modèle.
 	
 
 \subsubsection{Simulating Water and Smoke with an Octree Data Structure}
+    \begin{center}
+	\includegraphics[scale=0.5]{Octree.ps}
+    \end{center}
 \textbf{Auteur(s)} : Frank Losasso, Frédéric Gibou, Ron Fedkiw.\\
 \textbf{Publication} : SIGGRAPH 2004\\
 \textbf{Sujet(s) abordé(s)} : \\
@@ -762,36 +877,19 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
 \textbf{Principe} :\\	
 	Le calcul de l'équation des fluides est effectué sur un Octree.\\
 \textbf{Point(s) positif(s)} :\\
-	L'octree n'est pas restreint ( ce qui était le cas des travaux précédents ).\\
-	Réduction des calculs de 75\% pour un résultat équivalent avec une grille à pas constant.\\
+	- L'octree n'est pas restreint ( ce qui était le cas des travaux précédents ).\\
+	- Réduction des calculs de 75\% pour un résultat équivalent avec une grille à pas constant.\\
 \textbf{Point(s) négatif(s)} :\\
-	Pas temps réel.\\
-	Compliqué à mettre en place.\\
+	- Compliqué à mettre en place.\\
 \textbf{Conclusion} :\\
-	La complexité de la programmation est assez importante. L'avantage de cette méthode est d'avoir un très haut niveau de détail en effectuant plus de calculs là o`u cela est nécessaire. La précision que nous désirons n'est peut être pas suffisante pour nécessiter un tel modèle.
+	La complexité de la programmation est assez importante. L'avantage de cette méthode est d'avoir un très haut niveau de détail en effectuant plus de calculs là o`u cela est nécessaire. Cependant nous comptons sur la version GPU pour gagner en fps.
 
-
-
-\subsubsection{Real-Time Simulation of Deformation and Fracture of Stiff Materials}
-\textbf{Auteur(s)} : Matthias Müller, Leonard McMillan, Julie Dorsey, Robert Jagnow.\\
-\textbf{Publication} : EUROGRAPHICS 2001 Computer Animation and Simulation Workshop \\
-\textbf{Sujet(s) abordé(s)} : \\
-	Destruction réaliste et temps réel d'un objet. \\
-\textbf{Principe} :\\	
-	C'est la simplification d'un problème de propagation en négligeant les effets microscopiques, qui ne sont pas vraiment visibles en temps réel, mais coûtent énormément en calcul.\\
-	Les meshs sont représentés par des "tetrahedral meshes". Le modèle de propagation continu est transformé en modèle discret. L'élasticité des objets est prise en compte.\\
-\textbf{Point(s) positif(s)} :\\
-	Temps réel.\\
-	Le système est stable est rapide.\\
-	La méthode de destruction de l'objet basée sur des tétrahèdres est très intéressante.\\
-	Propagation des effets de la destruction à l'intérieur de l'objet.\\
-\textbf{Point(s) négatif(s)} :\\
-	Peut être lourd à utiliser si il y a trop d'objets à l'écran.\\
-\textbf{Conclusion} :\\
-	Le principe de déformation sur un mesh tétrahédral est très intéressant, et peut facilement s'adapter à un modèle de fluide.
 
 
 \subsubsection{Voxels On Fire}
+    \begin{center}
+	\includegraphics[scale=0.5]{Voxel.ps}
+    \end{center}
 \textbf{Auteur(s)} : Ye Zhao, Xiaoming Wei, Zhe Fan, Arie Kaufman, Hong Qin.\\
 \textbf{Sujet(s) abordé(s)} : \\  Animation et propagation de flammes, avec brulure de l'objet.\\
 \textbf{Principe} :\\ L'animation et la propagation sont gérés par un modèle de fluide ( Lattice Boltzmann Model ), avec une grille régulière. L'objet est représenté sous forme de voxels, sur lequel est calculé un champs de distance. Le voxel de l'objet est considéré comme un combustible. Pour le rendu ils utilisent des particules et le splatting ( \textbf{Westover} ).\\
@@ -800,11 +898,59 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
     - propagation réaliste\\
     - l'objet est brulé progressivement\\
 \textbf{Point(s) négatif(s)} :\\
-    - le rendu utilise un grandn ombre de particules pour être réaliste\\
+    - le rendu utilise un grand nombre de particules pour être réaliste\\
     - l'objet n'est pas détruit seule la texture est altérée\\
 \textbf{Conclusion} :\\
 
+
+
+\subsubsection{Real-Time Simulation and Rendering of 3D Fluids}
+    \begin{center}
+	\includegraphics[scale=0.5]{RealGPU.ps}
+    \end{center}
+\textbf{Auteur(s)} : Keenan Crane, Ignacio Llamas, Sarah Tariq.\\
+\textbf{Publication} : GPU GEMS \\
+\textbf{Sujet(s) abordé(s)} : \\ 
+	Résolution des équations de Navier-Stokes grace a la programmation GPU pour atteindre le temps réel. Les travaux étant réalisé par NVIDIA sur des cartes graphiques performantes et utilisant le shader langage GS ou CUDA.\\
+	La Technique de collision entre gaz et objets est aussi détaillée ainsi que la voxelisation de certains objets.\\
+\textbf{Principe} :\\	
+	Utilisation des langages de programmation utilisant les shaders GPU pour permettre un calcul bien plus rapide que par CPU et donc atteindre le temps réel bien plus facilement.\\
+\textbf{Point(s) positif(s)} :\\
+	- Les temps de calcul atteint par les GPU sont néttement plus faibles que ceux du CPU. On gagne donc a traiter les equations de dynamique des fluides par la carte graphique et non par le processeur. Les equations de la dynamique des fluides sont traitées de la meme maniere que dans les différents documents de Stam vus précédement.\\
+\textbf{Point(s) negatif(s)} :\\
+	- Nous n'allons pas utiliser le shading langage du document mais plutot le GLSL (openGL Shading Langage) qui est légérement différent dans la facon de coder. Il nous faut donc chercher un peu plus de documentation sur le codage GLSL.\\
+\textbf{Conclusion} :\\
+	L'utilisation des shaders GPU semble être la clé pour nous permettre de réaliser quelquechose de réaliste en temps réel.\\
+
+
+\subsubsection{Fast Fluid Dynamics Simulation on the GPU}
+    \begin{center}
+	\includegraphics[scale=0.5]{FastGPU.ps}
+    \end{center}
+\textbf{Auteur(s)} : Mark J. Harris.\\
+\textbf{Publication} : GPU GEMS \\
+\textbf{Sujet(s) abordé(s)} : \\ 
+	Chapitre du livre GPU Gems de NVIDIA traitant d'une méthode de resolution des équations de "stable fluids" entierement réalisées sur GPU.\\
+\textbf{Principe} :\\	
+	Tous les calculs pour les champs de vitesses et de densités pour les fluides (diffusion, advection, forces, conservation de la masse) sont réalisé sur GPU pour augmenter la vitesse et la puissance de calcul.\\
+\textbf{Point(s) positif(s)} :\\
+	- Les termes de l'équation de Navier stokes sont tous décortiqués et trés bien expliqués.\\
+	- Facilement Compréhensible et tous les calculs mathématiques sont bien détaillés.\\
+	- Modéle 2D pour que la compréhension soit facile.\\
+	- Prise en compte d'un terme de pression.\\
+	- Utilisation de la décomposition de Helmholtz-Hodge\\
+	- Exemple de programmation GPU (type CUDA ou GS)\\
+\textbf{Point(s) negatif(s)} :\\
+	- Toujours pas de "cours" GLSL.\\
+\textbf{Conclusion} :\\
+	Document qui peut servir de référence pour analyser et comprendre les equations de la dynamique des fluides et pour initier les bases de la programmation GPU.\\
+
+
+
 \subsubsection{Meshes On Fire}
+    \begin{center}
+	\includegraphics[scale=0.5]{Meshes.ps}
+    \end{center}
 \textbf{Auteur(s)} : Haeyoung Lee, Laehyun, Mark Meyer, Mathieu Desbrun.\\
 \textbf{Publication} : Eurographics Workshop on Computer Animation and Simulation '2001 \\
 \textbf{Sujet(s) abordé(s)} : \\
@@ -814,38 +960,66 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
 	Les flammes sont rendues sont formes de particules avec des blobs.\\
 	Les flammes générées subissent le champ de vent ce qui les rend plus réaliste.\\
 \textbf{Point(s) positif(s)} :\\
-	Temps réel.\\
-	Prise en compte de plusieurs feu.\\
-	Rapide à calculer.\\
-	Très efficace pour changer la texture d'un objet brulé.\\
-	Propagation fonction d'un champ de vent.\\
-	Les particules de feu générées peuvent être utilisées pour générer un feu 
+	- Temps réel.\\
+	- Prise en compte de plusieurs feu.\\
+	- Rapide à calculer.\\
+	- Très efficace pour changer la texture d'un objet brulé.\\
+	- Propagation fonction d'un champ de vent.\\
+	- Les particules de feu générées peuvent être utilisées pour générer un feu 
 	sur un autre objet ou sur une autre partie de l'objet.\\
 \textbf{Point(s) négatif(s)} :\\
-	Ne peut pas s'adapter à la destruction d'un objet.\\
-	Peut être une perte de performance si on utilise les particules de feu pour 
+	- Ne peut pas s'adapter à la destruction d'un objet.\\
+	- Peut être une perte de performance si on utilise les particules de feu pour 
 	allumer des foyer aux autres endroits du mesh.\\
-	La propagation surfacique n'est pas toujours adaptés.\\	
+	- La propagation surfacique n'est pas toujours adaptée.\\	
 \textbf{Conclusion} :\\
 	Ce modèle est intéressant, mais nécessite d'être beaucoup modifié pour 
 	correspondre à notre but. Il n'est pas très adapté à la destruction des objets. 
 	(Sauf si nous voulons uniquement dégrader la texture de l'objet) \\
 
+
+
+
+\subsubsection{Real-Time Simulation of Deformation and Fracture of Stiff Materials}
+    \begin{center}
+	\includegraphics[scale=0.8]{Deformation.ps}
+    \end{center}
+\textbf{Auteur(s)} : Matthias Müller, Leonard McMillan, Julie Dorsey, Robert Jagnow.\\
+\textbf{Publication} : EUROGRAPHICS 2001 Computer Animation and Simulation Workshop \\
+\textbf{Sujet(s) abordé(s)} : \\
+	Destruction réaliste et temps réel d'un objet. \\
+\textbf{Principe} :\\	
+	C'est la simplification d'un problème de propagation en négligeant les effets microscopiques, qui ne sont pas vraiment visibles en temps réel, mais coûtent énormément en calcul.\\
+	Les meshs sont représentés par des "tetrahedral meshes". Le modèle de propagation continu est transformé en modèle discret. L'élasticité des objets est prise en compte.\\
+\textbf{Point(s) positif(s)} :\\
+	- Temps réel.\\
+	- Le système est stable est rapide.\\
+	- La méthode de destruction de l'objet basée sur des tétrahèdres est très intéressante.\\
+	- Propagation des effets de la destruction à l'intérieur de l'objet.\\
+\textbf{Point(s) négatif(s)} :\\
+	- Peut être lourd à utiliser si il y a trop d'objets à l'écran.\\
+\textbf{Conclusion} :\\
+	Le principe de déformation sur un mesh tétrahédral est très intéressant, et peut facilement s'adapter à un modèle de fluide.
+
+
 \subsubsection{Real-time Procedural Volumetric Fire}
+    \begin{center}
+	\includegraphics[scale=0.5]{Volumetric.ps}
+    \end{center}
 \textbf{Auteur(s)} : Alfred R. Fuller, Hari Krishnan, Karim Mahrous, Bernd Hamann, Kenneth I. Joy.\\
 \textbf{Publication} : Proceedings of the 2007 symposium on Interactive 3D graphics and games\\
 \textbf{Sujet(s) abordé(s)} : \\
-	Rendu de feu réaliste en temps réel, utilisant le bruit de perlin.
+	Rendu de feu réaliste en temps réel, utilisant le bruit de perlin.\\
 \textbf{Principe} :\\
 	La flamme est calculée en 3 dimensions, et le rendu est effectué par le GPU.\\
 	L'animation de la texture est procédurale.\\	
 \textbf{Point(s) positif(s)} :\\
-	Temps réel.\\
-	Réaliste.\\
+	- Temps réel.\\
+	- Réaliste.\\
 \textbf{Point(s) négatif(s)} :\\
-	Représentation du feu uniquement, pas de propagation et de fumée.\\
-	Pas d'utilisation d'équation de dynamique des fluides, le feu est manuellement 
-	confiné dans un volume controlable grace à des points de controle.
+	- Représentation du feu uniquement, pas de propagation et de fumée.\\
+	- Pas d'utilisation d'équation de dynamique des fluides, le feu est manuellement 
+	- confiné dans un volume controlable grace à des points de controle.\\
 \textbf{Conclusion} :\\
 	La qualité du feu est importante, mais ce modèle de flamme ne concerne que 
 	la partie "affichage". Il faudra voir si le modèle de propagation choisi 
@@ -853,13 +1027,16 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
 
 
 \subsubsection{Melting and Burning Solids into Liquids and Gases}
+    \begin{center}
+	\includegraphics[scale=0.3]{Melting.ps}
+    \end{center}
 \textbf{Auteur(s)} : Frank Losasso, Geoffrey Irving, Eran Guendelman, Ron Fedkiw.\\
 \textbf{Publication} : IEEE TVCG 12, 343-352 (2006).\\
 \textbf{Sujet(s) abordé(s)} : \\
-	Modification des propriétés physiques d'un matériau tel que l'eau sous différentes phases, et intéraction entre les solides et les liquides et gas. 
+	Modification des propriétés physiques d'un matériau tel que l'eau sous différentes phases, et intéraction entre les solides et les liquides et gas. \\
 \textbf{Point(s) négatif(s)} :\\
-	Peu de détails mathématiques, juste des explications.\\
-	Pas assez de lien avec le feu et la fumée.
+	- Peu de détails mathématiques, juste des explications.\\
+	- Pas assez de lien avec le feu et la fumée.\\
 \textbf{Conclusion} :\\
 	Peu utilisable
 
@@ -868,33 +1045,42 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
 
 
 \subsubsection{FireStarter – A Real-Time Fire Simulator}
+    \begin{center}
+	\includegraphics[scale=0.5]{FireStarter.ps}
+    \end{center}
 \textbf{Auteur(s)} : Marc de Kruijf.\\
 \textbf{Sujet(s) abordé(s)} : \\ 
 	Description du feu réel, des différents modèles utilisés, et réalisation d'un modèle avec des particules.\\
 \textbf{Principe} :\\	
 	Le feu est un système de particules, les flammes sont générées avec une vie aléatoire, une vitesse verticale dépendant de la chaleur, et une vitesse horizontale aléatoire. De plus, un test aléatoire fonction de la durée de vie de la particule est effectué pour qu'elle se transforme en fumée. Le tout est effectué dans une grille cylindrique 3D. Au niveau de l'affichage, les particules sont reliées pour former des faces qui seront ensuite texturées et colorées en fonction de la chaleur.\\
 \textbf{Point(s) positif(s)} :\\
-	Temps réel.\\
-	Calcul très rapide et très simple.\\
+	- Temps réel.\\
+	- Calcul très rapide et très simple.\\
 \textbf{Point(s) négatif(s)} :\\
-	Pas très réaliste actuellement. (pourrait peut-être être amélioré par des experts)\\
-	De gros défauts sont visibles au niveau du rendu.\\
-	Les particules suivent une pseudo mécanique des fluides.\\
-	Le feu n'est pas adapté à plusieurs cas de figures, il faudrait un système de génération des générateurs de particules, ce qui n'est pas forcement permis par le système.\\
-	Pas de prise en compte des objets ( à moins d'ajouter des détections de collisions)\\
+	- Pas très réaliste actuellement.\\
+	- De gros défauts sont visibles au niveau du rendu.\\
+	- Les particules suivent une pseudo mécanique des fluides, qui n'est pas détaillée ici.\\
+	- Le feu n'est pas adapté à plusieurs cas de figures, il faudrait un système de génération des générateurs de particules, ce qui n'est pas forcement permis par le système.\\
+	- Pas de prise en compte des objets ( à moins d'ajouter des détections de collisions)\\
 \textbf{Conclusion} :\\
 	La bonne idée de transformer une particule de feu en fumée à partir d'un tirage aléatoire est une bonne idée. Ce modèle permet de représenter du feu d'une manière qui pourrait être suffisamment réaliste pour ne pas se lancer dans une résolution de mécanique du fluide.\\
 
 
 \subsubsection{Simulating Fire With Texture Splats}
+    \begin{center}
+	\includegraphics[scale=0.3]{Splats.ps}
+    \end{center}
 \textbf{Auteur(s)} : Xiaoming Wei, Wei Li, Klaus Mueller1 and Arie Kaufman.\\
 \textbf{Publication} : IEEE Visualization 2002. \\
 \textbf{Sujet(s) abordé(s)} : Méthode d'affichage de feu avec des particules et une texture "Splat"\\ 
 \textbf{Principe} : C'est une méthode de rendu efficace adaptée aux particules.\\	
-\textbf{Conclusion} : Nous n'utiliserons pas cette technique, car nous avons trouvé mieux pour le modèle de fluide.\\ 
+\textbf{Conclusion} : Nous n'utiliserons pas cette technique, car nous avons trouvé des procédés plus adaptés pour le modèle de fluide.\\ 
 
 
 \subsubsection{Physically Based Modeling and Animation of Fire}
+    \begin{center}
+	\includegraphics[scale=0.9]{Physically.ps}
+    \end{center}
 \textbf{Auteur(s)} : Duc Quang Nguyen, Ronald Fedkiw, Henrik Wann Jensen.\\
 \textbf{Publication} :  \\
 \textbf{Sujet(s) abordé(s)} : \\ 
@@ -902,50 +1088,13 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
 \textbf{Principe} :\\	
 	De même que les articles de Stam, Le principe est de considérer le feu comme un fluide auquel on applique les équations de Navier Stokes  pour les fluides incompressibles. On prend aussi en compte la densité du fluide mais aussi l'impact de la température sur celui ci. Cela permet d'avoir un champ de mouvement pour le fluide qui réagit avec la température. De plus l'utilisation de la température pour ce modéle permet d'être utilisé pour le rendu en considérant le feu comme un "corps noir" et de déterminer la coleur de la flamme grace au modéle du corps noir de planck en utilisant un spectre de couleur adapté.\\
 \textbf{Point(s) positif(s)} :\\
-	Plus de réalisme dans le modéle grace à l'impact de la température pour l'advection et la gestion du spectre lumineux du feu.\\	
+	- Plus de réalisme dans le modéle grace à l'impact de la température pour l'advection et la gestion du spectre lumineux du feu.\\	
 \textbf{Point(s) negatif(s)} :\\
-	rajoute du temps de calcul pour la prise en compte de la température.\\
+	- rajoute du temps de calcul pour la prise en compte de la température.\\
 \textbf{Conclusion} :\\
 	Certains points comme la température peuvent être à rajouter pour un effet de réalisme intéressant.\\
 
 
-
-
-
-\subsubsection{Real-Time Simulation and Rendering of 3D Fluids}
-\textbf{Auteur(s)} : Keenan Crane, Ignacio Llamas, Sarah Tariq.\\
-\textbf{Publication} : GPU GEMS \\
-\textbf{Sujet(s) abordé(s)} : \\ 
-	Résolution des équations de Navier-Stokes grace a la programmation GPU pour atteindre le temps réel. Les travaux étant réalisé par NVIDIA sur des cartes graphiques performantes et utilisant le shader langage GS ou CUDA.\\
-	La Technique de collision entre gas et objets est aussi détaillée ainsi que la voxelisation de certains objets.\\
-\textbf{Principe} :\\	
-	Utilisation des langages de programmation utilisant les shaders GPU pour permettre un calcul bien plus rapide que par CPU et donc atteindre le temps réel bien plus facilement.\\
-\textbf{Point(s) positif(s)} :\\
-	Les temps de calcul atteint par les GPU sont néttement plus faibles que ceux du CPU. On gagne donc a traiter les equations de dynamique des fluides par la carte graphique et non par le processeur. Les equations de la dynamique des fluides sont traitées de la meme maniere que dans les différents documents de Stam vus précédement.\\
-\textbf{Point(s) negatif(s)} :\\
-	Nous n'allons pas utiliser le shading langage du document mais plutot le GLSL (openGL Shading Langage) qui est légérement différent dans la facon de coder. Il nous faut donc chercher un peu plus de documentation sur le codage GLSL.\\
-\textbf{Conclusion} :\\
-	L'utilisation des shaders GPU semble être la clé pour nous permettre de réaliser quelquechose de réaliste en temps réel.\\
-
-
-\subsubsection{Fast Fluid Dynamics Simulation on the GPU}
-\textbf{Auteur(s)} : Mark J. Harris.\\
-\textbf{Publication} : GPU GEMS \\
-\textbf{Sujet(s) abordé(s)} : \\ 
-	Chapitre du livre GPU Gems de NVIDIA traitant d'une méthode de resolution des équations de "stable fluids" entierement réalisées sur GPU.\\
-\textbf{Principe} :\\	
-	Tous les calculs pour les champs de vitesses et de densités pour les fluides (diffusion, advection, forces, conservation de la masse) sont réalisé sur GPU pour augmenter la vitesse et la puissance de calcul.\\
-\textbf{Point(s) positif(s)} :\\
-	Les termes de l'équation de Navier stokes sont tous décortiqués et trés bien expliqués.\\
-	Facilement Compréhensible et tous les calculs mathématiques sont bien détaillés.\\
-	Modéle 2D pour que la compréhension soit facile.\\
-	Prise en compte d'un terme de pression.\\
-	Utilisation de la décomposition de Helmholtz-Hodge\\
-	Exemple de programmation GPU (type CUDA ou GS)\\
-\textbf{Point(s) negatif(s)} :\\
-	Toujours pas de "cours" GLSL.\\
-\textbf{Conclusion} :\\
-	Document qui peut servir de référence pour analyser et comprendre les equations de la dynamique des fluides et pour initier les bases de la programmation GPU.\\
 
 
 
@@ -954,6 +1103,9 @@ Une autre méthode de rendu, plus réaliste, utilise une méthode de lancé de r
 
 
 \subsubsection{Adaptative Physics Based Tetrahedral Mesh Generation Using Level Sets}
+    \begin{center}
+	\includegraphics[scale=0.5]{Adaptative.ps}
+    \end{center}
 \textbf{Auteur(s)} : Robert Bridson, Joseph Teran, Neil Molino, Ronald Fedkiw.\\
 \textbf{Publication} : Engineering with Computers (2005)\\
 \textbf{Sujet(s) abordé(s)} : \\
