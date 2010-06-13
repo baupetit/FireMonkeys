@@ -132,6 +132,7 @@ donc suffisamment bonnes pour valider notre contrainte de temps réel.\\
 
 
 %%%%%%%%%%%%%%%%%
+\newpage
 \section{Aperçu de notre modèle}
 Ici nous présentons un résumé de notre modèle global. Ce modèle a été
 établi pour unifier les différents modèles du processus de combustion. 
@@ -206,6 +207,7 @@ là ou c'est nécessaire.
 
 
 %----------------------------------------------------------------------------------------------------------------------------------------
+\newpage
 %%%%%%%%%%%%%%%%%
 \section{Modèle de fluide pour la flamme, la fumée et la chaleur}
 %%%%%%%%%%%%%%%%%
@@ -464,16 +466,18 @@ Le fait d'ajouter ce bruit lors du rendu dans le shader ne modifie pas la positi
 
 Les rendus obtenus étant plutôt convaincant :\\
 
-Sans bruit de Perlin:\\
 \begin{center}
-\includegraphics[scale=0.5]{SansPerlin.ps}
+\includegraphics[scale=0.5]{SansPerlin.ps}\\
+Sans bruit de Perlin
 \end{center}
 
 
-Avec Bruit de Perlin:\\
 
-\includegraphics[scale=0.4]{Perlin1.ps}
-\includegraphics[scale=0.4]{Perlin2.ps}
+\begin{center}
+\includegraphics[scale=0.5]{Perlin1.ps}
+\includegraphics[scale=0.5]{Perlin2.ps}\\
+Avec Bruit de Perlin\\
+\end{center}
 
 
 
@@ -483,6 +487,13 @@ C'est une série (absolument) convergente, majorée par la série géométrique 
 $\sum_{i=0}^{n-1} p^i = \frac{1 - p^n}{1 - p}$.\\
 
 \subsection{Résultats}
+
+
+    \begin{center}
+	\includegraphics[scale=0.7]{FlammeBleue.ps}
+	\includegraphics[scale=0.7]{FlammeBleue2.ps}
+    \end{center}  
+
 
 
 
@@ -613,11 +624,10 @@ un \textbf{gain de temps important}.
  
 \subsection{Tentative d'amélioration}
 Un framebuffer est capable de dessiner dans plusieurs tranches de la
-texture en même temps (en général 8). Par défaut il dessinera la même
-chose dans les 8 tranches. Nous avons donc créé un shader qui dessine
+texture en même temps (en général 8). Nous avons donc créé un shader qui dessine
 dans les 8 tranches de sortie les 8 tranches de l'entrée
 correspondantes.\\
-Malheureusement il n'y a aucun gain de temps, et les shaders sont
+Malheureusement il n'y a pas de gain de temps, et les shaders sont
 un poil plus compliqués à réaliser. Nous avons donc enlevé cette méthode.
 
 \subsection{Résultats - Comparatif de performances}
@@ -729,20 +739,6 @@ de notre objet pour optenir tout un tas d'effet. Par exemple, nous pouvons réal
 explosifs, des grenades fumigènes, des bout de bois qui brulent, des objets
 qui se décomposent sans bruler, des objets insensibles à la chaleur...
 
-\subsection{Chargement des objets}
-Nous avons réalisé un \textbf{chargeur de fichier .obj}. A l'aide d'un \textbf{calculateur de
-champs de distance}, nous construisons l'équivalent de notre objet maillé en grille de voxel.
-
-
-\subsection{Intéraction avec le fluide}
-Concrètement, nous avons englobé notre fluide et nos objets par une \textbf{boite englobante}.
-Lorsqu'il y a intéraction, nous convertissons les coordonnées (i,j,k) de la grille de
-l'objet en coordonnées (i',j',k') dans le modèle de fluide. Si ces coordonnées sont 
-valides, alors il y a intéraction du voxel avec le fluide.
-
-\subsection{Propagation de la chaleur}
-
-
 \subsection{Rendu}
 Pour chaque grile de voxel, nous calculons son maillage avec un \textbf{marching cube adaptatif}.
 Nous stockons le maillage calculé dans des tableaux, ces tableaux étant associés aux voxels
@@ -751,13 +747,72 @@ et les affichons. Lorsqu'un voxel est modifié, nous recalculons le marching cub
 là ou la modification intervient. Ainsi nous disposons d' un modèle d'objets déformables
 dont le rendu est effectué de manière efficace.
 
+\subsection{Chargement des objets}
+Nous avons réalisé un \textbf{chargeur de fichier .obj}. A l'aide d'un \textbf{calculateur de
+champs de distance}, nous construisons l'équivalent de notre objet maillé en grille de voxel.
+
+
+\subsection{Principe d'intéraction avec le fluide}
+Concrètement, nous avons englobé notre fluide et nos objets par une \textbf{boite englobante}.
+Lorsqu'il y a intéraction, nous convertissons les coordonnées (i,j,k) de la grille de
+l'objet en coordonnées (i',j',k') dans le modèle de fluide. Si ces coordonnées sont 
+valides, alors il y a intéraction du voxel avec le fluide.\\
+
+
+
+
+\subsection{Propagation de la chaleur au sein de l'objet}
+
+\subsubsection{Champs de répulsion et déplacement de l'objet}
+
+    Lorsqu'on place un objet dans le fluide, la vitesse du fluide est changée de deux manières :\\
+    La vitesse des voxels du fluide dans lesquels se trouve l'objet sont affecté : leur vitesse \textbf{devient égale à la vitesse du déplacement de l'objet}. Ainsi lorsqu'on déplace l'objet le fluide est emporté par son mouvement.\\
+    Les voxels se situant sur la frontière sont affecté d'un terme de \textbf{répulsion}. \\
+    
+    
+    Une première version du champs de répulsion consistait à calculer la normale aux surfaces de l'objet.\\
+    
+    \begin{center}
+	\includegraphics[scale=0.7]{Contour.ps}\\
+	Vecteurs de répulsion normaux aux surfaces.
+    \end{center}
+    
+    Puis nous avons opté pour une version "truquée" dans laquelle nous orientons les vitesses de répulsions de manière à ce que le fluide suive les contours de l'objet. \\
+    
+
+
+    [IMAGE]\\
+
+
+
+
+
+
+\subsection{Pyrolise}
+
+Dans un premier temps, c'est la chaleur qui est échangé entre le fluide et le contour
+extérieur d'un objet.\\
+Lorsque la température d'un voxel situé sur la frontière de l'objet dépasse un seuil critique, la pyrolise commence. \\
+L'objet perds de la matière dans des proportions fixées par les paramètres du voxel.
+En effet, en fonction des paramètres, le voxel va generer plus ou moins de gaz, de fumée, et de température.
+
 \subsection{Combustion}
-Lorsque la température d'un voxel situé sur la frontière dépasse un seuil critique, l'objet commence à perdre de la matière.
-En fonction des paramètres, le voxel va generer plus ou moins de gaz, de fumée, et de température.
-Les elements générés 
 
-\subsection{Destruction}
-
+    \begin{center}
+	\includegraphics[scale=1]{Decomposition.ps}\\
+	A gauche : affichage en marching cube de l'objet. A droite : affichage en voxel avec l'affichage des vecteurs vitesse de repulsions.\\
+    \end{center}
+    
+  
+    \begin{center}
+	\includegraphics[scale=0.6]{Decomposition0.ps}
+	\includegraphics[scale=0.8]{Decomposition2.ps}
+	\includegraphics[scale=0.6]{Decomposition3.ps}\\
+	\includegraphics[scale=0.6]{Decomposition4.ps}
+	\includegraphics[scale=0.6]{Decomposition5.ps}\\
+	Combustion progressive de l'objet.
+    \end{center}  
+    
 \subsection{Résultats}
 
 
