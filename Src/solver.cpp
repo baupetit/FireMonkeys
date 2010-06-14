@@ -230,7 +230,7 @@ void diffuseFireAndSmoke ( int N, int b1, int b2, int b3,
 	float c2=1+6*a2;
 	float c3=1+6*a3;
 	
-	cout << a1 << " " <<  a2 << endl;
+	//cout << a1 << " " <<  a2 << endl;
 	/*
 	cout << "  =================================== " << endl;
 	cout << " a1 : " << a1 << endl;
