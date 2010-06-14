@@ -25,7 +25,7 @@ Fluid::Fluid(list<Object *> obj)
 {
 
 	//taille grille 
-    tailleGrille = 40;
+    tailleGrille = 20;
     
     s = new Solver(tailleGrille);
     
