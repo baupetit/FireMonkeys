@@ -28,7 +28,7 @@
 \addtobeamertemplate{footline}{\hfill\insertframenumber/\inserttotalframenumber\hspace{2em}\null}
 
 
-\title{Fire Monkeys\\ Modélisation de feu en temps réel}
+\title{Fire Monkeys\\ Animation de feu en 3D temps réel}
 \author{Benjamin Aupetit - Julien Champeau - Arnaud Emilien}
 \date{Jun 14 2010}
 
@@ -37,6 +37,7 @@
 %% 0 - Présentation de l'équipe
 \begin{frame}
    \titlepage
+  
 \end{frame}
 
 %% 1 - Présenter le plan de la présentation
@@ -48,61 +49,78 @@
 %    Réaliser un modèle de combustion d'objets en 3D temps réel.
 \section{Objectif}
 \begin{frame}{Objectif}
-  Réaliser un modéle de combustion d'objets en 3D temps réel.\\
-  \textbf{image}
+  Réaliser un modèle de combustion d'objets en 3D temps réel.\\
+  
+  \begin{minipage}{0.48\linewidth}
+  \begin{figure}[h]
+    \centering\includegraphics[scale=0.1]{feu.jpg}
+  \end{figure}    
+  \end{minipage}
+  \begin{minipage}{0.48\linewidth}
+
   \begin{itemize}
     \item{Le feu}% flamme réaliste visuellement.
     \item{La fumée}% comportement réaliste.
-    \item{Iteraction avec des objets}% gérer les collisions entre le feu et les objets
-    \item{Propagation sur l'objet}% propagation du feu sur un objet
+    \item{Interactions avec des objets}% gérer les collisions entre le feu et les objets
+    \item{Propagation du feu sur l'objet}% propagation du feu sur un objet
     \item{Combustion d'objet}% destruction de l'objet par le feu
   \end{itemize}
+  \end{minipage}
+  
 \end{frame}
 
 \begin{frame}{Les étapes de notre démarche}
+  Découverte du milieu scientifique :
   \begin{itemize}
-  \item{découvrir le milieu scientifique} % domaine de recherche
-  \item{étudier différents articles} % étude du sujet
+  \item{Apprendre une démarche de R\&D} % domaine de recherche
+  \item{Étudier différents articles} % étude du sujet
   \item{Concevoir notre propre modèle} % comprehension des article et choix d'une solution
   \item{Implémenter le modèle} % sur CPU
-  \item{Améliorer le modèle} GPU ( objectif initial ) %
+  \item{Paralléliser le modèle en l'implémentant sur GPU} %
   \end{itemize}
 \end{frame}
 
+
 \section{Le modèle}
-\begin{frame}{Modèle d'intéraction}
-  Interractions entre le modèle de feu et le modèle d'objet.
+\begin{frame}{Le feu}
   \begin{itemize}
-  \item Présence des objets ( i.e. : pas de flamme a l'interieur des objets )
-  \item Transimission des informations de chaleur d'un modèle à l'autre.
-  \item Gestion de la ``pyrolise'' des objets.
+  \item Résultat de la combustion d'un fluide
+  \item Le fluide se propage dans l'air
+  \item La couleur de la flamme = f (chaleur, gaz)
   \end{itemize}
+  \begin{figure}[!h]
+    \centering\includegraphics[scale=0.2]{Gaz.jpg}
+    \caption{Gaz qui brûle}
+    \label{Gaz}
+  \end{figure}    
 \end{frame}
+
 
 \subsection{Le fluide}
 \begin{frame}{Principe}
   \begin{itemize}
-  \item Modèle basé sur le travail de \textbf{Jos Stam}, notemment
+  \item Modèle basé sur le travail de \textbf{Jos Stam}, notamment
     \textbf{Stable Fluids}(SIGGRAPH 99 Conference Proceedings).
   \item Résolution de manière approchée des équation de Navier-Stokes
-    pour la dynamique des fluides icompréssibles.
-  \item Un rendu utilisant le principe de ``BillBoard''.    
+    pour la dynamique des fluides incompressibles.
   \end{itemize}
 \end{frame}
 
-\begin{frame}{La diffusion}
-  La diffusion représente la capacité du fluide à se déplacer dans le
-  milieu ambiant.
-  \begin{figure}[h]
-      \begin{equation}
-        \frac{\partial \vec{u}}{\partial t} =  \nu{\nabla^2}\vec{u} 
-      \end{equation}
-      \caption{Equation de diffusion}
-      \label{DiffusionEquation}
-  \end{figure}
+
+\begin{frame}{Représentation du fluide}
+  4 grilles uniformes 3D
+  \begin{itemize}
+    \item Densité de gaz ( flamme )
+    \item Densité de fumée
+    \item Temperature
+    \item Champs de vitesse de l'air 
+  \end{itemize}
 \end{frame}
 
-\begin{frame}{Diffusion}
+
+
+\begin{frame}{Phase 1 - La diffusion}
+  Échange de valeurs avec les cases voisines.
   \begin{figure}[h]
     \centering\includegraphics[scale=0.6]{STAM.png}
     \caption{Diffusion sur une grille 2D}
@@ -111,21 +129,30 @@
 \end{frame}
 
 
-\begin{frame}{L'advection}
-  Le champ de vitesse va servir à transporter la quantité de fluide
-  dans l’espace. L’auto-advection du champ de vitesse est ce qui va
-  permettre le mouvement des particules de gaz dans le milieu.
+\begin{frame}{Phase 2 - Le transport}
+  Déplacement des valeurs en fonction du champs de vitesse.
   \begin{figure}[h]
     \centering\includegraphics[scale=0.3]{STAM2.png}
-    \caption{Principe de l'advection évoquée par \textbf{Jos Stam}}
+    \caption{Résolution de l'advection par Backtracking introduite par \textbf{Jos Stam}}
     \label{AdvectionStam}
   \end{figure}
 \end{frame}
 
-\begin{frame}{La projection}
-  La projection permet de forcer le champ de vitesse à conserver la
-  masse. Pour faire cela il suffit de soustraire le gradient au champ
-  de vitesse après la diffusion et après l'advection de celui-ci.
+
+\begin{frame}{}
+  \begin{figure}[h]
+    \centering\includegraphics[scale=0.4]{Stam4.png}
+    \caption{Advection d'une densité dans une grille 2D}
+    \label{Bla}
+  \end{figure}
+\end{frame}
+
+
+
+\begin{frame}{Phase 3 - La projection}
+    But : avoir un fluide incomprésible\\
+    Solution : gradient de la pression nul ( Décomposition de Hodge )\\
+    Effet visuel : des vortex se créent\\
   \begin{figure}[h]
     \centering\includegraphics[scale=0.3]{STAM3.png}
     \caption{Correction du champ de vitesse par la soustraction du gradient}
@@ -133,9 +160,20 @@
   \end{figure}
 \end{frame}
 
+
+\begin{frame}{Apéritif}
+  \begin{figure}[h]
+    \centering\includegraphics[scale=0.3]{FlammeBleue.jpg}
+    \caption{Rendu de flamme sur la version finale}
+    \label{ProjectionStam}
+  \end{figure}
+\end{frame}
+
+
 \begin{frame}{Le rendu}
-  Pour le rendu, nous utilisons une technique de ``billboard'', ce qui
-  permet d'avoir un cout d'affichage assez faible.
+  Problème : tourner autour de l'image \\
+  Solution : une texture 3D et une technique de ``billboard'',\\
+             $\Rightarrow$ affichage de plans face à la camera \\
   \begin{minipage}{0.48\linewidth} 
     \begin{figure}[!h]
       \centering\includegraphics[scale=0.3]{Render3D.png}
@@ -153,9 +191,36 @@
   %image + perlin
 \end{frame}
 
-\begin{frame}
-  Pour amélioré le rendu et le rendre plus réaliste nous avons aussi
-  implémenter un bruit de Perlin qui agit sur l'image.
+
+\begin{frame}{Coloration de la flamme}
+
+  \begin{minipage}{0.48\linewidth} 
+    \begin{figure}[!h]
+      \centering\includegraphics[scale=0.3]{FlammeBleue2.jpg}
+      \caption{Coloration de la flamme}
+      \label{PlanAffiche}
+    \end{figure}
+  \end{minipage}
+  \begin{minipage}{0.48\linewidth}
+  \begin{itemize}
+  \item Corps noir
+  \item Formule de Planck
+  \end{itemize}
+  \end{minipage}
+\end{frame}
+
+\begin{frame}{Bruit de perlin 4D}
+  \begin{itemize}
+  \item Bruit de perlin 3D lissé cosinusoïdalement
+  \item Translation des coordonnées de texture
+  \item Continuité temporelle
+  \end{itemize} 
+    \begin{figure}[!h]
+      \centering\includegraphics[scale=0.2]{Perlin3D.jpg}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{}
   \begin{minipage}{0.48\linewidth} 
     \begin{figure}[!h]
       \centering\includegraphics[scale=0.3]{SansPerlin.png}
@@ -172,42 +237,61 @@
   \end{minipage}
 \end{frame}
 
+\begin{frame}
+  \begin{center}
+    \textbf{Entrée}
+  \end{center}
+\end{frame}
+
+
+
 \subsection{Les objets}
+
+
+\begin{frame}{Description des objets}
+  \begin{itemize}
+  \item Volumiques
+  \item Différents matériaux
+  \item Combustibles
+  \item Température de combustion
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Modèle d'intéraction}
+  Interactions entre le modèle de fluide et le modèle d'objet.
+  \begin{itemize}
+  \item Présence des objets ( i.e. : pas de flamme a l'intérieur des objets )
+  \item Transmission des informations de chaleur d'un modèle à l'autre.
+  \item Gestion de la ``pyrolyse'' des objets.
+  \end{itemize}
+\end{frame}
+
+
 \begin{frame}{Une représentation par voxel}
   Un objet $=$ un champ de voxels\\
-  Interraction facilité avec le modèle d'objet\\
-  Permet de gerer des objets non uniforme\\
-  \begin{figure}[!h]
+  Interaction facilitée avec le modèle d'objet\\
+  
+  \begin{minipage}{0.48\linewidth} 
+    \begin{figure}[!h]
     \centering\includegraphics[scale=0.4]{Distance.png}
     \caption{Exemple de champ de distance}
-    \label{Distance}
-  \end{figure}
+      \label{SansPerlin2}
+    \end{figure}
+  \end{minipage}
+  \begin{minipage}{0.48\linewidth}
+    \begin{figure}[!h]
+    \centering\includegraphics[scale=0.2]{phi_inside.png}
+    \caption{Exemple de champ de distance 2}
+      \label{AvecPerlin222}
+    \end{figure}
+  \end{minipage}
 \end{frame}
 
-\begin{frame}{Action des objets sur le fluide}
-  Propagation du feu qui tiens compte des objets\\
-  $\Rightarrow$ champ de répulsion autour des objets.
-  \begin{figure}[!h]
-    \centering\includegraphics[scale=0.4]{Contour.png}
-    \caption{Objet afficher avec son champ de répulsion}
-    \label{repulsion}
-  \end{figure}
-\end{frame}
-
-\begin{frame}{Combustion des objet}
-  Lors de la phase d'échange entre les modèles, les voxels sont
-  détruit pour générer du combustible pour le modèle de fluide, ainsi
-  que de la fumée.\\
-  \begin{figure}[!h]
-    \centering\includegraphics[scale=0.3]{Decomposition.png}
-    \caption{Combustion d'une sphere, avec diffusion de la chaleur}
-    \label{BoisQuiBrule}
-  \end{figure}
-\end{frame}
 
 \begin{frame}{Rendu}
-  Besoin de recalculer la surface de l'objet localement.
-  \\ $\Rightarrow$ utilisation d'un algorithme de marching cube
+  Besoin : recalculer la surface de l'objet localement.\\
+  $\Rightarrow$ utilisation d'un algorithme de marching cube
   adaptatif.\\
   \begin{minipage}{0.48\linewidth} 
     \begin{figure}[!h]
@@ -218,12 +302,45 @@
   \end{minipage}
   \begin{minipage}{0.48\linewidth}
     \begin{figure}[!h]
-      \centering\includegraphics[scale=0.2]{LineFace.png}
-      \caption{Arrêtes calculées de marching cube}
+      \centering\includegraphics[scale=0.15]{Monkey.jpg}
+      \caption{Mesh original}
       \label{LineFace}
     \end{figure}
   \end{minipage}
 \end{frame}
+
+
+
+
+\begin{frame}{Action des objets sur le fluide}
+  Propagation du feu qui tient compte des objets\\
+  $\Rightarrow$ champs de répulsion autour des objets.
+  \begin{figure}[!h]
+    \centering\includegraphics[scale=0.4]{Contour.png}
+    \caption{Objet affiché avec son champs de répulsion}
+    \label{repulsion}
+  \end{figure}
+\end{frame}
+
+
+\begin{frame}{Combustion des objet}
+    1 : combustion\\
+    2 : génération de gaz / chaleur / fumée\\
+    3 : si plus de matière : destruction du voxel et recalcul de la surface\\
+  
+  \begin{figure}[!h]
+    \centering\includegraphics[scale=0.3]{Decomposition.png}
+    \caption{Combustion d'une sphère, avec diffusion de la chaleur}
+    \label{BoisQuiBrule}
+  \end{figure}
+\end{frame}
+
+\begin{frame}
+  \begin{center}
+    \textbf{Plat principal}
+  \end{center}
+\end{frame}
+
 
 \section{Portage du modèle de fluide sur GPU}
 \begin{frame}{Le calcul sur GPU}
@@ -232,13 +349,22 @@
     \begin{tabular}{c|c|c}
        & CPU & GPU \\
       \hline
-      données & tableau unidimentionnel & texture 3D \\
-      calcul  & itératif                & parallèle par cellule \\
+      données & tableau unidimentionnel  & texture 3D \\
+      calcul  & itératif                 & parallèle par cellule \\
+      rendu   & tableau vers texture 3D    & texture 3D \\
+      coloration & function(chaleur) return RGB & couleur(texture 1D,chaleur) \\
+      stockage & min 1E-37, max 1E+37 & min 0.0, max 1.0 \\
     \end{tabular}
   \end{figure}
 \end{frame}
 
-\begin{frame}{Principe de fonctionnement}
+\begin{frame}
+  \begin{center}
+    \textbf{Trou Normand}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Problème rencontré}
   \begin{itemize}
   \item dessin dans un \textbf{frame buffer}
   \item calculs fait par le \textbf{fragment shader}
@@ -250,18 +376,22 @@
   \end{figure}
 \end{frame}
 
-\begin{frame}{Les problèmes rencontrés}
-\end{frame}
 
 \section{Démonstration}
 \begin{frame}
   \begin{center}
-    \textbf{Démonstrations}
+    \textbf{Dessert}
   \end{center}
 \end{frame}
 
 \section{Conclusion}
 \begin{frame}{Conclusion}
+  \begin{itemize}
+  \item Résultats très satisfaisants
+  \item Modèle complet
+  \item Beaucoup de nouvelles connaissances
+  \item Petite déception pour le GPU
+  \end{itemize}
 \end{frame}
 
 \begin{frame}{Remerciements}
