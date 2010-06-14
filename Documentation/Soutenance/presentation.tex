@@ -60,7 +60,6 @@
 \end{frame}
 
 \begin{frame}{Les étapes de notre démarche}
-  Pour réaliser notre projet nous avont du prendre une démarche à laquelle nous n'étions pas familier.\\
   \begin{itemize}
   \item{découvrir le milieu scientifique} % domaine de recherche
   \item{étudier différents articles} % étude du sujet
@@ -70,40 +69,211 @@
   \end{itemize}
 \end{frame}
 
-% example pour une slide 
-\section{truc}
-\subsection{machin}
-\begin{frame}{Titre de la slide}
-  blah blah
+\section{Le modèle}
+\begin{frame}{Modèle d'intéraction}
+  Interractions entre le modèle de feu et le modèle d'objet.
+  \begin{itemize}
+  \item Présence des objets ( i.e. : pas de flamme a l'interieur des objets )
+  \item Transimission des informations de chaleur d'un modèle à l'autre.
+  \item Gestion de la ``pyrolise'' des objets.
+  \end{itemize}
 \end{frame}
 
-\begin{frame}{Titre de la slide1}
-  blah blah
+\subsection{Le fluide}
+\begin{frame}{Principe}
+  \begin{itemize}
+  \item Modèle basé sur le travail de \textbf{Jos Stam}, notemment
+    \textbf{Stable Fluids}(SIGGRAPH 99 Conference Proceedings).
+  \item Résolution de manière approchée des équation de Navier-Stokes
+    pour la dynamique des fluides icompréssibles.
+  \item Un rendu utilisant le principe de ``BillBoard''.    
+  \end{itemize}
 \end{frame}
 
-\subsection{machine}
-\begin{frame}{Titre de la slide}
-  blah blah
+\begin{frame}{La diffusion}
+  La diffusion représente la capacité du fluide à se déplacer dans le
+  milieu ambiant.
+  \begin{figure}[h]
+      \begin{equation}
+        \frac{\partial \vec{u}}{\partial t} =  \nu{\nabla^2}\vec{u} 
+      \end{equation}
+      \caption{Equation de diffusion}
+      \label{DiffusionEquation}
+  \end{figure}
 \end{frame}
 
-\section{lulz}
-\begin{frame}{Titre de la slide}
-  blah blah
+\begin{frame}{Diffusion}
+  \begin{figure}[h]
+    \centering\includegraphics[scale=0.6]{STAM.png}
+    \caption{Diffusion sur une grille 2D}
+    \label{DiffusionStam}
+  \end{figure}
 \end{frame}
 
-\subsection{THE LULZ}
-\begin{frame}{Titre de la slide}
-  blah blah
-\end{frame}
-\begin{frame}{Titre de la slide}
-  blah blah
+
+\begin{frame}{L'advection}
+  Le champ de vitesse va servir à transporter la quantité de fluide
+  dans l’espace. L’auto-advection du champ de vitesse est ce qui va
+  permettre le mouvement des particules de gaz dans le milieu.
+  \begin{figure}[h]
+    \centering\includegraphics[scale=0.3]{STAM2.png}
+    \caption{Principe de l'advection évoquée par \textbf{Jos Stam}}
+    \label{AdvectionStam}
+  \end{figure}
 \end{frame}
 
-\subsection{an example of lulz : The roflocopter}
-\begin{frame}{Titre de la slide}
-  blah blah
+\begin{frame}{La projection}
+  La projection permet de forcer le champ de vitesse à conserver la
+  masse. Pour faire cela il suffit de soustraire le gradient au champ
+  de vitesse après la diffusion et après l'advection de celui-ci.
+  \begin{figure}[h]
+    \centering\includegraphics[scale=0.3]{STAM3.png}
+    \caption{Correction du champ de vitesse par la soustraction du gradient}
+    \label{ProjectionStam}
+  \end{figure}
 \end{frame}
 
+\begin{frame}{Le rendu}
+  Pour le rendu, nous utilisons une technique de ``billboard'', ce qui
+  permet d'avoir un cout d'affichage assez faible.
+  \begin{minipage}{0.48\linewidth} 
+    \begin{figure}[!h]
+      \centering\includegraphics[scale=0.3]{Render3D.png}
+      \caption{Vue des plans affichés}
+      \label{PlanAffiche}
+    \end{figure}
+  \end{minipage}
+  \begin{minipage}{0.48\linewidth}
+    \begin{figure}[!h]
+      \centering\includegraphics[scale=0.2]{Render3D3.png}
+      \caption{Affichage normal face caméra}
+      \label{VueFaceCam}
+    \end{figure}
+  \end{minipage}
+  %image + perlin
+\end{frame}
+
+\begin{frame}
+  Pour amélioré le rendu et le rendre plus réaliste nous avons aussi
+  implémenter un bruit de Perlin qui agit sur l'image.
+  \begin{minipage}{0.48\linewidth} 
+    \begin{figure}[!h]
+      \centering\includegraphics[scale=0.3]{SansPerlin.png}
+      \caption{Sans le bruit de Perlin}
+      \label{SansPerlin}
+    \end{figure}
+  \end{minipage}
+  \begin{minipage}{0.48\linewidth}
+    \begin{figure}[!h]
+      \centering\includegraphics[scale=0.2]{Perlin1.png}
+      \caption{Avec le bruit de Perlin}
+      \label{AvecPerlin}
+    \end{figure}
+  \end{minipage}
+\end{frame}
+
+\subsection{Les objets}
+\begin{frame}{Une représentation par voxel}
+  Un objet $=$ un champ de voxels\\
+  Interraction facilité avec le modèle d'objet\\
+  Permet de gerer des objets non uniforme\\
+  \begin{figure}[!h]
+    \centering\includegraphics[scale=0.4]{Distance.png}
+    \caption{Exemple de champ de distance}
+    \label{Distance}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{Action des objets sur le fluide}
+  Propagation du feu qui tiens compte des objets\\
+  $\Rightarrow$ champ de répulsion autour des objets.
+  \begin{figure}[!h]
+    \centering\includegraphics[scale=0.4]{Contour.png}
+    \caption{Objet afficher avec son champ de répulsion}
+    \label{repulsion}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{Combustion des objet}
+  Lors de la phase d'échange entre les modèles, les voxels sont
+  détruit pour générer du combustible pour le modèle de fluide, ainsi
+  que de la fumée.\\
+  \begin{figure}[!h]
+    \centering\includegraphics[scale=0.3]{Decomposition.png}
+    \caption{Combustion d'une sphere, avec diffusion de la chaleur}
+    \label{BoisQuiBrule}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{Rendu}
+  Besoin de recalculer la surface de l'objet localement.
+  \\ $\Rightarrow$ utilisation d'un algorithme de marching cube
+  adaptatif.\\
+  \begin{minipage}{0.48\linewidth} 
+    \begin{figure}[!h]
+      \centering\includegraphics[scale=0.2]{FilledFace.png}
+      \caption{Surface calculée par marching cube}
+      \label{FilledFace}
+    \end{figure}
+  \end{minipage}
+  \begin{minipage}{0.48\linewidth}
+    \begin{figure}[!h]
+      \centering\includegraphics[scale=0.2]{LineFace.png}
+      \caption{Arrêtes calculées de marching cube}
+      \label{LineFace}
+    \end{figure}
+  \end{minipage}
+\end{frame}
+
+\section{Portage du modèle de fluide sur GPU}
+\begin{frame}{Le calcul sur GPU}
+  Principe du modèle indentique, calcul différent.\\
+  \begin{figure}[!h]
+    \begin{tabular}{c|c|c}
+       & CPU & GPU \\
+      \hline
+      données & tableau unidimentionnel & texture 3D \\
+      calcul  & itératif                & parallèle par cellule \\
+    \end{tabular}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{Principe de fonctionnement}
+  \begin{itemize}
+  \item dessin dans un \textbf{frame buffer}
+  \item calculs fait par le \textbf{fragment shader}
+  \end{itemize}
+  \begin{figure}[!h]
+    \centering\includegraphics[scale=0.3]{FBO.png}
+    \caption{Frame Buffer Object}
+    \label{AvecPerlin}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{Les problèmes rencontrés}
+\end{frame}
+
+\section{Démonstration}
+\begin{frame}
+  \begin{center}
+    \textbf{Démonstrations}
+  \end{center}
+\end{frame}
+
+\section{Conclusion}
+\begin{frame}{Conclusion}
+\end{frame}
+
+\begin{frame}{Remerciements}
+  \begin{itemize}
+  \item{Marie-Paule Cani} pour avoir accepté de nous encadrer, pour
+    ses conseils et indices de recherche.
+  \item{Cyril Crassin} pour nous avoir aidé à comprendre le
+    fonctionnement de GLSL.
+  \item{Aurelie Catel} pour le suivi de gestion de projet.
+  \item{Nintendo\texttrademark} pour Super Smash Bross Melee ©.
+  \end{itemize}
+\end{frame}
 
 \end{document}
 
