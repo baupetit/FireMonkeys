@@ -25,7 +25,8 @@ Fluid::Fluid()
 	tps1 = 0;
 	tps2 = 0;
 	tps3=0;
-    tailleGrille = 100;
+    tailleGrille = 50	;
+
     s = new Solver(tailleGrille);
     tempIndex = new TempToRGB(256,50);
 
@@ -37,10 +38,10 @@ Fluid::Fluid()
 
 	perl = p->genererNoise();
 	perl_temps = p->genererNoise1D();
-
+/*
 	for (int i = 0 ; i< 100 ; i++)
 	cout << "x= " << perl_temps[i].x << "y= " << perl_temps[i].y  << "z= " << perl_temps[i].z << endl;
-
+*/
 	//attenuation du bruit en dégradé de haut en bas.
 	for (int k=0; k< (tailleGrille+2); k++){
 		for (int j=0; j< (tailleGrille+2); j++){
@@ -64,20 +65,20 @@ Fluid::Fluid()
 
 
 	int mid = tailleGrille/2;
-	s->setDensity( mid ,5, mid, 100.0f );   
-	s->setDensity( mid ,6, mid, 100.0f );   
-	s->setDensity( mid ,4, mid, 100.0f );
-	s->setDensity( mid+1 ,5, mid, 100.0f );   
-	s->setDensity( mid-1 ,5, mid, 100.0f );   
-	s->setDensity( mid ,5, mid+1, 100.0f );   
-	s->setDensity( mid ,5, mid-1, 100.0f );   
-	s->setTemperature( mid ,5, mid, 10*60*((random()+1)/(float)RAND_MAX)*4/1);   
-	s->setTemperature( mid ,6, mid, 10*42*((random()+1)/(float)RAND_MAX)*4/1);   
-	s->setTemperature( mid ,6, mid, 10*25*((random()+1)/(float)RAND_MAX)*4/1);   
-	s->setTemperature( mid+1 ,5, mid, 10*24*((random()+1)/(float)RAND_MAX)*4/1);   
-	s->setTemperature( mid-1 ,5, mid, 10*38*((random()+1)/(float)RAND_MAX)*4/1);   
-	s->setTemperature( mid ,5, mid+1, 10*12*((random()+1)/(float)RAND_MAX)*4/1);   
-	s->setTemperature( mid ,5, mid-1, 10*55*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setDensity( mid ,5, mid, 10000.0f );   
+	s->setDensity( mid ,6, mid, 10000.0f );   
+	s->setDensity( mid ,4, mid, 10000.0f );
+	s->setDensity( mid+1 ,5, mid, 10000.0f );   
+	s->setDensity( mid-1 ,5, mid, 10000.0f );   
+	s->setDensity( mid ,5, mid+1, 10000.0f );   
+	s->setDensity( mid ,5, mid-1, 10000.0f );   
+	s->setTemperature( mid ,5, mid, 1000*60*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid ,6, mid, 1000*42*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid ,6, mid, 1000*25*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid+1 ,5, mid, 1000*24*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid-1 ,5, mid, 1000*38*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid ,5, mid+1, 1000*12*((random()+1)/(float)RAND_MAX)*4/1);   
+	s->setTemperature( mid ,5, mid-1, 1000*55*((random()+1)/(float)RAND_MAX)*4/1);   
 	
 	/*
 	for( int i = 7 ; i < tailleGrille-6 ; ++i ){
@@ -464,8 +465,8 @@ void Fluid::dessinerPlansDansTexture3D(GLuint id_texture, int nb_plans){
 }
 
 void Fluid::Mise_A_Jour( float dt ){
-	s->velocitiesStepWithTemp(dt);
-	s->densitiesStepWithTemp(dt);
+	s->velocitiesStepWithTemp(0.01);
+	s->densitiesStepWithTemp(0.01);
 }
 
 

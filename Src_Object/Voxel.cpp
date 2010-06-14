@@ -13,6 +13,7 @@ Voxel::Voxel(){
 	conductance = 0.0;
 	pos = Vecteur3I( 0,0,0 );
 	nb_faces = 0;
+	tauxFumee = 0.0;
 
 }
 	
@@ -26,6 +27,7 @@ Voxel::Voxel( bool plein,
 	      float tauxPerte, 
 	      float diffusion,  
 	      float conductance, 
+	      float tauxFumee,
 	      Vecteur3I pos ) 
 	:plein(plein),
 	 frontiere(frontiere),
@@ -38,6 +40,7 @@ Voxel::Voxel( bool plein,
 	 tempThreshold(tempThreshold),
 	 diffusion(diffusion), 
 	 conductance(conductance), 
+	 tauxFumee(tauxFumee),
 	 pos(pos)
 {
 	nb_faces = 0;

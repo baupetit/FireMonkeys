@@ -13,6 +13,9 @@ struct Triangle {
 	Vecteur3D s3;
 
 	inline void drawTriangle() const {
+	    glEnable(GL_LIGHTING);
+	    Vecteur3D prod = produitVectoriel(s2-s1, s3-s1);
+	    glNormal3f(prod.x, prod.y, prod.z);
 		glVertex3f( s1.x, s1.y, s1.z );
 		glVertex3f( s2.x, s2.y, s2.z );
 		glVertex3f( s3.x, s3.y, s3.z );

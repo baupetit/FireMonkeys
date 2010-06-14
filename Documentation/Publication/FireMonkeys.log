@@ -1,15 +1,16 @@
-This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=latex 2010.6.3)  8 JUN 2010 08:06
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=latex 2010.5.21)  14 JUN 2010 00:22
 entering extended mode
+ restricted \write18 enabled.
  %&-line parsing enabled.
 **FireMonkeys.tex
 (./FireMonkeys.tex
-LaTeX2e <2005/12/01>
-Babel <v3.8h> and hyphenation patterns for english, usenglishmax, dumylang, noh
+LaTeX2e <2009/09/24>
+Babel <v3.8l> and hyphenation patterns for english, usenglishmax, dumylang, noh
 yphenation, loaded.
 (/usr/share/texmf-texlive/tex/latex/base/article.cls
-Document Class: article 2005/09/16 v1.4f Standard LaTeX document class
+Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
 (/usr/share/texmf-texlive/tex/latex/base/size10.clo
-File: size10.clo 2005/09/16 v1.4f Standard LaTeX file (size option)
+File: size10.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
 )
 \c@part=\count79
 \c@section=\count80
@@ -24,19 +25,19 @@ File: size10.clo 2005/09/16 v1.4f Standard LaTeX file (size option)
 \bibindent=\dimen102
 )
 (/usr/share/texmf-texlive/tex/latex/base/inputenc.sty
-Package: inputenc 2006/05/05 v1.1b Input encoding file
+Package: inputenc 2008/03/30 v1.1d Input encoding file
 \inpenc@prehook=\toks14
 \inpenc@posthook=\toks15
 
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def
-File: utf8.def 2006/03/30 v1.1i UTF-8 support for inputenc
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 Now handling font encoding OML ...
 ... no UTF-8 mapping file for font encoding OML
 Now handling font encoding T1 ...
-... processing UTF-8 mapping file for font encodingT1
+... processing UTF-8 mapping file for font encoding T1
 
 (/usr/share/texmf-texlive/tex/latex/base/t1enc.dfu
-File: t1enc.dfu 2006/03/30 v1.1i UTF-8 support for inputenc
+File: t1enc.dfu 2008/04/05 v1.1m UTF-8 support for inputenc
    defining Unicode char U+00A1 (decimal 161)
    defining Unicode char U+00A3 (decimal 163)
    defining Unicode char U+00AB (decimal 171)
@@ -183,10 +184,10 @@ File: t1enc.dfu 2006/03/30 v1.1i UTF-8 support for inputenc
    defining Unicode char U+2423 (decimal 9251)
 )
 Now handling font encoding OT1 ...
-... processing UTF-8 mapping file for font encodingOT1
+... processing UTF-8 mapping file for font encoding OT1
 
 (/usr/share/texmf-texlive/tex/latex/base/ot1enc.dfu
-File: ot1enc.dfu 2006/03/30 v1.1i UTF-8 support for inputenc
+File: ot1enc.dfu 2008/04/05 v1.1m UTF-8 support for inputenc
    defining Unicode char U+00A1 (decimal 161)
    defining Unicode char U+00A3 (decimal 163)
    defining Unicode char U+00B8 (decimal 184)
@@ -214,10 +215,10 @@ File: ot1enc.dfu 2006/03/30 v1.1i UTF-8 support for inputenc
    defining Unicode char U+201D (decimal 8221)
 )
 Now handling font encoding OMS ...
-... processing UTF-8 mapping file for font encodingOMS
+... processing UTF-8 mapping file for font encoding OMS
 
 (/usr/share/texmf-texlive/tex/latex/base/omsenc.dfu
-File: omsenc.dfu 2006/03/30 v1.1i UTF-8 support for inputenc
+File: omsenc.dfu 2008/04/05 v1.1m UTF-8 support for inputenc
    defining Unicode char U+00A7 (decimal 167)
    defining Unicode char U+00B6 (decimal 182)
    defining Unicode char U+00B7 (decimal 183)
@@ -248,15 +249,15 @@ Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
 \KV@toks@=\toks16
 )
 (/usr/share/texmf-texlive/tex/latex/graphics/graphics.sty
-Package: graphics 2006/02/20 v1.0o Standard LaTeX Graphics (DPC,SPQR)
+Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
 
 (/usr/share/texmf-texlive/tex/latex/graphics/trig.sty
 Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
 )
 (/etc/texmf/tex/latex/config/graphics.cfg
-File: graphics.cfg 2007/01/18 v1.5 graphics configuration of teTeX/TeXLive
+File: graphics.cfg 2009/08/28 v1.8 graphics configuration of TeX Live
 )
-Package graphics Info: Driver file: dvips.def on input line 90.
+Package graphics Info: Driver file: dvips.def on input line 91.
 
 (/usr/share/texmf-texlive/tex/latex/graphics/dvips.def
 File: dvips.def 1999/02/16 v3.0i Driver-dependant file (DPC,SPQR)
@@ -269,19 +270,19 @@ Package: lscape 2000/10/22 v3.01 Landscape Pages (DPC)
 )
 (/usr/share/texmf-texlive/tex/latex/ltxmisc/url.sty
 \Urlmuskip=\muskip10
-Package: url 2005/06/27  ver 3.2  Verb mode for urls, etc.
+Package: url 2006/04/12  ver 3.3  Verb mode for urls, etc.
 )
 (/usr/share/texmf-texlive/tex/latex/tools/xspace.sty
 Package: xspace 2006/05/08 v1.12 Space after command names (DPC,MH)
 )
 (/usr/share/texmf-texlive/tex/generic/babel/babel.sty
-Package: babel 2005/11/23 v3.8h The Babel package
+Package: babel 2008/07/06 v3.8l The Babel package
 
 (/usr/share/texmf-texlive/tex/generic/babel/frenchb.ldf
-Language: french 2005/02/06 v1.6g French support from the babel system
+Language: frenchb 2009/03/16 v2.3d French support from the babel system
 
 (/usr/share/texmf-texlive/tex/generic/babel/babel.def
-File: babel.def 2005/11/23 v3.8h Babel common definitions
+File: babel.def 2008/07/06 v3.8l Babel common definitions
 \babel@savecnt=\count87
 \U@D=\dimen105
 )
@@ -291,28 +292,28 @@ Package babel Warning: No hyphenation patterns were loaded for
 (babel)                I will use the patterns loaded for \language=0 instead.
 
 \l@french = a dialect from \language0
-Package babel Info: Making : an active character on input line 219.
-Package babel Info: Making ; an active character on input line 220.
-Package babel Info: Making ! an active character on input line 221.
-Package babel Info: Making ? an active character on input line 222.
-LaTeX Font Info:    Redeclaring font encoding T1 on input line 299.
-\parindentFFN=\dimen106
+Package babel Info: Making : an active character on input line 120.
+Package babel Info: Making ; an active character on input line 121.
+Package babel Info: Making ! an active character on input line 122.
+Package babel Info: Making ? an active character on input line 123.
+\FB@Mht=\dimen106
 \std@mcc=\count88
 \dec@mcc=\count89
+\parindentFFN=\dimen107
 *************************************
 * Local config file frenchb.cfg used
 *
-(/usr/share/texmf-texlive/tex/generic/babel/frenchb.cfg))) (./FireMonkeys.aux)
+(/usr/share/texmf-texlive/tex/generic/babel/frenchb.cfg)))
+(/usr/share/texmf-texlive/tex/latex/carlisle/scalefnt.sty)
+(/usr/share/texmf-texlive/tex/latex/fullpage.sty
+Package: fullpage 1999/02/23 1.1 (PWD)
+\FP@margin=\skip43
+) (./FireMonkeys.aux)
 \openout1 = `FireMonkeys.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 23.
 LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for T1/lmr/m/n on input line 23.
-LaTeX Font Info:    Try loading font information for T1+lmr on input line 23.
-
-(/usr/share/texmf/tex/latex/lm/t1lmr.fd
-File: t1lmr.fd 2007/01/14 v1.3 Font defs for Latin Modern
-)
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 23.
 LaTeX Font Info:    ... okay on input line 23.
 LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 23.
 LaTeX Font Info:    ... okay on input line 23.
@@ -322,429 +323,482 @@ LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 23.
 LaTeX Font Info:    ... okay on input line 23.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 23.
 LaTeX Font Info:    ... okay on input line 23.
+LaTeX Info: Redefining \degres on input line 23.
 LaTeX Info: Redefining \dots on input line 23.
+LaTeX Info: Redefining \up on input line 23.
+
+
+Package frenchb.ldf Warning: OT1 encoding should not be used for French. 
+(frenchb.ldf)                Add \usepackage[T1]{fontenc} to the preamble
+(frenchb.ldf)                of your document, on input line 23.
+
 File: logo.ps Graphic file (type eps)
- <logo.ps>
+<logo.ps>
 File: feu.ps Graphic file (type eps)
  <feu.ps> [1
 
-]
-(./FireMonkeys.toc
+] (./FireMonkeys.toc
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 3.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <5> on input line 3.
-
-Overfull \hbox (0.44511pt too wide) in paragraph at lines 17--17
- [][] []\OT1/cmr/m/n/10 Real-Time Sim-u-la-tion of De-for-ma-tion and Frac-ture
- of Stiff 
- []
-
-[2]
-Overfull \hbox (8.88957pt too wide) in paragraph at lines 46--46
- [][] []\OT1/cmr/m/n/10 Operation sur le point (i,j,k) de la tex-ture == Frag-m
-entShader []  
- []
-
-)
+ [2])
 \tf@toc=\write3
 \openout3 = `FireMonkeys.toc'.
 
  [3]
-Underfull \hbox (badness 10000) in paragraph at lines 75--82
+Underfull \hbox (badness 10000) in paragraph at lines 79--87
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 96--97
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 118--131
 
  []
 
 [4]
-Overfull \hbox (21.38937pt too wide) in paragraph at lines 131--137
-[]\OT1/cmr/m/n/10 Dans un pre-mier temps nous nous con-cen-trerons sur des ob-j
-ets qui se d^^Secomposent
- []
-
-[5]
-Underfull \hbox (badness 10000) in paragraph at lines 192--206
+Underfull \hbox (badness 10000) in paragraph at lines 175--186
 
  []
 
-[6]
-Overfull \hbox (9.69489pt too wide) in paragraph at lines 247--263
-\OT1/cmr/m/n/10 La m^^Sethode de de-struc-tion de l'ob-jet bas^^See sur des t^^
-Setrah^^Redres est tr^^Res int^^Seressante. 
- []
-
-[7]
-Underfull \hbox (badness 10000) in paragraph at lines 266--277
+[5] [6]
+Underfull \hbox (badness 10000) in paragraph at lines 214--219
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 279--304
+Underfull \hbox (badness 10000) in paragraph at lines 220--226
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 227--231
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 234--237
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 239--243
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 244--246
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 247--252
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 252--257
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 257--261
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 262--266
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 267--269
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 271--274
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 274--275
+
+ []
+
+File: STAM.ps Graphic file (type eps)
+<STAM.ps> [7]
+Underfull \hbox (badness 10000) in paragraph at lines 281--287
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 299--301
+
+ []
+
+! Undefined control sequence.
+l.323   \textvf
+               {Gauss-Seidel} nous permet de considérer une méthode stable...
+
+? 
+
+Underfull \hbox (badness 10000) in paragraph at lines 322--326
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 327--328
+
+ []
+
+File: STAM2.ps Graphic file (type eps)
+<STAM2.ps>
+Underfull \hbox (badness 10000) in paragraph at lines 333--343
 
  []
 
 [8]
-Overfull \hbox (6.82114pt too wide) in paragraph at lines 306--324
-[]\OT1/cmr/bx/n/10 Auteur(s) \OT1/cmr/m/n/10 : Al-fred R. Fuller, Hari Kr-ish-n
-an, Karim Mahrous, Bernd Hamann,
+Underfull \hbox (badness 10000) in paragraph at lines 346--348
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 350--355
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 357--359
+
+ []
+
+! Undefined control sequence.
+l.362 \textvf
+             {coefficient de refroidissement} qui fait baisser la températu...
+
+? 
+
+Underfull \hbox (badness 10000) in paragraph at lines 360--364
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 366--369
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 375--378
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 395--396
+
  []
 
 [9]
-Overfull \hbox (0.94696pt too wide) in paragraph at lines 327--336
-\OT1/cmr/m/n/10 phases, et int^^Seraction en-tre les solides et les liq-uides e
-t gas. \OT1/cmr/bx/n/10 Point(s) n^^Segatif(s) \OT1/cmr/m/n/10 : 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 342--358
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 361--367
-
- []
-
-[10]
-Underfull \hbox (badness 10000) in paragraph at lines 370--382
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 388--401
-
- []
-
-[11]
-Underfull \hbox (badness 10000) in paragraph at lines 404--421
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 429--436
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 439--447
-
- []
-
-[12]
-Underfull \hbox (badness 10000) in paragraph at lines 468--472
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 473--479
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 480--484
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 487--490
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 492--496
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 497--499
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 500--505
-
- []
-
-[13]
-Underfull \hbox (badness 10000) in paragraph at lines 505--510
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 510--514
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 515--519
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 520--522
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 524--527
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 527--533
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 545--547
-
- []
-
-
-Overfull \hbox (71.42938pt too wide) detected at line 551
-[]\OML/cmm/m/it/10 p \OT1/cmr/m/n/10 = [] + [] + []
- []
-
-
-Overfull \hbox (24.04317pt too wide) detected at line 566
-\OML/cmm/m/it/10 u[] \OT1/cmr/m/n/10 = []
- []
-
-[14]
-Underfull \hbox (badness 10000) in paragraph at lines 568--572
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 573--583
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 586--588
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 590--594
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 596--598
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 599--603
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 605--608
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 614--617
-
- []
-
-[15]
-Underfull \hbox (badness 10000) in paragraph at lines 628--629
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 630--631
+Underfull \hbox (badness 10000) in paragraph at lines 397--399
 
  []
 
 File: plan_en_coupe.ps Graphic file (type eps)
 <plan_en_coupe.ps>
-Underfull \hbox (badness 10000) in paragraph at lines 638--639
+File: Render3D.ps Graphic file (type eps)
+ <Render3D.ps>
+File: Render3D2.ps Graphic file (type eps)
+ <Render3D2.ps> [10]
+File: Render3D3.ps Graphic file (type eps)
+ <Render3D3.ps>
+Underfull \hbox (badness 10000) in paragraph at lines 418--419
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 642--644
+Underfull \hbox (badness 10000) in paragraph at lines 422--424
 
  []
 
-[16]
-Underfull \hbox (badness 10000) in paragraph at lines 645--646
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 650--651
+[11]
+File: Flamme.ps Graphic file (type eps)
+ <Flamme.ps>
+Underfull \hbox (badness 10000) in paragraph at lines 438--439
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 654--655
+Underfull \hbox (badness 10000) in paragraph at lines 443--444
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 656--657
+Underfull \hbox (badness 10000) in paragraph at lines 445--446
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 658--665
+Underfull \hbox (badness 10000) in paragraph at lines 447--454
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 669--670
+Underfull \hbox (badness 10000) in paragraph at lines 458--460
 
  []
 
+[12]
 File: Perlin3D.ps Graphic file (type eps)
-<Perlin3D.ps> [17]
-Underfull \hbox (badness 10000) in paragraph at lines 675--676
+ <Perlin3D.ps>
+Underfull \hbox (badness 10000) in paragraph at lines 465--466
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 677--678
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 679--680
+Underfull \hbox (badness 10000) in paragraph at lines 467--468
 
  []
 
 File: SansPerlin.ps Graphic file (type eps)
 <SansPerlin.ps>
-Underfull \hbox (badness 10000) in paragraph at lines 685--686
+File: Perlin1.ps Graphic file (type eps)
+ <Perlin1.ps>
+File: Perlin2.ps Graphic file (type eps)
+ <Perlin2.ps> [13]
+Underfull \hbox (badness 10000) in paragraph at lines 484--488
 
  []
 
-File: Perlin1.ps Graphic file (type eps)
-<Perlin1.ps>
-File: Perlin2.ps Graphic file (type eps)
- <Perlin2.ps>
-Overfull \hbox (15.20706pt too wide) in paragraph at lines 687--689
-[][] [] 
+File: FlammeBleue.ps Graphic file (type eps)
+<FlammeBleue.ps>
+File: FlammeBleue2.ps Graphic file (type eps)
+ <FlammeBleue2.ps> [14]
+Overfull \vbox (8.41606pt too high) has occurred while \output is active []
+
+
+[15]
+Underfull \hbox (badness 10000) in paragraph at lines 506--515
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 530--532
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 533--537
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 538--541
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 550--556
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 557--559
+
+ []
+
+
+! LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.561 
+      
+? 
+
+Underfull \hbox (badness 10000) in paragraph at lines 562--566
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 567--570
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 571--574
+
+ []
+
+[16]
+Underfull \hbox (badness 10000) in paragraph at lines 575--577
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 577--578
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 578--581
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 582--584
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 592--599
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 600--607
+
+ []
+
+File: GPU.ps Graphic file (type eps)
+<GPU.ps> [17]
+Underfull \hbox (badness 10000) in paragraph at lines 634--638
+
  []
 
 [18]
-Underfull \hbox (badness 10000) in paragraph at lines 692--696
+Underfull \hbox (badness 10000) in paragraph at lines 728--736
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 699--701
+Underfull \hbox (badness 10000) in paragraph at lines 756--760
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 702--704
+Underfull \hbox (badness 10000) in paragraph at lines 768--771
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 705--707
+Underfull \hbox (badness 10000) in paragraph at lines 773--774
+
+ []
+
+File: Contour.ps Graphic file (type eps)
+<Contour.ps> [19]
+Underfull \hbox (badness 10000) in paragraph at lines 780--781
 
  []
 
 
-Overfull \hbox (1.24844pt too wide) in paragraph at lines 713--721
-\OT1/cmr/m/n/10 D'autres out-ils de pro-gram-ma-tion ex-is-tent ( comme OpenCL 
-) mais nous n'^^Setions
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 713--721
+Underfull \hbox (badness 10000) in paragraph at lines 784--785
 
  []
 
+File: Decomposition.ps Graphic file (type eps)
+<Decomposition.ps> [20]
+File: Decomposition0.ps Graphic file (type eps)
+ <Decomposition0.ps>
+File: Decomposition2.ps Graphic file (type eps)
+ <Decomposition2.ps>
+File: Decomposition3.ps Graphic file (type eps)
 
-Overfull \hbox (1.2056pt too wide) in paragraph at lines 726--726
-[]\OT1/cmr/bx/n/12 Transformation du probl^^Reme pour une r^^Sesolution GPU 
- []
+<Decomposition3.ps>
+File: Decomposition4.ps Graphic file (type eps)
+ <Decomposition4.ps>
+File: Decomposition5.ps Graphic file (type eps)
+ <Decomposition5.ps> [21] [22]
+File: JosStam1.ps Graphic file (type eps)
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 729--731
-
- []
-
-[19]
-Underfull \hbox (badness 10000) in paragraph at lines 733--735
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 736--740
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 741--744
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 751--757
+<JosStam1.ps>
+File: Stable.ps Graphic file (type eps)
+ <Stable.ps> [23]
+File: Interactive.ps Graphic file (type eps)
+ <Interactive.ps>
+Underfull \hbox (badness 10000) in paragraph at lines 886--900
 
  []
 
+File: Smoke.ps Graphic file (type eps)
+<Smoke.ps> [24]
+File: Octree.ps Graphic file (type eps)
+ <Octree.ps>
+Overfull \hbox (10.7646pt too wide) in paragraph at lines 925--926
+ [] 
+ []
 
-Underfull \hbox (badness 10000) in paragraph at lines 758--760
-
+[25]
+File: Voxel.ps Graphic file (type eps)
+ <Voxel.ps>
+Overfull \hbox (9.76085pt too wide) in paragraph at lines 946--947
+ [] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 761--765
+Underfull \hbox (badness 10000) in paragraph at lines 948--959
 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 766--769
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 770--773
+File: RealGPU.ps Graphic file (type eps)
+<RealGPU.ps>
+Underfull \hbox (badness 10000) in paragraph at lines 966--979
 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 774--776
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 776--777
+[26]
+File: FastGPU.ps Graphic file (type eps)
+ <FastGPU.ps>
+Underfull \hbox (badness 10000) in paragraph at lines 985--1002
 
  []
 
-[20]
-Underfull \hbox (badness 10000) in paragraph at lines 777--780
+File: Meshes.ps Graphic file (type eps)
+<Meshes.ps> [27]
+Underfull \hbox (badness 10000) in paragraph at lines 1009--1034
 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 781--783
+File: Deformation.ps Graphic file (type eps)
+<Deformation.ps> [28]
+File: Volumetric.ps Graphic file (type eps)
+ <Volumetric.ps>
+File: Melting.ps Graphic file (type eps)
+ <Melting.ps>
+File: FireStarter.ps Graphic file (type eps)
+ <FireStarter.ps> [29]
+Underfull \hbox (badness 10000) in paragraph at lines 1106--1122
 
  []
 
+File: Splats.ps Graphic file (type eps)
+<Splats.ps>
+Underfull \hbox (badness 10000) in paragraph at lines 1128--1133
 
-Overfull \hbox (1.90935pt too wide) in paragraph at lines 784--788
-[]\OT1/cmr/bx/n/10 Remarque im-por-tante :  \OT1/cmr/m/n/10 Sur le pa-pier cett
-e as-tuce est tr^^Res compr^^Sehensible.
  []
 
-[21] (./FireMonkeys.aux) ) 
+File: Physically.ps Graphic file (type eps)
+<Physically.ps> [30]
+Underfull \hbox (badness 10000) in paragraph at lines 1139--1151
+
+ []
+
+File: Adaptative.ps Graphic file (type eps)
+<Adaptative.ps> [31] (./FireMonkeys.aux) ) 
 Here is how much of TeX's memory you used:
- 1453 strings out of 95087
- 17394 string characters out of 1183279
- 75691 words of memory out of 1500000
- 4636 multiletter control sequences out of 10000+50000
- 5158 words of font info for 19 fonts, out of 1200000 for 2000
+ 1632 strings out of 495062
+ 20213 string characters out of 1182644
+ 84319 words of memory out of 3000000
+ 4784 multiletter control sequences out of 15000+50000
+ 5158 words of font info for 19 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
- 25i,5n,24p,661b,261s stack positions out of 5000i,500n,6000p,200000b,5000s
+ 25i,5n,24p,661b,284s stack positions out of 5000i,500n,10000p,200000b,50000s
 
-Output written on FireMonkeys.dvi (21 pages, 65804 bytes).
+Output written on FireMonkeys.dvi (31 pages, 95148 bytes).

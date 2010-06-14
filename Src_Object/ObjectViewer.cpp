@@ -14,6 +14,7 @@ static Voxel def( true,
 		  0,
 		  0, 
 		  0,
+		  0,
 		  Vecteur3I(0,0,0));
 
 ObjectViewer::ObjectViewer()
