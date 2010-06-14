@@ -184,21 +184,62 @@
   \end{figure}
 \end{frame}
 
-\begin{frame}{Rendu}
-  Besoin de recalculer la surface de l'objet localement.\\ $\Rightarrow$ utilisation d'un algorithme de marching cube
-  adaptatif.\\ 
+\begin{frame}{Action des objets sur le fluide}
+  Propagation du feu qui tiens compte des objets\\
+  $\Rightarrow$ champ de répulsion autour des objets.
   \begin{figure}[!h]
     \centering\includegraphics[scale=0.4]{Contour.png}
-    \caption{Sphere qui brûle, avec affichage du champ de répulsion}
-    \label{Distance}
+    \caption{Objet afficher avec son champ de répulsion}
+    \label{repulsion}
   \end{figure}
+\end{frame}
+
+\begin{frame}{Combustion des objet}
+  Lors de la phase d'échange entre les modèles, les voxels sont
+  détruit pour générer du combustible pour le modèle de fluide, ainsi
+  que de la fumée.\\
+  \begin{figure}[!h]
+    \centering\includegraphics[scale=0.3]{Decomposition.png}
+    \caption{Combustion d'une sphere, avec diffusion de la chaleur}
+    \label{BoisQuiBrule}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{Rendu}
+  Besoin de recalculer la surface de l'objet localement.
+  \\ $\Rightarrow$ utilisation d'un algorithme de marching cube
+  adaptatif.\\
+  \begin{minipage}{0.48\linewidth} 
+    \begin{figure}[!h]
+      \centering\includegraphics[scale=0.2]{FilledFace.png}
+      \caption{Surface calculée par marching cube}
+      \label{FilledFace}
+    \end{figure}
+  \end{minipage}
+  \begin{minipage}{0.48\linewidth}
+    \begin{figure}[!h]
+      \centering\includegraphics[scale=0.2]{LineFace.png}
+      \caption{Arrêtes calculées de marching cube}
+      \label{LineFace}
+    \end{figure}
+  \end{minipage}
 \end{frame}
 
 \section{Portage du modèle de fluide sur GPU}
 \begin{frame}{Le calcul sur GPU}
+  Principe du modèle indentique, calcul différent.\\
+  \begin{figure}[!h]
+    \begin{tabular}{c|c|c}
+       & CPU & GPU \\
+      \hline
+      données & tableau unidimentionnel & texture 3D \\
+      calcul  & itératif                & parallèle par cellule \\
+    \end{tabular}
+  \end{figure}
 \end{frame}
 
 \begin{frame}{Principe de fonctionnement}
+  
 \end{frame}
 
 \begin{frame}{Les problèmes rencontrés}
