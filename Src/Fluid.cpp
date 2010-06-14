@@ -24,8 +24,8 @@ Fluid::Fluid()
 {
 	tps1 = 0;
 	tps2 = 0;
-	tps3=0;
-    tailleGrille = 50	;
+	tps3 = 0;
+    tailleGrille = 20;
     s = new Solver(tailleGrille);
     tempIndex = new TempToRGB(256,50);
 

@@ -116,27 +116,82 @@
   dans l’espace. L’auto-advection du champ de vitesse est ce qui va
   permettre le mouvement des particules de gaz dans le milieu.
   \begin{figure}[h]
-    \centering\includegraphics[scale=0.6]{STAM2.png}
+    \centering\includegraphics[scale=0.3]{STAM2.png}
     \caption{Principe de l'advection évoquée par \textbf{Jos Stam}}
     \label{AdvectionStam}
   \end{figure}
 \end{frame}
 
 \begin{frame}{La projection}
-%image
+  La projection permet de forcer le champ de vitesse à conserver la
+  masse. Pour faire cela il suffit de soustraire le gradient au champ
+  de vitesse après la diffusion et après l'advection de celui-ci.
+  \begin{figure}[h]
+    \centering\includegraphics[scale=0.3]{STAM3.png}
+    \caption{Correction du champ de vitesse par la soustraction du gradient}
+    \label{ProjectionStam}
+  \end{figure}
 \end{frame}
 
 \begin{frame}{Le rendu}
-%image + perlin
+  Pour le rendu, nous utilisons une technique de ``billboard'', ce qui
+  permet d'avoir un cout d'affichage assez faible.
+  \begin{minipage}{0.48\linewidth} 
+    \begin{figure}[!h]
+      \centering\includegraphics[scale=0.3]{Render3D.png}
+      \caption{Vue des plans affichés}
+      \label{PlanAffiche}
+    \end{figure}
+  \end{minipage}
+  \begin{minipage}{0.48\linewidth}
+    \begin{figure}[!h]
+      \centering\includegraphics[scale=0.2]{Render3D3.png}
+      \caption{Affichage normal face caméra}
+      \label{VueFaceCam}
+    \end{figure}
+  \end{minipage}
+  %image + perlin
+\end{frame}
+
+\begin{frame}
+  Pour amélioré le rendu et le rendre plus réaliste nous avons aussi
+  implémenter un bruit de Perlin qui agit sur l'image.
+  \begin{minipage}{0.48\linewidth} 
+    \begin{figure}[!h]
+      \centering\includegraphics[scale=0.3]{SansPerlin.png}
+      \caption{Sans le bruit de Perlin}
+      \label{SansPerlin}
+    \end{figure}
+  \end{minipage}
+  \begin{minipage}{0.48\linewidth}
+    \begin{figure}[!h]
+      \centering\includegraphics[scale=0.2]{Perlin1.png}
+      \caption{Avec le bruit de Perlin}
+      \label{AvecPerlin}
+    \end{figure}
+  \end{minipage}
 \end{frame}
 
 \subsection{Les objets}
 \begin{frame}{Une représentation par voxel}
-%image + champ de distance + isosruface + marching cube adaptatif
+  Un objet $=$ un champ de voxels\\
+  Interraction facilité avec le modèle d'objet\\
+  Permet de gerer des objets non uniforme\\
+  \begin{figure}[!h]
+    \centering\includegraphics[scale=0.4]{Distance.png}
+    \caption{Exemple de champ de distance}
+    \label{Distance}
+  \end{figure}
 \end{frame}
 
-\begin{frame}{Combustion de l'objet}
-%localite du marching cube
+\begin{frame}{Rendu}
+  Besoin de recalculer la surface de l'objet localement.\\ $\Rightarrow$ utilisation d'un algorithme de marching cube
+  adaptatif.\\ 
+  \begin{figure}[!h]
+    \centering\includegraphics[scale=0.4]{Contour.png}
+    \caption{Sphere qui brûle, avec affichage du champ de répulsion}
+    \label{Distance}
+  \end{figure}
 \end{frame}
 
 \section{Portage du modèle de fluide sur GPU}
