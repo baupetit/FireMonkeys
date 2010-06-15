@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=latex 2010.5.21)  14 JUN 2010 15:41
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=latex 2010.5.21)  15 JUN 2010 11:21
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -334,8 +334,8 @@ Package frenchb.ldf Warning: OT1 encoding should not be used for French.
 
 File: logo.ps Graphic file (type eps)
 <logo.ps>
-File: feu.ps Graphic file (type eps)
- <feu.ps> [1
+File: FlammeBleue.ps Graphic file (type eps)
+ <FlammeBleue.ps> [1
 
 ] (./FireMonkeys.toc
 LaTeX Font Info:    External font `cmex10' loaded for size
@@ -352,62 +352,33 @@ Underfull \hbox (badness 10000) in paragraph at lines 79--87
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 96--97
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 118--131
+Underfull \hbox (badness 10000) in paragraph at lines 116--130
 
  []
 
 [4]
-Underfull \hbox (badness 10000) in paragraph at lines 175--186
+Underfull \hbox (badness 10000) in paragraph at lines 174--187
 
  []
 
 [5] [6]
-Underfull \hbox (badness 10000) in paragraph at lines 214--219
+Underfull \hbox (badness 10000) in paragraph at lines 217--222
+
+ []
+
+File: Gaz.ps Graphic file (type eps)
+<Gaz.ps>
+Underfull \hbox (badness 10000) in paragraph at lines 234--239
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 220--226
+Underfull \hbox (badness 10000) in paragraph at lines 240--244
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 227--231
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 234--237
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 239--243
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 244--246
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 247--252
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 252--257
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 257--261
+Underfull \hbox (badness 10000) in paragraph at lines 257--260
 
  []
 
@@ -422,145 +393,153 @@ Underfull \hbox (badness 10000) in paragraph at lines 267--269
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 271--274
+Underfull \hbox (badness 10000) in paragraph at lines 270--275
+
+ []
+
+[7]
+Underfull \hbox (badness 10000) in paragraph at lines 275--280
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 274--275
+Underfull \hbox (badness 10000) in paragraph at lines 280--284
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 286--290
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 291--293
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 295--298
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 298--299
 
  []
 
 File: STAM.ps Graphic file (type eps)
-<STAM.ps> [7]
-Underfull \hbox (badness 10000) in paragraph at lines 281--287
+<STAM.ps>
+Underfull \hbox (badness 10000) in paragraph at lines 305--311
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 299--301
+Underfull \hbox (badness 10000) in paragraph at lines 323--325
 
  []
 
-! Undefined control sequence.
-l.323   \textvf
-               {Gauss-Seidel} nous permet de considérer une méthode stable...
-
-? 
-
-Underfull \hbox (badness 10000) in paragraph at lines 322--326
+[8]
+Underfull \hbox (badness 10000) in paragraph at lines 346--350
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 327--328
+Underfull \hbox (badness 10000) in paragraph at lines 351--352
 
  []
 
 File: STAM2.ps Graphic file (type eps)
 <STAM2.ps>
-Underfull \hbox (badness 10000) in paragraph at lines 333--343
-
- []
-
-[8]
-Underfull \hbox (badness 10000) in paragraph at lines 346--348
+Underfull \hbox (badness 10000) in paragraph at lines 357--367
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 350--355
+Underfull \hbox (badness 10000) in paragraph at lines 370--372
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 357--359
-
- []
-
-! Undefined control sequence.
-l.362 \textvf
-             {coefficient de refroidissement} qui fait baisser la températu...
-
-? 
-
-Underfull \hbox (badness 10000) in paragraph at lines 360--364
+Underfull \hbox (badness 10000) in paragraph at lines 374--379
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 366--369
+Underfull \hbox (badness 10000) in paragraph at lines 381--383
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 375--378
+Underfull \hbox (badness 10000) in paragraph at lines 384--388
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 395--396
+Underfull \hbox (badness 10000) in paragraph at lines 390--393
 
  []
 
 [9]
-Underfull \hbox (badness 10000) in paragraph at lines 397--399
+Underfull \hbox (badness 10000) in paragraph at lines 399--402
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 412--413
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 414--416
 
  []
 
 File: plan_en_coupe.ps Graphic file (type eps)
 <plan_en_coupe.ps>
 File: Render3D.ps Graphic file (type eps)
- <Render3D.ps>
+ <Render3D.ps> [10]
 File: Render3D2.ps Graphic file (type eps)
- <Render3D2.ps> [10]
+ <Render3D2.ps>
 File: Render3D3.ps Graphic file (type eps)
  <Render3D3.ps>
-Underfull \hbox (badness 10000) in paragraph at lines 418--419
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 422--424
+Underfull \hbox (badness 10000) in paragraph at lines 436--437
 
  []
 
 [11]
+Underfull \hbox (badness 10000) in paragraph at lines 440--442
+
+ []
+
 File: Flamme.ps Graphic file (type eps)
- <Flamme.ps>
-Underfull \hbox (badness 10000) in paragraph at lines 438--439
+<Flamme.ps>
+Underfull \hbox (badness 10000) in paragraph at lines 456--457
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 443--444
+Underfull \hbox (badness 10000) in paragraph at lines 461--462
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 445--446
+Underfull \hbox (badness 10000) in paragraph at lines 463--464
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 447--454
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 458--460
+Underfull \hbox (badness 10000) in paragraph at lines 465--472
 
  []
 
 [12]
-File: Perlin3D.ps Graphic file (type eps)
- <Perlin3D.ps>
-Underfull \hbox (badness 10000) in paragraph at lines 465--466
+Underfull \hbox (badness 10000) in paragraph at lines 476--477
 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 467--468
+File: Perlin3D.ps Graphic file (type eps)
+<Perlin3D.ps> [13]
+Underfull \hbox (badness 10000) in paragraph at lines 487--488
 
  []
 
@@ -569,142 +548,135 @@ File: SansPerlin.ps Graphic file (type eps)
 File: Perlin1.ps Graphic file (type eps)
  <Perlin1.ps>
 File: Perlin2.ps Graphic file (type eps)
- <Perlin2.ps> [13]
-Underfull \hbox (badness 10000) in paragraph at lines 484--488
+ <Perlin2.ps> [14]
+Underfull \hbox (badness 10000) in paragraph at lines 504--508
 
  []
 
 File: FlammeBleue.ps Graphic file (type eps)
 <FlammeBleue.ps>
 File: FlammeBleue2.ps Graphic file (type eps)
- <FlammeBleue2.ps> [14]
-Overfull \vbox (8.41606pt too high) has occurred while \output is active []
-
-
-[15]
-Underfull \hbox (badness 10000) in paragraph at lines 506--515
+ <FlammeBleue2.ps> [15] [16] [17]
+Underfull \hbox (badness 10000) in paragraph at lines 527--536
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 530--532
+Underfull \hbox (badness 10000) in paragraph at lines 551--553
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 533--537
+Underfull \hbox (badness 10000) in paragraph at lines 554--558
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 538--541
+Underfull \hbox (badness 10000) in paragraph at lines 559--563
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 550--556
+Underfull \hbox (badness 10000) in paragraph at lines 566--572
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 557--559
+Underfull \hbox (badness 10000) in paragraph at lines 573--575
 
  []
 
 
-! LaTeX Error: There's no line here to end.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.561 
-      
-? 
-
-Underfull \hbox (badness 10000) in paragraph at lines 562--566
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 567--570
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 571--574
-
- []
-
-[16]
-Underfull \hbox (badness 10000) in paragraph at lines 575--577
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 577--578
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 578--581
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 582--584
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 592--599
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 600--607
-
- []
-
-File: GPU.ps Graphic file (type eps)
-<GPU.ps> [17]
-Underfull \hbox (badness 10000) in paragraph at lines 634--638
+Underfull \hbox (badness 10000) in paragraph at lines 578--579
 
  []
 
 [18]
-Underfull \hbox (badness 10000) in paragraph at lines 728--736
+File: Framebuffer.ps Graphic file (type eps)
+ <Framebuffer.ps>
+Overfull \hbox (149.2821pt too wide) in paragraph at lines 587--587
+ [] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 591--592
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 756--760
+Underfull \hbox (badness 10000) in paragraph at lines 593--595
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 768--771
+Underfull \hbox (badness 10000) in paragraph at lines 595--596
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 773--774
+Underfull \hbox (badness 10000) in paragraph at lines 596--597
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 598--600
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 604--611
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 612--619
+
+ []
+
+File: GPU.ps Graphic file (type eps)
+<GPU.ps> [19]
+Underfull \hbox (badness 10000) in paragraph at lines 646--650
+
+ []
+
+File: Grille1.ps Graphic file (type eps)
+<Grille1.ps> [20]
+File: Grille2.ps Graphic file (type eps)
+ <Grille2.ps>
+File: Grille2.ps Graphic file (type eps)
+ <Grille2.ps> [21]
+Underfull \hbox (badness 10000) in paragraph at lines 682--690
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 710--714
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 722--725
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 727--728
 
  []
 
 File: Contour.ps Graphic file (type eps)
-<Contour.ps> [19]
-Underfull \hbox (badness 10000) in paragraph at lines 780--781
+<Contour.ps> [22]
+Underfull \hbox (badness 10000) in paragraph at lines 734--735
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 784--785
+Underfull \hbox (badness 10000) in paragraph at lines 738--739
 
  []
 
 File: Decomposition.ps Graphic file (type eps)
-<Decomposition.ps> [20]
+<Decomposition.ps> [23]
 File: Decomposition0.ps Graphic file (type eps)
  <Decomposition0.ps>
 File: Decomposition2.ps Graphic file (type eps)
@@ -715,90 +687,90 @@ File: Decomposition3.ps Graphic file (type eps)
 File: Decomposition4.ps Graphic file (type eps)
  <Decomposition4.ps>
 File: Decomposition5.ps Graphic file (type eps)
- <Decomposition5.ps> [21] [22]
+ <Decomposition5.ps> [24] [25]
 File: JosStam1.ps Graphic file (type eps)
 
 <JosStam1.ps>
 File: Stable.ps Graphic file (type eps)
- <Stable.ps> [23]
+ <Stable.ps> [26]
 File: Interactive.ps Graphic file (type eps)
  <Interactive.ps>
-Underfull \hbox (badness 10000) in paragraph at lines 886--900
+Underfull \hbox (badness 10000) in paragraph at lines 840--854
 
  []
 
 File: Smoke.ps Graphic file (type eps)
-<Smoke.ps> [24]
+<Smoke.ps> [27]
 File: Octree.ps Graphic file (type eps)
  <Octree.ps>
-Overfull \hbox (10.7646pt too wide) in paragraph at lines 925--926
+Overfull \hbox (10.7646pt too wide) in paragraph at lines 879--880
  [] 
  []
 
-[25]
+[28]
 File: Voxel.ps Graphic file (type eps)
  <Voxel.ps>
-Overfull \hbox (9.76085pt too wide) in paragraph at lines 946--947
+Overfull \hbox (9.76085pt too wide) in paragraph at lines 900--901
  [] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 948--959
+Underfull \hbox (badness 10000) in paragraph at lines 902--913
 
  []
 
 File: RealGPU.ps Graphic file (type eps)
 <RealGPU.ps>
-Underfull \hbox (badness 10000) in paragraph at lines 966--979
+Underfull \hbox (badness 10000) in paragraph at lines 920--933
 
  []
 
-[26]
+[29]
 File: FastGPU.ps Graphic file (type eps)
  <FastGPU.ps>
-Underfull \hbox (badness 10000) in paragraph at lines 985--1002
+Underfull \hbox (badness 10000) in paragraph at lines 939--956
 
  []
 
 File: Meshes.ps Graphic file (type eps)
-<Meshes.ps> [27]
-Underfull \hbox (badness 10000) in paragraph at lines 1009--1034
+<Meshes.ps> [30]
+Underfull \hbox (badness 10000) in paragraph at lines 963--988
 
  []
 
 File: Deformation.ps Graphic file (type eps)
-<Deformation.ps> [28]
+<Deformation.ps> [31]
 File: Volumetric.ps Graphic file (type eps)
  <Volumetric.ps>
 File: Melting.ps Graphic file (type eps)
  <Melting.ps>
 File: FireStarter.ps Graphic file (type eps)
- <FireStarter.ps> [29]
-Underfull \hbox (badness 10000) in paragraph at lines 1106--1122
+ <FireStarter.ps> [32]
+Underfull \hbox (badness 10000) in paragraph at lines 1060--1076
 
  []
 
 File: Splats.ps Graphic file (type eps)
 <Splats.ps>
-Underfull \hbox (badness 10000) in paragraph at lines 1128--1133
+Underfull \hbox (badness 10000) in paragraph at lines 1082--1087
 
  []
 
 File: Physically.ps Graphic file (type eps)
-<Physically.ps> [30]
-Underfull \hbox (badness 10000) in paragraph at lines 1139--1151
+<Physically.ps> [33]
+Underfull \hbox (badness 10000) in paragraph at lines 1093--1105
 
  []
 
 File: Adaptative.ps Graphic file (type eps)
-<Adaptative.ps> [31] (./FireMonkeys.aux) ) 
+<Adaptative.ps> [34] (./FireMonkeys.aux) ) 
 Here is how much of TeX's memory you used:
- 1632 strings out of 495062
- 20213 string characters out of 1182644
+ 1638 strings out of 495062
+ 20284 string characters out of 1182644
  84319 words of memory out of 3000000
- 4784 multiletter control sequences out of 15000+50000
+ 4787 multiletter control sequences out of 15000+50000
  5158 words of font info for 19 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
- 25i,5n,24p,661b,284s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 25i,5n,24p,687b,286s stack positions out of 5000i,500n,10000p,200000b,50000s
 
-Output written on FireMonkeys.dvi (31 pages, 95136 bytes).
+Output written on FireMonkeys.dvi (34 pages, 97604 bytes).

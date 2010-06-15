@@ -14,53 +14,55 @@
 \contentsline {subsubsection}{\numberline {2.2.2}Interactions avec le fluide}{5}
 \contentsline {subsubsection}{\numberline {2.2.3}Le rendu des objets}{6}
 \contentsline {section}{\numberline {3}Mod\IeC {\`e}le de fluide pour la flamme, la fum\IeC {\'e}e et la chaleur}{7}
-\contentsline {subsection}{\numberline {3.1}Plus de d\IeC {\'e}tails :}{7}
-\contentsline {subsection}{\numberline {3.2}Nos am\IeC {\'e}liorations :}{9}
-\contentsline {subsubsection}{\numberline {3.2.1}La Temp\IeC {\'e}rature :}{9}
-\contentsline {subsubsection}{\numberline {3.2.2}Vorticity confinement :}{9}
-\contentsline {subsubsection}{\numberline {3.2.3}G\IeC {\'e}n\IeC {\'e}ration de fum\IeC {\'e}e :}{9}
-\contentsline {subsubsection}{\numberline {3.2.4}R\IeC {\'e}sum\IeC {\'e} :}{9}
-\contentsline {subsection}{\numberline {3.3}M\IeC {\'e}thode de rendu}{10}
-\contentsline {subsubsection}{\numberline {3.3.1}Affichage volumique}{10}
-\contentsline {subsubsection}{\numberline {3.3.2}Rendu de la flamme}{11}
-\contentsline {subsubsection}{\numberline {3.3.3}Rendu de la fum\IeC {\'e}e}{12}
-\contentsline {subsubsection}{\numberline {3.3.4}Multitexturing}{12}
-\contentsline {subsubsection}{\numberline {3.3.5}am\IeC {\'e}lioration de rendu : Bruit de Perlin 4D}{12}
-\contentsline {subsection}{\numberline {3.4}R\IeC {\'e}sultats}{15}
-\contentsline {section}{\numberline {4}Mod\IeC {\`e}le de flamme et de fum\IeC {\'e}e GPU}{16}
-\contentsline {subsection}{\numberline {4.1}Transformation du probl\IeC {\`e}me pour une r\IeC {\'e}solution GPU}{16}
-\contentsline {subsubsection}{\numberline {4.1.1}Matrice 3 dimensions == Texture 3D}{16}
-\contentsline {subsubsection}{\numberline {4.1.2}Operation sur le point (i,j,k) de la matrice == FragmentShader}{16}
-\contentsline {subsubsection}{\numberline {4.1.3}It\IeC {\'e}ration == Framebuffer ( render to texture 3D ) }{16}
-\contentsline {subsection}{\numberline {4.2}D\IeC {\'e}tail de l'adaptation}{17}
-\contentsline {subsection}{\numberline {4.3}Rendu}{17}
-\contentsline {subsection}{\numberline {4.4}Tentative d'am\IeC {\'e}lioration}{18}
-\contentsline {subsection}{\numberline {4.5}R\IeC {\'e}sultats - Comparatif de performances}{18}
-\contentsline {subsection}{\numberline {4.6}Conclusion}{18}
-\contentsline {section}{\numberline {5}Mod\IeC {\`e}le d'objet}{19}
-\contentsline {subsection}{\numberline {5.1}D\IeC {\'e}tail du mod\IeC {\`e}le}{19}
-\contentsline {subsection}{\numberline {5.2}Rendu}{19}
-\contentsline {subsection}{\numberline {5.3}Chargement des objets}{19}
-\contentsline {subsection}{\numberline {5.4}Principe d'int\IeC {\'e}raction avec le fluide}{19}
-\contentsline {subsection}{\numberline {5.5}Propagation de la chaleur au sein de l'objet}{19}
-\contentsline {subsubsection}{\numberline {5.5.1}Champs de r\IeC {\'e}pulsion et d\IeC {\'e}placement de l'objet}{19}
-\contentsline {subsection}{\numberline {5.6}Pyrolise}{20}
-\contentsline {subsection}{\numberline {5.7}Combustion}{21}
-\contentsline {subsection}{\numberline {5.8}R\IeC {\'e}sultats}{22}
-\contentsline {section}{\numberline {6}Analyses Bibliographiques}{23}
-\contentsline {subsubsection}{\numberline {6.0.1}Real-Time Fluid Dynamics for Games}{23}
-\contentsline {subsubsection}{\numberline {6.0.2}Stable Fluids}{24}
-\contentsline {subsubsection}{\numberline {6.0.3}An Interactive Simulation Framework for Burning Objets}{24}
-\contentsline {subsubsection}{\numberline {6.0.4}Visual Simulation of Smoke}{25}
-\contentsline {subsubsection}{\numberline {6.0.5}Simulating Water and Smoke with an Octree Data Structure}{25}
-\contentsline {subsubsection}{\numberline {6.0.6}Voxels On Fire}{26}
-\contentsline {subsubsection}{\numberline {6.0.7}Real-Time Simulation and Rendering of 3D Fluids}{26}
-\contentsline {subsubsection}{\numberline {6.0.8}Fast Fluid Dynamics Simulation on the GPU}{27}
-\contentsline {subsubsection}{\numberline {6.0.9}Meshes On Fire}{28}
-\contentsline {subsubsection}{\numberline {6.0.10}Real-Time Simulation of Deformation and Fracture of Stiff Materials}{28}
-\contentsline {subsubsection}{\numberline {6.0.11}Real-time Procedural Volumetric Fire}{29}
-\contentsline {subsubsection}{\numberline {6.0.12}Melting and Burning Solids into Liquids and Gases}{29}
-\contentsline {subsubsection}{\numberline {6.0.13}FireStarter \IeC {\textendash } A Real-Time Fire Simulator}{30}
-\contentsline {subsubsection}{\numberline {6.0.14}Simulating Fire With Texture Splats}{30}
-\contentsline {subsubsection}{\numberline {6.0.15}Physically Based Modeling and Animation of Fire}{31}
-\contentsline {subsubsection}{\numberline {6.0.16}Adaptative Physics Based Tetrahedral Mesh Generation Using Level Sets}{31}
+\contentsline {subsection}{\numberline {3.1}Le feu}{7}
+\contentsline {subsection}{\numberline {3.2}Principe}{7}
+\contentsline {subsection}{\numberline {3.3}Repr\IeC {\'e}sentation de l'espace}{7}
+\contentsline {subsection}{\numberline {3.4}R\IeC {\'e}solution du syst\IeC {\`e}me de fluide}{7}
+\contentsline {subsection}{\numberline {3.5}Nos am\IeC {\'e}liorations :}{9}
+\contentsline {subsubsection}{\numberline {3.5.1}Gestion de la temp\IeC {\'e}rature :}{9}
+\contentsline {subsubsection}{\numberline {3.5.2}Vorticity confinement :}{10}
+\contentsline {subsubsection}{\numberline {3.5.3}G\IeC {\'e}n\IeC {\'e}ration de fum\IeC {\'e}e :}{10}
+\contentsline {subsection}{\numberline {3.6}M\IeC {\'e}thode de rendu}{10}
+\contentsline {subsubsection}{\numberline {3.6.1}Affichage volumique}{10}
+\contentsline {subsubsection}{\numberline {3.6.2}Coloration de la flamme}{11}
+\contentsline {subsubsection}{\numberline {3.6.3}Rendu de la fum\IeC {\'e}e}{12}
+\contentsline {subsubsection}{\numberline {3.6.4}Multitexturing}{12}
+\contentsline {subsubsection}{\numberline {3.6.5}Bruit de Perlin 4D}{13}
+\contentsline {subsection}{\numberline {3.7}R\IeC {\'e}sultats}{16}
+\contentsline {section}{\numberline {4}Mod\IeC {\`e}le de flamme et de fum\IeC {\'e}e GPU}{18}
+\contentsline {subsection}{\numberline {4.1}Transformation du probl\IeC {\`e}me pour une r\IeC {\'e}solution GPU}{18}
+\contentsline {subsubsection}{\numberline {4.1.1}Matrice 3 dimensions == Texture 3D}{18}
+\contentsline {subsubsection}{\numberline {4.1.2}Op\IeC {\'e}ration sur le point (i,j,k) de la matrice == FragmentShader}{18}
+\contentsline {subsubsection}{\numberline {4.1.3}It\IeC {\'e}ration == Framebuffer ( render to texture 3D ) }{18}
+\contentsline {subsection}{\numberline {4.2}D\IeC {\'e}tail de l'adaptation}{19}
+\contentsline {subsection}{\numberline {4.3}Rendu}{20}
+\contentsline {subsection}{\numberline {4.4}Tentative d'am\IeC {\'e}lioration}{20}
+\contentsline {subsection}{\numberline {4.5}R\IeC {\'e}sultats - Comparatif de performances}{20}
+\contentsline {subsection}{\numberline {4.6}Conclusion}{21}
+\contentsline {section}{\numberline {5}Mod\IeC {\`e}le d'objet}{22}
+\contentsline {subsection}{\numberline {5.1}D\IeC {\'e}tail du mod\IeC {\`e}le}{22}
+\contentsline {subsection}{\numberline {5.2}Rendu}{22}
+\contentsline {subsection}{\numberline {5.3}Chargement des objets}{22}
+\contentsline {subsection}{\numberline {5.4}Principe d'int\IeC {\'e}raction avec le fluide}{22}
+\contentsline {subsection}{\numberline {5.5}Propagation de la chaleur au sein de l'objet}{22}
+\contentsline {subsubsection}{\numberline {5.5.1}Champs de r\IeC {\'e}pulsion et d\IeC {\'e}placement de l'objet}{22}
+\contentsline {subsection}{\numberline {5.6}pyrolyse}{23}
+\contentsline {subsection}{\numberline {5.7}Combustion}{24}
+\contentsline {subsection}{\numberline {5.8}R\IeC {\'e}sultats}{25}
+\contentsline {section}{\numberline {6}Analyses Bibliographiques}{26}
+\contentsline {subsubsection}{\numberline {6.0.1}Real-Time Fluid Dynamics for Games}{26}
+\contentsline {subsubsection}{\numberline {6.0.2}Stable Fluids}{27}
+\contentsline {subsubsection}{\numberline {6.0.3}An Interactive Simulation Framework for Burning Objets}{27}
+\contentsline {subsubsection}{\numberline {6.0.4}Visual Simulation of Smoke}{28}
+\contentsline {subsubsection}{\numberline {6.0.5}Simulating Water and Smoke with an Octree Data Structure}{28}
+\contentsline {subsubsection}{\numberline {6.0.6}Voxels On Fire}{29}
+\contentsline {subsubsection}{\numberline {6.0.7}Real-Time Simulation and Rendering of 3D Fluids}{29}
+\contentsline {subsubsection}{\numberline {6.0.8}Fast Fluid Dynamics Simulation on the GPU}{30}
+\contentsline {subsubsection}{\numberline {6.0.9}Meshes On Fire}{31}
+\contentsline {subsubsection}{\numberline {6.0.10}Real-Time Simulation of Deformation and Fracture of Stiff Materials}{31}
+\contentsline {subsubsection}{\numberline {6.0.11}Real-time Procedural Volumetric Fire}{32}
+\contentsline {subsubsection}{\numberline {6.0.12}Melting and Burning Solids into Liquids and Gases}{32}
+\contentsline {subsubsection}{\numberline {6.0.13}FireStarter \IeC {\textendash } A Real-Time Fire Simulator}{33}
+\contentsline {subsubsection}{\numberline {6.0.14}Simulating Fire With Texture Splats}{33}
+\contentsline {subsubsection}{\numberline {6.0.15}Physically Based Modeling and Animation of Fire}{34}
+\contentsline {subsubsection}{\numberline {6.0.16}Adaptative Physics Based Tetrahedral Mesh Generation Using Level Sets}{34}
