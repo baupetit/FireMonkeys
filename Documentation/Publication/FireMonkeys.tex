@@ -11,7 +11,7 @@
 \usepackage{url}
 \usepackage{xspace}
 \usepackage[francais]{babel}
-\usepackage{fullpage}
+%\usepackage{fullpage}
 
 \pagestyle{plain}
 
@@ -678,100 +678,128 @@ sur l'implémentation en GPU n'ont pas été vains.
 \section{Modèle d'objet}
 %%%%%%%%%%%%%%%%%
 
-\subsection{Détail du modèle}
-Nous utilisons une \textbf{grille de voxels} pour représenter les objets. Chaque voxel
-a plusieurs attributs : comme sa température de combustion, sa quantité de matière,
-son taux de combustion, son taux de conversion en gaz, son taux de conversion en fumée,
-sa température, sa vitesse de répulsion.\\
-Nous avons choisi ce modèle car le fait de représenter les objets en voxels
-permet de faire le lien rapidement entre la grille de l'objet et la grille du fluide,
-avec une simple fonction prenant en compte la position des objets et la valeur d'une division
-de l'espace.\\
+Pour les objets, nous devions répondre à certain critères, notemment :
+\begin{itemize}
+\item facilité d'interaction avec le feu
+\item possibilité de charger un mesh depuis un fichier
+\end{itemize}
 
-Chaque objet est initialisé avec un voxel de base. Nous pouvons donc jouer sur les propriétés
-de notre objet pour optenir tout un tas d'effet. Par exemple, nous pouvons réaliser des
-explosifs, des grenades fumigènes, des bout de bois qui brulent, des objets
-qui se décomposent sans bruler, des objets insensibles à la chaleur...
+\subsection{Détail du modèle}
+Nous utilisons une \textbf{grille de voxels} pour représenter les
+objets. Chaque voxel a plusieurs attributs : comme sa température de
+combustion, sa quantité de matière, son taux de combustion, son taux
+de conversion en gaz, son taux de conversion en fumée, sa température,
+sa vitesse de répulsion.\\
+
+Nous avons choisi ce modèle car le fait de représenter les objets en
+voxels permet de faire le lien rapidement entre la grille de l'objet
+et la grille du fluide, avec une simple fonction prenant en compte la
+position des objets et la valeur d'une division de l'espace.\\ 
+
+De plus ce modèle a l'avantage de pouvoir représenter des objets
+multimatériaux. Un exmple simple est le marteau, avec un manche qui
+brûle et une tête en fer qui ne brule pas.\\
+
+Chaque objet est initialisé avec un voxel de base. Nous pouvons donc
+jouer sur les propriétés de notre objet pour obtenir tout un tas
+d'effet. Par exemple, nous pouvons réaliser des explosifs, des
+grenades fumigènes, des bout de bois qui brulent, des objets qui se
+décomposent sans bruler, des objets insensibles à la chaleur...
 
 \subsection{Rendu}
-Pour chaque grile de voxel, nous calculons son maillage avec un \textbf{marching cube adaptatif}.
-Nous stockons le maillage calculé dans des tableaux, ces tableaux étant associés aux voxels
-qu'ils représentent. Lors du rendu, nous parcourons la liste des triangles calculés
-et les affichons. Lorsqu'un voxel est modifié, nous recalculons le marching cube uniquement
-là ou la modification intervient. Ainsi nous disposons d' un modèle d'objets déformables
+Pour chaque grile de voxel, nous calculons son maillage avec un
+\textbf{marching cube adaptatif}.  Nous stockons le maillage calculé
+dans des tableaux, ces tableaux étant associés aux voxels qu'ils
+représentent. Lors du rendu, nous parcourons la liste des triangles
+calculés et les affichons. Lorsqu'un voxel est modifié, nous
+recalculons le marching cube uniquement là ou la modification
+intervient. Ainsi nous disposons d' un modèle d'objets déformables
 dont le rendu est effectué de manière efficace.
+
+\begin{center}
+  \includegraphics[scale=0.5]{Monkey.ps}\\ 
+  \includegraphics[scale=0.5]{FilledFace.ps}\\
+  Exemple de mesh ( en haut ) et de la surface reconstruite par marching cube ( en dessous ).
+\end{center}
+
 
 \subsection{Chargement des objets}
 Nous avons réalisé un \textbf{chargeur de fichier .obj}. A l'aide d'un \textbf{calculateur de
 champs de distance}, nous construisons l'équivalent de notre objet maillé en grille de voxel.
 
+\begin{center}
+  \includegraphics[scale=0.5]{phi_inside.ps}\\ Exemple de champs de
+  distance d'un cube, en rouge la distance négative (ie: à
+  l'intérieur) et en bleu distance nulle (à la surface).
+\end{center}
 
 \subsection{Principe d'intéraction avec le fluide}
-Concrètement, nous avons englobé notre fluide et nos objets par une \textbf{boite englobante}.
-Lorsqu'il y a intéraction, nous convertissons les coordonnées (i,j,k) de la grille de
-l'objet en coordonnées (i',j',k') dans le modèle de fluide. Si ces coordonnées sont 
-valides, alors il y a intéraction du voxel avec le fluide.\\
-
-
-
+Concrètement, les collisions entre les objets et le fluide est détecté
+par \textbf{boite englobante}. Lors du traitement des objets par le
+fluide, il suffit alors de detecter les collisions. Pour chaque objet
+en collision, on transmet ses informations de présence au
+fluide. Ensuite traite chaque voxel pour la pyrolyse, et on met à jour
+ses informations de densité. Si le voxel doit être détruit on le
+signal alors à l'objet qui s'occuperra de recalculer la surface avec
+le marching cube adaptatif.
 
 \subsection{Propagation de la chaleur au sein de l'objet}
+Pour la propagation de la chaleur au sein de l'objet, ils faut distinguer trois cas:
+\begin{itemize}
+\item dans l'objet ( sans frontière )
+\item à la surface de l'objet ( dans l'objet, mais avec un voisin frontière )
+\item à la frontière de l'objet ( en dehors de l'objet, mais avec un voisin objet )
+\end{itemize}
 
-\subsubsection{Champs de répulsion et déplacement de l'objet}
+Pour la résolution de la diffusion, cependant nous utilisons la même
+technique que lors de la diffusion dans le fluide.
 
-    Lorsqu'on place un objet dans le fluide, la vitesse du fluide est changée de deux manières :\\
-    La vitesse des voxels du fluide dans lesquels se trouve l'objet sont affecté : leur vitesse \textbf{devient égale à la vitesse du déplacement de l'objet}. Ainsi lorsqu'on déplace l'objet le fluide est emporté par son mouvement.\\
-    Les voxels se situant sur la frontière sont affecté d'un terme de \textbf{répulsion}. \\
+\subsection{Champs de répulsion et déplacement de l'objet}
+
+Lorsqu'on place un objet dans le fluide, la vitesse du fluide est
+changée de deux manières :\\ La vitesse des voxels du fluide dans
+lesquels se trouve l'objet sont affecté : leur vitesse \textbf{devient
+  égale à la vitesse du déplacement de l'objet}. Ainsi lorsqu'on
+déplace l'objet le fluide est emporté par son mouvement.\\ Les voxels
+se situant sur la frontière sont affecté d'un terme de
+\textbf{répulsion}. \\
+
+Une première version du champs de répulsion consistait à calculer la normale aux surfaces de l'objet.\\
     
+\begin{center}
+  \includegraphics[scale=0.7]{Contour.ps}\\
+  Vecteurs de répulsion normaux aux surfaces.
+\end{center}
     
-    Une première version du champs de répulsion consistait à calculer la normale aux surfaces de l'objet.\\
-    
-    \begin{center}
-	\includegraphics[scale=0.7]{Contour.ps}\\
-	Vecteurs de répulsion normaux aux surfaces.
-    \end{center}
-    
-    Puis nous avons opté pour une version "truquée" dans laquelle nous orientons les vitesses de répulsions de manière à ce que le fluide suive les contours de l'objet. \\
-    
-
-
-    [IMAGE]\\
-
-
-
-
+Puis nous avons opté pour une version "truquée" dans laquelle nous
+orientons les vitesses de répulsions de manière à ce que le fluide
+suive les contours de l'objet. \\
 
 
 \subsection{pyrolyse}
-
-Dans un premier temps, c'est la chaleur qui est échangé entre le fluide et le contour
-extérieur d'un objet.\\
-Lorsque la température d'un voxel situé sur la frontière de l'objet dépasse un seuil critique, la pyrolyse commence. \\
-L'objet perds de la matière dans des proportions fixées par les paramètres du voxel.
-En effet, en fonction des paramètres, le voxel va generer plus ou moins de gaz, de fumée, et de température.
+Dans un premier temps, c'est la chaleur qui est échangé entre le
+fluide et le contour extérieur d'un objet.\\ Lorsque la température
+d'un voxel situé sur la frontière de l'objet dépasse un seuil
+critique, la pyrolyse commence. \\ L'objet perds de la matière dans
+des proportions fixées par les paramètres du voxel.  En effet, en
+fonction des paramètres, le voxel va generer plus ou moins de gaz, de
+fumée, et de température.
 
 \subsection{Combustion}
 
-    \begin{center}
-	\includegraphics[scale=1]{Decomposition.ps}\\
-	A gauche : affichage en marching cube de l'objet. A droite : affichage en voxel avec l'affichage des vecteurs vitesse de repulsions.\\
-    \end{center}
+\begin{center}
+  \includegraphics[scale=1]{Decomposition.ps}\\
+  A gauche : affichage en marching cube de l'objet. A droite : affichage en voxel avec l'affichage des vecteurs vitesse de repulsions.\\
+\end{center}
     
-  
-    \begin{center}
+\begin{center}
 	\includegraphics[scale=0.6]{Decomposition0.ps}
 	\includegraphics[scale=0.8]{Decomposition2.ps}
 	\includegraphics[scale=0.6]{Decomposition3.ps}\\
 	\includegraphics[scale=0.6]{Decomposition4.ps}
 	\includegraphics[scale=0.6]{Decomposition5.ps}\\
 	Combustion progressive de l'objet.
-    \end{center}  
-    
-\subsection{Résultats}
-
-
-
-
+\end{center}  
 
 \newpage
 \section{Analyses Bibliographiques}
