@@ -506,12 +506,13 @@ $P_n(x) = \sum_{i=0}^{n-1} p^i bruitPerlin(2^i.x)$.\\
 C'est une série (absolument) convergente, majorée par la série géométrique :\\
 $\sum_{i=0}^{n-1} p^i = \frac{1 - p^n}{1 - p}$.\\
 
+\newpage
 \subsection{Résultats}
 
 
     \begin{center}
-	\includegraphics[scale=0.7]{FlammeBleue.ps}
-	\includegraphics[scale=0.7]{FlammeBleue2.ps}
+	\includegraphics[scale=0.6]{FlammeBleue.ps}\\
+	\includegraphics[scale=0.6]{FlammeBleue2.ps}\\
 	Rendu final des flammes.
     \end{center}  
 
@@ -584,7 +585,7 @@ sera automatiquement enregistré dans la tranche de la texture3D qui a été li�
 Nous devons ensuite dessiner la tranche correspondante de la texture d'entée sur un plan. La taille de la fenêtre de dessin ( viewport ) doit être égale à la taille de la texture.
 
     \begin{center}
-	\includegraphics[scale=0.5]{Framebuffer.ps}\\
+	\includegraphics[scale=0.4]{Framebuffer.ps}\\
 	Ecriture du résultat de la tranche i grâce au framebuffer.
     \end{center}
     
@@ -613,14 +614,12 @@ Chaque étape de calcul a un shader associé. Le code des fragment shader
 est quasi identique à ce qu'on peut trouver à l'intérieur de la boucle
 des fonctions de la partie CPU. Il a fallut néanmoins rajouter des modificateurs
 de repères car le résultat final est stocké dans une texture3D, dont les composantes
-sont entre 0.0 et 1.0. Pour effectuer un calcul il faut charger le shader associé,
-lier les textures3D aux entrées et sorties du shader, lier les variables intervenant
-dans les calculs, et enfin appliquer le rendu dans le framebuffer.\\
+sont entre 0.0 et 1.0.\\
 
 
     \begin{center}
 	\includegraphics[scale=0.5]{GPU.ps}\\
-	Coloration de la flamme sur le modèle GPU.
+	Exemple de rendu de flamme avec la version GPU.\\
     \end{center}
  
  
@@ -646,12 +645,12 @@ un poil plus compliqués à réaliser. Nous avons donc enlevé cette méthode.
 Les résultat en terme de perfomance sont plutôt bons. Cependant il faut
 bien avoir conscience qu'ils dépendent totalement de la carte graphique utilisée,
 contraitement au modèle CPU qui tourne à peut près à la même vitesse sur les processeurs
-actuels.\\
+actuels. Sur une carte graphique récente, le gain est énorme.\\
 
   \begin{center}
 	\includegraphics[scale=1]{Grille1.ps}\\
 	\includegraphics[scale=1]{Grille2.ps}\\
-	\includegraphics[scale=1]{Grille2.ps}\\
+	\includegraphics[scale=1]{Grille3.ps}\\
 	Comparaison de performance entre CPU et GPU
   \end{center}
  
@@ -665,7 +664,7 @@ qu'un modèle de fluide réaliste peut être utilisé en temps réel avec une gr
 Même si notre modèle CPU est interactif, la grille 40x40x40 et ses 8 fps est
 trop petite pour réaliser un logiciel de simulation. Cependant, notre version GPU
 nous montre que notre modèle de fluide peut être utilisé dans une application 
-temps réel de grande envergure. Avec 8 fps en 100x100x100, dans une version
+temps réel de grande envergure. Avec 8 fps en 100x100x100 (avec une carte graphique récente), dans une version
 pouvant encore être optimisée, nous pensons que tous les efforts fournis
 sur l'implémentation en GPU n'ont pas été vains. 
 
